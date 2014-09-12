@@ -202,10 +202,10 @@ gulp.task('move-GUI-images', [ 'images' ], function () {
 // Build
 gulp.task('build', [
     'css',
-    'template',
+    'partials',
     'html',
-    'scripts'
-    //'bower-all'
+    'scripts',
+    'bower-all'
     //'images'
   ]
 );
@@ -245,16 +245,16 @@ gulp.task('protractor', function () {
 gulp.task('watch', [ 'browser-sync' ], function () {
 
   // Watch all .html files
-  gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], [ 'set-to-dev', 'move-GUI-html' ]);
+  gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], [ 'set-to-dev', 'build' ]);
 
   // Watch .scss files
-  gulp.watch(config.app + '/sass/**/*.scss', [ 'set-to-dev', 'move-GUI-css' ]);
+  gulp.watch(config.app + '/sass/**/*.scss', [ 'set-to-dev', 'build' ]);
 
   // Watch .js files
-  gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], [ 'set-to-dev', 'move-GUI-js' ]);
+  gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], [ 'set-to-dev', 'build' ]);
 
   // Watch image files
-  gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', [ 'set-to-dev', 'move-GUI-images' ]);
+  gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', [ 'set-to-dev', 'build' ]);
 
 });
 
@@ -266,7 +266,7 @@ gulp.task('bs-reload', function () {
 gulp.task('browser-sync', [ 'build' ], function () {
   browserSync({
     open: true,
-    port: 9999,
+    port: 8888,
     server: {
       baseDir: config.dev
     }

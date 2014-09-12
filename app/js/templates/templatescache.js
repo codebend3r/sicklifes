@@ -1,0 +1,1 @@
+angular.module("sicklifesApp").run(["$templateCache", function($templateCache) {$templateCache.put("views/main.html","<div>Hello</div>\r\n\r\n<ul>\r\n  <li ng-repeat=\'scorer in topScorers\'>scorer.player.full_name</li>\r\n</ul>");}]);
