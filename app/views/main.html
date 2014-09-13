@@ -1,8 +1,28 @@
-<div>La Liga</div>
+<div class='container'>
 
-<ul>
-  <li ng-repeat='scorer in topScorers'>
-    <span>{{scorer.player.full_name}}</span>
-    <span> - {{scorer.team.full_name}}</span>
-  </li>
-</ul>
+  <div class='page-header'>
+    <h1>Sicklifes Fantasy League Manager</h1>
+    <h2>La Liga</h2>
+  </div>
+
+	<div class='fantasy-table'>
+
+    <div class='header'>
+      <div ng-class='[header.columnClass]' ng-repeat='header in ligaHeader'>{{header.text}}</div>
+    </div>
+
+    <div class='table-body'>
+      <div class='row' ng-repeat='scorer in topLigaScorers'>
+        <div class='col-md-1 small-hpadding'>{{scorer.id}}</div>
+        <div class='col-md-1 small-hpadding'>{{scorer.rank}}</div>
+        <div class='col-md-4 small-hpadding'>{{scorer.playerName}}</div>
+        <div class='col-md-4 small-hpadding'>{{scorer.teamName}}</div>
+        <div class='col-md-2 small-hpadding'>{{scorer.goals}}</div>
+      </div>
+    </div>
+
+	</div>
+
+</div>
+
+

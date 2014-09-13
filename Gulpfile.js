@@ -265,7 +265,7 @@ gulp.task('bs-reload', function () {
 
 gulp.task('browser-sync', [ 'build' ], function () {
   browserSync({
-    open: true,
+    open: false,
     port: 8888,
     server: {
       baseDir: config.dev

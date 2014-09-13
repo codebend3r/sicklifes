@@ -1,2 +1,21 @@
+html {
+  font-family: 'Open Sans', sans-serif; }
+
 .main-container {
   padding: 10px; }
+
+.fantasy-table {
+  padding: 0;
+  margin: 0;
+  width: 100%; }
+  .fantasy-table .header {
+    font-weight: bold;
+    font-size: 14px;
+    height: 25px;
+    line-height: 25px; }
+  .fantasy-table .row {
+    width: 100%;
+    padding: 5px 0;
+    margin: 0; }
+    .fantasy-table .row:nth-child(even) {
+      background-color: #c4e1ff; }
