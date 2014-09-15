@@ -11,17 +11,26 @@
   <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic,700italic'>
 
   <!-- build:css css/sicklifes.css -->
-  <link rel='stylesheet' href='css/vendor/bootstrap.css'/>
+  <link rel='stylesheet' href='bower_components/bootstrap-sass/dist/css/bootstrap.css'/>
   <link rel='stylesheet' href='css/general.css'/>
   <!-- endbuild -->
 
 </head>
 <body>
 
-<div class='main-container' ng-view></div>
+<div class='container'>
+  <ul class="nav nav-pills">
+    <li class="active"><a href="#/main">Main</a></li>
+    <li><a href="#/leagues">Leagues</a></li>
+    <li><a href="#/teams">Teams</a></li>
+  </ul>
+</div>
+
+<div class='container' ng-view></div>
 
 <!-- build:js js/sicklifes.js -->
 <script src='bower_components/jquery/dist/jquery.js'></script>
+<script src='bower_components/bootstrap-sass/dist/js/bootstrap.js'></script>
 <script src='bower_components/tweenlite/TweenLite.min.js'></script>
 <script src='bower_components/angular/angular.js'></script>
 <script src='bower_components/angular-route/angular-route.js'></script>
@@ -29,7 +38,7 @@
 
 <script src='js/app.js'></script>
 <script src='js/routes.js'></script>
-<script src='js/mainCtrl.js'></script>
+<script src='js/controllers/mainCtrl.js'></script>
 <script src='js/players/teamsFactory.js'></script>
 
 <!-- endbuild -->

@@ -6,7 +6,7 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
 
   'use strict';
 
-  $scope.ligaHeader = [
+  $scope.tableHeader = [
     {
       columnClass: 'col-md-1 small-hpadding',
       text: 'ID'
