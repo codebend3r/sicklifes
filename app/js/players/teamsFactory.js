@@ -10,110 +10,110 @@
       teamName: 'Inter Max',
  			players: [
         {
-          player: 'Cristiano Ronaldo',
-          team: 'Real Madrid',
+          playerName: 'Cristiano Ronaldo',
+          teamName: 'Real Madrid',
           league: 'LIGA'
         },
         {
-          player: 'Falcao',
-          team: 'Manchester United',
+          playerName: 'Falcao',
+          teamName: 'Manchester United',
           league: 'EPL'
         },
         {
-          player: 'Bale',
-          team: 'Real Madrid',
+          playerName: 'Bale',
+          teamName: 'Real Madrid',
           league: 'LIGA'
         },
         {
-          player: 'Cerci',
-          team: 'Athletico Madrid',
+          playerName: 'Cerci',
+          teamName: 'Athletico Madrid',
           league: 'LIGA'
         },
         {
-          player: 'Toure',
-          team: 'Manchester City',
+          playerName: 'Toure',
+          teamName: 'Manchester City',
           league: 'BUND'
         },
         {
-          player: 'Bony',
-          team: 'Swansea City',
+          playerName: 'Bony',
+          teamName: 'Swansea City',
           league: 'BUND'
         },
         {
-          player: 'Vela',
-          team: 'Real Sociedad',
+          playerName: 'Vela',
+          teamName: 'Real Sociedad',
           league: 'LIGA'
         },
         {
-          player: 'Cuadrado',
-          team: 'Fiorintina',
+          playerName: 'Cuadrado',
+          teamName: 'Fiorintina',
           league: 'SERIEA'
         },
         {
-          player: 'Berardi',
-          team: 'Juventus',
+          playerName: 'Berardi',
+          teamName: 'Juventus',
           league: 'SERIEA'
         },
         {
-          player: 'Robben',
-          team: 'Bayern Munich',
+          playerName: 'Robben',
+          teamName: 'Bayern Munich',
           league: 'BUND'
         },
         {
-          player: 'Remy',
-          team: 'Chelsea'
+          playerName: 'Remy',
+          teamName: 'Chelsea'
         },
         {
-          player: 'Hamsik',
-          team: 'Napoli'
+          playerName: 'Hamsik',
+          teamName: 'Napoli'
         },
         {
-          player: 'Hulk',
-          team: 'Zenit St. Petersburg'
+          playerName: 'Hulk',
+          teamName: 'Zenit St. Petersburg'
         },
         {
-          player: 'Paul Pogba',
-          team: 'Juventus'
+          playerName: 'Paul Pogba',
+          teamName: 'Juventus'
         },
         {
-          player: 'Chicharito',
-          team: 'Real Madrid'
+          playerName: 'Chicharito',
+          teamName: 'Real Madrid'
         },
         {
-          player: 'Honda',
-          team: 'AC Milan'
+          playerName: 'Honda',
+          teamName: 'AC Milan'
         },
         {
-          player: 'Iniesta',
-          team: 'Barcelona'
+          playerName: 'Iniesta',
+          teamName: 'Barcelona'
         },
         {
-          player: 'Lallana',
-          team: 'Liverpool'
+          playerName: 'Lallana',
+          teamName: 'Liverpool'
         },
         {
-          player: 'Guarin',
-          team: 'Inter'
+          playerName: 'Guarin',
+          teamName: 'Inter'
         },
         {
-          player: 'Soldado',
-          team: 'Tottenham'
+          playerName: 'Soldado',
+          teamName: 'Tottenham'
         },
         {
-          player: 'Mhiktryan',
-          team: 'Borrusia Dortmund'
+          playerName: 'Mhiktryan',
+          teamName: 'Borrusia Dortmund'
         },
         {
-          player: 'Ibai Gómez',
-          team: 'Athletic Bilbao'
+          playerName: 'Ibai Gómez',
+          teamName: 'Athletic Bilbao'
         },
         {
-          player: 'Mertens',
-          team: 'Napoli'
+          playerName: 'Mertens',
+          teamName: 'Napoli'
         },
         {
-          player: 'Mesut Ozil',
-          team: 'Arsenal'
+          playerName: 'Mesut Ozil',
+          teamName: 'Arsenal'
         }
 
 

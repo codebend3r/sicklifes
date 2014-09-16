@@ -2,17 +2,13 @@
  * Created by crivas on 9/12/2014.
  */
 
-sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeams) {
+sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeams, $timeout) {
 
   'use strict';
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-1 small-hpadding',
-      text: 'ID'
-    },
-    {
-      columnClass: 'col-md-1 small-hpadding',
+      columnClass: 'col-md-2 small-hpadding',
       text: 'Rank'
     },
     {
@@ -29,183 +25,205 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
     }
   ];
 
+  $scope.allRequest = []; // array of promises
+
   $scope.topLigaScorers = [];
   $scope.topEPLScorers = [];
   $scope.topSeriScorers = [];
 
-  var allRequest = [ ];
+  $scope.changeLeague = function () {
 
-  $q.all(allRequest).then(function(){
+    console.log('change leagues');
 
-    console.log('all loaded');
-
-  });
+  };
 
   var ligaURL = 'http://api.thescore.com/liga/leaders?categories=goals',
     eplURL = 'http://api.thescore.com/epl/leaders?categories=goals',
-    seriURL = 'http://api.thescore.com/seri/leaders?categories=goals',
+    seriURL = 'http://api.thescore.com/seri/leaders?categories=goals';
 
-    getData = function (endPoint) {
+  $scope.getData = function (endPoint) {
 
-      var defer = $q.defer(),
-        httpObject = {
-          method: endPoint.method || 'GET',
-          url: endPoint.endPointURL
+    var defer = $q.defer(),
+      httpObject = {
+        method: endPoint.method || 'GET',
+        url: endPoint.endPointURL
+      };
+
+    $http(httpObject).then(function (result) {
+
+      defer.resolve(result);
+      if (angular.isDefined(endPoint.qCallBack)) endPoint.qCallBack(result);
+
+    });
+
+    return defer;
+
+  };
+
+  $scope.getLigaLeaders = function () {
+
+    var url = ligaURL,
+      ligaRequest = $scope.getData({
+        endPointURL: url
+      });
+
+    ligaRequest.promise.then(function (result) {
+
+      $scope.topLigaScorers = result.data.goals.map(function (i) {
+
+        var league = {
+          id: i.player.id,
+          rank: i.ranking,
+          playerName: i.player.full_name,
+          teamName: i.team.full_name,
+          goals: i.stat,
+          game: null,
+          endPoint: $scope.getData({
+            endPointURL: 'http://api.thescore.com/liga/players/' + i.player.id + '/player_records?rpp=100',
+            qCallBack: function (result) {
+              league.games = result
+            }
+          })
         };
 
-      //console.log('endPoint.endPointURL:', endPoint.endPointURL);
-
-      $http(httpObject).then(function (result) {
-
-        defer.resolve(result);
-        //console.log('resolved', endPoint.endPointURL);
-        if (angular.isDefined(endPoint.qCallBack)) endPoint.qCallBack(result);
+        ligaRequest.resolve(league);
+        return league;
 
       });
 
-      return defer;
+      console.log('$scope.topLigaScorers:', $scope.topLigaScorers);
 
-    },
 
-    getLigaLeaders = function () {
+    });
 
-      var url = ligaURL,
-        ligaRequest = getData({
-          endPointURL: url
-        });
+    return ligaRequest;
 
-      ligaRequest.promise.then(function (result) {
+  };
 
-        $scope.topLigaScorers = result.data.goals.map(function (i) {
+  $scope.getEPLLeaders = function () {
 
-          var league = {
-            id: i.player.id,
-            rank: i.ranking,
-            playerName: i.player.full_name,
-            teamName: i.team.full_name,
-            goals: i.stat,
-            game: null,
-            endPoint: getData({
-              endPointURL: 'http://api.thescore.com/liga/players/' + i.player.id + '/player_records?rpp=100',
-              qCallBack: function (result) {
-                league.games = result
-              }
-            })
-          };
+    var url = eplURL,
+      eplRequest = $scope.getData({
+        endPointURL: url
+      });
 
-          return league;
+    eplRequest.promise.then(function (result) {
 
-        });
+      $scope.topEPLScorers = result.data.goals.map(function (i) {
 
-        console.log('$scope.topLigaScorers:', $scope.topLigaScorers);
-
-        allRequest.push(ligaRequest.promise);
-
-        $leagueTeams.chester.players.forEach(function (teamPlayer) {
-
-          //console.log('teamPlayer', teamPlayer);
-
-          $scope.topLigaScorers.forEach(function(leaguePlayer) {
-
-            //console.log(leaguePlayer.playerName, '===', teamPlayer.player);
-            if (leaguePlayer.playerName === teamPlayer.player) {
-
-              console.log('MATCH');
-
+        var league = {
+          id: i.player.id,
+          rank: i.ranking,
+          playerName: i.player.full_name,
+          teamName: i.team.full_name,
+          goals: i.stat,
+          game: null,
+          endPoint: $scope.getData({
+            endPointURL: 'http://api.thescore.com/epl/players/' + i.player.id + '/player_records?rpp=100',
+            qCallBack: function (result) {
+              league.games = result
             }
+          })
+        };
 
-          });
-
-        });
-
-
-      });
-
-      return ligaRequest;
-
-    },
-
-    getEPLLeaders = function () {
-
-      var url = eplURL,
-        eplRequest = getData({
-          endPointURL: url
-        });
-
-      eplRequest.promise.then(function (result) {
-
-        $scope.topEPLScorers = result.data.goals.map(function (i) {
-
-          var league = {
-            id: i.player.id,
-            rank: i.ranking,
-            playerName: i.player.full_name,
-            teamName: i.team.full_name,
-            goals: i.stat,
-            game: null,
-            endPoint: getData({
-              endPointURL: 'http://api.thescore.com/epl/players/' + i.player.id + '/player_records?rpp=100',
-              qCallBack: function (result) {
-                league.games = result
-              }
-            })
-          };
-
-          return league;
-
-        });
-
-        console.log('$scope.topEPLScorers:', $scope.topEPLScorers);
-        allRequest.push(eplRequest.promise);
+        eplRequest.resolve(league);
+        return league;
 
       });
 
-      return eplRequest;
+      console.log('$scope.topEPLScorers:', $scope.topEPLScorers);
 
-    },
+    });
 
-    getSeriLeaders = function () {
+    return eplRequest;
 
-      var url = seriURL,
-        seriRequest = getData({
-          endPointURL: url
-        });
+  };
 
-      seriRequest.promise.then(function (result) {
+  $scope.getSeriLeaders = function () {
 
-        $scope.topSeriScorers = result.data.goals.map(function (i) {
+    var url = seriURL,
+      seriRequest = $scope.getData({
+        endPointURL: url
+      });
 
-          var league = {
-            id: i.player.id,
-            rank: i.ranking,
-            playerName: i.player.full_name,
-            teamName: i.team.full_name,
-            goals: i.stat,
-            game: null,
-            endPoint: getData({
-              endPointURL: 'http://api.thescore.com/seri/players/' + i.player.id + '/player_records?rpp=100',
-              qCallBack: function (result) {
-                league.games = result
-              }
-            })
-          };
+    seriRequest.promise.then(function (result) {
 
-          return league;
+      $scope.topSeriScorers = result.data.goals.map(function (i) {
 
-        });
+        var league = {
+          id: i.player.id,
+          rank: i.ranking,
+          playerName: i.player.full_name,
+          teamName: i.team.full_name,
+          goals: i.stat,
+          game: null,
+          endPoint: $scope.getData({
+            endPointURL: 'http://api.thescore.com/seri/players/' + i.player.id + '/player_records?rpp=100',
+            qCallBack: function (result) {
+              league.games = result
+            }
+          })
+        };
 
-        console.log('$scope.topSeriScorers:', $scope.topSeriScorers);
-        allRequest.push(seriRequest.promise);
+        seriRequest.resolve(league);
+        return league;
 
       });
 
-      return seriRequest;
+      console.log('$scope.topSeriScorers:', $scope.topSeriScorers);
 
-    };
+    });
 
-  getLigaLeaders();
-  getEPLLeaders();
-  getSeriLeaders();
+    return seriRequest;
+
+  };
+
+  $scope.allRequestComplete = function () {
+
+    console.log('$scope.allRequestComplete');
+
+    $scope.allLeagues = [
+      {
+        name: 'Liga',
+        source: $scope.topLigaScorers
+      },
+      {
+        name: 'EPL',
+        source: $scope.topEPLScorers
+      },
+      {
+        name: 'Serie A',
+        source: $scope.topSeriScorers
+      }
+    ];
+
+    $scope.selectedLeague = $scope.allLeagues[0];
+
+    console.log('$scope.selectedLeague', $scope.selectedLeague);
+
+    $leagueTeams.chester.players.forEach(function (teamPlayer) {
+
+      $scope.topLigaScorers.forEach(function (leaguePlayer) {
+
+        //console.log(leaguePlayer.playerName, '===', teamPlayer.player);
+        if (leaguePlayer.playerName === teamPlayer.playerName && leaguePlayer.teamName === teamPlayer.teamName) {
+
+          console.log('MATCH', leaguePlayer.playerName);
+          console.log('MATCH', leaguePlayer);
+          console.log('MATCH', teamPlayer);
+
+        }
+
+      });
+
+    });
+
+  };
+
+
+  $q.all([$scope.getLigaLeaders().promise, $scope.getEPLLeaders().promise, $scope.getSeriLeaders().promise]).then($scope.allRequestComplete);
+
+
 
 
 });

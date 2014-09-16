@@ -4,131 +4,32 @@
     <h1>Sicklifes Fantasy League Manager</h1>
   </div>
 
-  <div class='panel-group' id='accordion'>
-    <div class='panel panel-default' id='panel1'>
-      <div class='panel-heading'>
-        <h4 class='panel-title'>
-          <a data-toggle='collapse' data-target='#collapseOne' href='#collapseOne'>
-            La Liga
-          </a>
-        </h4>
+  <div class='panel-body'>
+
+    <div class='col-md-5'>
+      <select id='view-select' class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague()'></select>
+    </div>
+
+    <div class='fantasy-table'>
+
+      <h2>{{selectedLeagueName}}</h2>
+
+      <div class='header'>
+        <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'>{{header.text}}</div>
       </div>
-      <div id='collapseOne' class='panel-collapse collapse'>
-        <div class='panel-body'>
-          <div class='fantasy-table'>
 
-            <h2>La Liga</h2>
-
-            <div class='header'>
-              <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'>{{header.text}}</div>
-            </div>
-
-            <div class='table-body'>
-              <div class='row' ng-repeat='scorer in topLigaScorers'>
-                <div class='col-md-1 small-hpadding'>{{scorer.id}}</div>
-                <div class='col-md-1 small-hpadding'>{{scorer.rank}}</div>
-                <div class='col-md-4 small-hpadding'>{{scorer.playerName}}</div>
-                <div class='col-md-4 small-hpadding'>{{scorer.teamName}}</div>
-                <div class='col-md-2 small-hpadding'>{{scorer.goals}}</div>
-              </div>
-            </div>
-
-          </div>
+      <div class='table-body'>
+        <div class='row' ng-repeat='scorer in selectedLeague.source'>
+          <div class='col-md-2 small-hpadding'>{{scorer.rank}}</div>
+          <div class='col-md-4 small-hpadding'>{{scorer.playerName}}</div>
+          <div class='col-md-4 small-hpadding'>{{scorer.teamName}}</div>
+          <div class='col-md-2 small-hpadding'>{{scorer.goals}}</div>
         </div>
       </div>
+
     </div>
-    <div class='panel panel-default' id='panel2'>
-      <div class='panel-heading'>
-        <h4 class='panel-title'>
-          <a data-toggle='collapse' data-target='#collapseTwo'
-             href='#collapseTwo' class='collapsed'>
-            EPL
-          </a>
-        </h4>
-      </div>
-      <div id='collapseTwo' class='panel-collapse collapse'>
-        <div class='panel-body'>
-          <div class='fantasy-table'>
 
-            <h2>EPL</h2>
-
-            <div class='header'>
-              <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'>{{header.text}}</div>
-            </div>
-
-            <div class='table-body'>
-              <div class='row' ng-repeat='scorer in topEPLScorers'>
-                <div class='col-md-1 small-hpadding'>{{scorer.id}}</div>
-                <div class='col-md-1 small-hpadding'>{{scorer.rank}}</div>
-                <div class='col-md-4 small-hpadding'>{{scorer.playerName}}</div>
-                <div class='col-md-4 small-hpadding'>{{scorer.teamName}}</div>
-                <div class='col-md-2 small-hpadding'>{{scorer.goals}}</div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class='panel panel-default' id='panel3'>
-      <div class='panel-heading'>
-        <h4 class='panel-title'>
-          <a data-toggle='collapse' data-target='#collapseThree'
-             href='#collapseThree' class='collapsed'>
-            Serie A
-          </a>
-        </h4>
-      </div>
-      <div id='collapseThree' class='panel-collapse collapse'>
-        <div class='panel-body'>
-          <div class='fantasy-table'>
-
-            <h2>Serie A</h2>
-
-            <div class='header'>
-              <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'>{{header.text}}</div>
-            </div>
-
-            <div class='table-body'>
-              <div class='row' ng-repeat='scorer in topSeriScorers'>
-                <div class='col-md-1 small-hpadding'>{{scorer.id}}</div>
-                <div class='col-md-1 small-hpadding'>{{scorer.rank}}</div>
-                <div class='col-md-4 small-hpadding'>{{scorer.playerName}}</div>
-                <div class='col-md-4 small-hpadding'>{{scorer.teamName}}</div>
-                <div class='col-md-2 small-hpadding'>{{scorer.goals}}</div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </div>
-    </div>
   </div>
-
-
-
-
-
-
-  <!--<div class='table-responsive'>
-    <table class='table table-bordered table-hover'>
-      <thead>
-      <tr>
-        <th ng-repeat='header in tableHeader'>{{header.text}}</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class='row' ng-repeat='scorer in topSeriScorers'>
-        <td class='col-md-1 small-hpadding'>{{scorer.id}}</td>
-        <td class='col-md-1 small-hpadding'>{{scorer.rank}}</td>
-        <td class='col-md-4 small-hpadding'>{{scorer.playerName}}</td>
-        <td class='col-md-4 small-hpadding'>{{scorer.teamName}}</td>
-        <td class='col-md-2 small-hpadding'>{{scorer.goals}}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>-->
 
 </div>
 
