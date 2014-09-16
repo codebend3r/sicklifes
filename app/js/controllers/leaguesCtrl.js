@@ -2,7 +2,9 @@
  * Created by crivas on 9/12/2014.
  */
 
-sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeams, $timeout) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams) {
+
+  console.log('leaguesCtrl');
 
   'use strict';
 
@@ -41,29 +43,10 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
     eplURL = 'http://api.thescore.com/epl/leaders?categories=goals',
     seriURL = 'http://api.thescore.com/seri/leaders?categories=goals';
 
-  $scope.getData = function (endPoint) {
-
-    var defer = $q.defer(),
-      httpObject = {
-        method: endPoint.method || 'GET',
-        url: endPoint.endPointURL
-      };
-
-    $http(httpObject).then(function (result) {
-
-      defer.resolve(result);
-      if (angular.isDefined(endPoint.qCallBack)) endPoint.qCallBack(result);
-
-    });
-
-    return defer;
-
-  };
-
   $scope.getLigaLeaders = function () {
 
     var url = ligaURL,
-      ligaRequest = $scope.getData({
+      ligaRequest = $apiFactory.getData({
         endPointURL: url
       });
 
@@ -78,7 +61,7 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
           teamName: i.team.full_name,
           goals: i.stat,
           game: null,
-          endPoint: $scope.getData({
+          endPoint: $apiFactory.getData({
             endPointURL: 'http://api.thescore.com/liga/players/' + i.player.id + '/player_records?rpp=100',
             qCallBack: function (result) {
               league.games = result
@@ -103,7 +86,7 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
   $scope.getEPLLeaders = function () {
 
     var url = eplURL,
-      eplRequest = $scope.getData({
+      eplRequest = $apiFactory.getData({
         endPointURL: url
       });
 
@@ -118,7 +101,7 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
           teamName: i.team.full_name,
           goals: i.stat,
           game: null,
-          endPoint: $scope.getData({
+          endPoint: $apiFactory.getData({
             endPointURL: 'http://api.thescore.com/epl/players/' + i.player.id + '/player_records?rpp=100',
             qCallBack: function (result) {
               league.games = result
@@ -142,7 +125,7 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
   $scope.getSeriLeaders = function () {
 
     var url = seriURL,
-      seriRequest = $scope.getData({
+      seriRequest = $apiFactory.getData({
         endPointURL: url
       });
 
@@ -157,7 +140,7 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
           teamName: i.team.full_name,
           goals: i.stat,
           game: null,
-          endPoint: $scope.getData({
+          endPoint: $apiFactory.getData({
             endPointURL: 'http://api.thescore.com/seri/players/' + i.player.id + '/player_records?rpp=100',
             qCallBack: function (result) {
               league.games = result
@@ -199,6 +182,8 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
 
     $scope.selectedLeague = $scope.allLeagues[0];
 
+    $scope.selectedLeagueName = $scope.selectedLeague.name;
+
     console.log('$scope.selectedLeague', $scope.selectedLeague);
 
     $leagueTeams.chester.players.forEach(function (teamPlayer) {
@@ -206,7 +191,7 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
       $scope.topLigaScorers.forEach(function (leaguePlayer) {
 
         //console.log(leaguePlayer.playerName, '===', teamPlayer.player);
-        if (leaguePlayer.playerName === teamPlayer.playerName && leaguePlayer.teamName === teamPlayer.teamName) {
+        if (leaguePlayer.playerName === teamPlayer.playerName) {
 
           console.log('MATCH', leaguePlayer.playerName);
           console.log('MATCH', leaguePlayer);
@@ -222,8 +207,6 @@ sicklifesFantasy.controller('mainCtrl', function ($scope, $http, $q, $leagueTeam
 
 
   $q.all([$scope.getLigaLeaders().promise, $scope.getEPLLeaders().promise, $scope.getSeriLeaders().promise]).then($scope.allRequestComplete);
-
-
 
 
 });

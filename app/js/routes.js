@@ -7,14 +7,25 @@ sicklifesFantasy.config(function ($routeProvider) {
   'use strict';
 
   $routeProvider.when('/', {
-    redirectTo: '/main/',
-    templateUrl: 'views/main.html',
-    controller: 'mainCtrl'
-  }).when('/main/', {
-    templateUrl: 'views/main.html',
-    controller: 'mainCtrl'
+
+    redirectTo: '/leagues/',
+    templateUrl: 'views/leagues.html',
+    controller: 'leaguesCtrl'
+
+  }).when('/leagues/', {
+
+    templateUrl: 'views/leagues.html',
+    controller: 'leaguesCtrl'
+
+  }).when('/players/', {
+
+    templateUrl: 'views/players.html',
+    controller: 'playersCtrl'
+
   }).otherwise({
-    redirectTo: '/main/'
+
+    redirectTo: '/leagues/'
+
   });
 
 });
