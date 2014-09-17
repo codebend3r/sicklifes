@@ -1,14 +1,12 @@
 <div class='container'>
 
   <div class='page-header'>
-    <!--<h1>Sicklifes Fantasy League Manager</h1>-->
+    <h2>Leagues</h2>
   </div>
 
   <div class='panel-body'>
 
-    <div class='col-md-5'>
-      <select id='view-select' class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague()'></select>
-    </div>
+    <select id='view-select' class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague()'></select>
 
     <div class='fantasy-table'>
 

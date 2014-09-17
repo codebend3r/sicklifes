@@ -32,6 +32,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   $scope.topLigaScorers = [];
   $scope.topEPLScorers = [];
   $scope.topSeriScorers = [];
+  $scope.topCLScorers = [];
+  $scope.topEuropaScorers = [];
 
   $scope.changeLeague = function () {
 
@@ -41,13 +43,14 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   var ligaURL = 'http://api.thescore.com/liga/leaders?categories=goals',
     eplURL = 'http://api.thescore.com/epl/leaders?categories=goals',
-    seriURL = 'http://api.thescore.com/seri/leaders?categories=goals';
+    seriURL = 'http://api.thescore.com/seri/leaders?categories=goals',
+    clURL = 'http://api.thescore.com/chlg/leaders?categories=goals',
+    europaURL = 'http://api.thescore.com/uefa/leaders?categories=goals';
 
   $scope.getLigaLeaders = function () {
 
-    var url = ligaURL,
-      ligaRequest = $apiFactory.getData({
-        endPointURL: url
+    var ligaRequest = $apiFactory.getData({
+        endPointURL: ligaURL
       });
 
     ligaRequest.promise.then(function (result) {
@@ -60,21 +63,13 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
           playerName: i.player.full_name,
           teamName: i.team.full_name,
           goals: i.stat,
-          game: null,
-          endPoint: $apiFactory.getData({
-            endPointURL: 'http://api.thescore.com/liga/players/' + i.player.id + '/player_records?rpp=100',
-            qCallBack: function (result) {
-              league.games = result
-            }
-          })
+          game: null
         };
 
         ligaRequest.resolve(league);
         return league;
 
       });
-
-      console.log('$scope.topLigaScorers:', $scope.topLigaScorers);
 
 
     });
@@ -85,9 +80,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   $scope.getEPLLeaders = function () {
 
-    var url = eplURL,
-      eplRequest = $apiFactory.getData({
-        endPointURL: url
+    var eplRequest = $apiFactory.getData({
+        endPointURL: eplURL
       });
 
     eplRequest.promise.then(function (result) {
@@ -100,21 +94,13 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
           playerName: i.player.full_name,
           teamName: i.team.full_name,
           goals: i.stat,
-          game: null,
-          endPoint: $apiFactory.getData({
-            endPointURL: 'http://api.thescore.com/epl/players/' + i.player.id + '/player_records?rpp=100',
-            qCallBack: function (result) {
-              league.games = result
-            }
-          })
+          game: null
         };
 
         eplRequest.resolve(league);
         return league;
 
       });
-
-      console.log('$scope.topEPLScorers:', $scope.topEPLScorers);
 
     });
 
@@ -124,9 +110,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   $scope.getSeriLeaders = function () {
 
-    var url = seriURL,
-      seriRequest = $apiFactory.getData({
-        endPointURL: url
+    var seriRequest = $apiFactory.getData({
+        endPointURL: seriURL
       });
 
     seriRequest.promise.then(function (result) {
@@ -139,13 +124,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
           playerName: i.player.full_name,
           teamName: i.team.full_name,
           goals: i.stat,
-          game: null,
-          endPoint: $apiFactory.getData({
-            endPointURL: 'http://api.thescore.com/seri/players/' + i.player.id + '/player_records?rpp=100',
-            qCallBack: function (result) {
-              league.games = result
-            }
-          })
+          game: null
         };
 
         seriRequest.resolve(league);
@@ -153,11 +132,69 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
       });
 
-      console.log('$scope.topSeriScorers:', $scope.topSeriScorers);
-
     });
 
     return seriRequest;
+
+  };
+
+  $scope.getCLLeaders = function () {
+
+    var clRequest = $apiFactory.getData({
+        endPointURL: clURL
+      });
+
+    clRequest.promise.then(function (result) {
+
+      $scope.topCLScorers = result.data.goals.map(function (i) {
+
+        var league = {
+          id: i.player.id,
+          rank: i.ranking,
+          playerName: i.player.full_name,
+          teamName: i.team.full_name,
+          goals: i.stat,
+          game: null
+        };
+
+        clRequest.resolve(league);
+        return league;
+
+      });
+
+    });
+
+    return clRequest;
+
+  };
+
+  $scope.getEuropaLeaders = function () {
+
+    var europaRequest = $apiFactory.getData({
+        endPointURL: europaURL
+      });
+
+    europaRequest.promise.then(function (result) {
+
+      $scope.topEuropaScorers = result.data.goals.map(function (i) {
+
+        var league = {
+          id: i.player.id,
+          rank: i.ranking,
+          playerName: i.player.full_name,
+          teamName: i.team.full_name,
+          goals: i.stat,
+          game: null
+        };
+
+        europaRequest.resolve(league);
+        return league;
+
+      });
+
+    });
+
+    return europaRequest;
 
   };
 
@@ -177,6 +214,14 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
       {
         name: 'Serie A',
         source: $scope.topSeriScorers
+      },
+      {
+        name: 'Champions League',
+        source: $scope.topCLScorers
+      },
+      {
+        name: 'Europa',
+        source: $scope.topEuropaScorers
       }
     ];
 
@@ -184,6 +229,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
     $scope.selectedLeagueName = $scope.selectedLeague.name;
 
+    console.log('$scope.allLeagues', $scope.allLeagues);
     console.log('$scope.selectedLeague', $scope.selectedLeague);
 
     $leagueTeams.chester.players.forEach(function (teamPlayer) {
@@ -203,10 +249,11 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
     });
 
+    $scope.allRequestComplete = null;
+
   };
 
-
-  $q.all([$scope.getLigaLeaders().promise, $scope.getEPLLeaders().promise, $scope.getSeriLeaders().promise]).then($scope.allRequestComplete);
+  $q.all([$scope.getLigaLeaders().promise, $scope.getEPLLeaders().promise, $scope.getSeriLeaders().promise, $scope.getCLLeaders().promise, $scope.getEuropaLeaders().promise]).then($scope.allRequestComplete);
 
 
 });

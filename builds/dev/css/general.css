@@ -4,6 +4,9 @@ html, body {
 .main-container {
   padding: 10px; }
 
+.form-control {
+  margin-bottom: 20px; }
+
 .fantasy-table {
   padding: 0;
   margin: 0;
@@ -18,5 +21,5 @@ html, body {
     width: 100%;
     padding: 5px 0;
     margin: 0; }
-    .fantasy-table .row:nth-child(even) {
+    .fantasy-table .row:nth-child(odd) {
       background-color: #c4e1ff; }

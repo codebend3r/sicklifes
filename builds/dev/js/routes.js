@@ -22,6 +22,11 @@ sicklifesFantasy.config(function ($routeProvider) {
     templateUrl: 'views/players.html',
     controller: 'playersCtrl'
 
+  }).when('/standings/', {
+
+    templateUrl: 'views/standings.html',
+    controller: 'standingsCtrl'
+
   }).otherwise({
 
     redirectTo: '/leagues/'

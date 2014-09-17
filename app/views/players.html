@@ -1,15 +1,18 @@
 <div class='container'>
 
   <div class='page-header'>
-    <h1>Sicklifes Fantasy League Manager</h1>
+    <h2>Teams</h2>
   </div>
 
   <div class='panel-body'>
 
-    <!--<div class='col-md-5'>
-      <select id='view-select' class='form-control' ng-model='selectedLeague'
-              ng-options='option.name for option in allLeagues' ng-change='changeLeague()'></select>
-    </div>-->
+    <select id='view-select' class='form-control' ng-model='selectedTeam' ng-options='option.personName for option in allTeams' ng-change='changeTeam()'></select>
+
+    <div class='jumbotron'>
+      <div class='container'>
+        <span><b>Total Points:</b> {{totalPoints}}</span>
+      </div>
+    </div>
 
     <div class='fantasy-table'>
 
@@ -20,10 +23,12 @@
       </div>
 
       <div class='table-body'>
-        <div class='row' ng-repeat='scorer in chesterTeams'>
-          <div class='col-md-5 small-hpadding'>{{scorer.playerName}}</div>
-          <div class='col-md-5 small-hpadding'>{{scorer.teamName}}</div>
-          <div class='col-md-2 small-hpadding'>0</div>
+        <div class='row' ng-repeat='scorer in selectedTeam.players'>
+          <div class='col-md-3 small-hpadding'>{{scorer.playerName}}</div>
+          <div class='col-md-4 small-hpadding'>{{scorer.teamName}}</div>
+          <div class='col-md-3 small-hpadding'>{{scorer.league}}</div>
+          <div class='col-md-1 small-hpadding text-center'>{{scorer.goals}}</div>
+          <div class='col-md-1 small-hpadding text-center'>{{scorer.points()}}</div>
         </div>
       </div>
 
