@@ -1,39 +1,32 @@
-<div class='container'>
+<nav-menu></nav-menu>
+<preloader loading='loading'></preloader>
 
-  <preloader loading='loading'><preloader>
+<div ng-if='!loading' class='panel-body'>
 
-  <div ng-if='!loading' class='panel-body'>
+  <h2>Players</h2>
 
-    <h2>Players</h2>
+  <select id='view-select' class='form-control' ng-model='defaultTeam' ng-options='option.personName for option in allTeams' ng-change='changeTeam()'></select>
 
-    <select id='view-select' class='form-control' ng-model='selectedTeam' ng-options='option.personName for option in allTeams' ng-change='changeTeam()'></select>
+  <p><b>Name:</b> {{selectedTeam.personName}}</p>
+  <p><b>Team Name:</b> {{selectedTeam.teamName}}</p>
+  <p><b>Total Points:</b> {{totalPoints}}</p>
 
-      <div class='container'>
-        <p><b>Name:</b> {{selectedTeam.personName}}</p>
-        <p><b>Team Name:</b> {{selectedTeam.teamName}}</p>
-        <p><b>Total Points:</b> {{totalPoints}}</p>
+  <div class='fantasy-table'>
+
+    <div class='header'>
+      <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a></div>
+    </div>
+
+    <div class='table-body'>
+      <div class='row' ng-repeat='scorer in selectedPlayers'>
+        <div class='col-md-3 small-hpadding'>{{scorer.playerName}}</div>
+        <div class='col-md-4 small-hpadding'>{{scorer.teamName}}</div>
+        <div class='col-md-3 small-hpadding'>{{scorer.league}}</div>
+        <div class='col-md-1 small-hpadding text-center'>{{scorer.goals}}</div>
+        <div class='col-md-1 small-hpadding text-center'>{{scorer.points()}}</div>
       </div>
-
-    <div class='fantasy-table'>
-
-      <div class='header'>
-        <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable' ng-click="order(header.orderCriteria, reverse)">{{header.text}}</a></div>
-      </div>
-
-      <div class='table-body'>
-        <div class='row' ng-repeat='scorer in selectedPlayers'>
-          <div class='col-md-3 small-hpadding'>{{scorer.playerName}}</div>
-          <div class='col-md-4 small-hpadding'>{{scorer.teamName}}</div>
-          <div class='col-md-3 small-hpadding'>{{scorer.league}}</div>
-          <div class='col-md-1 small-hpadding text-center'>{{scorer.goals}}</div>
-          <div class='col-md-1 small-hpadding text-center'>{{scorer.points()}}</div>
-        </div>
-      </div>
-
     </div>
 
   </div>
 
 </div>
-
-

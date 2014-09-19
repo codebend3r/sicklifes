@@ -2,7 +2,7 @@
  * Created by crivas on 9/18/2014.
  */
 
-sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $arrayMapper, $filter, $leagueTeams) {
+sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $arrayMapper, $leagueTeams) {
 
   'use strict';
 
@@ -36,10 +36,6 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
     }
   ];
 
-  $scope.reverse = true;
-
-  var orderBy = $filter('orderBy');
-
   $scope.order = function(predicate, reverse) {
     //reverse = !reverse;
     //console.log('predicate', predicate);
@@ -61,8 +57,10 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
 
   $scope.changeTeam = function () {
 
-    console.log($scope.selectedTeam);
-    $scope.populateTable();
+    //console.log('option', option);
+    console.log('$scope.selectedTeam', $scope.selectedTeam);
+    console.log('$scope.defaultTeam', $scope.defaultTeam);
+    //$scope.populateTable();
 
   };
 
@@ -114,6 +112,7 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
     ];
 
     $scope.selectedTeam = $scope.allTeams[0];
+    $scope.defaultTeam = $scope.selectedTeam;
     $scope.populateTable();
 
   };
@@ -147,7 +146,10 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
   $scope.populateTable = function () {
 
     $scope.totalPoints = 0;
+
     $scope.selectedPlayers = $scope.selectedTeam.players;
+
+    console.log('$scope.selectedPlayers', $scope.selectedPlayers);
 
     $scope.selectedTeam.players.forEach(function (teamPlayer) {
 
@@ -167,9 +169,7 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
           $scope.totalPoints += leaguePlayer.goals * 2;
 
           console.log('====================================================');
-          console.log('');
           console.log('MATCH leaguePlayer |', leaguePlayer.league(), '|', leaguePlayer.playerName, '|', leaguePlayer.teamName);
-          console.log('');
 
           $apiFactory.getData({
             endPointURL: $scope.getPlayerURL(leaguePlayer.league(), leaguePlayer.id),
@@ -194,8 +194,6 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
       });
 
     });
-
-    console.log('$scope.selectedPlayers:', $scope.selectedPlayers);
 
   };
 

@@ -89,7 +89,7 @@ gulp.task('partials', function () {
 gulp.task('template', function () {
   gulp.src([config.app + '/views/**/*.html'])
     .pipe(templateCache('./', {
-      module: 'sicklifesApp',
+      module: 'sicklifesFantasy',
       standalone: false,
       root: './views/'
     }))
@@ -115,7 +115,7 @@ gulp.task('css', [ 'sass' ], function () {
 });
 
 // JS
-gulp.task('scripts', function () {
+gulp.task('scripts', [ 'template' ], function () {
   return gulp.src([ config.app + '/js/**/*.js' ])
     .pipe(gulp.dest(config.dev + '/js/'))
 
@@ -206,9 +206,8 @@ gulp.task('move-GUI-images', [ 'images' ], function () {
 
 // Build
 gulp.task('build', [
-    'css',
-    'partials',
     'html',
+    'css',
     'scripts',
     'bower-all'
   ]
