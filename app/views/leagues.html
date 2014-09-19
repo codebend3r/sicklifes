@@ -1,10 +1,10 @@
 <div class='container'>
 
-  <div class='page-header'>
-    <h2>Leagues</h2>
-  </div>
+  <preloader loading='loading'><preloader>
 
-  <div class='panel-body'>
+  <div ng-if='!loading' class='panel-body'>
+
+    <h2>Leagues</h2>
 
     <select id='view-select' class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague()'></select>
 

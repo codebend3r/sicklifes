@@ -5,6 +5,7 @@
 sicklifesFantasy.factory('$leagueTeams', function () {
 
   return {
+
     chester: {
       personName: 'Chester R.',
       teamName: 'Inter Max',
@@ -55,43 +56,43 @@ sicklifesFantasy.factory('$leagueTeams', function () {
           playerName: 'Juan CUADRADO',
           teamName: 'Fiorintina',
           league: 'SERI',
-          ids: [ ]
+          ids: [ 358 ]
         },
         {
           playerName: 'Domenico BERARDI',
-          teamName: 'Juventus',
+          teamName: 'Sassuolo',
           league: 'SERI',
-          ids: [ ]
+          ids: [ 22137 ]
         },
         {
           playerName: 'Arjen ROBBEN',
           teamName: 'Bayern Munich',
           league: 'WILD',
-          ids: [ ]
+          ids: [ 2238 ]
         },
         {
           playerName: 'Loic REMY',
           teamName: 'Chelsea',
           league: 'EPL',
-          ids: [ ]
+          ids: [ 4780 ]
         },
         {
           playerName: 'Marek HAMSIK',
           teamName: 'Napoli',
           league: 'SERI',
-          ids: [ ]
+          ids: [ 267 ]
         },
         {
           playerName: 'HULK',
           teamName: 'Zenit St. Petersburg',
-          league: 'WILD',
-          ids: [ ]
+          league: 'WC',
+          ids: [ 2334 ]
         },
         {
           playerName: 'Paul POGBA',
           teamName: 'Juventus',
           league: 'SERI',
-          ids: [ ]
+          ids: [ 13802 ]
         },
         {
           playerName: 'Javier HERNANDEZ',
@@ -103,7 +104,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
           playerName: 'Keisuke HONDA',
           teamName: 'AC Milan',
           league: 'SERI',
-          ids: [ ]
+          ids: [ 3913 ]
         },
         {
           playerName: 'Andres INIESTA',
@@ -115,25 +116,25 @@ sicklifesFantasy.factory('$leagueTeams', function () {
           playerName: 'Adam LALLANA',
           teamName: 'Liverpool',
           league: 'EPL',
-          ids: [ ]
+          ids: [ 7070 ]
         },
         {
           playerName: 'Freddy GUARIN',
           teamName: 'Inter',
           league: 'SERI',
-          ids: [ ]
+          ids: [ 2331 ]
         },
         {
           playerName: 'Roberto SOLDADO',
           teamName: 'Tottenham',
           league: 'EPL',
-          ids: [ ]
+          ids: [ 1536 ]
         },
         {
           playerName: 'Henrik MKHITARYAN',
           teamName: 'Borrusia Dortmund',
           league: 'WILD',
-          ids: [ ]
+          ids: [ 10070 ]
         },
         {
           playerName: 'Ibai GOMEZ',
@@ -145,13 +146,13 @@ sicklifesFantasy.factory('$leagueTeams', function () {
           playerName: 'Dries MERTENS',
           teamName: 'Napoli',
           league: 'SERI',
-          ids: [ ]
+          ids: [ 267 ]
         },
         {
           playerName: 'Mesut OZIL',
           teamName: 'Arsenal',
           league: 'EPL',
-          ids: [ ]
+          ids: [ 3267 ]
         }
       ]
     },
@@ -163,251 +164,299 @@ sicklifesFantasy.factory('$leagueTeams', function () {
         {
           playerName: 'Lionel MESSI',
           teamName: 'BARCELONA',
-          league: 'LIGA'
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Daniel STURRIDGE',
           teamName: 'LIVERPOOL',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Edin DZEKO',
           teamName: 'MANCHESTER CITY',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Stevan JOVETIC',
           teamName: 'MANCHESTER CITY',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Eden HAZARD',
           teamName: 'CHELSEA',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Aaron RAMSEY',
           teamName: 'ARSENAL',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Fernando TORRES',
           teamName: 'AC MILAN',
-          league: ''
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Pablo OSVALDO',
           teamName: 'INTER MILAN',
-          league: ''
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Andre SCHURRLE',
           teamName: 'CHELSEA',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Cesc FABREGAS',
           teamName: 'CHELSEA',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'NOLITO',
           teamName: 'CELTA VIGO',
-          league: ''
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Christian BENTEKE',
           teamName: 'ASTON VILLA',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Raul JIMENEZ',
           teamName: 'ATLETICO MADRID',
-          league: ''
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Iker MUNIAIN',
           teamName: 'ATHLETIC BILBAO',
-          league: ''
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Marco SAU',
           teamName: 'CAGLIARI',
-          league: ''
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'CHARLES',
           teamName: 'CELTA VIGO',
-          league: ''
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'MICHU',
           teamName: 'NAPOLI',
-          league: ''
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Alberto PALOSCHI',
           teamName: 'CHIEVO',
-          league: ''
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Nathan DYER',
           teamName: 'SWANSEA CITY',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Antonio CASSANO',
           teamName: 'PARMA',
-          league: ''
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Toni KROOS',
           teamName: 'REAL MADRID',
-          league: ''
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Ciro IMMOBILE',
           teamName: 'BORUSSIA DORTMUND',
-          league: ''
+          league: 'WC',
+          ids: [ ]
         },
         {
           playerName: 'Angel DI MARIA',
           teamName: 'MANCHESTER UNITED',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Jonathan DE GUZMAN',
           teamName: 'NAPOLI',
-          league: ''
+          league: 'SERI',
+          ids: [ ]
         }
 
       ]
 
     },
 
-      dan: {
+    dan: {
       personName: 'Dan',
       teamName: '-',
       players: [
         {
           playerName: 'Diego COSTA',
           teamName: 'CHELSEA',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Zlatan IBRAHIMOVIC',
           teamName: 'PSG',
-          league: 'W'
+          league: 'WC',
+          ids: [ ]
         },
         {
           playerName: 'Mario BALOTELLI',
           teamName: 'LIVERPOOL',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'James RODRIGUEZ',
           teamName: 'REAL MADRID',
-          league: 'LIGA'
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Mattia DESTRO',
           teamName: 'ROMA',
-          league: 'SERI'
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Wayne ROONEY',
           teamName: 'MANCHESTER UNITED',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'PEDRO',
           teamName: 'BARCELONA',
-          league: 'LIGA'
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Arturo VIDAL',
           teamName: 'JUVENTUS',
-          league: 'SERI'
+          league: 'SERI',
+          ids: [ 3436 ]
         },
         {
           playerName: 'Simone ZAZA',
           teamName: 'SASSUOLO',
-          league: 'SERI'
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'AMAURI',
           teamName: 'TORINO',
-          league: 'SERI'
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'ISCO',
           teamName: 'REAL MADRID',
-          league: 'LIGA'
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'GERVINHO',
           teamName: 'ROMA',
-          league: 'SERI'
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Pablo PIATTI',
           teamName: 'VALENCIA',
-          league: 'LIGA'
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Steven GERRARD',
           teamName: 'LIVERPOOL',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'OSCAR',
           teamName: 'CHELSEA',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Aleix VIDAL',
           teamName: 'SEVILLA',
-          league: 'LIGA'
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Mauricio PINILLA',
           teamName: 'GENOA',
-          league: 'SERI'
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Jonathan BIABIANY',
           teamName: 'PARMA',
-          league: 'SERI'
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Alvaro MORATA',
           teamName: 'JUVENTUS',
-          league: 'SERI'
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Abel HERNANDEZ',
           teamName: 'Hull City',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Richmond BOAKYE',
           teamName: 'ATALANTA',
-          league: 'SERI'
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Kingsley COMAN',
           teamName: 'JUVENTUS',
-          league: 'SERI'
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Fabio BORINI',
           teamName: 'LIVERPOOL',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Lukas PODOLSKI',
           teamName: 'ARSENAL',
-          league: 'EPL'
+          league: 'EPL',
+          ids: [ ]
         }
 
       ]
@@ -419,123 +468,147 @@ sicklifesFantasy.factory('$leagueTeams', function () {
       players: [
         {
           playerName: 'Alexis SANCHEZ',
-          teamName: '',
-          league: ''
+          teamName: 'ARSENAL',
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Carlos TEVEZ',
-          teamName: '',
-          league: ''
+          teamName: 'JUVENTUS',
+          league: 'SERI',
+          ids: [ 1815 ]
         },
         {
           playerName: 'Aritz ADURIZ',
-          teamName: '',
-          league: ''
+          teamName: 'ATHLETIC BILBAO',
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Romelu LUKAKU',
-          teamName: '',
-          league: ''
+          teamName: 'EVERTON',
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Carlos BACCA',
-          teamName: '',
-          league: ''
+          teamName: 'SEVILLA',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Mario GOMEZ',
-          teamName: '',
-          league: ''
+          teamName: 'FIORENTINA',
+          league: 'SERI',
+          ids: [ 2225 ]
         },
         {
           playerName: 'Antonio DI NATALE',
-          teamName: '',
-          league: ''
+          teamName: 'UDINESE',
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Mauro ICARDI',
-          teamName: '',
-          league: ''
+          teamName: 'INTER',
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Steven NAISMITH',
-          teamName: '',
-          league: ''
+          teamName: 'EVERTON',
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Sergio GARCIA',
-          teamName: '',
-          league: ''
+          teamName: 'ESPANYOL',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Ishak BELFODIL',
-          teamName: '',
-          league: ''
+          teamName: 'PARMA',
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Edinson CAVANI',
-          teamName: '',
-          league: ''
+          teamName: 'PSG',
+          league: 'WC',
+          ids: [ ]
         },
         {
           playerName: 'Ikechukwu UCHE',
-          teamName: '',
-          league: ''
+          teamName: 'VILLARREAL',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Paco ALCACER',
-          teamName: '',
-          league: ''
+          teamName: 'VALENCIA',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Nikica JELAVIC',
-          teamName: '',
-          league: ''
+          teamName: 'HULL CITY',
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Keita BALDE',
-          teamName: '',
-          league: ''
+          teamName: 'LAZIO',
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Mame DIOUF',
-          teamName: '',
-          league: ''
+          teamName: 'STOKE CITY',
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Alvaro VAZQUEZ',
-          teamName: '',
-          league: ''
+          teamName: 'GETAFE',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
           playerName: 'Charlie AUSTIN',
-          teamName: '',
-          league: ''
+          teamName: 'QPR',
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Luis MURIEL',
-          teamName: '',
-          league: ''
+          teamName: 'UDINESE',
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Marcelo LARRONDO',
-          teamName: '',
-          league: ''
+          teamName: 'TORINO',
+          league: 'SERI',
+          ids: [ ]
         },
         {
           playerName: 'Peter CROUCH',
-          teamName: '',
-          league: ''
+          teamName: 'STOKE CITY',
+          league: 'EPL',
+          ids: [ ]
         },
         {
           playerName: 'Adrian RAMOS',
-          teamName: '',
-          league: ''
+          teamName: 'BORUSSIA DORTMUND',
+          league: 'WC',
+          ids: [ ]
         },
         {
           playerName: 'Paulo DYBALA',
-          teamName: '',
-          league: ''
+          teamName: 'PALERMO',
+          league: 'SERI',
+          ids: [ ]
         }
 
       ]
@@ -546,124 +619,148 @@ sicklifesFantasy.factory('$leagueTeams', function () {
       teamName: '-',
       players: [
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Karim BENZEMA',
+          teamName: 'REAL MADRID',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Fernando LLORENTE',
+          teamName: 'JUVENTUS',
+          league: 'SERI',
+          ids: [ 1102 ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Gonzalo HIGUAIN',
+          teamName: 'NAPOLI',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'NEYMAR',
+          teamName: 'BARCELONA',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Robin VAN PERSIE',
+          teamName: 'MANCHESTER UNITED',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Emmanuel ADEBAYOR',
+          teamName: 'TOTTENHAM',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Alvaro NEGREDO',
+          teamName: 'VALENCIA',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Danny WELBECK',
+          teamName: 'ARSENAL',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Robert LEWANDOWSKI',
+          teamName: 'BAYERN MUNICH',
+          league: 'WC',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Luca TONI',
+          teamName: 'VERONA',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Raul GARCIA',
+          teamName: 'ATLETICO MADRID',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Raheem STERLING',
+          teamName: 'LIVERPOOL',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Fabio QUAGLIARELLA',
+          teamName: 'TORINO',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Miroslav KLOSE',
+          teamName: 'LAZIO',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Francesco TOTTI',
+          teamName: 'ROMA',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Didier DROGBA',
+          teamName: 'CHELSEA',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Graziano PELLE',
+          teamName: 'SOUTHAMPTON',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Emmanuel RIVIERE',
+          teamName: 'NEWCASTLE',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Stephan EL SHAARAWY',
+          teamName: 'AC MILAN',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Steven FLETCHER',
+          teamName: 'SUNDERLAND',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Youssef EL ARABI',
+          teamName: 'GRANADA',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Imanol AGIRRETXE',
+          teamName: 'REAL SOCIEDAD',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Bojan KRKIC',
+          teamName: 'STOKE CITY',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Tomer HEMED',
+          teamName: 'ALMERIA',
+          league: 'LIGA',
+          ids: [ ]
         }
 
       ]
@@ -674,124 +771,148 @@ sicklifesFantasy.factory('$leagueTeams', function () {
       teamName: '-',
       players: [
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Sergio AGUERO',
+          teamName: 'MANCHESTER CITY',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Mario MANDZUKIC',
+          teamName: 'ATLETICO MADRID',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Olivier GIROUD',
+          teamName: 'ARSENAL',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Luis SUAREZ',
+          teamName: 'BARCELONA',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Kevin GAMEIRO',
+          teamName: 'SEVILLA',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Jose Maria CALLEJON',
+          teamName: 'NAPOLI',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Antoine GRIEZMANN',
+          teamName: 'ATLETICO MADRID',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Rodrigo PALACIO',
+          teamName: 'INTER MILAN',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Rickie LAMBERT',
+          teamName: 'LIVERPOOL',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Samuel ETO\'O',
+          teamName: 'EVERTON',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Thomas MULLER',
+          teamName: 'BAYERN MUNICH',
+          league: 'WC',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'German DENIS',
+          teamName: 'ATALANTA',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Jay RODRIGUEZ',
+          teamName: 'SOUTHAMPTON',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Alberto BUENO',
+          teamName: 'RAYO VALLECANO',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'EDER',
+          teamName: 'SAMPDORIA',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Giovani DOS SANTOS',
+          teamName: 'VILLARREAL',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Antonio CANDREVA',
+          teamName: 'LAZIO',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'David SILVA',
+          teamName: 'MANCHESTER CITY',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Jeremy MENEZ',
+          teamName: 'AC MILAN',
+          league: 'SERI',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Marco REUS',
+          teamName: 'BORUSSIA DORTMUND',
+          league: 'WC',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Munir EL HADDADI',
+          teamName: 'BARCELONA',
+          league: 'LIGA',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Bafetimbi GOMIS',
+          teamName: 'SWANSEA CITY',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Samir NASRI',
+          teamName: 'MANCHESTER CITY',
+          league: 'EPL',
+          ids: [ ]
         },
         {
-          playerName: '',
-          teamName: '',
-          league: ''
+          playerName: 'Sergio RAMOS',
+          teamName: 'REAL MADRID',
+          league: 'LIGA',
+          ids: [ ]
         }
 
       ]

@@ -4,7 +4,7 @@
 
 sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams) {
 
-  console.log('leaguesCtrl');
+  $scope.loading = true;
 
   'use strict';
 
@@ -201,6 +201,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   $scope.allRequestComplete = function () {
 
     console.log('$scope.allRequestComplete');
+    $scope.loading = false;
 
     $scope.allLeagues = [
       {

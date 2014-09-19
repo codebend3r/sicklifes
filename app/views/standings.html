@@ -1,12 +1,25 @@
 <div class='container'>
 
-  <div class='page-header'>
+  <preloader loading='loading'><preloader>
+
+  <div ng-if='!loading' class='panel-body'>
+
     <h2>Standings</h2>
-  </div>
 
-  <div class='panel-body'>
+    <div class='fantasy-table'>
 
+      <div class='header'>
+        <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a></div>
+      </div>
 
+      <div class='table-body'>
+        <div class='row' ng-repeat='scorer in allTeams | orderBy:"totalPoints":true'>
+          <div class='col-md-6 small-hpadding'>{{scorer.personName}}</div>
+          <div class='col-md-6 small-hpadding text-center'>{{scorer.totalPoints}}</div>
+        </div>
+      </div>
+
+    </div>
 
   </div>
 

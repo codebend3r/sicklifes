@@ -194,6 +194,11 @@ gulp.task('move-GUI-html', [ 'template' ], function () {
     .pipe(gulp.dest(config.dev + '/index.html'));
 });
 
+gulp.task('move-view-html', [ 'template' ], function () {
+  return gulp.src([config.dev + '/views/*.html', config.dev + '/views/**/*.html'])
+    .pipe(gulp.dest(config.dev + '/index.html'));
+});
+
 gulp.task('move-GUI-images', [ 'images' ], function () {
   return gulp.src([config.dev + '/images/**/*.{png,jpg,gif,svg}'])
     .pipe(gulp.dest(config.dev + '/images'));
@@ -206,21 +211,18 @@ gulp.task('build', [
     'html',
     'scripts',
     'bower-all'
-    //'images'
   ]
 );
 
 
 gulp.task('build-prod', [
   'css',
-  'html',
-  'images'
+  'html'
 ]);
 
 gulp.task('build-release', [
   'css',
-  'html',
-  'images'
+  'html'
 ]);
 
 // Karma - Unit

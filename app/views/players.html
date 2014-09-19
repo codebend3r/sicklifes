@@ -1,29 +1,27 @@
 <div class='container'>
 
-  <div class='page-header'>
-    <h2>Teams</h2>
-  </div>
+  <preloader loading='loading'><preloader>
 
-  <div class='panel-body'>
+  <div ng-if='!loading' class='panel-body'>
+
+    <h2>Players</h2>
 
     <select id='view-select' class='form-control' ng-model='selectedTeam' ng-options='option.personName for option in allTeams' ng-change='changeTeam()'></select>
 
-    <div class='jumbotron'>
       <div class='container'>
-        <span><b>Total Points:</b> {{totalPoints}}</span>
+        <p><b>Name:</b> {{selectedTeam.personName}}</p>
+        <p><b>Team Name:</b> {{selectedTeam.teamName}}</p>
+        <p><b>Total Points:</b> {{totalPoints}}</p>
       </div>
-    </div>
 
     <div class='fantasy-table'>
 
-      <!--<h2>{{selectedLeagueName}}</h2>-->
-
       <div class='header'>
-        <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'>{{header.text}}</div>
+        <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable' ng-click="order(header.orderCriteria, reverse)">{{header.text}}</a></div>
       </div>
 
       <div class='table-body'>
-        <div class='row' ng-repeat='scorer in selectedTeam.players'>
+        <div class='row' ng-repeat='scorer in selectedPlayers'>
           <div class='col-md-3 small-hpadding'>{{scorer.playerName}}</div>
           <div class='col-md-4 small-hpadding'>{{scorer.teamName}}</div>
           <div class='col-md-3 small-hpadding'>{{scorer.league}}</div>
