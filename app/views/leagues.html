@@ -5,11 +5,12 @@
 
   <h2>Leagues</h2>
 
-  <select id='view-select' class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague()'></select>
+  <select id='view-select' class='form-control' ng-model='selectedLeague'
+          ng-options='option.name for option in allLeagues' ng-change='changeLeague()'></select>
 
   <div class='fantasy-table'>
 
-    <h2>{{selectedLeagueName}}</h2>
+    <h2>{{selectedLeague.name}}</h2>
 
     <div class='header'>
       <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'>{{header.text}}</div>

@@ -21,7 +21,6 @@ sicklifesFantasy.factory('$arrayMapper', function () {
       return league;
 
     }
-
   }
 
 });

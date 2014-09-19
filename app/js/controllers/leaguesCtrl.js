@@ -37,7 +37,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   $scope.changeLeague = function () {
 
-    console.log('change leagues');
+    console.log('change leagues', $scope.selectedLeague);
 
   };
 
@@ -50,8 +50,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   $scope.getLigaLeaders = function () {
 
     var ligaRequest = $apiFactory.getData({
-        endPointURL: ligaURL
-      });
+      endPointURL: ligaURL
+    });
 
     ligaRequest.promise.then(function (result) {
 
@@ -81,8 +81,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   $scope.getEPLLeaders = function () {
 
     var eplRequest = $apiFactory.getData({
-        endPointURL: eplURL
-      });
+      endPointURL: eplURL
+    });
 
     eplRequest.promise.then(function (result) {
 
@@ -111,8 +111,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   $scope.getSeriLeaders = function () {
 
     var seriRequest = $apiFactory.getData({
-        endPointURL: seriURL
-      });
+      endPointURL: seriURL
+    });
 
     seriRequest.promise.then(function (result) {
 
@@ -141,8 +141,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   $scope.getCLLeaders = function () {
 
     var clRequest = $apiFactory.getData({
-        endPointURL: clURL
-      });
+      endPointURL: clURL
+    });
 
     clRequest.promise.then(function (result) {
 
@@ -171,8 +171,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   $scope.getEuropaLeaders = function () {
 
     var europaRequest = $apiFactory.getData({
-        endPointURL: europaURL
-      });
+      endPointURL: europaURL
+    });
 
     europaRequest.promise.then(function (result) {
 
@@ -227,28 +227,6 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
     ];
 
     $scope.selectedLeague = $scope.allLeagues[0];
-
-    $scope.selectedLeagueName = $scope.selectedLeague.name;
-
-    console.log('$scope.allLeagues', $scope.allLeagues);
-    console.log('$scope.selectedLeague', $scope.selectedLeague);
-
-    $leagueTeams.chester.players.forEach(function (teamPlayer) {
-
-      $scope.topLigaScorers.forEach(function (leaguePlayer) {
-
-        //console.log(leaguePlayer.playerName, '===', teamPlayer.player);
-        if (leaguePlayer.playerName === teamPlayer.playerName) {
-
-          console.log('MATCH', leaguePlayer.playerName);
-          console.log('MATCH', leaguePlayer);
-          console.log('MATCH', teamPlayer);
-
-        }
-
-      });
-
-    });
 
     $scope.allRequestComplete = null;
 

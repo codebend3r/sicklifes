@@ -2,7 +2,7 @@
  * Created by crivas on 9/18/2014.
  */
 
-sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $arrayMapper, $leagueTeams) {
+sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $arrayMapper, $textManipulator, $scoringLogic, $leagueTeams) {
 
   'use strict';
 
@@ -36,7 +36,7 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
     }
   ];
 
-  $scope.order = function(predicate, reverse) {
+  $scope.order = function (predicate, reverse) {
     //reverse = !reverse;
     //console.log('predicate', predicate);
     //console.log('predicate', $scope[predicate]);
@@ -57,15 +57,13 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
 
   $scope.changeTeam = function () {
 
-    //console.log('option', option);
-    console.log('$scope.selectedTeam', $scope.selectedTeam);
-    console.log('$scope.defaultTeam', $scope.defaultTeam);
+    console.log('change team', $scope.defaultTeam);
     //$scope.populateTable();
 
   };
 
   /**
-   *
+   * init function
    */
   $scope.init = function () {
 
@@ -76,8 +74,6 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
       defer.promise.then(function (result) {
 
         $scope.allPlayers = $scope.allPlayers.concat(result.data.goals.map($arrayMapper.goalsMap));
-
-        console.log('allPlayers --> allPlayers', index, $scope.allPlayers.length);
 
       });
 
@@ -94,7 +90,7 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
   $scope.allRequest = []; // array of promises
 
   /**
-   *
+   * all requests complete
    */
   $scope.allRequestComplete = function () {
 
@@ -112,44 +108,19 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
     ];
 
     $scope.selectedTeam = $scope.allTeams[0];
-    $scope.defaultTeam = $scope.selectedTeam;
+
     $scope.populateTable();
 
   };
 
-  var stripVowelAccent = function(str) {
-    var rExps = [
-      {re: /[\xC0-\xC6]/g, ch: 'A'},
-      {re: /[\xE0-\xE6]/g, ch: 'a'},
-      {re: /[\xC8-\xCB]/g, ch: 'E'},
-      {re: /[\xE8-\xEB]/g, ch: 'e'},
-      {re: /[\xCC-\xCF]/g, ch: 'I'},
-      {re: /[\xEC-\xEF]/g, ch: 'i'},
-      {re: /[\xD2-\xD6]/g, ch: 'O'},
-      {re: /[\xF2-\xF6]/g, ch: 'o'},
-      {re: /[\xD9-\xDC]/g, ch: 'U'},
-      {re: /[\xF9-\xFC]/g, ch: 'u'},
-      {re: /[\xD1]/g, ch: 'N'},
-      {re: /[\xF1]/g, ch: 'n'}
-    ];
-
-    for (var i = 0, len = rExps.length; i < len; i++)
-      str = str.replace(rExps[i].re, rExps[i].ch);
-
-    return str;
-
-  };
-
   /**
-   *
+   * builds table
    */
   $scope.populateTable = function () {
 
+    console.log('$scope.populateTable');
+
     $scope.totalPoints = 0;
-
-    $scope.selectedPlayers = $scope.selectedTeam.players;
-
-    console.log('$scope.selectedPlayers', $scope.selectedPlayers);
 
     $scope.selectedTeam.players.forEach(function (teamPlayer) {
 
@@ -159,14 +130,12 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
 
         //console.log(teamPlayer.playerName.toLowerCase(), '===', stripVowelAccent(leaguePlayer.playerName.toLowerCase()));
 
-        if (teamPlayer.playerName.toLowerCase() === stripVowelAccent(leaguePlayer.playerName.toLowerCase())) {
+        if (teamPlayer.playerName.toLowerCase() === $textManipulator.stripVowelAccent(leaguePlayer.playerName.toLowerCase())) {
 
           teamPlayer.goals += leaguePlayer.goals;
-          teamPlayer.points = function () {
-            return teamPlayer.goals * 2;
-          };
+          teamPlayer.points = $scoringLogic.calculatePoints(teamPlayer.goals, leaguePlayer.league());
 
-          $scope.totalPoints += leaguePlayer.goals * 2;
+          $scope.totalPoints += teamPlayer.points;
 
           console.log('====================================================');
           console.log('MATCH leaguePlayer |', leaguePlayer.league(), '|', leaguePlayer.playerName, '|', leaguePlayer.teamName);
