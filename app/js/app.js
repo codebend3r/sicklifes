@@ -11,6 +11,9 @@ if ( !String.prototype.contains ) {
 
 var sicklifesFantasy = angular.module('sicklifesFantasy', [
 
-  'ngRoute'
+  'ngRoute',
+  'LocalStorageModule'
 
 ]);
+
+sicklifesFantasy.constant('$date', Date);

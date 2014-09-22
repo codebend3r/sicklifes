@@ -7,7 +7,9 @@ sicklifesFantasy.factory('$scoringLogic', function () {
   return {
 
     calculatePoints: function (goals, league) {
-      if (league === 'EUROPA') {
+      league = league.toLowerCase();
+      league = league.replace(/^\/|\/$/g, '');
+      if (league === 'uefa' || league === 'europa') {
         return goals * 1;
       } else {
         return goals * 2;

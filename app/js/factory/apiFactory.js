@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.factory('$apiFactory', function ($http, $q) {
+sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService, $arrayLoopers, $date) {
 
   var scope = {};
 
@@ -26,63 +26,88 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q) {
 
   };
 
-  scope.getAllLeagues = function () {
+  scope.getAllLeagues = function (cbObj) {
 
-    var allLeagues = [
-      'http://api.thescore.com/liga/leaders?categories=goals',
-      'http://api.thescore.com/epl/leaders?categories=goals',
-      'http://api.thescore.com/seri/leaders?categories=goals',
-      'http://api.thescore.com/chlg/leaders?categories=goals',
-      'http://api.thescore.com/uefa/leaders?categories=goals'
-    ];
+    console.log('>> allLeagues', localStorageService.get('allLeagues'));
 
-    var listOrPromises = [],
-      listOfResults = [];
+    if (localStorageService.get('allLeagues')) {
 
-    allLeagues.forEach(function (url, index) {
+      console.log('get from localStorage');
 
-      var leagueRequest = scope.getData({
-        endPointURL: url
-      });
+      var currentDate = $date.create(),
+        lDate = localStorageService.get('lastCheckDate'),
+        lastDate = Date.create(lDate);
 
-      leagueRequest.promise.then(function (result) {
+      console.log('lDate', lDate);
+      console.log('lastDate', lastDate);
+      console.log('DIFF', Math.abs(currentDate - lastDate));
 
-        result.data.goals = result.data.goals.map(function(i) {
+      cbObj.allLeagues = localStorageService.get('allLeagues');
+      cbObj.liga = localStorageService.get('liga');
+      cbObj.epl = localStorageService.get('epl');
+      cbObj.seri = localStorageService.get('seri');
+      cbObj.chlg = localStorageService.get('chlg');
+      cbObj.uefa = localStorageService.get('uefa');
+      cbObj.cb();
 
-          var customResult = i;
+      return [];
 
-          customResult.url = url;
+    } else {
 
-          customResult.league = function () {
-            if (url.contains('liga')) {
-              return 'liga';
-            } else if (url.contains('epl')) {
-              return 'epl';
-            } else if (url.contains('seri')) {
-              return 'seri';
-            } else if (url.contains('chlg')) {
-              return 'chlg';
-            } else if (url.contains('uefa')) {
-              return 'uefa';
-            } else {
-              return 'unknown';
-            }
+      console.log('get from server');
 
-          };
+      cbObj.allLeagues = [];
 
-          return customResult;
+      var allLeaguesURL = [
+          'http://api.thescore.com/liga/leaders?categories=goals',
+          'http://api.thescore.com/epl/leaders?categories=goals',
+          'http://api.thescore.com/seri/leaders?categories=goals',
+          'http://api.thescore.com/chlg/leaders?categories=goals',
+          'http://api.thescore.com/uefa/leaders?categories=goals'
+        ],
+        allLeagues = [ 'liga', 'epl', 'seri', 'chlg', 'uefa' ],
+        listOrPromises = [],
+        listOfResults = [];
+
+      allLeaguesURL.forEach(function (url, index) {
+
+        var leagueRequest = scope.getData({
+          endPointURL: url
+        });
+
+        leagueRequest.promise.then(function (result) {
+
+          result.data.goals = result.data.goals.map($arrayLoopers.goalsMap.bind($arrayLoopers, url));
+          cbObj[allLeagues[index]] = result.data.goals; // save league data reference to cbObj
+          localStorageService.set(allLeagues[index], result.data.goals); // also save to localStorage
+          listOfResults.push(result);
 
         });
 
-        listOfResults.push(result);
+        listOrPromises.push(leagueRequest);
 
       });
 
-      listOrPromises.push(leagueRequest);
+      $q.all(listOrPromises.map(function (defer) {
 
-    });
+        return defer.promise;
 
-    return listOrPromises;
+      })).then(function (result) {
+
+        result.forEach(function (league) {
+          cbObj.allLeagues = cbObj.allLeagues.concat(league.data.goals);
+        });
+        localStorageService.set('allLeagues', cbObj.allLeagues); // also save to localStorage
+        cbObj.lastCheckDate = $date.create();
+        localStorageService.set('lastCheckDate', $date.create());
+        cbObj.cb();
+
+      });
+
+
+      return listOrPromises;
+
+    }
 
   };
 

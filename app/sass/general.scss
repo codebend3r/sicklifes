@@ -10,6 +10,10 @@ html, body {
   margin-bottom: 20px;
 }
 
+.table-body {
+  clear: both;
+}
+
 .fantasy-table {
 
   padding: 0;
@@ -23,6 +27,16 @@ html, body {
     height: 25px;
     line-height: 25px;
   }
+
+  /*@media (max-width: 700px) {
+
+    .row {
+      margin: 0;
+      padding: 0;
+      border: 1px solid red;
+    }
+
+  }*/
 
   .row {
     width: 100%;

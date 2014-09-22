@@ -1,5 +1,20 @@
-<nav-menu></nav-menu>
-<preloader loading='loading'></preloader>
+<!--<nav-menu></nav-menu>-->
+<ul class='nav nav-pills'>
+  <li ng-class='{active:isActive("/leagues/")}'><a href='#/leagues'>Leagues</a></li>
+  <li ng-class='{active:isActive("/players/")}'><a href='#/players'>Players</a></li>
+  <li ng-class='{active:isActive("/standings/")}'><a href='#/standings'>Standings</a></li>
+</ul>
+
+<!--<preloader loading='loading'></preloader>-->
+<div class='ajax-loader' ng-if='loading'>
+  <div class='equalizer-bars'>
+    <div class='rect1'></div>
+    <div class='rect2'></div>
+    <div class='rect3'></div>
+    <div class='rect4'></div>
+    <div class='rect5'></div>
+  </div>
+</div>
 
 <div ng-if='!loading' class='panel-body'>
 
@@ -8,13 +23,13 @@
   <div class='fantasy-table'>
 
     <div class='header'>
-      <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a></div>
+      <div class='col-md-6 col-xs-6' ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a></div>
     </div>
 
     <div class='table-body'>
-      <div class='row' ng-repeat='scorer in allTeams | orderBy:"totalPoints":true'>
-        <div class='col-md-6 small-hpadding'>{{scorer.personName}}</div>
-        <div class='col-md-6 small-hpadding text-center'>{{scorer.totalPoints}}</div>
+      <div class='row' ng-repeat='team in allTeams | orderBy:"totalPoints":true'>
+        <div class='col-md-6 col-xs-6 small-hpadding'><a ng-href='#/players?team={{team.personName}}'>{{team.personName}}</a></div>
+        <div class='col-md-6 col-xs-6 small-hpadding text-center'>{{team.totalPoints}}</div>
       </div>
     </div>
 

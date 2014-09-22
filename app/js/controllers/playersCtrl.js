@@ -2,7 +2,7 @@
  * Created by crivas on 9/18/2014.
  */
 
-sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $arrayMapper, $textManipulator, $scoringLogic, $leagueTeams) {
+sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $routeParams, $arrayMapper, localStorageService, $leagueTeams, $location) {
 
   'use strict';
 
@@ -10,55 +10,37 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-3 small-hpadding',
+      columnClass: 'col-md-3 col-xs-4 small-hpadding',
       text: 'Player',
       orderCriteria: ''
     },
     {
-      columnClass: 'col-md-4 small-hpadding',
+      columnClass: 'col-md-4 col-xs-4 small-hpadding',
       text: 'Team',
       orderCriteria: ''
     },
     {
-      columnClass: 'col-md-3 small-hpadding',
+      columnClass: 'col-md-3 col-xs-2 small-hpadding',
       text: 'League',
       orderCriteria: 'league'
     },
     {
-      columnClass: 'col-md-1 small-hpadding',
+      columnClass: 'col-md-1 col-xs-1 small-hpadding',
       text: 'Goals',
       orderCriteria: 'goal'
     },
     {
-      columnClass: 'col-md-1 small-hpadding',
+      columnClass: 'col-md-1 col-xs-1 small-hpadding',
       text: 'Points',
       orderCriteria: 'points()'
     }
   ];
 
-  $scope.order = function (predicate, reverse) {
-    //reverse = !reverse;
-    //console.log('predicate', predicate);
-    //console.log('predicate', $scope[predicate]);
-    //console.log('reverse', reverse);
-    //$scope.selectedTeam = orderBy($scope.selectedTeam, predicate, reverse);
-  };
+  $scope.changeTeam = function (selectedTeam) {
 
-  /**
-   *
-   * @param league
-   * @param id
-   * @returns {string}
-   */
-  $scope.getPlayerURL = function (league, id) {
-    var url = 'http://api.thescore.com/' + league + '/players/' + id + '/player_records?rpp=100';
-    return url;
-  };
-
-  $scope.changeTeam = function () {
-
-    console.log('change team', $scope.defaultTeam);
-    //$scope.populateTable();
+    console.log('change team', selectedTeam);
+    $scope.selectedTeam = selectedTeam;
+    $scope.populateTable();
 
   };
 
@@ -67,27 +49,15 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
    */
   $scope.init = function () {
 
-    $scope.allPlayers = [];
+    localStorageService.clearAll();
 
-    $apiFactory.getAllLeagues().forEach(function (defer, index) {
+    $scope.allLeagueDataObj = {
+      cb: $scope.allRequestComplete
+    };
 
-      defer.promise.then(function (result) {
-
-        $scope.allPlayers = $scope.allPlayers.concat(result.data.goals.map($arrayMapper.goalsMap));
-
-      });
-
-    });
-
-    $q.all($apiFactory.getAllLeagues().map(function (defer) {
-
-      return defer.promise;
-
-    })).then($scope.allRequestComplete);
+    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
 
   };
-
-  $scope.allRequest = []; // array of promises
 
   /**
    * all requests complete
@@ -107,7 +77,17 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
       $leagueTeams.joe
     ];
 
-    $scope.selectedTeam = $scope.allTeams[0];
+    $scope.allPlayers = $scope.allLeagueDataObj.allLeagues;
+
+    if ($routeParams.team) {
+      $scope.allTeams.forEach(function(team){
+        if (team.personName === $routeParams.team) {
+          $scope.selectedTeam = team;
+        }
+      });
+    } else {
+      $scope.selectedTeam = $scope.allTeams[0];
+    }
 
     $scope.populateTable();
 
@@ -119,54 +99,14 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $q, $a
   $scope.populateTable = function () {
 
     console.log('$scope.populateTable');
-
-    $scope.totalPoints = 0;
-
-    $scope.selectedTeam.players.forEach(function (teamPlayer) {
-
-      teamPlayer.goals = 0; // start at 0;
-
-      $scope.allPlayers.forEach(function (leaguePlayer) {
-
-        //console.log(teamPlayer.playerName.toLowerCase(), '===', stripVowelAccent(leaguePlayer.playerName.toLowerCase()));
-
-        if (teamPlayer.playerName.toLowerCase() === $textManipulator.stripVowelAccent(leaguePlayer.playerName.toLowerCase())) {
-
-          teamPlayer.goals += leaguePlayer.goals;
-          teamPlayer.points = $scoringLogic.calculatePoints(teamPlayer.goals, leaguePlayer.league());
-
-          $scope.totalPoints += teamPlayer.points;
-
-          console.log('====================================================');
-          console.log('MATCH leaguePlayer |', leaguePlayer.league(), '|', leaguePlayer.playerName, '|', leaguePlayer.teamName);
-
-          $apiFactory.getData({
-            endPointURL: $scope.getPlayerURL(leaguePlayer.league(), leaguePlayer.id),
-            qCallBack: function (result) {
-
-              //var resultArray = result.data.map(function(i) {
-
-              //console.log('player name:', i.player.full_name);
-              //console.log('goals: ', i.goals);
-              //console.log(i);
-              //teamPlayer.goals += result.data.length;
-
-              //});
-
-              //console.log('=============================================');
-
-            }
-          })
-
-        }
-
-      });
-
-    });
+    $scope.selectedTeam.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, $scope.selectedTeam));
 
   };
 
-  $scope.init();
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
 
+  $scope.init();
 
 });

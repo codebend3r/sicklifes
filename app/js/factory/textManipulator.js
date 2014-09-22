@@ -27,7 +27,24 @@ sicklifesFantasy.factory('$textManipulator', function () {
 
       return str;
 
+    },
+
+    acceptedLeague: function(league) {
+      return league === '/liga' || league === '/epl' || league === '/seri' || league === '/chlg' || league === '/uefa'
+    },
+
+    /**
+     *
+     * @param league
+     * @param id
+     * @returns {string}
+     */
+    getPlayerURL: function (league, id) {
+      var url = 'http://origin-api.thescore.com/'+ league.toLowerCase() +'/players/' + id + '/summary';
+      //var url = 'http://api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/player_records?rpp=100';
+      return url;
     }
+
 
   }
 

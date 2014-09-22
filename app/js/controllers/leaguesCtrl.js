@@ -2,7 +2,7 @@
  * Created by crivas on 9/12/2014.
  */
 
-sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $arrayMapper, localStorageService) {
 
   $scope.loading = true;
 
@@ -10,19 +10,19 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-2 small-hpadding',
+      columnClass: 'col-md-2 col-xs-2 small-hpadding',
       text: 'Rank'
     },
     {
-      columnClass: 'col-md-4 small-hpadding',
+      columnClass: 'col-md-4 col-xs-4 small-hpadding',
       text: 'Player'
     },
     {
-      columnClass: 'col-md-4 small-hpadding',
+      columnClass: 'col-md-4 col-xs-4 small-hpadding',
       text: 'Team'
     },
     {
-      columnClass: 'col-md-2 small-hpadding',
+      columnClass: 'col-md-2 col-xs-2 small-hpadding',
       text: 'Goals'
     }
   ];
@@ -35,204 +35,63 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   $scope.topCLScorers = [];
   $scope.topEuropaScorers = [];
 
-  $scope.changeLeague = function () {
+  $scope.changeLeague = function (league) {
 
-    console.log('change leagues', $scope.selectedLeague);
-
-  };
-
-  var ligaURL = 'http://api.thescore.com/liga/leaders?categories=goals',
-    eplURL = 'http://api.thescore.com/epl/leaders?categories=goals',
-    seriURL = 'http://api.thescore.com/seri/leaders?categories=goals',
-    clURL = 'http://api.thescore.com/chlg/leaders?categories=goals',
-    europaURL = 'http://api.thescore.com/uefa/leaders?categories=goals';
-
-  $scope.getLigaLeaders = function () {
-
-    var ligaRequest = $apiFactory.getData({
-      endPointURL: ligaURL
-    });
-
-    ligaRequest.promise.then(function (result) {
-
-      $scope.topLigaScorers = result.data.goals.map(function (i) {
-
-        var league = {
-          id: i.player.id,
-          rank: i.ranking,
-          playerName: i.player.full_name,
-          teamName: i.team.full_name,
-          goals: i.stat,
-          game: null
-        };
-
-        ligaRequest.resolve(league);
-        return league;
-
-      });
-
-
-    });
-
-    return ligaRequest;
-
-  };
-
-  $scope.getEPLLeaders = function () {
-
-    var eplRequest = $apiFactory.getData({
-      endPointURL: eplURL
-    });
-
-    eplRequest.promise.then(function (result) {
-
-      $scope.topEPLScorers = result.data.goals.map(function (i) {
-
-        var league = {
-          id: i.player.id,
-          rank: i.ranking,
-          playerName: i.player.full_name,
-          teamName: i.team.full_name,
-          goals: i.stat,
-          game: null
-        };
-
-        eplRequest.resolve(league);
-        return league;
-
-      });
-
-    });
-
-    return eplRequest;
-
-  };
-
-  $scope.getSeriLeaders = function () {
-
-    var seriRequest = $apiFactory.getData({
-      endPointURL: seriURL
-    });
-
-    seriRequest.promise.then(function (result) {
-
-      $scope.topSeriScorers = result.data.goals.map(function (i) {
-
-        var league = {
-          id: i.player.id,
-          rank: i.ranking,
-          playerName: i.player.full_name,
-          teamName: i.team.full_name,
-          goals: i.stat,
-          game: null
-        };
-
-        seriRequest.resolve(league);
-        return league;
-
-      });
-
-    });
-
-    return seriRequest;
-
-  };
-
-  $scope.getCLLeaders = function () {
-
-    var clRequest = $apiFactory.getData({
-      endPointURL: clURL
-    });
-
-    clRequest.promise.then(function (result) {
-
-      $scope.topCLScorers = result.data.goals.map(function (i) {
-
-        var league = {
-          id: i.player.id,
-          rank: i.ranking,
-          playerName: i.player.full_name,
-          teamName: i.team.full_name,
-          goals: i.stat,
-          game: null
-        };
-
-        clRequest.resolve(league);
-        return league;
-
-      });
-
-    });
-
-    return clRequest;
-
-  };
-
-  $scope.getEuropaLeaders = function () {
-
-    var europaRequest = $apiFactory.getData({
-      endPointURL: europaURL
-    });
-
-    europaRequest.promise.then(function (result) {
-
-      $scope.topEuropaScorers = result.data.goals.map(function (i) {
-
-        var league = {
-          id: i.player.id,
-          rank: i.ranking,
-          playerName: i.player.full_name,
-          teamName: i.team.full_name,
-          goals: i.stat,
-          game: null
-        };
-
-        europaRequest.resolve(league);
-        return league;
-
-      });
-
-    });
-
-    return europaRequest;
+    console.log('change leagues', league);
 
   };
 
   $scope.allRequestComplete = function () {
 
-    console.log('$scope.allRequestComplete');
+    console.log('$scope.allRequestComplete', $scope.allLeaguesData.allLeagues);
     $scope.loading = false;
 
     $scope.allLeagues = [
       {
-        name: 'Liga',
-        source: $scope.topLigaScorers
+        name: 'La Liga',
+        source: $scope.allLeagueDataObj.liga
       },
       {
         name: 'EPL',
-        source: $scope.topEPLScorers
+        source: $scope.allLeagueDataObj.epl
       },
       {
         name: 'Serie A',
-        source: $scope.topSeriScorers
+        source: $scope.allLeagueDataObj.seri
       },
       {
         name: 'Champions League',
-        source: $scope.topCLScorers
+        source: $scope.allLeagueDataObj.chlg
       },
       {
-        name: 'Europa',
-        source: $scope.topEuropaScorers
+        name: 'Europa League',
+        source: $scope.allLeagueDataObj.uefa
       }
     ];
 
     $scope.selectedLeague = $scope.allLeagues[0];
-
     $scope.allRequestComplete = null;
+    console.log('localStorageService.keys', localStorageService.keys());
 
   };
 
-  $q.all([$scope.getLigaLeaders().promise, $scope.getEPLLeaders().promise, $scope.getSeriLeaders().promise, $scope.getCLLeaders().promise, $scope.getEuropaLeaders().promise]).then($scope.allRequestComplete);
+  $scope.init = function(){
+
+    localStorageService.clearAll();
+
+    $scope.allLeagueDataObj = {
+      cb: $scope.allRequestComplete
+    };
+
+    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
+
+  };
+
+  $scope.init();
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
 
 
 });

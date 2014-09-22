@@ -2,7 +2,7 @@
  * Created by crivas on 9/18/2014.
  */
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $arrayMapper, $filter, $textManipulator, $scoringLogic, $leagueTeams) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $arrayMapper, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
 
   'use strict';
 
@@ -35,32 +35,22 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
    */
   $scope.init = function () {
 
-    $scope.allPlayers = [];
+    localStorageService.clearAll();
 
-    $apiFactory.getAllLeagues().forEach(function (defer, index) {
+    $scope.allLeagueDataObj = {
+      cb: $scope.allRequestComplete
+    };
 
-      defer.promise.then(function (result) {
-        $scope.allPlayers = $scope.allPlayers.concat(result.data.goals.map($arrayMapper.goalsMap));
-      });
-
-    });
-
-    $q.all($apiFactory.getAllLeagues().map(function (defer) {
-
-      return defer.promise;
-
-    })).then($scope.allRequestComplete);
+    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
 
   };
-
-  $scope.allRequest = []; // array of promises
 
   /**
    *
    */
   $scope.allRequestComplete = function () {
 
-    console.log('$scope.allRequestComplete');
+    console.log('$scope.allRequestComplete on', $scope.allLeagueDataObj.lastCheckDate);
     $scope.loading = false;
 
     $scope.allTeams = [
@@ -72,7 +62,10 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
       $leagueTeams.joe
     ];
 
-    $scope.selectedTeam = $scope.allTeams[0];
+    console.log('localStorageService.keys', localStorageService.keys());
+
+    $scope.allPlayers = $scope.allLeagueDataObj.allLeagues;
+
     $scope.populateTable();
 
   };
@@ -84,28 +77,19 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     $scope.allTeams.forEach(function (team) {
 
-      team.totalPoints = 0;
-
-      team.players.forEach(function (teamPlayer) {
-
-        $scope.allPlayers.forEach(function (leaguePlayer) {
-
-          if (teamPlayer.playerName.toLowerCase() === $textManipulator.stripVowelAccent(leaguePlayer.playerName.toLowerCase())) {
-
-            teamPlayer.goals += leaguePlayer.goals;
-            team.totalPoints = $scoringLogic.calculatePoints(teamPlayer.goals, leaguePlayer.league());
-
-          }
-
-        });
-
-      });
+      team.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, team));
 
     });
+
+    //localStorageService.set('allTeams', $scope.allTeams);
 
   };
 
   $scope.init();
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
 
 
 });

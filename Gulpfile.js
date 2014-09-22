@@ -115,7 +115,7 @@ gulp.task('css', [ 'sass' ], function () {
 });
 
 // JS
-gulp.task('scripts', [ 'template' ], function () {
+gulp.task('scripts', [ 'partials' ], function () {
   return gulp.src([ config.app + '/js/**/*.js' ])
     .pipe(gulp.dest(config.dev + '/js/'))
 
@@ -159,6 +159,13 @@ gulp.task('images', function () {
 
 
 // Clean
+
+gulp.task('clean-all', [
+  'clean-templatecache',
+  'clean-dev',
+  'clean-prod',
+  'clean-release'
+]);
 
 gulp.task('clean-templatecache', function () {
   return gulp.src([config.app + '/js/templates/templatescache.js'], { read: false }).pipe($.clean({force: true}));

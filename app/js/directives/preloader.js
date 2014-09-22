@@ -6,11 +6,14 @@ sicklifesFantasy.directive('preloader', function(){
 
   return {
     restrict: 'E',
-    replace: true,
+    replace: false,
     scope: {
-      loading: '='
+      //loading: '='
     },
-    templateURL: 'views/directives/preloader.html'
+    templateURL: 'views/directives/preloader.html',
+    link: function() {
+      console.log('preloader -- link');
+    }
   }
 
 });

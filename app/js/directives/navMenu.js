@@ -11,6 +11,8 @@ sicklifesFantasy.directive('navMenu', function ($location) {
     templateURL: 'views/directives/nav.html',
     link: function ($scope) {
 
+      console.log('navMenu -- link');
+
       $scope.isActive = function (viewLocation) {
         return viewLocation === $location.path();
       };
