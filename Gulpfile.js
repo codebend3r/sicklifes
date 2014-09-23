@@ -13,7 +13,7 @@ var gulp = require('gulp'),
     release: 'builds/release'
   },
   env = 'dev',
-  gulpif = require('gulp-if'),
+  gutil = require('gulp-util'),
   browserSync = require('browser-sync'),
   reload = browserSync.reload,
   templateCache = require('gulp-angular-templatecache'),
@@ -23,24 +23,31 @@ var gulp = require('gulp'),
 // TASKS
 //=============================================
 
-gulp.task('set-to-dev', function () {
-  env = 'dev';
-});
-
-gulp.task('set-to-prod', function () {
-  env = 'prod';
-});
-
-gulp.task('set-to-release', function () {
-  env = 'release';
-});
-
 // HTML
-gulp.task('html', function () {
-  return gulp.src([ config.app + '/index.html' ])
-    // RELEASE
-    .pipe(gulpif(env === 'release',
-      $.usemin({
+gulp.task('html', [ 'template', 'css' ], function () {
+
+  if (gutil.env.prod === true) {
+
+    gutil.log(gutil.colors.yellow('PROD BUILD'));
+
+    return gulp.src([ config.app + '/index.html' ])
+      .pipe($.usemin({
+        css: [
+          $.rev()
+        ],
+        js: [
+          $.rev()
+        ]
+      }))
+      .pipe(gulp.dest(config.prod))
+      .pipe($.size());
+
+  } else if (gutil.env.release === true) {
+
+    gutil.log(gutil.colors.green('RELEASE BUILD'));
+
+    return gulp.src([ config.app + '/index.html' ])
+      .pipe($.usemin({
         css: [
           $.csso(),
           $.rev()
@@ -50,54 +57,37 @@ gulp.task('html', function () {
           $.uglify(),
           $.rev()
         ]
-      })
-    ))
-    .pipe(gulpif(env === 'release',
-      gulp.dest(config.release)
-    ))
-    // PROD
-    .pipe(gulpif(env === 'prod',
-      $.usemin({
-        css: [$.rev()],
-        js: [$.rev()]
-      })
-    ))
-    .pipe(gulpif(env === 'prod',
-      gulp.dest(config.prod)
-    ))
-    // DEV
-    .pipe(gulpif(env === 'dev',
-      gulp.dest(config.dev)
-    ))
+      }))
+      .pipe(gulp.dest(config.release))
+      .pipe($.size());
 
-});
+  } else {
 
-gulp.task('partials', function () {
-  return gulp.src([ config.app + '/views/**/*.html' ])
-    .pipe(gulpif(env === 'release',
-      gulp.dest(config.release)
-    ))
-    .pipe(gulpif(env === 'prod',
-      gulp.dest(config.prod)
-    ))
-    .pipe(gulpif(env === 'dev',
-      gulp.dest(config.dev + '/views')
-    ))
+    gutil.log(gutil.colors.cyan('DEV BUILD'));
+
+    return gulp.src([ config.app + '/index.html' ])
+      .pipe(gulp.dest(config.dev))
+      .pipe($.size());
+
+  }
 
 });
 
 gulp.task('template', function () {
-  gulp.src([config.app + '/views/**/*.html'])
+
+  gulp.src([config.app + '/views/**/*.html', '!' + config.app + '/views/directives/assets/*.html', '!' + config.app + '/views/assets.html'])
     .pipe(templateCache('./', {
       module: 'sicklifesFantasy',
       standalone: false,
       root: './views/'
     }))
     .pipe(gulp.dest(config.app + '/js/templates/templatescache.js'));
+
 });
 
 // SASS
 gulp.task('sass', function () {
+
   return gulp.src([config.app + '/sass/*.scss'])
     .pipe($.sass({
       outputStyle: 'expanded'
@@ -108,52 +98,35 @@ gulp.task('sass', function () {
 
 // CSS
 gulp.task('css', [ 'sass' ], function () {
-  return gulp.src([config.app + '/css/**/*.css'])
-    .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-    .pipe(gulp.dest(config.dev + '/css/'))
+
+  if (gutil.env.dev === true) {
+
+    return gulp.src([config.app + '/css/**/*.css'])
+      .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+      .pipe(gulp.dest(config.dev + '/css/'))
+
+  }
 
 });
 
 // JS
-gulp.task('scripts', [ 'partials' ], function () {
-  return gulp.src([ config.app + '/js/**/*.js' ])
-    .pipe(gulp.dest(config.dev + '/js/'))
+gulp.task('scripts', function () {
+
+  if (gutil.env.dev === true) {
+    return gulp.src([ config.app + '/js/**/*.js' ])
+      .pipe(gulp.dest(config.dev + '/js/'))
+  }
 
 });
 
 // Bower
 gulp.task('bower-all', function () {
-  return gulp.src([ config.app + '/bower_components/**/*.{js,css}' ])
-    .pipe(gulp.dest(config.dev + '/bower_components/'))
 
-});
+  if (gutil.env.dev === true) {
+    return gulp.src([ config.app + '/bower_components/**/*.{js,css}' ])
+      .pipe(gulp.dest(config.dev + '/bower_components/'))
 
-// Images
-gulp.task('images', function () {
-  return gulp.src(config.app + '/images/**/*.{png,jpg,gif,svg}')
-    .pipe(gulpif(env === 'dev',
-      gulp.dest(config.dev + '/images/')
-    ))
-    .pipe(gulpif(env === 'prod',
-      $.imagemin({
-        optimizationLevel: 2,
-        progressive: true,
-        interlaced: true
-      })
-    ))
-    .pipe(gulpif(env === 'prod',
-      gulp.dest(config.prod + '/images/')
-    ))
-    .pipe(gulpif(env === 'release',
-      $.imagemin({
-        optimizationLevel: 1,
-        progressive: true,
-        interlaced: true
-      })
-    ))
-    .pipe(gulpif(env === 'release',
-      gulp.dest(config.release + '/images/')
-    ))
+  }
 
 });
 
@@ -213,56 +186,27 @@ gulp.task('move-GUI-images', [ 'images' ], function () {
 
 // Build
 gulp.task('build', [
-    'html',
     'css',
+    'html',
     'scripts',
     'bower-all'
   ]
 );
 
-
-gulp.task('build-prod', [
-  'css',
-  'html'
-]);
-
-gulp.task('build-release', [
-  'css',
-  'html'
-]);
-
-// Karma - Unit
-gulp.task('karma', function () {
-  gulp.src(['test/unit/**/*.js'])
-    .pipe($.karma({
-      configFile: 'karma.conf.js',
-      action: 'run'
-    }));
-
-});
-
-gulp.task('protractor', function () {
-  gulp.src(['test/e2e/*.js'])
-    .pipe($.protractor.protractor({
-      configFile: 'protractor.conf.js',
-      debug: false
-    }));
-});
-
 // Watch
 gulp.task('watch', [ 'browser-sync' ], function () {
 
   // Watch all .html files
-  gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], [ 'set-to-dev', 'build' ]);
+  gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], [ 'build' ]);
 
   // Watch .scss files
-  gulp.watch(config.app + '/sass/**/*.scss', [ 'set-to-dev', 'build' ]);
+  gulp.watch(config.app + '/sass/**/*.scss', [ 'build' ]);
 
   // Watch .js files
-  gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], [ 'set-to-dev', 'build' ]);
+  gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], [ 'build' ]);
 
   // Watch image files
-  gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', [ 'set-to-dev', 'build' ]);
+  gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', [  'build' ]);
 
 });
 
@@ -281,6 +225,6 @@ gulp.task('browser-sync', [ 'build' ], function () {
   });
 });
 
-gulp.task('default', [ 'set-to-dev', 'watch' ]);
+gulp.task('default', [ 'watch' ]);
 
 module.exports = gulp; // for chrome gulp dev-tools

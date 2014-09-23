@@ -77,6 +77,8 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     $scope.allTeams.forEach(function (team) {
 
+      team.totalPoints = 0;
+
       team.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, team));
 
     });

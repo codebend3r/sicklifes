@@ -20,7 +20,8 @@
 
   <h2>Leagues</h2>
 
-  <select class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague(selectedLeague)'></select>
+  <select class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues'
+          ng-change='changeLeague(selectedLeague)'></select>
 
   <div class='fantasy-table'>
 
@@ -32,10 +33,10 @@
 
     <div class='table-body'>
       <div class='row' ng-repeat='scorer in selectedLeague.source'>
-        <div class='col-md-2 col-xs-2 small-hpadding'>{{scorer.rank}}</div>
-        <div class='col-md-4 col-xs-4 small-hpadding'>{{scorer.playerName}}</div>
-        <div class='col-md-4 col-xs-4 small-hpadding'>{{scorer.teamName}}</div>
-        <div class='col-md-2 col-xs-2 small-hpadding'>{{scorer.goals}}</div>
+        <div class='col-md-2 col-sm-2 small-hpadding'>{{scorer.rank}}</div>
+        <div class='col-md-4 col-sm-4 small-hpadding'>{{scorer.playerName}}</div>
+        <div class='col-md-4 col-sm-4 small-hpadding'>{{scorer.teamName}}</div>
+        <div class='col-md-2 col-sm-2 small-hpadding'>{{scorer.goals}}</div>
       </div>
     </div>
 

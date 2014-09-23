@@ -10,28 +10,28 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-3 col-xs-4 small-hpadding',
+      columnClass: 'col-md-5 col-sm-4 small-hpadding',
       text: 'Player',
       orderCriteria: ''
     },
     {
-      columnClass: 'col-md-4 col-xs-4 small-hpadding',
+      columnClass: 'col-md-5 col-sm-4 small-hpadding',
       text: 'Team',
       orderCriteria: ''
     },
     {
-      columnClass: 'col-md-3 col-xs-2 small-hpadding',
+      columnClass: 'col-md-3 hidden-sm small-hpadding',
       text: 'League',
       orderCriteria: 'league'
     },
     {
-      columnClass: 'col-md-1 col-xs-1 small-hpadding',
-      text: 'Goals',
+      columnClass: 'col-md-1 col-sm-1 small-hpadding',
+      text: 'G',
       orderCriteria: 'goal'
     },
     {
-      columnClass: 'col-md-1 col-xs-1 small-hpadding',
-      text: 'Points',
+      columnClass: 'col-md-1 col-sm-1 small-hpadding',
+      text: 'P',
       orderCriteria: 'points()'
     }
   ];
@@ -80,7 +80,7 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
     $scope.allPlayers = $scope.allLeagueDataObj.allLeagues;
 
     if ($routeParams.team) {
-      $scope.allTeams.forEach(function(team){
+      $scope.allTeams.forEach(function (team) {
         if (team.personName === $routeParams.team) {
           $scope.selectedTeam = team;
         }
@@ -100,6 +100,13 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
 
     console.log('$scope.populateTable');
     $scope.selectedTeam.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, $scope.selectedTeam));
+
+    /*$scope.selectedTeam.players.forEach(function (player) {
+
+     console.log(player);
+
+     });*/
+
 
   };
 

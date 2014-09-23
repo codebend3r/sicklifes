@@ -27,13 +27,17 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
           qCallBack: function (result) {
 
             result.data.map(function (i) {
+
               if ($textManipulator.acceptedLeague(i.league.api_uri)) {
+
                 teamPlayers.goals += i.games_goals;
                 teamPlayers.points = $scoringLogic.calculatePoints(teamPlayers.goals, i.league.api_uri);
-                team.totalPoints += teamPlayers.points;
+
               }
 
             });
+
+            team.totalPoints += teamPlayers.points;
 
           }
         });
@@ -48,7 +52,7 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
 
           if (teamPlayers.playerName.toLowerCase() === $textManipulator.stripVowelAccent(leaguePlayer.playerName.toLowerCase())) {
 
-            console.log('MATCH', leaguePlayer.playerName, leaguePlayer.id);
+            console.log('OLD MATCH', leaguePlayer.playerName, leaguePlayer.id);
 
             teamPlayers.goals += leaguePlayer.goals;
             teamPlayers.points = $scoringLogic.calculatePoints(teamPlayers.goals, leaguePlayer.league);
