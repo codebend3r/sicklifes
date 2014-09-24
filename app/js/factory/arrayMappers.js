@@ -21,7 +21,10 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
       teamPlayers.clGoals = 0;
       teamPlayers.eGoals = 0;
 
-      team.totalPoints = 0; // start at 0;
+      team.totalPoints = 0;
+      team.clGoals = 0;
+      team.eGoals = 0;
+      team.domesticGoals = 0;
 
       if (angular.isDefined(teamPlayers.league) && teamPlayers.id !== null) {
 	  
@@ -53,6 +56,9 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
             });
 			
             team.totalPoints += teamPlayers.points;
+            team.clGoals += teamPlayers.clGoals;
+            team.eGoals += teamPlayers.eGoals;
+            team.domesticGoals += teamPlayers.domesticGoals;
 
           }
         });
