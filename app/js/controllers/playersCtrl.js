@@ -10,27 +10,32 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-5 col-sm-4 small-hpadding',
+      columnClass: 'col-md-4 col-sm-5 col-xs-10',
       text: 'Player',
       orderCriteria: ''
     },
     {
-      columnClass: 'col-md-5 col-sm-4 small-hpadding',
+      columnClass: 'col-md-3 col-sm-4 hidden-xs',
       text: 'Team',
       orderCriteria: ''
     },
     {
-      columnClass: 'col-md-3 hidden-sm small-hpadding',
+      columnClass: 'col-md-2 hidden-sm hidden-xs',
       text: 'League',
       orderCriteria: 'league'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 small-hpadding',
-      text: 'G',
-      orderCriteria: 'goal'
+      columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
+      text: 'D-G',
+      orderCriteria: 'domestic'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 small-hpadding',
+      columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
+      text: 'L-G',
+      orderCriteria: 'champions'
+    },
+    {
+      columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
       text: 'P',
       orderCriteria: 'points()'
     }

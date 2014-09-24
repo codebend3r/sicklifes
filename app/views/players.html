@@ -25,7 +25,7 @@
 
   <p><b>Name:</b> {{selectedTeam.personName}}</p>
 
-  <p><b>Team Name:</b> {{selectedTeam.teamName}}</p>
+  <!--<p><b>Team Name:</b> {{selectedTeam.teamName}}</p>-->
 
   <p><b>Total Points:</b> {{selectedTeam.totalPoints}}</p>
 
@@ -38,11 +38,12 @@
 
     <div class='table-body'>
       <div class='row' ng-repeat='scorer in selectedTeam.players'>
-        <div class='col-md-3 col-sm-5 small-hpadding'>{{scorer.playerName}}</div>
-        <div class='col-md-4 col-sm-5 small-hpadding'>{{scorer.teamName}}</div>
-        <div class='col-md-3 hidden-sm small-hpadding'>{{scorer.league}}</div>
-        <div class='col-md-1 col-sm-1 small-hpadding text-center'>{{scorer.goals}}</div>
-        <div class='col-md-1 col-sm-1 small-hpadding text-center'>{{scorer.points}}</div>
+        <div class='col-md-4 col-sm-5 col-xs-10'>{{scorer.playerName}}</div>
+        <div class='col-md-3 col-sm-4 hidden-xs'>{{scorer.teamName}}</div>
+        <div class='col-md-2 hidden-sm hidden-xs'>{{scorer.league}}</div>
+        <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.domesticGoals}}</div>
+        <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.leagueGoals}}</div>
+        <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.points}}</div>
       </div>
     </div>
 

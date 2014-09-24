@@ -14,6 +14,8 @@ sicklifesFantasy.factory('$arrayLoopers', function () {
         rank: i.ranking,
         playerName: i.player.full_name,
         teamName: i.team.full_name,
+        domesticGoals: 0,
+        leagueGoals: 0,
         goals: i.stat,
         league: '',
         game: null

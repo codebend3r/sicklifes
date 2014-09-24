@@ -10,12 +10,29 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-6 small-hpadding',
+      columnClass: 'col-md-4 col-xs-4 small-hpadding',
+      hoverTitle: 'Team',
       text: 'Team'
     },
     {
-      columnClass: 'col-md-6 text-center small-hpadding',
-      text: 'Total Points'
+      columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
+      hoverTitle: 'Domestic Goals',
+      text: 'D-G'
+    },
+    {
+      columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
+      hoverTitle: 'Champions League Goals',
+      text: 'CL-G'
+    },
+    {
+      columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
+      hoverTitle: 'Europa League Goals',
+      text: 'E-G'
+    },
+    {
+      columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
+      hoverTitle: 'Total Points',
+      text: 'PTS'
     }
   ];
 

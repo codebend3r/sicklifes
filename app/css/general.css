@@ -35,3 +35,11 @@ html, body {
     margin: 0; }
     .fantasy-table .row:nth-child(odd) {
       background-color: #c4e1ff; }
+
+.legend {
+  margin: 0;
+  padding: 0; }
+  .legend .ll {
+    margin: 0;
+    padding: 0;
+    list-style: none; }

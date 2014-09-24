@@ -197,21 +197,21 @@ gulp.task('build', [
 gulp.task('watch', [ 'browser-sync' ], function () {
 
   // Watch all .html files
-  gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], [ 'build' ]);
+  gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], [ 'bs-reload' ]);
 
   // Watch .scss files
-  gulp.watch(config.app + '/sass/**/*.scss', [ 'build' ]);
+  gulp.watch(config.app + '/sass/**/*.scss', [ 'bs-reload' ]);
 
   // Watch .js files
-  gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], [ 'build' ]);
+  gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], [ 'bs-reload' ]);
 
   // Watch image files
-  gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', [  'build' ]);
+  gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', [ 'bs-reload' ]);
 
 });
 
 
-gulp.task('bs-reload', function () {
+gulp.task('bs-reload', [ 'build' ], function () {
   browserSync.reload();
 });
 

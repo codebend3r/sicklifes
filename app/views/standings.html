@@ -23,17 +23,27 @@
   <div class='fantasy-table'>
 
     <div class='header'>
-      <div class='col-md-6 col-xs-6' ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a></div>
+      <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable' ng-title='{{header.hoverTitle}}'>{{header.text}}</a></div>
     </div>
 
     <div class='table-body'>
       <div class='row' ng-repeat='team in allTeams | orderBy:"totalPoints":true'>
-        <div class='col-md-6 col-xs-6 small-hpadding'><a ng-href='#/players?team={{team.personName}}'>{{team.personName}}</a></div>
-        <div class='col-md-6 col-xs-6 small-hpadding text-center'>{{team.totalPoints}}</div>
+        <div class='col-md-4 col-xs-4 small-hpadding'><a ng-href='#/players?team={{team.personName}}'>{{team.personName}}</a></div>
+        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.domesticGoals}}</div>
+        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.clGoals}}</div>
+        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.eGoals}}</div>
+        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.totalPoints}}</div>
       </div>
     </div>
 
   </div>
+
+  <!--<ul class='legend'>
+    <li>D-G - Domestic Goals</li>
+    <li>CL-g - League Goals</li>
+    <li>E-G - Europa League Goals</li>
+    <li>PTS - Total Points</li>
+  </ul>-->
 
 </div>
 

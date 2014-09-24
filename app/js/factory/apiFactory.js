@@ -26,33 +26,29 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   };
 
+  scope.getFromLocalStorage = function() {
+
+    console.log('get from localStorage');
+
+    var currentDate = $date.create(),
+      lDate = localStorageService.get('lastCheckDate'),
+      lastDate = Date.create(lDate);
+
+    cbObj.allLeagues = localStorageService.get('allLeagues');
+    cbObj.liga = localStorageService.get('liga');
+    cbObj.epl = localStorageService.get('epl');
+    cbObj.seri = localStorageService.get('seri');
+    cbObj.chlg = localStorageService.get('chlg');
+    cbObj.uefa = localStorageService.get('uefa');
+    cbObj.cb();
+
+    return [];
+
+  };
+
   scope.getAllLeagues = function (cbObj) {
 
     console.log('>> allLeagues', localStorageService.get('allLeagues'));
-
-    if (localStorageService.get('allLeagues')) {
-
-      console.log('get from localStorage');
-
-      var currentDate = $date.create(),
-        lDate = localStorageService.get('lastCheckDate'),
-        lastDate = Date.create(lDate);
-
-      console.log('lDate', lDate);
-      console.log('lastDate', lastDate);
-      console.log('DIFF', Math.abs(currentDate - lastDate));
-
-      cbObj.allLeagues = localStorageService.get('allLeagues');
-      cbObj.liga = localStorageService.get('liga');
-      cbObj.epl = localStorageService.get('epl');
-      cbObj.seri = localStorageService.get('seri');
-      cbObj.chlg = localStorageService.get('chlg');
-      cbObj.uefa = localStorageService.get('uefa');
-      cbObj.cb();
-
-      return [];
-
-    } else {
 
       console.log('get from server');
 
@@ -99,15 +95,16 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
         });
         localStorageService.set('allLeagues', cbObj.allLeagues); // also save to localStorage
         cbObj.lastCheckDate = $date.create();
-        localStorageService.set('lastCheckDate', $date.create());
         cbObj.cb();
+
+      }, function() {
+
+        scope.getFromLocalStorage();
 
       });
 
 
       return listOrPromises;
-
-    }
 
   };
 

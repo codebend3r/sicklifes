@@ -29,8 +29,24 @@ sicklifesFantasy.factory('$textManipulator', function () {
 
     },
 
+    isDomesticGoal: function(league) {
+      return league === '/liga' || league === '/epl' || league === '/seri';
+    },
+
+    isLeagueGoal: function(league) {
+      return league === '/chlg' || league === '/uefa';
+    },
+
+    isChampionsLeagueGoal: function(league) {
+      return league === '/chlg';
+    },
+
+    isEuropaGoal: function(league) {
+      return league === '/uefa';
+    },
+
     acceptedLeague: function(league) {
-      return league === '/liga' || league === '/epl' || league === '/seri' || league === '/chlg' || league === '/uefa'
+      return league === '/liga' || league === '/epl' || league === '/seri' || league === '/chlg' || league === '/uefa';
     },
 
     /**
