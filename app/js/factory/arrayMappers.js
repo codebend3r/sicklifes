@@ -27,34 +27,35 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
       team.domesticGoals = 0;
 
       if (angular.isDefined(teamPlayers.league) && teamPlayers.id !== null) {
-	  
+
         $apiFactory.getData({
           endPointURL: $textManipulator.getPlayerURL(teamPlayers.league, teamPlayers.id),
           qCallBack: function (result) {
 
             result.data.map(function (i) {
 
-              if ($textManipulator.acceptedLeague(i.league.api_uri)) {
+              if ($textManipulator.acceptedLeague(i.league.slug)) {
 
                 teamPlayers.goals += i.games_goals;
 
-                if ($textManipulator.isLeagueGoal(i.league.api_uri)) {
+                if ($textManipulator.isLeagueGoal(i.league.slug)) {
                   teamPlayers.leagueGoals += i.games_goals
                 }
 
-                if ($textManipulator.isDomesticGoal(i.league.api_uri)) {
+                if ($textManipulator.isDomesticGoal(i.league.slug)) {
                   teamPlayers.domesticGoals += i.games_goals;
-                } else if ($textManipulator.isChampionsLeagueGoal(i.league.api_uri)) {
+                } else if ($textManipulator.isChampionsLeagueGoal(i.league.slug)) {
                   teamPlayers.clGoals += i.games_goals;
-                } else if ($textManipulator.isEuropaGoal(i.league.api_uri)) {
+                } else if ($textManipulator.isEuropaGoal(i.league.slug)) {
                   teamPlayers.eGoals += i.games_goals;
                 }
-                teamPlayers.points = $scoringLogic.calculatePoints(teamPlayers.goals, i.league.api_uri);
+
+                teamPlayers.points += $scoringLogic.calculatePoints(i.games_goals, i.league.slug);
 
               }
 
             });
-			
+
             team.totalPoints += teamPlayers.points;
             team.clGoals += teamPlayers.clGoals;
             team.eGoals += teamPlayers.eGoals;

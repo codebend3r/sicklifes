@@ -10,14 +10,14 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-4 col-sm-5 col-xs-10',
+      columnClass: 'col-md-4 col-sm-5 col-xs-8',
       text: 'Player',
-      orderCriteria: ''
+      orderCriteria: 'player'
     },
     {
-      columnClass: 'col-md-3 col-sm-4 hidden-xs',
+      columnClass: 'col-md-2 col-sm-3 hidden-xs',
       text: 'Team',
-      orderCriteria: ''
+      orderCriteria: 'team'
     },
     {
       columnClass: 'col-md-2 hidden-sm hidden-xs',
@@ -26,20 +26,35 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
     },
     {
       columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
-      text: 'D-G',
+      text: 'DG',
       orderCriteria: 'domestic'
     },
     {
       columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
-      text: 'L-G',
+      text: 'CLG',
       orderCriteria: 'champions'
     },
     {
       columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
+      text: 'ELG',
+      orderCriteria: 'euro'
+    },
+    {
+      columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
       text: 'P',
-      orderCriteria: 'points()'
+      orderCriteria: 'total points for player'
     }
   ];
+
+  /*
+   <div class='col-md-4 col-sm-5 col-xs-8'>{{scorer.playerName}}</div>
+   <div class='col-md-2 col-sm-3 hidden-xs small-text bold'>{{scorer.teamName}}</div>
+   <div class='col-md-2 hidden-sm hidden-xs small-text'>{{scorer.league}}</div>
+   <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.domesticGoals}}</div>
+   <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.clGoals}}</div>
+   <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.eGoals}}</div>
+   <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.points}}</div>
+   */
 
   $scope.changeTeam = function (selectedTeam) {
 

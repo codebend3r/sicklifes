@@ -35,7 +35,7 @@
       <div class='row' ng-repeat='scorer in selectedLeague.source'>
         <div class='col-md-2 col-sm-2 small-hpadding'>{{scorer.rank}}</div>
         <div class='col-md-4 col-sm-4 small-hpadding'>{{scorer.playerName}}</div>
-        <div class='col-md-4 col-sm-4 small-hpadding'>{{scorer.teamName}}</div>
+        <div class='col-md-4 col-sm-4 small-hpadding small-text bold'>{{scorer.teamName()}}</div>
         <div class='col-md-2 col-sm-2 small-hpadding'>{{scorer.goals}}</div>
       </div>
     </div>

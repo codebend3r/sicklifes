@@ -24,7 +24,7 @@ var gulp = require('gulp'),
 //=============================================
 
 // HTML
-gulp.task('html', [ 'template', 'css' ], function () {
+gulp.task('html', [ 'js', 'css' ], function () {
 
   if (gutil.env.prod === true) {
 
@@ -110,7 +110,7 @@ gulp.task('css', [ 'sass' ], function () {
 });
 
 // JS
-gulp.task('scripts', function () {
+gulp.task('js', [ 'template' ], function () {
 
   if (gutil.env.dev === true) {
     return gulp.src([ config.app + '/js/**/*.js' ])
@@ -186,9 +186,7 @@ gulp.task('move-GUI-images', [ 'images' ], function () {
 
 // Build
 gulp.task('build', [
-    'css',
     'html',
-    'scripts',
     'bower-all'
   ]
 );

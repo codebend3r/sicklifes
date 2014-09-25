@@ -32,17 +32,19 @@
   <div class='fantasy-table'>
 
     <div class='header'>
-      <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a>
+      <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a ng-attr-title='{{header.orderCriteria}}'
+                                                                                class='clickable'>{{header.text}}</a>
       </div>
     </div>
 
     <div class='table-body'>
       <div class='row' ng-repeat='scorer in selectedTeam.players'>
-        <div class='col-md-4 col-sm-5 col-xs-10'>{{scorer.playerName}}</div>
-        <div class='col-md-3 col-sm-4 hidden-xs'>{{scorer.teamName}}</div>
-        <div class='col-md-2 hidden-sm hidden-xs'>{{scorer.league}}</div>
+        <div class='col-md-4 col-sm-5 col-xs-8'>{{scorer.playerName}}</div>
+        <div class='col-md-2 col-sm-3 hidden-xs small-text bold'>{{scorer.teamName}}</div>
+        <div class='col-md-2 hidden-sm hidden-xs small-text'>{{scorer.league}}</div>
         <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.domesticGoals}}</div>
-        <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.leagueGoals}}</div>
+        <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.clGoals}}</div>
+        <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.eGoals}}</div>
         <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.points}}</div>
       </div>
     </div>

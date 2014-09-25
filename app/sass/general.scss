@@ -49,12 +49,14 @@ html, body {
 
 }
 
-.legend {
-  margin: 0;
-  padding: 0;
-  .ll {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
+.bold {
+  font-weight: bold;
+}
+
+.standard-text {
+  font-size: 12px;
+}
+
+.small-text {
+  font-size: 10px;
 }

@@ -29,24 +29,24 @@ sicklifesFantasy.factory('$textManipulator', function () {
 
     },
 
-    isDomesticGoal: function(league) {
-      return league === '/liga' || league === '/epl' || league === '/seri';
+    isDomesticGoal: function (league) {
+      return league === 'liga' || league === 'epl' || league === 'seri';
     },
 
-    isLeagueGoal: function(league) {
-      return league === '/chlg' || league === '/uefa';
+    isLeagueGoal: function (league) {
+      return league === 'chlg' || league === 'uefa';
     },
 
-    isChampionsLeagueGoal: function(league) {
-      return league === '/chlg';
+    isChampionsLeagueGoal: function (league) {
+      return league === 'chlg';
     },
 
-    isEuropaGoal: function(league) {
-      return league === '/uefa';
+    isEuropaGoal: function (league) {
+      return league === 'uefa';
     },
 
-    acceptedLeague: function(league) {
-      return league === '/liga' || league === '/epl' || league === '/seri' || league === '/chlg' || league === '/uefa';
+    acceptedLeague: function (league) {
+      return league === 'liga' || league === 'epl' || league === 'seri' || league === 'chlg' || league === 'uefa';
     },
 
     /**
@@ -56,7 +56,7 @@ sicklifesFantasy.factory('$textManipulator', function () {
      * @returns {string}
      */
     getPlayerURL: function (league, id) {
-      var url = 'http://origin-api.thescore.com/'+ league.toLowerCase() +'/players/' + id + '/summary';
+      var url = 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/summary';
       //var url = 'http://api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/player_records?rpp=100';
       return url;
     }
