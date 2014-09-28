@@ -4,6 +4,16 @@ html, body {
 .main-container {
   padding: 10px; }
 
+.container.sicklifes-container {
+  padding: 0; }
+
+@media (max-width: 700px) {
+  .sicklifes-menu li {
+    width: 32.8%;
+    text-align: center; }
+    .sicklifes-menu li.active a {
+      border-radius: 0px; } }
+
 .form-control {
   margin-bottom: 20px; }
 

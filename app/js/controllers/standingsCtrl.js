@@ -17,17 +17,17 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
     {
       columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
       hoverTitle: 'Domestic Goals',
-      text: 'D-G'
+      text: 'DG'
     },
     {
       columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
       hoverTitle: 'Champions League Goals',
-      text: 'CL-G'
+      text: 'CLG'
     },
     {
       columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
       hoverTitle: 'Europa League Goals',
-      text: 'E-G'
+      text: 'EG'
     },
     {
       columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',

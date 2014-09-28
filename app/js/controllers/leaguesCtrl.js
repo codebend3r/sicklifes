@@ -10,19 +10,19 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-2 col-sm-2 small-hpadding',
+      columnClass: 'col-md-2 col-sm-2 col-xs-2 small-hpadding',
       text: 'Rank'
     },
     {
-      columnClass: 'col-md-4 col-sm-4 small-hpadding',
+      columnClass: 'col-md-4 col-sm-4 col-xs-4 small-hpadding',
       text: 'Player'
     },
     {
-      columnClass: 'col-md-4 col-sm-4 small-hpadding',
+      columnClass: 'col-md-4 col-sm-4 col-xs-4 small-hpadding',
       text: 'Team'
     },
     {
-      columnClass: 'col-md-2 col-sm-2 small-hpadding',
+      columnClass: 'col-md-2 col-sm-2 col-xs-2 small-hpadding',
       text: 'G'
     }
   ];
@@ -42,6 +42,10 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   };
 
   $scope.allRequestComplete = function () {
+
+    var fb = new Firebase('https://glaring-fire-9383.firebaseio.com/');
+    //fb.set('$leagueTeams', $leagueTeams);
+    fb.set({blah:'blah', text:'inter'});
 
     console.log('$scope.allRequestComplete', $scope.allLeaguesData.allLeagues);
     $scope.loading = false;

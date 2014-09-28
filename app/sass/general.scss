@@ -6,6 +6,30 @@ html, body {
   padding: 10px;
 }
 
+.container {
+  &.sicklifes-container {
+    padding: 0;
+  }
+}
+
+.sicklifes-menu {
+
+  li {
+    @media (max-width: 700px) {
+
+      width: 32.8%;
+      text-align: center;
+      &.active {
+        a {
+          border-radius: 0px;
+        }
+      }
+
+    }
+  }
+
+}
+
 .form-control {
   margin-bottom: 20px;
 }

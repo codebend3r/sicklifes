@@ -20,7 +20,8 @@ sicklifesFantasy.factory('$arrayLoopers', function () {
         leagueGoals: 0,
         goals: i.stat,
         league: '',
-        game: null
+        transactionsLog: [],
+        historyLog: []
       };
 
       if (url.contains('liga')) {

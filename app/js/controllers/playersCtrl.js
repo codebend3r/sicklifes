@@ -10,51 +10,42 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-4 col-sm-5 col-xs-8',
+      columnClass: 'col-md-4 col-sm-5 col-xs-6',
       text: 'Player',
-      orderCriteria: 'player'
+      hoverText: 'Player',
+      orderCriteria: ''
     },
     {
-      columnClass: 'col-md-2 col-sm-3 hidden-xs',
+      columnClass: 'col-md-3 col-sm-4 hidden-xs',
       text: 'Team',
-      orderCriteria: 'team'
+      hoverText: 'Team',
+      orderCriteria: ''
     },
     {
       columnClass: 'col-md-2 hidden-sm hidden-xs',
       text: 'League',
+      hoverText: 'League Goals',
       orderCriteria: 'league'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
+      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
       text: 'DG',
+      hoverText: 'Domestic Goals',
       orderCriteria: 'domestic'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
-      text: 'CLG',
+      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
+      text: 'LG',
+      hoverText: 'Champions League Goals',
       orderCriteria: 'champions'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
-      text: 'ELG',
-      orderCriteria: 'euro'
-    },
-    {
-      columnClass: 'col-md-1 col-sm-1 col-xs-1 text-center',
+      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
       text: 'P',
-      orderCriteria: 'total points for player'
+      hoverText: 'Total Points',
+      orderCriteria: 'points()'
     }
   ];
-
-  /*
-   <div class='col-md-4 col-sm-5 col-xs-8'>{{scorer.playerName}}</div>
-   <div class='col-md-2 col-sm-3 hidden-xs small-text bold'>{{scorer.teamName}}</div>
-   <div class='col-md-2 hidden-sm hidden-xs small-text'>{{scorer.league}}</div>
-   <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.domesticGoals}}</div>
-   <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.clGoals}}</div>
-   <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.eGoals}}</div>
-   <div class='col-md-1 col-sm-1 col-xs-1 text-center'>{{scorer.points}}</div>
-   */
 
   $scope.changeTeam = function (selectedTeam) {
 
@@ -120,13 +111,6 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
 
     console.log('$scope.populateTable');
     $scope.selectedTeam.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, $scope.selectedTeam));
-
-    /*$scope.selectedTeam.players.forEach(function (player) {
-
-     console.log(player);
-
-     });*/
-
 
   };
 
