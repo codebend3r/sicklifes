@@ -78,6 +78,8 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
           localStorageService.set(allLeagues[index], result.data.goals); // also save to localStorage
           listOfResults.push(result);
 
+        }, function() {
+          console.log('ERROR');
         });
 
         listOrPromises.push(leagueRequest);
@@ -99,6 +101,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
       }, function() {
 
+        console.log('get from localStorage');
         scope.getFromLocalStorage();
 
       });
