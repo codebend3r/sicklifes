@@ -43,9 +43,9 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   $scope.allRequestComplete = function () {
 
-    var fb = new Firebase('https://glaring-fire-9383.firebaseio.com/');
+    //var fb = new Firebase('https://glaring-fire-9383.firebaseio.com/');
     //fb.set('$leagueTeams', $leagueTeams);
-    fb.set({blah:'blah', text:'inter'});
+    //fb.set({blah:'blah', text:'inter'});
 
     console.log('$scope.allRequestComplete', $scope.allLeaguesData.allLeagues);
     $scope.loading = false;

@@ -32,29 +32,40 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
           endPointURL: $textManipulator.getPlayerURL(teamPlayers.league, teamPlayers.id),
           qCallBack: function (result) {
 
+            //console.log('result.data', result.data);
+
             result.data.map(function (i) {
 
-              if ($textManipulator.acceptedLeague(i.league.slug)) {
+              var league = i.box_score.event.league.slug;
 
-                teamPlayers.goals += i.games_goals;
+              //var date = new Date(i.box_score.event.game_date);
+              //console.log(date);
 
-                if ($textManipulator.isLeagueGoal(i.league.slug)) {
-                  teamPlayers.leagueGoals += i.games_goals
+              if ($textManipulator.acceptedLeague(league)) {
+
+                console.log('goals', i.goals, 'on', i.box_score.event.game_date);
+
+                teamPlayers.goals += i.goals;
+
+                if ($textManipulator.isLeagueGoal(league)) {
+                  teamPlayers.leagueGoals += i.goals
                 }
 
-                if ($textManipulator.isDomesticGoal(i.league.slug)) {
-                  teamPlayers.domesticGoals += i.games_goals;
-                } else if ($textManipulator.isChampionsLeagueGoal(i.league.slug)) {
-                  teamPlayers.clGoals += i.games_goals;
-                } else if ($textManipulator.isEuropaGoal(i.league.slug)) {
-                  teamPlayers.eGoals += i.games_goals;
+                if ($textManipulator.isDomesticGoal(league)) {
+                  teamPlayers.domesticGoals += i.goals;
+                } else if ($textManipulator.isChampionsLeagueGoal(league)) {
+                  teamPlayers.clGoals += i.goals;
+                } else if ($textManipulator.isEuropaGoal(league)) {
+                  teamPlayers.eGoals += i.goals;
                 }
 
-                teamPlayers.points += $scoringLogic.calculatePoints(i.games_goals, i.league.slug);
+                teamPlayers.points += $scoringLogic.calculatePoints(i.goals, league);
 
               }
 
             });
+
+            console.log('================================================');
 
             team.totalPoints += teamPlayers.points;
             team.clGoals += teamPlayers.clGoals;

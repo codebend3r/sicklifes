@@ -22,6 +22,11 @@ sicklifesFantasy.config(function ($routeProvider) {
     templateUrl: 'views/players.html',
     controller: 'playersCtrl'
 
+  }).when('/player-details/:playerID', {
+
+    templateUrl: 'views/player-details.html',
+    controller: 'playersDetailsCtrl'
+
   }).when('/standings/', {
 
     templateUrl: 'views/standings.html',

@@ -8,7 +8,7 @@ sicklifesFantasy.factory('$arrayLoopers', function () {
 
     goalsMap: function (url, i) {
 
-      console.log('i >> ', i);
+      //console.log('i >> ', i);
 
       var playerInLeague = {
         id: i.player.id,
@@ -18,8 +18,8 @@ sicklifesFantasy.factory('$arrayLoopers', function () {
         playerName2: function() {
           var firstName = i.player.first_name === null ? '' : i.player.first_name;
           var lastName = i.player.last_name === null ? '' : i.player.last_name.toUpperCase();
-          console.log('firstName', firstName);
-          console.log('lastName', lastName);
+          //console.log('firstName', firstName);
+          //console.log('lastName', lastName);
           return firstName + ' ' + lastName;
         },
         cleanPlayerName: function() {

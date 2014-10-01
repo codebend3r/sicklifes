@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService, $arrayLoopers, $date) {
+sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService, $arrayLoopers, $date, $textManipulator) {
 
   var scope = {};
 
@@ -46,6 +46,17 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   };
 
+  scope.getPlayerDetails = function (league, id) {
+
+    var playerRequest = scope.getData({
+      method: 'GET',
+      endPointURL: $textManipulator.getPlayerURL(league, id)
+    });
+
+    return playerRequest;
+
+  }
+
   scope.getAllLeagues = function (cbObj) {
 
     console.log('>> allLeagues', localStorageService.get('allLeagues'));
@@ -68,6 +79,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
       allLeaguesURL.forEach(function (url, index) {
 
         var leagueRequest = scope.getData({
+          method: 'GET',
           endPointURL: url
         });
 
