@@ -73,6 +73,30 @@ gulp.task('html', [ 'js', 'css' ], function () {
 
 });
 
+gulp.task('partials', function () {
+
+  if (gutil.env.prod === true) {
+
+    return gulp.src([ config.app + '/views/**/*.html' ])
+      .pipe(gulp.dest(config.prod + '/views'))
+      .pipe($.size());
+
+  } else if (gutil.env.release === true) {
+
+    return gulp.src([ config.app + '/views/**/*.html' ])
+      .pipe(gulp.dest(config.release + '/views'))
+      .pipe($.size());
+
+  } else {
+
+    return gulp.src([ config.app + '/views/**/*.html' ])
+      .pipe(gulp.dest(config.dev + '/views'))
+      .pipe($.size());
+
+  }
+
+});
+
 gulp.task('template', function () {
 
   gulp.src([config.app + '/views/**/*.html', '!' + config.app + '/views/directives/assets/*.html', '!' + config.app + '/views/assets.html'])

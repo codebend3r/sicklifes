@@ -14,15 +14,15 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
       text: 'Rank'
     },
     {
-      columnClass: 'col-md-4 col-sm-4 col-xs-4 small-hpadding',
+      columnClass: 'col-md-4 col-sm-4 col-xs-8 small-hpadding',
       text: 'Player'
     },
     {
-      columnClass: 'col-md-4 col-sm-4 col-xs-4 small-hpadding',
+      columnClass: 'col-md-4 col-sm-4 hidden-xs small-hpadding',
       text: 'Team'
     },
     {
-      columnClass: 'col-md-2 col-sm-2 col-xs-2 small-hpadding',
+      columnClass: 'col-md-2 col-sm-2 col-xs-2 text-center small-hpadding',
       text: 'G'
     }
   ];

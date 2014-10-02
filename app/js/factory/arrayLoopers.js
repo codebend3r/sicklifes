@@ -15,19 +15,8 @@ sicklifesFantasy.factory('$arrayLoopers', function () {
         url: url || '',
         rank: i.ranking,
         playerName: i.player.full_name,
-        playerName2: function() {
-          var firstName = i.player.first_name === null ? '' : i.player.first_name;
-          var lastName = i.player.last_name === null ? '' : i.player.last_name.toUpperCase();
-          //console.log('firstName', firstName);
-          //console.log('lastName', lastName);
-          return firstName + ' ' + lastName;
-        },
-        cleanPlayerName: function() {
-          return i.player.first_name + '<b>' + i.player.last_name.toUpperCase();
-        },
-        teamName: function () {
-          return i.team.full_name.toUpperCase();
-        },
+        cleanPlayerName: i.player.first_name + ' ' + i.player.last_name.toUpperCase(),
+        teamName: i.team.full_name.toUpperCase(),
         domesticGoals: 0,
         leagueGoals: 0,
         goals: i.stat,

@@ -1,5 +1,5 @@
 /**
- * Created by crivas on 9/12/2014.
+ * Created by crivas on 10/02/2014
  */
 
 if ( !String.prototype.contains ) {
@@ -12,6 +12,7 @@ if ( !String.prototype.contains ) {
 var sicklifesFantasy = angular.module('sicklifesFantasy', [
 
   'ngRoute',
+  'ngResource',
   'LocalStorageModule'
 
 ]);

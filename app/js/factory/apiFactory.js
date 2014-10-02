@@ -74,65 +74,63 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
     console.log('>> allLeagues', localStorageService.get('allLeagues'));
 
-      console.log('get from server');
+    cbObj.allLeagues = [];
 
-      cbObj.allLeagues = [];
+    var allLeaguesURL = [
+        'http://api.thescore.com/liga/leaders?categories=goals',
+        'http://api.thescore.com/epl/leaders?categories=goals',
+        'http://api.thescore.com/seri/leaders?categories=goals',
+        'http://api.thescore.com/chlg/leaders?categories=goals',
+        'http://api.thescore.com/uefa/leaders?categories=goals'
+      ],
+      allLeagues = [ 'liga', 'epl', 'seri', 'chlg', 'uefa' ],
+      listOrPromises = [],
+      listOfResults = [];
 
-      var allLeaguesURL = [
-          'http://api.thescore.com/liga/leaders?categories=goals',
-          'http://api.thescore.com/epl/leaders?categories=goals',
-          'http://api.thescore.com/seri/leaders?categories=goals',
-          'http://api.thescore.com/chlg/leaders?categories=goals',
-          'http://api.thescore.com/uefa/leaders?categories=goals'
-        ],
-        allLeagues = [ 'liga', 'epl', 'seri', 'chlg', 'uefa' ],
-        listOrPromises = [],
-        listOfResults = [];
+    allLeaguesURL.forEach(function (url, index) {
 
-      allLeaguesURL.forEach(function (url, index) {
-
-        var leagueRequest = scope.getData({
-          method: 'GET',
-          endPointURL: url
-        });
-
-        leagueRequest.promise.then(function (result) {
-
-          result.data.goals = result.data.goals.map($arrayLoopers.goalsMap.bind($arrayLoopers, url));
-          cbObj[allLeagues[index]] = result.data.goals; // save league data reference to cbObj
-          localStorageService.set(allLeagues[index], result.data.goals); // also save to localStorage
-          listOfResults.push(result);
-
-        }, function() {
-          console.log('ERROR');
-        });
-
-        listOrPromises.push(leagueRequest);
-
+      var leagueRequest = scope.getData({
+        method: 'GET',
+        endPointURL: url
       });
 
-      $q.all(listOrPromises.map(function (defer) {
+      leagueRequest.promise.then(function (result) {
 
-        return defer.promise;
-
-      })).then(function (result) {
-
-        result.forEach(function (league) {
-          cbObj.allLeagues = cbObj.allLeagues.concat(league.data.goals);
-        });
-        localStorageService.set('allLeagues', cbObj.allLeagues); // also save to localStorage
-        cbObj.lastCheckDate = $date.create();
-        cbObj.cb();
+        result.data.goals = result.data.goals.map($arrayLoopers.goalsMap.bind($arrayLoopers, url));
+        cbObj[allLeagues[index]] = result.data.goals; // save league data reference to cbObj
+        localStorageService.set(allLeagues[index], result.data.goals); // also save to localStorage
+        listOfResults.push(result);
 
       }, function() {
-
-        console.log('get from localStorage');
-        scope.getFromLocalStorage();
-
+        console.log('ERROR');
       });
 
+      listOrPromises.push(leagueRequest);
 
-      return listOrPromises;
+    });
+
+    $q.all(listOrPromises.map(function (defer) {
+
+      return defer.promise;
+
+    })).then(function (result) {
+
+      result.forEach(function (league) {
+        cbObj.allLeagues = cbObj.allLeagues.concat(league.data.goals);
+      });
+      localStorageService.set('allLeagues', cbObj.allLeagues); // also save to localStorage
+      cbObj.lastCheckDate = $date.create();
+      cbObj.cb();
+
+    }, function() {
+
+      console.log('get from localStorage');
+      scope.getFromLocalStorage();
+
+    });
+
+
+    return listOrPromises;
 
   };
 
