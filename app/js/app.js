@@ -1,13 +1,12 @@
 /**
- * Created by crivas on 10/02/2014
+ * Created by Bouse on 10/2/2014
  */
 
-if ( !String.prototype.contains ) {
-  String.prototype.contains = function() {
-    return String.prototype.indexOf.apply( this, arguments ) !== -1;
+if (!String.prototype.contains) {
+  String.prototype.contains = function () {
+    return String.prototype.indexOf.apply(this, arguments) !== -1;
   };
 }
-
 
 var sicklifesFantasy = angular.module('sicklifesFantasy', [
 

@@ -1,21 +1,6 @@
-<!-- <nav-menu></nav-menu> -->
-<ul class='nav nav-pills sicklifes-menu'>
-  <li ng-class='{active:isActive("/leagues/")}'><a href='#/leagues'>Leagues</a></li>
-  <li ng-class='{active:isActive("/players/")}'><a href='#/players'>Players</a></li>
-  <li ng-class='{active:isActive("/standings/")}'><a href='#/standings'>Standings</a></li>
-</ul>
+<nav-menu></nav-menu>
 
-
-<!-- <preloader loading='loading'></preloader> -->
-<div ng-if='loading' class='ajax-loader'>
-  <div class='equalizer-bars'>
-    <div class='rect1'></div>
-    <div class='rect2'></div>
-    <div class='rect3'></div>
-    <div class='rect4'></div>
-    <div class='rect5'></div>
-  </div>
-</div>
+<preloader loading='loading'></preloader>
 
 <div ng-if='!loading' class='panel-body'>
 
@@ -38,7 +23,7 @@
     </div>
 
   </div>
-  
+
 </div>
 
 

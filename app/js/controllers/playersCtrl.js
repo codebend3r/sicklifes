@@ -1,10 +1,9 @@
 /**
- * Created by crivas on 9/18/2014.
+ * Created by Bouse on 10/2/2014
  */
 
-sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $routeParams, $arrayMapper, localStorageService, $leagueTeams, $location) {
 
-  'use strict';
+sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $routeParams, $arrayMapper, localStorageService, $leagueTeams, $location) {
 
   $scope.loading = true;
 
@@ -121,3 +120,5 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
   $scope.init();
 
 });
+
+

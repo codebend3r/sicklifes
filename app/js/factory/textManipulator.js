@@ -1,6 +1,8 @@
 /**
- * Created by crivas on 9/12/2014.
+ * Created by Bouse on 10/2/2014
  */
+
+
 
 sicklifesFantasy.factory('$textManipulator', function () {
 

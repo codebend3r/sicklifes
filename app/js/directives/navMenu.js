@@ -1,17 +1,16 @@
 /**
- * Created by Bouse on 9/18/2014.
+ * Created by Bouse on 10/2/2014
  */
+
 
 sicklifesFantasy.directive('navMenu', function ($location) {
 
   return {
-    restrict: 'AE',
+    restrict: 'E',
     replace: false,
+    templateUrl: 'views/directives/nav.html',
     scope: {},
-    templateURL: 'views/directives/nav.html',
     link: function ($scope) {
-
-      console.log('navMenu -- link');
 
       $scope.isActive = function (viewLocation) {
         return viewLocation === $location.path();

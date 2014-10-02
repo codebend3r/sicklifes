@@ -26,7 +26,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   };
 
-  scope.getFromLocalStorage = function(cbObj) {
+  scope.getFromLocalStorage = function (cbObj) {
 
     console.log('get from localStorage');
 
@@ -101,7 +101,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
         localStorageService.set(allLeagues[index], result.data.goals); // also save to localStorage
         listOfResults.push(result);
 
-      }, function() {
+      }, function () {
         console.log('ERROR');
       });
 
@@ -122,7 +122,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
       cbObj.lastCheckDate = $date.create();
       cbObj.cb();
 
-    }, function() {
+    }, function () {
 
       console.log('get from localStorage');
       scope.getFromLocalStorage();

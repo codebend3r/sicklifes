@@ -1,10 +1,9 @@
 /**
- * Created by crivas on 9/18/2014.
+ * Created by Bouse on 10/2/2014
  */
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $arrayMapper, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
 
-  'use strict';
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $arrayMapper, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
 
   $scope.loading = true;
 
