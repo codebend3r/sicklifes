@@ -13,6 +13,7 @@ var sicklifesFantasy = angular.module('sicklifesFantasy', [
 
   'ngRoute',
   'ngResource',
+  'ngSanitize',
   'LocalStorageModule'
 
 ]);

@@ -97,7 +97,7 @@ gulp.task('partials', function () {
 
 });
 
-gulp.task('template', function () {
+gulp.task('template', [ 'partials' ], function () {
 
   gulp.src([config.app + '/views/**/*.html', '!' + config.app + '/views/directives/assets/*.html', '!' + config.app + '/views/assets.html'])
     .pipe(templateCache('./', {

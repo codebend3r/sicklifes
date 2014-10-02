@@ -10,5 +10,11 @@
     "jquery": "2.1.1",
     "tweenlite": "1.11.5",
     "angular-local-storage": "~0.0.7"
+  },
+  "resolutions": {
+    "angular": "1.2.26"
+  },
+  "devDependencies": {
+    "angular-sanitize": "~1.2.26"
   }
 }

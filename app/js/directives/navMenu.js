@@ -5,7 +5,7 @@
 sicklifesFantasy.directive('navMenu', function ($location) {
 
   return {
-    restrict: 'E',
+    restrict: 'AE',
     replace: false,
     scope: {},
     templateURL: 'views/directives/nav.html',
