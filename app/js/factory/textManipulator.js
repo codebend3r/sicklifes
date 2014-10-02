@@ -49,21 +49,18 @@ sicklifesFantasy.factory('$textManipulator', function () {
       return league === 'liga' || league === 'epl' || league === 'seri' || league === 'chlg' || league === 'uefa';
     },
 
-    /**
-     *
-     * @param league
-     * @param id
-     * @returns {string}
-     */
     getPlayerURL: function (league, id) {
+      return 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/player_records';
+    },
 
-      //var url = 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/summary';
-      var url = 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/player_records?rpp=10';
-      //TRY THIS ONE --> http://origin-api.thescore.com/liga/players/1310/player_records?rpp=10
+    getPlayerSummaryURL: function (league, id) {
+      return'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/summary';
+    },
 
-      //var url = 'http://api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/player_records?rpp=100';
-      return url;
+    getPlayerProfileURL: function (id) {
+      return 'http://origin-api.thescore.com/soccer/players/' + id;
     }
+
 
 
   }

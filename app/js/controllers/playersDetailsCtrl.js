@@ -8,28 +8,109 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
   $scope.loading = true;
 
+  $scope.tableHeader = [
+    {
+      columnClass: 'col-sm-5',
+      text: 'Opponent'
+    },
+    {
+      columnClass: 'col-sm-1 text-center',
+      text: 'G'
+    },
+    {
+      columnClass: 'col-sm-3',
+      text: 'League'
+    },
+    {
+      columnClass: 'col-sm-3',
+      text: 'Date Played'
+    }
+  ];
+
   $scope.player = {};
+
+  $scope.gameMapper = function(game) {
+
+    return {
+      alignment: game.alignment === 'away' ? '@' : 'vs',
+      vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
+      goalsScored: game.goals,
+      leagueName: game.box_score.event.league.slug.toUpperCase(),
+      datePlayed: Date.create(game.box_score.event.game_date).format('{dd}/{MM}/{yy}')
+    };
+  };
+
+  $scope.filterAfterDate = function(game) {
+    var gameDate = Date.create(game.box_score.event.game_date);
+    var isAfter = gameDate.isAfter('September 1 2014');
+    return isAfter;
+  };
 
   $scope.init = function () {
 
     var id = $routeParams.playerID;
 
-    var league = 'liga';
+    var playerProfileRequest = $apiFactory.getPlayerProfile('liga', id);
 
-    var playerDetailsRequest = $apiFactory.getPlayerDetails(league, id);
+    playerProfileRequest.promise.then(function (result) {
+      $scope.player.playerName = result.data.first_name + ' ' + result.data.last_name.toUpperCase();
+      $scope.player.playerImage = result.data.headshots.original;
+    });
 
-    playerDetailsRequest.promise.then(function (result) {
+    var ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', id);
 
-      console.log('result player details', result);
+    ligaGamesRequest.promise.then(function (result) {
+
+      console.log(result);
+
+      $scope.loading = false;
+      $scope.ligaGameDetails = result.data.map($scope.gameMapper);
 
     });
+
+    var eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', id);
+
+    eplGamesRequest.promise.then(function (result) {
+
+      $scope.loading = false;
+      $scope.eplGameDetails = result.data.filter($scope.filterAfterDate).map($scope.gameMapper);
+
+    });
+
+    var seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', id);
+
+    seriGamesRequest.promise.then(function (result) {
+
+      $scope.loading = false;
+      $scope.seriGameDetails = result.data.filter($scope.filterAfterDate).map($scope.gameMapper);
+
+    });
+
+    var chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', id);
+
+    chlgGamesRequest.promise.then(function (result) {
+
+      $scope.loading = false;
+      $scope.chlgGameDetails = result.data.filter($scope.filterAfterDate).map($scope.gameMapper);
+
+    });
+
+    var euroGamesRequest = $apiFactory.getPlayerGameDetails('euro', id);
+
+    euroGamesRequest.promise.then(function (result) {
+
+      $scope.loading = false;
+      $scope.euroGameDetails = result.data.filter($scope.filterAfterDate).map($scope.gameMapper);
+
+    });
+
 
   };
 
   $scope.init();
 
   $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
+    return viewLocation === '/players/';
   };
 
 

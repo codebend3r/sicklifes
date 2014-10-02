@@ -29,43 +29,35 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
       if (angular.isDefined(teamPlayers.league) && teamPlayers.id !== null) {
 
         $apiFactory.getData({
-          endPointURL: $textManipulator.getPlayerURL(teamPlayers.league, teamPlayers.id),
+          endPointURL: $textManipulator.getPlayerSummaryURL(teamPlayers.league, teamPlayers.id),
           qCallBack: function (result) {
-
-            //console.log('result.data', result.data);
 
             result.data.map(function (i) {
 
-              var league = i.box_score.event.league.slug;
-
-              //var date = new Date(i.box_score.event.game_date);
-              //console.log(date);
+              var league = i.league.slug,
+                gameGoals = i.games_goals;
 
               if ($textManipulator.acceptedLeague(league)) {
 
-                console.log('goals', i.goals, 'on', i.box_score.event.game_date);
-
-                teamPlayers.goals += i.goals;
+                teamPlayers.goals += gameGoals;
 
                 if ($textManipulator.isLeagueGoal(league)) {
-                  teamPlayers.leagueGoals += i.goals
+                  teamPlayers.leagueGoals += gameGoals;
                 }
 
                 if ($textManipulator.isDomesticGoal(league)) {
-                  teamPlayers.domesticGoals += i.goals;
+                  teamPlayers.domesticGoals += gameGoals;
                 } else if ($textManipulator.isChampionsLeagueGoal(league)) {
-                  teamPlayers.clGoals += i.goals;
+                  teamPlayers.clGoals += gameGoals;
                 } else if ($textManipulator.isEuropaGoal(league)) {
-                  teamPlayers.eGoals += i.goals;
+                  teamPlayers.eGoals += gameGoals;
                 }
 
-                teamPlayers.points += $scoringLogic.calculatePoints(i.goals, league);
+                teamPlayers.points += $scoringLogic.calculatePoints(gameGoals, league);
 
               }
 
             });
-
-            console.log('================================================');
 
             team.totalPoints += teamPlayers.points;
             team.clGoals += teamPlayers.clGoals;

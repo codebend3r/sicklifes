@@ -26,7 +26,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   };
 
-  scope.getFromLocalStorage = function() {
+  scope.getFromLocalStorage = function(cbObj) {
 
     console.log('get from localStorage');
 
@@ -46,16 +46,29 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   };
 
-  scope.getPlayerDetails = function (league, id) {
+  scope.getPlayerGameDetails = function (league, id) {
 
-    var playerRequest = scope.getData({
+    var request = scope.getData({
       method: 'GET',
       endPointURL: $textManipulator.getPlayerURL(league, id)
     });
 
-    return playerRequest;
+    return request;
 
-  }
+  };
+
+  scope.getPlayerProfile = function (league, id) {
+
+    console.log('URL:', $textManipulator.getPlayerProfileURL(id));
+
+    var request = scope.getData({
+      method: 'GET',
+      endPointURL: $textManipulator.getPlayerProfileURL(id)
+    });
+
+    return request;
+
+  };
 
   scope.getAllLeagues = function (cbObj) {
 
