@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMapper, $date) {
+sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMapper, $date, $textManipulator) {
 
   $scope.loading = true;
 
@@ -34,7 +34,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       alignment: game.alignment === 'away' ? '@' : 'vs',
       vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
       goalsScored: game.goals,
-      leagueName: game.box_score.event.league.slug.toUpperCase(),
+      leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
       datePlayed: $date.create(game.box_score.event.game_date).format('{dd}/{MM}/{yy}')
     };
   };
@@ -56,7 +56,10 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', id);
 
     playerProfileRequest.promise.then(function (result) {
-      $scope.player.playerName = result.data.first_name + ' ' + result.data.last_name.toUpperCase();
+      console.log(result);
+      $scope.player.playerName = $textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
+      $scope.player.playerTeam = result.data.teams[0].full_name;
+      $scope.player.teamLogo = result.data.teams[0].sportsnet_logos.large;
       $scope.player.playerImage = result.data.headshots.original;
     });
 

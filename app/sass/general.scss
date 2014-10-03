@@ -77,6 +77,18 @@ html, body {
 
 }
 
+.jumbotron {
+  overflow: auto;
+  .player-name {
+    color: #4a89ff;
+    text-decoration: underline;
+  }
+}
+
+.inline-image {
+  display: inline-block;
+}
+
 .bold {
   font-weight: bold;
 }

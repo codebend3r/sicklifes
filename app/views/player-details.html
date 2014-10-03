@@ -6,13 +6,16 @@
 
   <h2>Players Details</h2>
 
-  <div class='container'>
-    <div class='col-sm-2'>
-      <img width='100' height='100' class='profile-pic' ng-src='{{player.playerImage}}'/>
-    </div>
-    <div class='col-sm-10'>
-      <h3>{{player.playerName}}</h3>
-    </div>
+  <div class='jumbotron'>
+
+    <h1 class='player-name'>{{player.playerName}}</h1>
+
+    <img class='inline-image' width='60' height='60' ng-src='{{player.teamLogo}}'/>
+
+    <h3 class='inline-image'>{{player.playerTeam}}</h3>
+
+    <img class='pull-left profile-pic' width='100' height='100' ng-src='{{player.playerImage}}'/>
+
   </div>
 
   <player-details-table game-details='ligaGameDetails' table-header='tableHeader' league-name='LIGA Games'></player-details-table>

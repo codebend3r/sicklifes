@@ -6,7 +6,7 @@
 
 sicklifesFantasy.factory('$textManipulator', function () {
 
-  return {
+  var textManipulator = {
 
     stripVowelAccent: function (str) {
       var rExps = [
@@ -47,6 +47,20 @@ sicklifesFantasy.factory('$textManipulator', function () {
       return league === 'uefa';
     },
 
+    formattedFullName: function (firstName, lastName) {
+      return textManipulator.stripVowelAccent((firstName !== null ? firstName : '') + ' ' + lastName.toUpperCase());
+    },
+
+    formattedLeagueName: function (leagueName) {
+      if (leagueName === 'uefa') {
+        return 'EUROPA';
+      } else if (leagueName === 'seri') {
+        return 'SERIE A';
+      } else {
+        return leagueName.toUpperCase();
+      }
+    },
+
     acceptedLeague: function (league) {
       return league === 'liga' || league === 'epl' || league === 'seri' || league === 'chlg' || league === 'uefa';
     },
@@ -63,8 +77,8 @@ sicklifesFantasy.factory('$textManipulator', function () {
       return 'http://origin-api.thescore.com/soccer/players/' + id;
     }
 
+  };
 
-
-  }
+  return textManipulator;
 
 });

@@ -31,6 +31,7 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
       if (angular.isDefined(teamPlayers.league) && teamPlayers.id !== null) {
 
         $apiFactory.getData({
+
           endPointURL: $textManipulator.getPlayerSummaryURL(teamPlayers.league, teamPlayers.id),
           qCallBack: function (result) {
 

@@ -10,13 +10,11 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator) {
 
     goalsMap: function (url, i) {
 
-      //console.log('i >> ', i);
-
       var playerInLeague = {
         id: i.player.id,
         url: url || '',
         rank: i.ranking,
-        playerName: $textManipulator.stripVowelAccent((i.player.first_name !== null ? i.player.first_name : '') + ' ' + i.player.last_name.toUpperCase()),
+        playerName: $textManipulator.formattedFullName(i.player.first_name, i.player.last_name),
         teamName: i.team.full_name.toUpperCase(),
         domesticGoals: 0,
         leagueGoals: 0,
