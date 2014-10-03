@@ -4,7 +4,7 @@
 
 
 
-sicklifesFantasy.factory('$arrayLoopers', function () {
+sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator) {
 
   return {
 
@@ -16,8 +16,7 @@ sicklifesFantasy.factory('$arrayLoopers', function () {
         id: i.player.id,
         url: url || '',
         rank: i.ranking,
-        playerName: i.player.full_name,
-        cleanPlayerName: i.player.first_name + ' ' + i.player.last_name.toUpperCase(),
+        playerName: $textManipulator.stripVowelAccent((i.player.first_name !== null ? i.player.first_name : '') + ' ' + i.player.last_name.toUpperCase()),
         teamName: i.team.full_name.toUpperCase(),
         domesticGoals: 0,
         leagueGoals: 0,

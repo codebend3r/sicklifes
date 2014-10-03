@@ -19,9 +19,9 @@
 
     <div class='table-body'>
       <div class='row' ng-repeat='scorer in selectedLeague.source'>
-        <div class='col-md-2 col-sm-2 col-xs-2 small-hpadding'>{{scorer.rank}}</div>
-        <div class='col-md-4 col-sm-4 col-xs-8 small-hpadding'>{{scorer.playerName}}</div>
-        <div class='col-md-4 col-sm-4 hidden-xs small-hpadding'>{{scorer.teamName}}</div>
+        <div class='col-md-1 col-sm-2 col-xs-2 small-hpadding'>{{scorer.rank}}</div>
+        <div class='col-md-5 col-sm-4 col-xs-8 small-hpadding'><a ng-href='#/player-details/{{scorer.id}}'>{{scorer.playerName}}</a></div>
+        <div class='col-md-4 col-sm-4 hidden-xs small-hpadding bold small-text'>{{scorer.teamName}}</div>
         <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{scorer.goals}}</div>
       </div>
     </div>

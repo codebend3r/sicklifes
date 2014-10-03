@@ -104,9 +104,4 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
   $scope.init();
 
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === '/players/';
-  };
-
-
 });

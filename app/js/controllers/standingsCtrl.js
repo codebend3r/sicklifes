@@ -105,9 +105,4 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
   $scope.init();
 
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
-  };
-
-
 });

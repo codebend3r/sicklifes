@@ -10,11 +10,11 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-2 col-sm-2 col-xs-2 small-hpadding',
+      columnClass: 'col-md-1 col-sm-2 col-xs-2 small-hpadding',
       text: 'Rank'
     },
     {
-      columnClass: 'col-md-4 col-sm-4 col-xs-8 small-hpadding',
+      columnClass: 'col-md-5 col-sm-4 col-xs-8 small-hpadding',
       text: 'Player'
     },
     {
@@ -92,10 +92,5 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   };
 
   $scope.init();
-
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
-  };
-
 
 });
