@@ -59,21 +59,6 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
   };
 
   /**
-   * init function
-   */
-  $scope.init = function () {
-
-    //localStorageService.clearAll();
-
-    $scope.allLeagueDataObj = {
-      cb: $scope.allRequestComplete
-    };
-
-    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
-
-  };
-
-  /**
    * all requests complete
    */
   $scope.allRequestComplete = function () {
@@ -116,6 +101,32 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
 
     console.log('$scope.populateTable');
     $scope.selectedTeam.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, $scope.selectedTeam));
+
+  };
+
+  $scope.updateData = function() {
+    $scope.allLeagueDataObj = {
+      cb: $scope.allRequestComplete
+    };
+
+    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
+  }
+
+  /**
+   * init function
+   */
+  $scope.init = function () {
+
+    if (localStorageService.get('allLeagues')) {
+
+      $scope.allLeaguesData = localStorageService.get('allLeagues');
+      $scope.allRequestComplete();
+
+    } else {
+
+      $scope.updateData();
+
+    }
 
   };
 

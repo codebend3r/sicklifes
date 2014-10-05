@@ -9,11 +9,11 @@
   <select class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues'
           ng-change='changeLeague(selectedLeague)'></select>
 
+  <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
+
   <div class='fantasy-table'>
 
     <h2>{{selectedLeague.name}}</h2>
-
-    <button type='button' class='btn btn-default dropdown-toggle' ng-click='updateData()'>Update Data</button>
 
     <div class='header'>
       <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'>{{header.text}}</div>
