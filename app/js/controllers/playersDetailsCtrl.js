@@ -49,19 +49,58 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
     var id = $routeParams.playerID,
       playerProfileRequest = $apiFactory.getPlayerProfile('soccer', id),
+      playerLeagueProfileRequest,
       ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', id),
       eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', id),
       seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', id),
       chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', id),
       euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', id);
 
-    playerProfileRequest.promise.then(function (result) {
-      console.log(result);
+    var playerProfileCallBack = function (result) {
+
+      var selectedInt = result.data.teams.length === 3 ? 1 : 0;
+      var teamName = result.data.teams[selectedInt].name;
+      var leagueName = $textManipulator.getLeagueByURL(result.data.api_uri);
+
+      console.log('leagueName', leagueName);
+
+      playerLeagueProfileRequest = $apiFactory.getPlayerProfile(leagueName, id);
+
+      playerLeagueProfileRequest.promise.then(function(profileData) {
+
+        console.log('================================');
+        console.log('>>>>>>>>>>>', profileData);
+        console.log('================================');
+        $scope.player.playerPos = profileData.data.position;
+        $scope.player.weight = profileData.data.weight;
+        $scope.player.height = profileData.data.height_feet + '\'' + profileData.data.height_inches;
+        $scope.player.birthdate = profileData.data.birthdate
+
+      });
+
+      
+
       $scope.player.playerName = $textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
-      $scope.player.playerTeam = result.data.teams[0].full_name;
-      $scope.player.teamLogo = result.data.teams[0].sportsnet_logos.large;
+      $scope.player.playerTeam = teamName;
+      $scope.player.leagueName = leagueName.toUpperCase();
+      $scope.player.teamLogo = result.data.teams[selectedInt].sportsnet_logos.large;
       $scope.player.playerImage = result.data.headshots.original;
-    });
+
+    };
+
+    playerProfileRequest.promise.then(playerProfileCallBack);
+
+    /*if (leagueName === 'liga') {
+
+    } else if (leagueName === 'epl') {
+
+    } else if (leagueName === 'seri') {
+
+    } else if (leagueName === 'chlg') {
+
+    } else if (leagueName === 'uefa') {
+
+    }*/
 
     ligaGamesRequest.promise.then(function (result) {
 

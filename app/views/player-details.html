@@ -6,15 +6,25 @@
 
   <h2>Players Details</h2>
 
-  <div class='jumbotron'>
+  <div class='jumbotron player-jumbo'>
 
-    <h1 class='player-name'>{{player.playerName}}</h1>
+    <img class='background-logo inline-image' ng-src='{{player.teamLogo}}'/>
+    <span class='background-dark'></span>
+    <span class='pattern'></span>
 
-    <img class='inline-image' width='60' height='60' ng-src='{{player.teamLogo}}'/>
+    <div class='col-md-2 col-sm-4'>
+      <img class='profile-pic' ng-src='{{player.playerImage}}'/>
+    </div>
+    <div class='col-md-10 col-sm-8'>
 
-    <h3 class='inline-image'>{{player.playerTeam}}</h3>
-
-    <img class='pull-left profile-pic' width='100' height='100' ng-src='{{player.playerImage}}'/>
+      <h1 class='player-name'>{{player.playerName}}</h1>
+      <h3 class='player-team'>{{player.playerTeam}}</h3><br/>
+      <h3 class='player-team'>{{player.leagueName}}</h3>
+      <p class='player-info'>POS: {{player.playerPos}}</p>
+      <p class='player-info'>WEIGHT/HEIGHT: {{player.weight}}lbs/{{player.height}}</p>
+      <p class='player-info'>BIRTHDATE: {{player.birthdate}}</p>
+      
+    </div>
 
   </div>
 

@@ -14,11 +14,15 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
       text: 'Rank'
     },
     {
-      columnClass: 'col-md-5 col-sm-4 col-xs-8 small-hpadding',
+      columnClass: 'col-md-4 col-sm-4 col-xs-8 small-hpadding',
       text: 'Player'
     },
     {
-      columnClass: 'col-md-4 col-sm-4 hidden-xs small-hpadding',
+      columnClass: 'col-md-2 col-sm-4 hidden-xs small-hpadding',
+      text: 'Team'
+    },
+    {
+      columnClass: 'col-md-3 col-sm-4 hidden-xs small-hpadding',
       text: 'Team'
     },
     {
@@ -27,13 +31,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
     }
   ];
 
-  $scope.allRequest = []; // array of promises
-
-  $scope.topLigaScorers = [];
-  $scope.topEPLScorers = [];
-  $scope.topSeriScorers = [];
-  $scope.topCLScorers = [];
-  $scope.topEuropaScorers = [];
+  $scope.allRequest = [];
 
   $scope.changeLeague = function (league) {
 
@@ -47,47 +45,62 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
     //fb.set('$leagueTeams', $leagueTeams);
     //fb.set({blah:'blah', text:'inter'});
 
-    console.log('$scope.allRequestComplete', $scope.allLeaguesData.allLeagues);
     $scope.loading = false;
 
     $scope.allLeagues = [
       {
         name: 'La Liga',
-        source: $scope.allLeagueDataObj.liga
+        source: localStorageService.get('liga') ? localStorageService.get('liga') : $scope.allLeagueDataObj.liga
       },
       {
         name: 'EPL',
-        source: $scope.allLeagueDataObj.epl
+        source: localStorageService.get('epl') ? localStorageService.get('epl') : $scope.allLeagueDataObj.epl
       },
       {
         name: 'Serie A',
-        source: $scope.allLeagueDataObj.seri
+        source: localStorageService.get('seri') ? localStorageService.get('seri') : $scope.allLeagueDataObj.seri
       },
       {
         name: 'Champions League',
-        source: $scope.allLeagueDataObj.chlg
+        source: localStorageService.get('chlg') ? localStorageService.get('chlg') : $scope.allLeagueDataObj.chlg
       },
       {
         name: 'Europa League',
-        source: $scope.allLeagueDataObj.uefa
+        source: localStorageService.get('uefa') ? localStorageService.get('uefa') : $scope.allLeagueDataObj.uefa
       }
     ];
 
     $scope.selectedLeague = $scope.allLeagues[0];
-    $scope.allRequestComplete = null;
-    console.log('localStorageService.keys', localStorageService.keys());
+    //$scope.allRequestComplete = null;
 
   };
 
-  $scope.init = function () {
+  $scope.updateData = function() {
 
-    localStorageService.clearAll();
+    $scope.allRequest = [];
 
     $scope.allLeagueDataObj = {
       cb: $scope.allRequestComplete
     };
 
     $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
+
+  };
+
+  $scope.init = function () {
+
+    //localStorageService.clearAll();
+
+    if (localStorageService.get('allLeagues')) {
+
+      $scope.allLeaguesData = localStorageService.get('allLeagues');
+      $scope.allRequestComplete();
+
+    } else {
+
+      $scope.updateData();
+
+    }
 
   };
 

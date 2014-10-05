@@ -66,7 +66,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
    */
   $scope.allRequestComplete = function () {
 
-    console.log('$scope.allRequestComplete on', $scope.allLeagueDataObj.lastCheckDate);
     $scope.loading = false;
 
     $scope.allTeams = [
@@ -78,7 +77,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
       $leagueTeams.joe
     ];
 
-    console.log('localStorageService.keys', localStorageService.keys());
+    localStorageService.set('allTeams', $scope.allTeams);
 
     $scope.allPlayers = $scope.allLeagueDataObj.allLeagues;
 

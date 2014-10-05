@@ -154,6 +154,16 @@ gulp.task('bower-all', function () {
 
 });
 
+// Images
+gulp.task('images', function () {
+
+  if (gutil.env.dev === true) {
+    return gulp.src([ config.app + '/images/**/*.{jpg,png,gif}' ])
+      .pipe(gulp.dest(config.dev + '/images/'))
+  }
+
+});
+
 
 // Clean
 
@@ -211,7 +221,8 @@ gulp.task('move-GUI-images', [ 'images' ], function () {
 // Build
 gulp.task('build', [
     'html',
-    'bower-all'
+    'bower-all',
+    'images'
   ]
 );
 
@@ -228,7 +239,7 @@ gulp.task('watch', [ 'browser-sync' ], function () {
   gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], [ 'bs-reload' ]);
 
   // Watch image files
-  gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', [ 'bs-reload' ]);
+  // gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', [ 'bs-reload' ]);
 
 });
 

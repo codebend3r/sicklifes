@@ -22,6 +22,10 @@ sicklifesFantasy.factory('$scoringLogic', function () {
         }
         return goals * 2;
       }
+    },
+
+    findOwnerByID: function(id) {
+
     }
 
   }

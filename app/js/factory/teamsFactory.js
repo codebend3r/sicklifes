@@ -96,7 +96,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
           id: 13802
         },
         {
-          playerName: 'Javier HERNANDEZ',
+          playerName: 'Chicharito HERNANDEZ',
           teamName: 'REAL MADRID',
           league: 'LIGA',
           id: 4225

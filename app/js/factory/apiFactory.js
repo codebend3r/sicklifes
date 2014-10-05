@@ -50,7 +50,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
     var request = scope.getData({
       method: 'GET',
-      endPointURL: $textManipulator.getPlayerURL(league, id)
+      endPointURL: $textManipulator.getPlayerPlayerRecordURL(league, id)
     });
 
     return request;
@@ -59,11 +59,11 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   scope.getPlayerProfile = function (league, id) {
 
-    console.log('URL:', $textManipulator.getPlayerProfileURL(id));
+    if (typeof league === 'undefined') league = 'soccer';
 
     var request = scope.getData({
       method: 'GET',
-      endPointURL: $textManipulator.getPlayerProfileURL(id)
+      endPointURL: $textManipulator.getPlayerProfileURL(league, id)
     });
 
     return request;
@@ -71,8 +71,6 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
   };
 
   scope.getAllLeagues = function (cbObj) {
-
-    console.log('>> allLeagues', localStorageService.get('allLeagues'));
 
     cbObj.allLeagues = [];
 
@@ -98,11 +96,9 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
         result.data.goals = result.data.goals.map($arrayLoopers.goalsMap.bind($arrayLoopers, url));
         cbObj[allLeagues[index]] = result.data.goals; // save league data reference to cbObj
-        localStorageService.set(allLeagues[index], result.data.goals); // also save to localStorage
+        localStorageService.set(allLeagues[index], result.data.goals); // save each league also save to localStorage
         listOfResults.push(result);
 
-      }, function () {
-        console.log('ERROR');
       });
 
       listOrPromises.push(leagueRequest);
@@ -121,11 +117,6 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
       localStorageService.set('allLeagues', cbObj.allLeagues); // also save to localStorage
       cbObj.lastCheckDate = $date.create();
       cbObj.cb();
-
-    }, function () {
-
-      console.log('get from localStorage');
-      scope.getFromLocalStorage();
 
     });
 

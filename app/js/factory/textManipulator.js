@@ -61,11 +61,27 @@ sicklifesFantasy.factory('$textManipulator', function () {
       }
     },
 
+    getLeagueByURL: function(url) {
+      if (url.contains('liga')) {
+        return 'liga';
+      } else if (url.contains('epl')) {
+        return 'epl';
+      } else if (url.contains('seri')) {
+        return 'seri';
+      } else if (url.contains('chlg')) {
+        return 'chlg';
+      } else if (url.contains('uefa')) {
+        return 'uefa';
+      } else {
+        return 'unknown';
+      }
+    },
+
     acceptedLeague: function (league) {
       return league === 'liga' || league === 'epl' || league === 'seri' || league === 'chlg' || league === 'uefa';
     },
 
-    getPlayerURL: function (league, id) {
+    getPlayerPlayerRecordURL: function (league, id) {
       return 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/player_records';
     },
 
@@ -73,8 +89,9 @@ sicklifesFantasy.factory('$textManipulator', function () {
       return'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/summary';
     },
 
-    getPlayerProfileURL: function (id) {
-      return 'http://origin-api.thescore.com/soccer/players/' + id;
+    getPlayerProfileURL: function (league, id) {
+      console.log('getPlayerProfileURL >>> http://origin-api.thescore.com/' + league + '/players/' + id)
+      return 'http://origin-api.thescore.com/' + league + '/players/' + id;
     }
 
   };

@@ -4,9 +4,9 @@
 
 
 
-sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator) {
+sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStorageService, $leagueTeams) {
 
-  return {
+  var arrayLoopers = {
 
     goalsMap: function (url, i) {
 
@@ -19,29 +19,43 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator) {
         domesticGoals: 0,
         leagueGoals: 0,
         goals: i.stat,
+        ownedBy: arrayLoopers.getOwnerByID(i.player.id),
         league: '',
         transactionsLog: [],
         historyLog: []
       };
 
-      if (url.contains('liga')) {
-        playerInLeague.league = 'liga';
-      } else if (url.contains('epl')) {
-        playerInLeague.league = 'epl';
-      } else if (url.contains('seri')) {
-        playerInLeague.league = 'seri';
-      } else if (url.contains('chlg')) {
-        playerInLeague.league = 'chlg';
-      } else if (url.contains('uefa')) {
-        playerInLeague.league = 'uefa';
-      } else {
-        return 'unknown';
-      }
-
+      playerInLeague.league = $textManipulator.getLeagueByURL(url);
       return playerInLeague;
 
+    },
+
+    getAllPlayers: function() {
+      return [
+        $leagueTeams.chester,
+        $leagueTeams.frank,
+        $leagueTeams.dan,
+        $leagueTeams.justin,
+        $leagueTeams.mike,
+        $leagueTeams.joe
+      ];
+    },
+
+    getOwnerByID: function(id) {
+      var owner = 'Free Agent';
+      arrayLoopers.getAllPlayers().forEach(function(team) {
+        team.players.some(function(p) {
+          if (p.id === id) {
+            owner = team.personName;
+            return p.id === id
+          }
+        });
+      });      
+      return owner;
     }
 
   }
+
+  return arrayLoopers;
 
 });

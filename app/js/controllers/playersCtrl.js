@@ -50,7 +50,11 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
 
     console.log('change team', selectedTeam);
     $scope.selectedTeam = selectedTeam;
-    $scope.populateTable();
+    //$scope.populateTable();
+    //var newURL = '#/players/?team=' + selectedTeam.personName;
+    //console.log('newURL', newURL);
+    //$location.path(newURL);
+    $location.url($location.path() + '?team=' + selectedTeam.personName);
 
   };
 
@@ -59,7 +63,7 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
    */
   $scope.init = function () {
 
-    localStorageService.clearAll();
+    //localStorageService.clearAll();
 
     $scope.allLeagueDataObj = {
       cb: $scope.allRequestComplete
@@ -86,6 +90,8 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
       $leagueTeams.mike,
       $leagueTeams.joe
     ];
+
+    localStorageService.set('allTeams', $scope.allTeams);
 
     $scope.allPlayers = $scope.allLeagueDataObj.allLeagues;
 

@@ -78,11 +78,94 @@ html, body {
 }
 
 .jumbotron {
-  overflow: auto;
-  .player-name {
-    color: #4a89ff;
-    text-decoration: underline;
+  position: relative;
+  padding: 20px;
+  h1 {
+    font-family: Oswald, sans-serif;
+    font-size: 55px;
   }
+  .profile-pic{
+    max-width: 100%;
+    height:auto;
+  }
+  .background-logo {
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    z-index: -1;
+    opacity: .5;
+    width: 350px;
+    height: 350px;
+  }
+  .pattern {
+    position: absolute;
+    background-image: url(../images/pattern/dimension_@2X.png);
+    background-size: 43px 50px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 0;
+    opacity: .2;
+  }
+  .background-dark {
+    position: absolute;
+    background-color: #333333;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 0;
+    opacity: 1;
+  }
+  &.player-jumbo {
+
+    overflow: hidden;
+    padding: 10px;
+    
+
+    .player-team {
+      color: #ffffff;
+      display: inline-block;
+      margin: 0;
+    }
+    .player-name {
+      color: #02C2FF;
+      text-decoration: underline;
+      margin: 0;
+    }
+  }
+}
+
+@media (max-width: 750px) {
+  .jumbotron {
+    h1 {
+      font-size: 45px;
+    }
+  }
+}
+
+@media (max-width: 550px) {
+
+  .jumbotron {
+    padding: 10px;
+    background-color: #333333;
+    h1 {
+      font-size: 35px;
+    }
+    .background-logo {
+      display: none;
+    }
+    &.player-jumbo {
+      background-image: none;
+    }
+  }
+
+}
+
+.player-info {
+  font-size: 12px;
+  color: white;
 }
 
 .inline-image {
