@@ -49,7 +49,6 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
   scope.getPlayerGameDetails = function (league, id) {
 
     var request = scope.getData({
-      method: 'GET',
       endPointURL: $textManipulator.getPlayerPlayerRecordURL(league, id)
     });
 
@@ -62,7 +61,6 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
     if (typeof league === 'undefined') league = 'soccer';
 
     var request = scope.getData({
-      method: 'GET',
       endPointURL: $textManipulator.getPlayerProfileURL(league, id)
     });
 
@@ -88,7 +86,6 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
     allLeaguesURL.forEach(function (url, index) {
 
       var leagueRequest = scope.getData({
-        method: 'GET',
         endPointURL: url
       });
 
