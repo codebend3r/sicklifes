@@ -119,8 +119,9 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
 
     if (localStorageService.get('allLeagues')) {
 
-      $scope.allLeaguesData = localStorageService.get('allLeagues');
-      $scope.allRequestComplete();
+      /*$scope.allLeaguesData = localStorageService.get('allLeagues');
+      $scope.allRequestComplete();*/
+      $scope.updateData();
 
     } else {
 

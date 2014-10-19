@@ -93,8 +93,10 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
     if (localStorageService.get('allLeagues')) {
 
-      $scope.allLeaguesData = localStorageService.get('allLeagues');
-      $scope.allRequestComplete();
+      /*$scope.allLeaguesData = localStorageService.get('allLeagues');
+      $scope.allRequestComplete();*/
+
+      $scope.updateData();
 
     } else {
 

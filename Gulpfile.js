@@ -97,7 +97,7 @@ gulp.task('partials', function () {
 
 });
 
-gulp.task('template', [ 'partials' ], function () {
+gulp.task('template', [ ], function () {
 
   gulp.src([config.app + '/views/**/*.html', '!' + config.app + '/views/directives/assets/*.html', '!' + config.app + '/views/assets.html'])
     .pipe(templateCache('./', {
@@ -249,13 +249,39 @@ gulp.task('bs-reload', [ 'build' ], function () {
 });
 
 gulp.task('browser-sync', [ 'build' ], function () {
-  browserSync({
-    open: false,
+
+  if (gutil.env.prod === true) {
+
+    browserSync({
+      open: true,
+      port: 8888,
+      server: {
+        baseDir: config.prod
+      }
+    });
+
+  } else if (gutil.env.release === true) {
+
+    browserSync({
+    open: true,
+    port: 8888,
+    server: {
+      baseDir: config.release
+    }
+  });
+
+  } else {
+
+    browserSync({
+    open: true,
     port: 8888,
     server: {
       baseDir: config.dev
     }
   });
+
+  }
+
 });
 
 gulp.task('default', [ 'watch' ]);
