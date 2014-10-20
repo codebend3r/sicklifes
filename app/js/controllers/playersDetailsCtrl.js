@@ -33,15 +33,21 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     return {
       alignment: game.alignment === 'away' ? '@' : 'vs',
       vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
-      goalsScored: game.goals,
+      goalsScored: game.goals || '-',
       leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
       datePlayed: $date.create(game.box_score.event.game_date).format('{dd}/{MM}/{yy}')
     };
+
   };
 
   $scope.filterAfterDate = function (game) {
     var gameDate = $date.create(game.box_score.event.game_date);
-    var isAfter = gameDate.isAfter('September 1 2014');
+
+    //EPL - Aug 16
+    //LIGA - Aug 25
+    //SERI - Aug
+
+    var isAfter = gameDate.isAfter('August 16 2014');
     return isAfter;
   };
 

@@ -97,9 +97,9 @@ gulp.task('partials', function () {
 
 });
 
-gulp.task('template', [ ], function () {
+gulp.task('template', function () {
 
-  gulp.src([config.app + '/views/**/*.html', '!' + config.app + '/views/directives/assets/*.html', '!' + config.app + '/views/assets.html'])
+  gulp.src([config.app + '/views/**/*.html'])
     .pipe(templateCache('./', {
       module: 'sicklifesFantasy',
       standalone: false,
@@ -179,15 +179,15 @@ gulp.task('clean-templatecache', function () {
 });
 
 gulp.task('clean-dev', function () {
-  return gulp.src([config.dev, config.app + '/css/*.css'], { read: false }).pipe($.clean({force: false}));
+  return gulp.src([config.dev, config.app + '/css/*.css'], { read: false }).pipe($.clean({force: true}));
 });
 
 gulp.task('clean-prod', function () {
-  return gulp.src([config.prod, config.app + '/css/*.css'], { read: false }).pipe($.clean({force: false}));
+  return gulp.src([config.prod, config.app + '/css/*.css'], { read: false }).pipe($.clean({force: true}));
 });
 
 gulp.task('clean-release', function () {
-  return gulp.src([config.release, config.app + '/css/*.css'], { read: false }).pipe($.clean({force: false}));
+  return gulp.src([config.release, config.app + '/css/*.css'], { read: false }).pipe($.clean({force: true}));
 });
 
 
