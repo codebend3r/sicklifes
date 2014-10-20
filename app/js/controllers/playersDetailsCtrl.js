@@ -82,9 +82,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
         $scope.player.height = profileData.data.height_feet + '\'' + profileData.data.height_inches;
         $scope.player.birthdate = profileData.data.birthdate
 
-      });
-
-      
+      });      
 
       $scope.player.playerName = $textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
       $scope.player.playerTeam = teamName;
