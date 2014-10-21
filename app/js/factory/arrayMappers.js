@@ -12,6 +12,7 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
      *
      * @param $scope - controller $scope
      * @param team - team which contains teamPlayers
+     * @param saveToFireBase
      * @param teamPlayers - from loop
      */
     forEachPlayer: function ($scope, team, teamPlayers) {

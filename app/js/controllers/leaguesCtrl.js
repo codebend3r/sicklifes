@@ -4,7 +4,10 @@
 
 
 
-sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $arrayMapper, localStorageService) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $arrayMapper, $firebase, localStorageService) {
+
+  var ref = new Firebase('https://glaring-fire-9383.firebaseio.com/'),
+    sync = $firebase(ref);
 
   $scope.loading = true;
 
@@ -39,39 +42,99 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   };
 
-  $scope.allRequestComplete = function () {
+  var defineAllData = function() {
 
-    //var fb = new Firebase('https://glaring-fire-9383.firebaseio.com/');
-    //fb.set('$leagueTeams', $leagueTeams);
-    //fb.set({blah:'blah', text:'inter'});
-
-    $scope.loading = false;
-
-    $scope.allLeagues = [
+    return [
       {
         name: 'La Liga',
-        source: localStorageService.get('liga') ? localStorageService.get('liga') : $scope.allLeagueDataObj.liga
+        source:$scope.allLeagueDataObj.liga
       },
       {
         name: 'EPL',
-        source: localStorageService.get('epl') ? localStorageService.get('epl') : $scope.allLeagueDataObj.epl
+        source: $scope.allLeagueDataObj.epl
       },
       {
         name: 'Serie A',
-        source: localStorageService.get('seri') ? localStorageService.get('seri') : $scope.allLeagueDataObj.seri
+        source: $scope.allLeagueDataObj.seri
       },
       {
         name: 'Champions League',
-        source: localStorageService.get('chlg') ? localStorageService.get('chlg') : $scope.allLeagueDataObj.chlg
+        source: $scope.allLeagueDataObj.chlg
       },
       {
         name: 'Europa League',
-        source: localStorageService.get('uefa') ? localStorageService.get('uefa') : $scope.allLeagueDataObj.uefa
+        source: $scope.allLeagueDataObj.uefa
       }
     ];
 
+  };
+
+  var allRequestComplete = function () {
+
+    $scope.loading = false;
+
+    $scope.allLeagues = defineAllData();
+
     $scope.selectedLeague = $scope.allLeagues[0];
-    //$scope.allRequestComplete = null;
+
+    syncLeagueData();
+
+  };
+
+  var getFireBaseData = function() {
+
+    $scope.loading = false;
+
+    $scope.leagueData = sync.$asArray();
+
+    ref.on('value', function (snapshot) {
+
+      $scope.allLeagues = [
+        {
+          name: 'La Liga',
+          source: snapshot.val().leagueData.LIGA
+      },
+        {
+          name: 'EPL',
+          source: snapshot.val().leagueData.EPL
+        },
+        {
+          name: 'Serie A',
+          source: snapshot.val().leagueData.SERI
+        },
+        {
+          name: 'Champions League',
+          source: snapshot.val().leagueData.CHLG
+        },
+        {
+          name: 'Europa League',
+          source: snapshot.val().leagueData.UEFA
+        }
+      ];
+
+      $scope.selectedLeague = $scope.allLeagues[0];
+      console.log('SELECTED LEAGUE', $scope.selectedLeague);
+
+    }, function (errorObject) {
+
+      console.log('The read failed: ' + errorObject.code);
+
+    });
+
+  };
+
+  var syncLeagueData = function() {
+
+    console.log('syncLeagueData');
+
+    var usersRef = ref.child('leagueData');
+    usersRef.set({
+      LIGA: $scope.allLeagueDataObj.liga,
+      EPL: $scope.allLeagueDataObj.epl,
+      SERI: $scope.allLeagueDataObj.seri,
+      CHLG: $scope.allLeagueDataObj.chlg,
+      UEFA: $scope.allLeagueDataObj.uefa
+    });
 
   };
 
@@ -80,7 +143,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
     $scope.allRequest = [];
 
     $scope.allLeagueDataObj = {
-      cb: $scope.allRequestComplete
+      cb: allRequestComplete
     };
 
     $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
@@ -92,17 +155,18 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
     //localStorageService.clearAll();
 
     if (localStorageService.get('allLeagues')) {
-
-      /*$scope.allLeaguesData = localStorageService.get('allLeagues');
-      $scope.allRequestComplete();*/
-
-      $scope.updateData();
-
+      //getFireBaseData();
+      //allRequestComplete();
+      //$scope.updateData();
     } else {
-
-      $scope.updateData();
-
+      //getFireBaseData();
+      //allRequestComplete();
+      //$scope.updateData();
     }
+
+    getFireBaseData();
+    //allRequestComplete();
+    //$scope.updateData();
 
   };
 

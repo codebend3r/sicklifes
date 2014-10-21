@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMapper, $date, $textManipulator) {
+sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMapper, $date, $textManipulator, $firebase) {
 
   $scope.loading = true;
 
@@ -62,6 +62,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', id),
       euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', id);
 
+
     var playerProfileCallBack = function (result) {
 
       var selectedInt = result.data.teams.length === 3 ? 1 : 0;
@@ -80,7 +81,9 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
         $scope.player.playerPos = profileData.data.position;
         $scope.player.weight = profileData.data.weight;
         $scope.player.height = profileData.data.height_feet + '\'' + profileData.data.height_inches;
-        $scope.player.birthdate = profileData.data.birthdate
+        $scope.player.birthdate = profileData.data.birthdate;
+
+
 
       });      
 

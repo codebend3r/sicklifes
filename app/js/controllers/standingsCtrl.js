@@ -3,7 +3,10 @@
  */
 
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $arrayMapper, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $firebase, $arrayMapper, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
+
+  var ref = new Firebase('https://glaring-fire-9383.firebaseio.com/'),
+    sync = $firebase(ref);
 
   $scope.loading = true;
 
@@ -70,6 +73,55 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
   };
 
+  var saveToFireBase = function() {
+
+    console.log('saveToFireBase');
+
+    console.log('$scope.allTeams', $scope.allTeams);
+    console.log('$scope.allTeams --> goals', $scope.allTeams[0].players[0].playerName);
+    console.log('$scope.allTeams --> goals', $scope.allTeams[0].players[0].goals);
+    console.log('$scope.allTeams --> domesticGoals', $scope.allTeams[0].players[0].domesticGoals);
+
+    var usersRef = ref.child('leagueTeamData');
+    usersRef.set({
+      __allPlayers: $scope.allPlayers,
+      __allLeagues: $scope.allLeagueDataObj.allLeagues,
+      CHESTER: $leagueTeams.chester.players,
+      FRANK: $leagueTeams.frank.players,
+      DAN: $leagueTeams.dan.players,
+      JUSTIN: $leagueTeams.justin.players,
+      MIKE: $leagueTeams.mike.players,
+      JOE: $leagueTeams.joe.players
+    });
+
+  };
+
+  var getFireBaseData = function() {
+
+    ref.on('value', function (snapshot) {
+
+      $scope.allTeams = [
+        snapshot.val().leagueTeamData.CHESTER,
+        snapshot.val().leagueTeamData.FRANK,
+        snapshot.val().leagueTeamData.DAN,
+        snapshot.val().leagueTeamData.JUSTIN,
+        snapshot.val().leagueTeamData.MIKE,
+        snapshot.val().leagueTeamData.JOE
+      ];
+
+      $scope.allPlayers = snapshot.val().__allLeagues;
+      $scope.populateTable();
+
+      console.log('SELECTED LEAGUE', $scope.selectedLeague);
+
+    }, function (errorObject) {
+
+      console.log('The read failed: ' + errorObject.code);
+
+    });
+
+  };
+
   /**
    *
    */
@@ -83,6 +135,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     });
 
+    setTimeout(saveToFireBase, 9000);
     //localStorageService.set('allTeams', $scope.allTeams);
 
   };
@@ -93,7 +146,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
     };
 
     $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
-  }
+  };
 
   /**
    *
@@ -110,11 +163,13 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
       /*$scope.allLeaguesData = localStorageService.get('allLeagues');
       $scope.allRequestComplete();*/
-      $scope.updateData();
+      //$scope.updateData();
+      getFireBaseData();
 
     } else {
 
-      $scope.updateData();
+      //$scope.updateData();
+      getFireBaseData();
 
     }
 
