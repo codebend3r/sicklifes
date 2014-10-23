@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase) {
+sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStorageService) {
 
   var ref,
     sync;
@@ -36,9 +36,28 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase) {
 
     },
 
-    saveToFireBase: function () {
+    syncLeagueData: function () {
 
-      console.log('saveToFireBase');
+      console.log('syncLeagueData');
+
+      var usersRef = ref.child('leagueData');
+
+      var saveObject = {
+        LIGA: $scope.allLeagueDataObj.liga,
+        EPL: $scope.allLeagueDataObj.epl,
+        SERI: $scope.allLeagueDataObj.seri,
+        CHLG: $scope.allLeagueDataObj.chlg,
+        UEFA: $scope.allLeagueDataObj.uefa
+      };
+
+      usersRef.set(saveObject);
+      localStorageService.set('leagueData', saveObject);
+
+    },
+
+    syncLeagueTeamData: function () {
+
+      console.log('syncLeagueTeamData');
 
       var usersRef = ref.child('leagueTeamData');
 
@@ -62,6 +81,8 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase) {
       };
 
       usersRef.set(saveObject);
+
+      localStorageService.set('leagueTeamData', saveObject);
 
     }
 

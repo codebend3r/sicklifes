@@ -92,16 +92,16 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
       team.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, team));
 
       masterDeferredList = masterDeferredList.concat(team.deferredList);
+
       team.deferredList = [];
 
     });
 
     console.log('END --> masterDeferredList.length:', masterDeferredList.length);
 
-
     $q.all(masterDeferredList).then(function () {
 
-      $fireBaseService.saveToFireBase();
+      $fireBaseService.syncLeagueTeamData();
       localStorageService.set('allTeams', $scope.allTeams);
 
     }, function () {

@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireBaseService, $routeParams, $arrayMapper, localStorageService, $leagueTeams, $location) {
+sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireBaseService, $routeParams, $arrayMapper, $leagueTeams, $location) {
 
   $scope.loading = true;
 
@@ -50,10 +50,6 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
 
     console.log('change team', selectedTeam);
     $scope.selectedTeam = selectedTeam;
-    //$scope.populateTable();
-    //var newURL = '#/players/?team=' + selectedTeam.personName;
-    //console.log('newURL', newURL);
-    //$location.path(newURL);
     $location.url($location.path() + '?team=' + selectedTeam.personName);
 
   };
@@ -61,9 +57,9 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
   /**
    * all requests complete
    */
-  $scope.allRequestComplete = function () {
+  var allRequestComplete = function () {
 
-    console.log('$scope.allRequestComplete');
+    console.log('allRequestComplete');
 
     $scope.loading = false;
 
@@ -107,7 +103,17 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
   $scope.populateTable = function () {
 
     console.log('$scope.populateTable');
+
+    $scope.selectedTeam.deferredList = [];
+
     $scope.selectedTeam.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, $scope.selectedTeam));
+
+    $q.all($scope.selectedTeam.deferredList).then(function () {
+
+      $scope.selectedTeam.deferredList = [];
+      $fireBaseService.syncLeagueTeamData();
+
+    });
 
   };
 
@@ -116,9 +122,8 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
    */
   $scope.updateData = function () {
     $scope.allLeagueDataObj = {
-      cb: $scope.allRequestComplete
+      cb: allRequestComplete
     };
-
     $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
   };
 

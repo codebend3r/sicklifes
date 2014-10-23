@@ -4,10 +4,9 @@
 
 
 
-sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $arrayMapper, $firebase, localStorageService) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $arrayMapper, $fireBaseService) {
 
-  var ref = new Firebase('https://glaring-fire-9383.firebaseio.com/'),
-    sync = $firebase(ref);
+  //////////////////////////// public
 
   $scope.loading = true;
 
@@ -42,12 +41,66 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   };
 
-  var defineAllData = function() {
+  $scope.updateData = function () {
+
+    $scope.allRequest = [];
+
+    $scope.allLeagueDataObj = {
+      cb: allRequestComplete
+    };
+
+    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
+
+  };
+
+  $scope.init = function () {
+
+    $fireBaseService.initialize();
+
+    var firePromise = $fireBaseService.getFireBaseData();
+
+    firePromise.promise.then(function (data) {
+
+      $scope.loading = false;
+
+      $scope.allLeagues = [
+        {
+          name: 'La Liga',
+          source: data.leagueData.LIGA
+        },
+        {
+          name: 'EPL',
+          source: data.leagueData.EPL
+        },
+        {
+          name: 'Serie A',
+          source: data.leagueData.SERI
+        },
+        {
+          name: 'Champions League',
+          source: data.leagueData.CHLG
+        },
+        {
+          name: 'Europa League',
+          source: data.leagueData.UEFA
+        }
+      ];
+
+      $scope.selectedLeague = $scope.allLeagues[0];
+
+
+    });
+
+  };
+
+  //////////////////////////// private
+
+  var defineAllData = function () {
 
     return [
       {
         name: 'La Liga',
-        source:$scope.allLeagueDataObj.liga
+        source: $scope.allLeagueDataObj.liga
       },
       {
         name: 'EPL',
@@ -77,96 +130,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
     $scope.selectedLeague = $scope.allLeagues[0];
 
-    syncLeagueData();
-
-  };
-
-  var getFireBaseData = function() {
-
-    $scope.loading = false;
-
-    $scope.leagueData = sync.$asArray();
-
-    ref.on('value', function (snapshot) {
-
-      $scope.allLeagues = [
-        {
-          name: 'La Liga',
-          source: snapshot.val().leagueData.LIGA
-      },
-        {
-          name: 'EPL',
-          source: snapshot.val().leagueData.EPL
-        },
-        {
-          name: 'Serie A',
-          source: snapshot.val().leagueData.SERI
-        },
-        {
-          name: 'Champions League',
-          source: snapshot.val().leagueData.CHLG
-        },
-        {
-          name: 'Europa League',
-          source: snapshot.val().leagueData.UEFA
-        }
-      ];
-
-      $scope.selectedLeague = $scope.allLeagues[0];
-      console.log('SELECTED LEAGUE', $scope.selectedLeague);
-
-    }, function (errorObject) {
-
-      console.log('The read failed: ' + errorObject.code);
-
-    });
-
-  };
-
-  var syncLeagueData = function() {
-
-    console.log('syncLeagueData');
-
-    var usersRef = ref.child('leagueData');
-    usersRef.set({
-      LIGA: $scope.allLeagueDataObj.liga,
-      EPL: $scope.allLeagueDataObj.epl,
-      SERI: $scope.allLeagueDataObj.seri,
-      CHLG: $scope.allLeagueDataObj.chlg,
-      UEFA: $scope.allLeagueDataObj.uefa
-    });
-
-  };
-
-  $scope.updateData = function() {
-
-    $scope.allRequest = [];
-
-    $scope.allLeagueDataObj = {
-      cb: allRequestComplete
-    };
-
-    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
-
-  };
-
-  $scope.init = function () {
-
-    //localStorageService.clearAll();
-
-    if (localStorageService.get('allLeagues')) {
-      //getFireBaseData();
-      //allRequestComplete();
-      //$scope.updateData();
-    } else {
-      //getFireBaseData();
-      //allRequestComplete();
-      //$scope.updateData();
-    }
-
-    getFireBaseData();
-    //allRequestComplete();
-    //$scope.updateData();
+    $fireBaseService.syncLeagueData();
 
   };
 
