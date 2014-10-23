@@ -3,10 +3,8 @@
  */
 
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $firebase, $arrayMapper, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMapper, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
 
-  var ref = new Firebase('https://glaring-fire-9383.firebaseio.com/'),
-    sync = $firebase(ref);
 
   $scope.loading = true;
 
@@ -67,8 +65,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
       $leagueTeams.joe
     ];
 
-    //localStorageService.set('allTeams', $scope.allTeams);
-
     $scope.allPlayers = $scope.allLeagueDataObj.allLeagues;
 
     populateTable();
@@ -81,105 +77,44 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
   var populateTable = function () {
 
     console.log('populateTable', allTeams);
-      
+
     var masterDeferredList = [];
 
     // 1st loop
-    $scope.allTeams.forEach(function (team) {      
+    $scope.allTeams.forEach(function (team) {
 
       team.totalPoints = 0;
-      
+
       // clear team deferred before the loop that populates it
       team.deferredList = [];
 
       // 2nd loop
       team.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, team));
-      
+
       masterDeferredList = masterDeferredList.concat(team.deferredList);
       team.deferredList = [];
 
     });
-    
+
     console.log('END --> masterDeferredList.length:', masterDeferredList.length);
-    
-    setTimeout(saveToFireBase, 8000);
-    
-    /*$q.all(masterDeferredList).then(function (result) {
 
-      console.log('********** DONE');
-      //saveToFireBase();
-      //localStorageService.set('allTeams', $scope.allTeams);
 
-    }, function() {
-      
+    $q.all(masterDeferredList).then(function () {
+
+      $fireBaseService.saveToFireBase();
+      localStorageService.set('allTeams', $scope.allTeams);
+
+    }, function () {
+
       console.log('********** ERROR');
-      
-    });*/
-  
-
-  };
-
-  var saveToFireBase = function() {
-
-    console.log('saveToFireBase');
-
-    var usersRef = ref.child('leagueTeamData');
-    
-    delete $leagueTeams.chester.$$hashKey;
-    delete $leagueTeams.frank.$$hashKey;
-    delete $leagueTeams.dan.$$hashKey;
-    delete $leagueTeams.justin.$$hashKey;
-    delete $leagueTeams.mike.$$hashKey;
-    delete $leagueTeams.joe.$$hashKey;
-    
-    var saveObject = {
-      __allPlayers: $scope.allPlayers,
-      __allLeagues: $scope.allLeagueDataObj.allLeagues,
-      //__allTeams: $scope.allTeams,
-      chester: $leagueTeams.chester,
-      frank: $leagueTeams.frank,
-      dan: $leagueTeams.dan,
-      justin: $leagueTeams.justin,
-      mike: $leagueTeams.mike,
-      joe: $leagueTeams.joe
-    };
-    
-    usersRef.set(saveObject);
-
-  };
-  
-  var populateTableFromFireBase = function(snapshot) {
-    
-    console.log('populateTableFromFireBase');
-    
-    $scope.loading = false;
-
-      $scope.allTeams = allTeams = [
-        snapshot.val().leagueTeamData.chester,
-        snapshot.val().leagueTeamData.frank,
-        snapshot.val().leagueTeamData.dan,
-        snapshot.val().leagueTeamData.justin,
-        snapshot.val().leagueTeamData.mike,
-        snapshot.val().leagueTeamData.joe
-      ];
-
-      $scope.allPlayers = snapshot.val().__allLeagues;
-    
-  };
-
-  var getFireBaseData = function() {
-
-    console.log('getFireBaseData');
-
-    ref.on('value', populateTableFromFireBase, function (errorObject) {
-
-      console.log('The read failed: ' + errorObject.code);
 
     });
 
+
   };
 
-  $scope.updateData = function() {
+
+  $scope.updateData = function () {
 
     console.log('updateData');
 
@@ -196,25 +131,33 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
    */
   $scope.init = function () {
 
-    if (localStorageService.get('allLeagues')) {
+    // TODO - implement localStorage save
+    /*if (localStorageService.get('allLeagues')) {
 
-      /*$scope.allLeaguesData = localStorageService.get('allLeagues');
-      $scope.allRequestComplete();*/
-      //$scope.updateData();
-      //getFireBaseData();
-      //saveToFireBase();
+     } else {
 
-    } else {
+     }*/
 
-      //$scope.updateData();
-      //getFireBaseData();
-      //saveToFireBase();
+    $fireBaseService.initialize();
 
-    }
+    var firePromise = $fireBaseService.getFireBaseData();
 
-    //$scope.updateData();
-    getFireBaseData();
-    //saveToFireBase();
+    firePromise.promise.then(function (data) {
+
+      $scope.loading = false;
+
+      $scope.allTeams = allTeams = [
+        data.leagueTeamData.chester,
+        data.leagueTeamData.frank,
+        data.leagueTeamData.dan,
+        data.leagueTeamData.justin,
+        data.leagueTeamData.mike,
+        data.leagueTeamData.joe
+      ];
+
+      $scope.allPlayers = data.__allLeagues;
+
+    });
 
 
   };

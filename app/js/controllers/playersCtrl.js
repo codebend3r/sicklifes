@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $routeParams, $arrayMapper, localStorageService, $leagueTeams, $location) {
+sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireBaseService, $routeParams, $arrayMapper, localStorageService, $leagueTeams, $location) {
 
   $scope.loading = true;
 
@@ -76,9 +76,18 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
       $leagueTeams.joe
     ];
 
-    localStorageService.set('allTeams', $scope.allTeams);
-
     $scope.allPlayers = $scope.allLeagueDataObj.allLeagues;
+
+    chooseTeam();
+
+    $scope.populateTable();
+
+  };
+
+  /**
+   * defines $scope.selectedTeam
+   */
+  var chooseTeam = function () {
 
     if ($routeParams.team) {
       $scope.allTeams.forEach(function (team) {
@@ -89,8 +98,6 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
     } else {
       $scope.selectedTeam = $scope.allTeams[0];
     }
-
-    $scope.populateTable();
 
   };
 
@@ -104,30 +111,53 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $route
 
   };
 
-  $scope.updateData = function() {
+  /**
+   *
+   */
+  $scope.updateData = function () {
     $scope.allLeagueDataObj = {
       cb: $scope.allRequestComplete
     };
 
     $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
-  }
+  };
 
   /**
    * init function
    */
   $scope.init = function () {
 
-    if (localStorageService.get('allLeagues')) {
+    // TODO - implement localStorage save
+    /*if (localStorageService.get('allLeagues')) {
 
-      /*$scope.allLeaguesData = localStorageService.get('allLeagues');
-      $scope.allRequestComplete();*/
-      $scope.updateData();
+     } else {
 
-    } else {
+     }*/
 
-      $scope.updateData();
+    $fireBaseService.initialize();
 
-    }
+    var firePromise = $fireBaseService.getFireBaseData();
+
+    firePromise.promise.then(function (data) {
+
+      $scope.loading = false;
+
+      $scope.allTeams = allTeams = [
+        data.leagueTeamData.chester,
+        data.leagueTeamData.frank,
+        data.leagueTeamData.dan,
+        data.leagueTeamData.justin,
+        data.leagueTeamData.mike,
+        data.leagueTeamData.joe
+      ];
+
+      $scope.allPlayers = data.__allLeagues;
+
+      chooseTeam();
+
+
+    });
+
 
   };
 

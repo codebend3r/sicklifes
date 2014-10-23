@@ -18,7 +18,7 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
      * @param teamPlayers - from loop
      */
     forEachPlayer: function ($scope, team, teamPlayers) {
-      
+
       // teamPlayers is a child of team
 
       teamPlayers.goals = 0; // start at 0;
@@ -32,7 +32,7 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
       team.clGoals = 0;
       team.eGoals = 0;
       team.domesticGoals = 0;
-      
+
       team.deferredList = team.deferredList || [];
 
       if (angular.isDefined(teamPlayers.league) && teamPlayers.id !== null) {
@@ -41,7 +41,7 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
 
           endPointURL: $textManipulator.getPlayerSummaryURL(teamPlayers.league, teamPlayers.id),
           qCallBack: function (result) {
-            
+
             console.log('qCallback');
 
             result.data.map(function (i) {
@@ -80,8 +80,8 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
         });
 
       }
-      
-      team.deferredList.push(request);
+
+      team.deferredList.push(request.promise);
 
     }
   }

@@ -20,9 +20,11 @@
 </head>
 <body>
 
-<div class="sicklifes-container container" ng-view></div>
+<div ng-controller="masterCtrl">
+  <div class="sicklifes-container container" ng-view></div>
 
-<footer>Build v 0.1.15</footer>
+  <footer>Build v{{version}}</footer>
+</div>
 
 <!-- build:js js/sicklifes.js -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -37,11 +39,11 @@
 <script src="bower_components/angularfire/dist/angularfire.js"></script>
 
 <script src="js/vendor/sugar.min.js"></script>
-<!-- <script src="js/vendor/firebase.min.js"></script> -->
 
 <script src="js/app.js"></script>
 <script src="js/routes.js"></script>
 <script src="js/templates/templatescache.js"></script>
+<script src="js/controllers/masterCtrl.js"></script>
 <script src="js/controllers/leaguesCtrl.js"></script>
 <script src="js/controllers/playersCtrl.js"></script>
 <script src="js/controllers/standingsCtrl.js"></script>
@@ -53,6 +55,7 @@
 <script src="js/factory/arrayLoopers.js"></script>
 <script src="js/factory/scoringLogic.js"></script>
 <script src="js/factory/apiFactory.js"></script>
+<script src="js/factory/fireBaseService.js"></script>
 <script src="js/factory/arrayMappers.js"></script>
 <script src="js/factory/teamsFactory.js"></script>
 <!-- endbuild -->
