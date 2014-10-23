@@ -4,9 +4,11 @@
 
 
 
-sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator, $scoringLogic) {
+sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator, $q, $scoringLogic) {
 
-  return {
+  var mapper = {
+
+    requestList: [],
 
     /**
      *
@@ -16,6 +18,8 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
      * @param teamPlayers - from loop
      */
     forEachPlayer: function ($scope, team, teamPlayers) {
+      
+      // teamPlayers is a child of team
 
       teamPlayers.goals = 0; // start at 0;
       teamPlayers.points = 0; // start at 0;
@@ -28,13 +32,17 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
       team.clGoals = 0;
       team.eGoals = 0;
       team.domesticGoals = 0;
+      
+      team.deferredList = team.deferredList || [];
 
       if (angular.isDefined(teamPlayers.league) && teamPlayers.id !== null) {
 
-        $apiFactory.getData({
+        var request = $apiFactory.getData({
 
           endPointURL: $textManipulator.getPlayerSummaryURL(teamPlayers.league, teamPlayers.id),
           qCallBack: function (result) {
+            
+            console.log('qCallback');
 
             result.data.map(function (i) {
 
@@ -71,28 +79,13 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
           }
         });
 
-      } else {
-
-        //console.log('DEP: checking goals by all players');
-
-        $scope.allPlayers.forEach(function (leaguePlayer) {
-
-          //console.log(teamPlayers.playerName.toLowerCase(), '==', $textManipulator.stripVowelAccent(leaguePlayer.playerName.toLowerCase()));
-
-          if (teamPlayers.playerName.toLowerCase() === $textManipulator.stripVowelAccent(leaguePlayer.playerName.toLowerCase())) {
-
-            console.log('OLD MATCH', leaguePlayer.playerName, leaguePlayer.id);
-
-            teamPlayers.goals += leaguePlayer.goals;
-            teamPlayers.points = $scoringLogic.calculatePoints(teamPlayers.goals, leaguePlayer.league);
-            team.totalPoints += teamPlayers.points;
-
-          }
-
-        });
       }
+      
+      team.deferredList.push(request);
 
     }
   }
+
+  return mapper;
 
 });

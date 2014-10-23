@@ -52,7 +52,9 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
   /**
    *
    */
-  $scope.allRequestComplete = function () {
+  var allRequestComplete = function () {
+
+    console.log('allRequestComplete');
 
     $scope.loading = false;
 
@@ -65,11 +67,55 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
       $leagueTeams.joe
     ];
 
-    localStorageService.set('allTeams', $scope.allTeams);
+    //localStorageService.set('allTeams', $scope.allTeams);
 
     $scope.allPlayers = $scope.allLeagueDataObj.allLeagues;
 
-    $scope.populateTable();
+    populateTable();
+
+  };
+
+  /**
+   *
+   */
+  var populateTable = function () {
+
+    console.log('populateTable', allTeams);
+      
+    var masterDeferredList = [];
+
+    // 1st loop
+    $scope.allTeams.forEach(function (team) {      
+
+      team.totalPoints = 0;
+      
+      // clear team deferred before the loop that populates it
+      team.deferredList = [];
+
+      // 2nd loop
+      team.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, team));
+      
+      masterDeferredList = masterDeferredList.concat(team.deferredList);
+      team.deferredList = [];
+
+    });
+    
+    console.log('END --> masterDeferredList.length:', masterDeferredList.length);
+    
+    setTimeout(saveToFireBase, 8000);
+    
+    /*$q.all(masterDeferredList).then(function (result) {
+
+      console.log('********** DONE');
+      //saveToFireBase();
+      //localStorageService.set('allTeams', $scope.allTeams);
+
+    }, function() {
+      
+      console.log('********** ERROR');
+      
+    });*/
+  
 
   };
 
@@ -77,44 +123,55 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     console.log('saveToFireBase');
 
-    console.log('$scope.allTeams', $scope.allTeams);
-    console.log('$scope.allTeams --> goals', $scope.allTeams[0].players[0].playerName);
-    console.log('$scope.allTeams --> goals', $scope.allTeams[0].players[0].goals);
-    console.log('$scope.allTeams --> domesticGoals', $scope.allTeams[0].players[0].domesticGoals);
-
     var usersRef = ref.child('leagueTeamData');
-    usersRef.set({
+    
+    delete $leagueTeams.chester.$$hashKey;
+    delete $leagueTeams.frank.$$hashKey;
+    delete $leagueTeams.dan.$$hashKey;
+    delete $leagueTeams.justin.$$hashKey;
+    delete $leagueTeams.mike.$$hashKey;
+    delete $leagueTeams.joe.$$hashKey;
+    
+    var saveObject = {
       __allPlayers: $scope.allPlayers,
       __allLeagues: $scope.allLeagueDataObj.allLeagues,
-      CHESTER: $leagueTeams.chester.players,
-      FRANK: $leagueTeams.frank.players,
-      DAN: $leagueTeams.dan.players,
-      JUSTIN: $leagueTeams.justin.players,
-      MIKE: $leagueTeams.mike.players,
-      JOE: $leagueTeams.joe.players
-    });
+      //__allTeams: $scope.allTeams,
+      chester: $leagueTeams.chester,
+      frank: $leagueTeams.frank,
+      dan: $leagueTeams.dan,
+      justin: $leagueTeams.justin,
+      mike: $leagueTeams.mike,
+      joe: $leagueTeams.joe
+    };
+    
+    usersRef.set(saveObject);
 
+  };
+  
+  var populateTableFromFireBase = function(snapshot) {
+    
+    console.log('populateTableFromFireBase');
+    
+    $scope.loading = false;
+
+      $scope.allTeams = allTeams = [
+        snapshot.val().leagueTeamData.chester,
+        snapshot.val().leagueTeamData.frank,
+        snapshot.val().leagueTeamData.dan,
+        snapshot.val().leagueTeamData.justin,
+        snapshot.val().leagueTeamData.mike,
+        snapshot.val().leagueTeamData.joe
+      ];
+
+      $scope.allPlayers = snapshot.val().__allLeagues;
+    
   };
 
   var getFireBaseData = function() {
 
-    ref.on('value', function (snapshot) {
+    console.log('getFireBaseData');
 
-      $scope.allTeams = [
-        snapshot.val().leagueTeamData.CHESTER,
-        snapshot.val().leagueTeamData.FRANK,
-        snapshot.val().leagueTeamData.DAN,
-        snapshot.val().leagueTeamData.JUSTIN,
-        snapshot.val().leagueTeamData.MIKE,
-        snapshot.val().leagueTeamData.JOE
-      ];
-
-      $scope.allPlayers = snapshot.val().__allLeagues;
-      $scope.populateTable();
-
-      console.log('SELECTED LEAGUE', $scope.selectedLeague);
-
-    }, function (errorObject) {
+    ref.on('value', populateTableFromFireBase, function (errorObject) {
 
       console.log('The read failed: ' + errorObject.code);
 
@@ -122,30 +179,16 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
   };
 
-  /**
-   *
-   */
-  $scope.populateTable = function () {
-
-    $scope.allTeams.forEach(function (team) {
-
-      team.totalPoints = 0;
-
-      team.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, team));
-
-    });
-
-    setTimeout(saveToFireBase, 9000);
-    //localStorageService.set('allTeams', $scope.allTeams);
-
-  };
-
   $scope.updateData = function() {
+
+    console.log('updateData');
+
     $scope.allLeagueDataObj = {
-      cb: $scope.allRequestComplete
+      cb: allRequestComplete
     };
 
     $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
+
   };
 
   /**
@@ -153,25 +196,26 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
    */
   $scope.init = function () {
 
-    /*$scope.allLeagueDataObj = {
-      cb: $scope.allRequestComplete
-    };
-
-    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);*/
-
     if (localStorageService.get('allLeagues')) {
 
       /*$scope.allLeaguesData = localStorageService.get('allLeagues');
       $scope.allRequestComplete();*/
       //$scope.updateData();
-      getFireBaseData();
+      //getFireBaseData();
+      //saveToFireBase();
 
     } else {
 
       //$scope.updateData();
-      getFireBaseData();
+      //getFireBaseData();
+      //saveToFireBase();
 
     }
+
+    //$scope.updateData();
+    getFireBaseData();
+    //saveToFireBase();
+
 
   };
 
