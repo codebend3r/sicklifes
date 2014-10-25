@@ -2,34 +2,88 @@
  * Created by Bouse on 10/2/2014
  */
 
-
-
 sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStorageService, $leagueTeams) {
 
   var arrayLoopers = {
 
-    goalsMap: function (url, i) {
+    /**
+     *
+     * @param $scope - controller $scope
+     * @param team - team which contains teamPlayers
+     * @param saveToFireBase
+     * @param teamPlayers - from loop
+     */
+    forEachPlayer: function ($scope, team, teamPlayers) {
 
-      var playerInLeague = {
-        id: i.player.id,
-        url: url || '',
-        rank: i.ranking,
-        playerName: $textManipulator.formattedFullName(i.player.first_name, i.player.last_name),
-        teamName: i.team.full_name.toUpperCase(),
-        domesticGoals: 0,
-        leagueGoals: 0,
-        goals: i.stat,
-        ownedBy: arrayLoopers.getOwnerByID(i.player.id),
-        league: '',
-        transactionsLog: [],
-        historyLog: []
-      };
+      // teamPlayers is a child of team
 
-      playerInLeague.league = $textManipulator.getLeagueByURL(url);
-      return playerInLeague;
+      teamPlayers.goals = 0; // start at 0;
+      teamPlayers.points = 0; // start at 0;
+      teamPlayers.domesticGoals = 0;
+      teamPlayers.leagueGoals = 0;
+      teamPlayers.clGoals = 0;
+      teamPlayers.eGoals = 0;
+
+      team.totalPoints = 0;
+      team.clGoals = 0;
+      team.eGoals = 0;
+      team.domesticGoals = 0;
+
+      team.deferredList = team.deferredList || [];
+
+      if (angular.isDefined(teamPlayers.league) && teamPlayers.id !== null) {
+
+        var request = $apiFactory.getData({
+
+          endPointURL: $textManipulator.getPlayerSummaryURL(teamPlayers.league, teamPlayers.id),
+          qCallBack: function (result) {
+
+            console.log('qCallback');
+
+            result.data.map(function (i) {
+
+              var league = i.league.slug,
+                gameGoals = i.games_goals;
+
+              if ($textManipulator.acceptedLeague(league)) {
+
+                teamPlayers.goals += gameGoals;
+
+                if ($textManipulator.isLeagueGoal(league)) {
+                  teamPlayers.leagueGoals += gameGoals;
+                }
+
+                if ($textManipulator.isDomesticGoal(league)) {
+                  teamPlayers.domesticGoals += gameGoals;
+                } else if ($textManipulator.isChampionsLeagueGoal(league)) {
+                  teamPlayers.clGoals += gameGoals;
+                } else if ($textManipulator.isEuropaGoal(league)) {
+                  teamPlayers.eGoals += gameGoals;
+                }
+
+                teamPlayers.points += $scoringLogic.calculatePoints(gameGoals, league);
+
+              }
+
+            });
+
+            team.totalPoints += teamPlayers.points;
+            team.clGoals += teamPlayers.clGoals;
+            team.eGoals += teamPlayers.eGoals;
+            team.domesticGoals += teamPlayers.domesticGoals;
+
+          }
+        });
+
+      }
+
+      team.deferredList.push(request.promise);
 
     },
 
+    /**
+     * TODO
+     */
     getAllPlayers: function() {
       return [
         $leagueTeams.chester,
@@ -41,6 +95,9 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
       ];
     },
 
+    /**
+     * TODO
+     */
     getOwnerByID: function(id) {
       var owner = 'Free Agent';
       arrayLoopers.getAllPlayers().forEach(function(team) {

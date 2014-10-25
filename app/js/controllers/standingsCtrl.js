@@ -1,13 +1,18 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Created by Bouse on 10/24/2014
  */
 
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMapper, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
 
-
+  /**
+   * TODO
+   */
   $scope.loading = true;
 
+  /**
+   * TODO
+   */
   $scope.tableHeader = [
     {
       columnClass: 'col-md-4 col-xs-4 small-hpadding',
@@ -48,7 +53,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
   };
 
   /**
-   *
+   * TODO
    */
   var allRequestComplete = function () {
 
@@ -72,7 +77,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
   };
 
   /**
-   *
+   * TODO
    */
   var populateTable = function () {
 
@@ -89,7 +94,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
       team.deferredList = [];
 
       // 2nd loop
-      team.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, team));
+      team.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, team));
 
       masterDeferredList = masterDeferredList.concat(team.deferredList);
 
@@ -113,7 +118,9 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
   };
 
-
+  /**
+   * TODO
+   */
   $scope.updateData = function () {
 
     console.log('updateData');
@@ -127,7 +134,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
   };
 
   /**
-   *
+   * TODO
    */
   $scope.init = function () {
 

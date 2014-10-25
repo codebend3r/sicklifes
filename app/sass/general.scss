@@ -85,8 +85,13 @@ html, body {
     font-size: 55px;
   }
   .profile-pic{
-    max-width: 100%;
-    height:auto;
+    width: 160px;
+    height: 160px;
+    border: 2px solid #ffffff;
+    @media (max-width: 700px) {
+      width: 100%;
+      height: 100%;
+    }
   }
   .background-logo {
     position: absolute;
@@ -133,6 +138,10 @@ html, body {
       color: #02C2FF;
       text-decoration: underline;
       margin: 0;
+      @media (max-width: 700px) {
+        font-size: 40px;
+        line-height: 50px;
+      }
     }
   }
 }

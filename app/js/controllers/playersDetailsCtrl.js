@@ -1,45 +1,49 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Created by Bouse on 10/24/2014
  */
 
 
-sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMapper, $date, $textManipulator, $firebase) {
+sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMappers, $date, $textManipulator, $firebase) {
 
+  /*
+   * TODO
+   */ 
   $scope.loading = true;
 
   /*
-   <div class='col-sm-4 col-xs-8'>{{game.alignment}} {{game.vsTeam}}</div>
-   <div class='col-sm-1 col-xs-2 text-center'>{{game.goalsScored}}</div>
-   <div class='col-sm-1 col-xs-2 text-center'>{{game.finalScore()}}</div>
-   <div class='col-sm-3 hidden-xs'>{{game.leagueName}}</div>
-   <div class='col-sm-3 hidden-xs'>{{game.datePlayed}}</div>
-   */
-
+   * TODO
+   */ 
   $scope.tableHeader = [
     {
-      columnClass: 'col-sm-4 col-xs-8',
+      columnClass: 'col-md-4 col-sm-4 col-xs-8',
       text: 'Opponent'
     },
     {
-      columnClass: 'col-sm-1 col-xs-2 text-center',
+      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
       text: 'G'
     },
     {
-      columnClass: 'col-sm-1 col-xs-2 text-center',
+      columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
       text: 'Final Score'
     },
     {
-      columnClass: 'col-sm-3 hidden-xs',
+      columnClass: 'col-md-3 col-sm-3 hidden-xs',
       text: 'League'
     },
     {
-      columnClass: 'col-sm-3 hidden-xs',
+      columnClass: 'col-md-3 col-sm-3 col-xs-2',
       text: 'Date Played'
     }
   ];
 
+  /*
+   * TODO
+   */ 
   $scope.player = {};
 
+  /*
+   * TODO
+   */ 
   $scope.filterAfterDate = function (game) {
     var gameDate = $date.create(game.box_score.event.game_date),
       isAfter = gameDate.isAfter('August 16 2014');
@@ -49,17 +53,30 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     return isAfter;
   };
 
+  /*
+   * TODO
+   */ 
   var playerProfileCallBack = function (result) {
 
     var selectedInt = result.data.teams.length === 3 ? 1 : 0,
       id = $routeParams.playerID,
       teamName = result.data.teams[selectedInt].name,
       playerLeagueProfileRequest,
-      leagueName = $textManipulator.getLeagueByURL(result.data.api_uri);
+      leagueName = function() {
+        var length = result.data.teams[0].leagues.length - 1;
+        var leaguesString = result.data.teams[0].leagues[0].slug.toUpperCase();
+        /*result.data.leagues.forEach(function(league, index) {
+          if ($textManipulator.acceptedLeague(league.slug)) {
+            console.log('league.slug', league.slug, index);
+            leaguesString += league.slug.toUpperCase() + '/';
+          }
+        });*/
+        return leaguesString;
+      };
 
-    console.log('leagueName', leagueName);
+    console.log('result.data', result.data);
 
-    playerLeagueProfileRequest = $apiFactory.getPlayerProfile(leagueName, id);
+    playerLeagueProfileRequest = $apiFactory.getPlayerProfile(leagueName(), id);
 
     playerLeagueProfileRequest.promise.then(function (profileData) {
 
@@ -73,12 +90,15 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
     $scope.player.playerName = $textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
     $scope.player.playerTeam = teamName;
-    $scope.player.leagueName = leagueName.toUpperCase();
+    $scope.player.leagueName = leagueName;
     $scope.player.teamLogo = result.data.teams[selectedInt].sportsnet_logos.large;
     $scope.player.playerImage = result.data.headshots.original;
 
   };
 
+  /*
+   * TODO
+   */ 
   var init = function () {
 
     var id = $routeParams.playerID,
@@ -95,7 +115,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     ligaGamesRequest.promise.then(function (result) {
 
       $scope.loading = false;
-      $scope.ligaGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMapper.gameMapper);
+      $scope.ligaGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
 
       console.log('$scope.ligaGameDetails', $scope.ligaGameDetails);
 
@@ -105,7 +125,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     eplGamesRequest.promise.then(function (result) {
 
       $scope.loading = false;
-      $scope.eplGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMapper.gameMapper);
+      $scope.eplGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
 
     });
 
@@ -113,7 +133,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     seriGamesRequest.promise.then(function (result) {
 
       $scope.loading = false;
-      $scope.seriGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMapper.gameMapper);
+      $scope.seriGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
 
     });
 
@@ -121,7 +141,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     chlgGamesRequest.promise.then(function (result) {
 
       $scope.loading = false;
-      $scope.chlgGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMapper.gameMapper);
+      $scope.chlgGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
 
     });
 
@@ -129,7 +149,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     euroGamesRequest.promise.then(function (result) {
 
       $scope.loading = false;
-      $scope.euroGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMapper.gameMapper);
+      $scope.euroGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
 
     });
 

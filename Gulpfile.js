@@ -157,9 +157,15 @@ gulp.task('bower-all', function () {
 // Images
 gulp.task('images', function () {
 
-  if (gutil.env.dev === true) {
+  if (gutil.env.prod === true) {
     return gulp.src([ config.app + '/images/**/*.{jpg,png,gif}' ])
-      .pipe(gulp.dest(config.dev + '/images/'))
+      .pipe(gulp.dest(config.prod + '/images/'));
+  } else if (gutil.env.release === true) {
+    return gulp.src([ config.app + '/images/**/*.{jpg,png,gif}' ])
+      .pipe(gulp.dest(config.release + '/images/'));
+  } else {
+    return gulp.src([ config.app + '/images/**/*.{jpg,png,gif}' ])
+      .pipe(gulp.dest(config.dev + '/images/'));
   }
 
 });

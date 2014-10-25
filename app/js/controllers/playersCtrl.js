@@ -1,12 +1,18 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Created by Bouse on 10/24/2014
  */
 
 
-sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireBaseService, $routeParams, $arrayMapper, $leagueTeams, $location) {
+sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireBaseService, $routeParams, $arrayMappers, $leagueTeams, $location) {
 
+  /**
+   * TODO
+   */
   $scope.loading = true;
 
+  /**
+   * TODO
+   */
   $scope.tableHeader = [
     {
       columnClass: 'col-md-4 col-sm-5 col-xs-6',
@@ -46,6 +52,9 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
     }
   ];
 
+  /**
+   * TODO
+   */
   $scope.changeTeam = function (selectedTeam) {
 
     console.log('change team', selectedTeam);
@@ -106,7 +115,7 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
 
     $scope.selectedTeam.deferredList = [];
 
-    $scope.selectedTeam.players.forEach($arrayMapper.forEachPlayer.bind($scope, $scope, $scope.selectedTeam));
+    $scope.selectedTeam.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, $scope.selectedTeam));
 
     $q.all($scope.selectedTeam.deferredList).then(function () {
 
@@ -118,7 +127,7 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
   };
 
   /**
-   *
+   * TODO
    */
   $scope.updateData = function () {
     $scope.allLeagueDataObj = {

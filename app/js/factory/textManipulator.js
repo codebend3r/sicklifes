@@ -86,13 +86,17 @@ sicklifesFantasy.factory('$textManipulator', function () {
     },
 
     getPlayerSummaryURL: function (league, id) {
-      return'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/summary';
+      return 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/summary';
     },
 
     getPlayerProfileURL: function (league, id) {
-      console.log('getPlayerProfileURL >>> http://origin-api.thescore.com/' + league + '/players/' + id)
       return 'http://origin-api.thescore.com/' + league + '/players/' + id;
     }
+
+    /*getTeamInfoURL: function (league, id) {
+      return 'http://origin-api.thescore.com/liga/teams/' + id;
+    }*/
+
 
   };
 

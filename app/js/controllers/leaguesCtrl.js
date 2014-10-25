@@ -1,22 +1,30 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Created by Bouse on 10/24/2014
  */
 
 
 
-sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $arrayMapper, $fireBaseService) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $arrayMappers, $fireBaseService) {
 
   //////////////////////////// public
 
   $scope.loading = true;
 
+  /*
+  <div class='col-md-1 col-sm-2 col-xs-2 small-hpadding'>{{scorer.rank}}</div>
+  <div class='col-md-4 col-sm-4 col-xs-8 small-hpadding'><a ng-href='#/player-details/{{scorer.id}}'>{{scorer.playerName}}</a></div>
+  <div class='col-md-2 col-sm-4 hidden-xs small-hpadding bold small-text'>{{scorer.teamName}}</div>
+  <div class='col-md-3 col-sm-4 hidden-xs small-hpadding bold small-text'>{{scorer.ownedBy}}</div>
+  <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{scorer.goals}}</div>
+  */
+
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-1 col-sm-2 col-xs-2 small-hpadding',
+      columnClass: 'col-md-1 col-sm-1 col-xs-2 small-hpadding',
       text: 'Rank'
     },
     {
-      columnClass: 'col-md-4 col-sm-4 col-xs-8 small-hpadding',
+      columnClass: 'col-md-4 col-sm-5 col-xs-8 small-hpadding',
       text: 'Player'
     },
     {
@@ -24,8 +32,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
       text: 'Team'
     },
     {
-      columnClass: 'col-md-3 col-sm-4 hidden-xs small-hpadding',
-      text: 'Team'
+      columnClass: 'col-md-3 hidden-sm hidden-xs small-hpadding',
+      text: 'Owned By'
     },
     {
       columnClass: 'col-md-2 col-sm-2 col-xs-2 text-center small-hpadding',
@@ -36,9 +44,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   $scope.allRequest = [];
 
   $scope.changeLeague = function (league) {
-
-    console.log('change leagues', league);
-
+    //
   };
 
   $scope.updateData = function () {
@@ -95,7 +101,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   //////////////////////////// private
 
-  var defineAllData = function () {
+  var defineRESTData = function () {
 
     return [
       {
@@ -126,7 +132,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
     $scope.loading = false;
 
-    $scope.allLeagues = defineAllData();
+    $scope.allLeagues = defineRESTData();
 
     $scope.selectedLeague = $scope.allLeagues[0];
 

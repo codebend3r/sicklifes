@@ -12,16 +12,16 @@
     <span class='background-dark'></span>
     <span class='pattern'></span>
 
-    <div class='col-md-2 col-sm-4'>
+    <div class='col-md-3 col-sm-4 col-xs-4'>
       <img class='profile-pic' ng-src='{{player.playerImage}}'/>
     </div>
-    <div class='col-md-10 col-sm-8'>
+    <div class='col-md-9 col-sm-8 col-xs-8'>
 
       <h1 class='player-name'>{{player.playerName}}</h1>
 
       <h3 class='player-team'>{{player.playerTeam}}</h3><br/>
 
-      <h3 class='player-team'>{{player.leagueName}}</h3>
+      <h3 class='player-team'>{{player.leagueName()}}</h3>
 
       <p class='player-info'>POS: {{player.playerPos}}</p>
 

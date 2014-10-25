@@ -1,90 +1,41 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Created by Bouse on 10/24/2014
  */
-
-
-
-sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator, $q, $scoringLogic, $date) {
+ 
+sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $date) {
 
   var mapper = {
 
-    requestList: [],
-
     /**
-     *
-     * @param $scope - controller $scope
-     * @param team - team which contains teamPlayers
-     * @param saveToFireBase
-     * @param teamPlayers - from loop
+     * TODO
+     * @param $url
+     * @param i
      */
-    forEachPlayer: function ($scope, team, teamPlayers) {
+    goalsMap: function (url, i) {
 
-      // teamPlayers is a child of team
+      var playerInLeague = {
+        id: i.player.id,
+        url: url || '',
+        rank: i.ranking,
+        playerName: $textManipulator.formattedFullName(i.player.first_name, i.player.last_name),
+        teamName: i.team.full_name.toUpperCase(),
+        domesticGoals: 0,
+        leagueGoals: 0,
+        goals: i.stat,
+        ownedBy: arrayLoopers.getOwnerByID(i.player.id),
+        league: '',
+        transactionsLog: [],
+        historyLog: []
+      };
 
-      teamPlayers.goals = 0; // start at 0;
-      teamPlayers.points = 0; // start at 0;
-      teamPlayers.domesticGoals = 0;
-      teamPlayers.leagueGoals = 0;
-      teamPlayers.clGoals = 0;
-      teamPlayers.eGoals = 0;
-
-      team.totalPoints = 0;
-      team.clGoals = 0;
-      team.eGoals = 0;
-      team.domesticGoals = 0;
-
-      team.deferredList = team.deferredList || [];
-
-      if (angular.isDefined(teamPlayers.league) && teamPlayers.id !== null) {
-
-        var request = $apiFactory.getData({
-
-          endPointURL: $textManipulator.getPlayerSummaryURL(teamPlayers.league, teamPlayers.id),
-          qCallBack: function (result) {
-
-            console.log('qCallback');
-
-            result.data.map(function (i) {
-
-              var league = i.league.slug,
-                gameGoals = i.games_goals;
-
-              if ($textManipulator.acceptedLeague(league)) {
-
-                teamPlayers.goals += gameGoals;
-
-                if ($textManipulator.isLeagueGoal(league)) {
-                  teamPlayers.leagueGoals += gameGoals;
-                }
-
-                if ($textManipulator.isDomesticGoal(league)) {
-                  teamPlayers.domesticGoals += gameGoals;
-                } else if ($textManipulator.isChampionsLeagueGoal(league)) {
-                  teamPlayers.clGoals += gameGoals;
-                } else if ($textManipulator.isEuropaGoal(league)) {
-                  teamPlayers.eGoals += gameGoals;
-                }
-
-                teamPlayers.points += $scoringLogic.calculatePoints(gameGoals, league);
-
-              }
-
-            });
-
-            team.totalPoints += teamPlayers.points;
-            team.clGoals += teamPlayers.clGoals;
-            team.eGoals += teamPlayers.eGoals;
-            team.domesticGoals += teamPlayers.domesticGoals;
-
-          }
-        });
-
-      }
-
-      team.deferredList.push(request.promise);
+      playerInLeague.league = $textManipulator.getLeagueByURL(url);
+      return playerInLeague;
 
     },
 
+    /**
+     * TODO
+     */
     gameMapper: function (game) {
 
       var gameMapsObj = {
@@ -96,19 +47,19 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
 
           if (game.alignment === 'away') {
             if (game.box_score.score.away.score > game.box_score.score.home.score) {
-              result = 'W-';
+              result = 'W';
             } else if (game.box_score.score.away.score < game.box_score.score.home.score) {
-              result = 'L-';
+              result = 'L';
             } else {
-              result = 'T-';
+              result = 'T';
             }
           } else {
             if (game.box_score.score.away.score < game.box_score.score.home.score) {
-              result = 'W-';
+              result = 'W';
             } else if (game.box_score.score.away.score > game.box_score.score.home.score) {
-              result = 'L-';
+              result = 'L';
             } else {
-              result = 'T-';
+              result = 'T';
             }
           }
 
@@ -138,6 +89,7 @@ sicklifesFantasy.factory('$arrayMapper', function ($apiFactory, $textManipulator
       return gameMapsObj;
 
     }
+
   };
 
   return mapper;

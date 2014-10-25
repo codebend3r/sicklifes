@@ -1,12 +1,14 @@
 /**
- * Created by crivas on 9/12/2014.
+ * Created by Bouse on 10/24/2014
  */
-
-
-sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService, $arrayLoopers, $date, $textManipulator) {
+ 
+sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService, $arrayMappers, $date, $textManipulator) {
 
   var scope = {};
 
+  /**
+   * TODO
+   */
   scope.getData = function (endPoint) {
 
     var defer = $q.defer(),
@@ -26,6 +28,9 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   };
 
+  /**
+   * TODO
+   */
   scope.getFromLocalStorage = function (cbObj) {
 
     console.log('get from localStorage');
@@ -46,6 +51,9 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   };
 
+  /**
+   * TODO
+   */
   scope.getPlayerGameDetails = function (league, id) {
 
     var request = scope.getData({
@@ -56,6 +64,9 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   };
 
+  /**
+   * TODO
+   */
   scope.getPlayerProfile = function (league, id) {
 
     if (typeof league === 'undefined') league = 'soccer';
@@ -68,6 +79,9 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   };
 
+  /**
+   * TODO
+   */
   scope.getAllLeagues = function (cbObj) {
 
     cbObj.allLeagues = [];
@@ -91,7 +105,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
       leagueRequest.promise.then(function (result) {
 
-        result.data.goals = result.data.goals.map($arrayLoopers.goalsMap.bind($arrayLoopers, url));
+        result.data.goals = result.data.goals.map($arrayMapper.goalsMap.bind($arrayMapper, url));
         cbObj[allLeagues[index]] = result.data.goals; // save league data reference to cbObj
         localStorageService.set(allLeagues[index], result.data.goals); // save each league also save to localStorage
         listOfResults.push(result);
