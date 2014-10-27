@@ -59,33 +59,7 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
 
     console.log('change team', selectedTeam);
     $scope.selectedTeam = selectedTeam;
-    $location.url($location.path() + '?team=' + selectedTeam.personName);
-
-  };
-
-  /**
-   * all requests complete
-   */
-  var allRequestComplete = function () {
-
-    console.log('allRequestComplete');
-
-    $scope.loading = false;
-
-    $scope.allTeams = [
-      $leagueTeams.chester,
-      $leagueTeams.frank,
-      $leagueTeams.dan,
-      $leagueTeams.justin,
-      $leagueTeams.mike,
-      $leagueTeams.joe
-    ];
-
-    $scope.allPlayers = $scope.allLeagueDataObj.allLeagues;
-
-    chooseTeam();
-
-    $scope.populateTable();
+    $location.url($location.path() + '?team=' + selectedTeam.personName); // route change
 
   };
 
@@ -95,14 +69,16 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
   var chooseTeam = function () {
 
     if ($routeParams.team) {
-      $scope.allTeams.forEach(function (team) {
+      $scope.allManagers.forEach(function (team) {
         if (team.personName === $routeParams.team) {
           $scope.selectedTeam = team;
         }
       });
     } else {
-      $scope.selectedTeam = $scope.allTeams[0];
+      $scope.selectedTeam = $scope.allManagers[0];
     }
+
+    $location.url($location.path() + '?team=' + $scope.selectedTeam.personName); // route change
 
   };
 
@@ -127,19 +103,42 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
   };
 
   /**
-   * TODO
+   * called from ng-click, makes a request from TheScore to get new data
    */
   $scope.updateData = function () {
-    $scope.allLeagueDataObj = {
-      cb: allRequestComplete
-    };
-    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
+
+    console.log('updateData');
+
+    var allLeagues = [];
+
+    // makes a request for all leagues in a loop returns a list of promises
+    var allPromises = $apiFactory.getAllLeagues();
+
+    // waits for an array of promises to resolve, sets allLeagues data
+    $apiFactory.listOfPromises(allPromises, function (result) {
+
+      allLeagues = [];
+
+      result.forEach(function (league, index) {
+        var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
+        localStorageService.set(league.leagueName, goalsMap); // save each league also save to localStorage
+        allLeagues = allLeagues.concat(goalsMap);
+      });
+
+      localStorageService.set('allLeagues', allLeagues); // also save to localStorage
+
+      $scope.allLeagues = allLeagues;
+
+      allRequestComplete();
+
+    });
+
   };
 
   /**
    * init function
    */
-  $scope.init = function () {
+  var init = function () {
 
     // TODO - implement localStorage save
     /*if (localStorageService.get('allLeagues')) {
@@ -156,7 +155,7 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
 
       $scope.loading = false;
 
-      $scope.allTeams = allTeams = [
+      $scope.allManagers = [
         data.leagueTeamData.chester,
         data.leagueTeamData.frank,
         data.leagueTeamData.dan,
@@ -172,10 +171,33 @@ sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireB
 
     });
 
+  };
+
+  /**
+   * all requests complete
+   */
+  var allRequestComplete = function () {
+
+    console.log('allRequestComplete');
+
+    $scope.loading = false;
+
+    $scope.allManagers = [
+      $leagueTeams.chester,
+      $leagueTeams.frank,
+      $leagueTeams.dan,
+      $leagueTeams.justin,
+      $leagueTeams.mike,
+      $leagueTeams.joe
+    ];
+
+    chooseTeam();
+
+    $scope.populateTable();
 
   };
 
-  $scope.init();
+  init();
 
 });
 

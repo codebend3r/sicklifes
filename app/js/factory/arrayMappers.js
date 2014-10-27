@@ -1,13 +1,13 @@
 /**
  * Created by Bouse on 10/24/2014
  */
- 
+
 sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $arrayLoopers, $date) {
 
   var mapper = {
 
     /**
-     * TODO
+     * maps each player's stats
      * @param $url
      * @param i
      */
@@ -34,7 +34,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
     },
 
     /**
-     * TODO
+     * maps each game data in player details view
      */
     gameMapper: function (game) {
 

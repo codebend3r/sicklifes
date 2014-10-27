@@ -103,9 +103,6 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
       leagueRequest.promise.then(function (result) {
 
-        //result.data.goals = result.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, url));
-        //cbObj[allLeagues[index]] = result.data.goals; // save league data reference to cbObj
-        //localStorageService.set(allLeagues[index], result.data.goals); // save each league also save to localStorage
         result.leagueURL = url;
         result.leagueName = allLeagues[index];
         listOfResults.push(result);

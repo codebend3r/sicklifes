@@ -82,7 +82,7 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
     /**
      * TODO
      */
-    getAllPlayers: function() {
+    getAllPlayers: function () {
       return [
         $leagueTeams.chester,
         $leagueTeams.frank,
@@ -96,16 +96,16 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
     /**
      * TODO
      */
-    getOwnerByID: function(id) {
+    getOwnerByID: function (id) {
       var owner = 'Free Agent';
-      arrayLoopers.getAllPlayers().forEach(function(team) {
-        team.players.some(function(p) {
+      arrayLoopers.getAllPlayers().forEach(function (team) {
+        team.players.some(function (p) {
           if (p.id === id) {
             owner = team.personName;
             return p.id === id
           }
         });
-      });      
+      });
       return owner;
     }
 

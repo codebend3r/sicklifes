@@ -259,7 +259,7 @@ gulp.task('browser-sync', [ 'build' ], function () {
   if (gutil.env.prod === true) {
 
     browserSync({
-      open: true,
+      open: gutil.env.open,
       port: 8888,
       server: {
         baseDir: config.prod
@@ -269,22 +269,22 @@ gulp.task('browser-sync', [ 'build' ], function () {
   } else if (gutil.env.release === true) {
 
     browserSync({
-    open: true,
-    port: 8888,
-    server: {
-      baseDir: config.release
-    }
-  });
+      open: gutil.env.open,
+      port: 8888,
+      server: {
+        baseDir: config.release
+      }
+    });
 
   } else {
 
     browserSync({
-    open: true,
-    port: 8888,
-    server: {
-      baseDir: config.dev
-    }
-  });
+      open: gutil.env.open,
+      port: 8888,
+      server: {
+        baseDir: config.dev
+      }
+    });
 
   }
 

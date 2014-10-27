@@ -11,12 +11,12 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
   $scope.loading = true;
 
   /*
-  <div class='col-md-1 col-sm-2 col-xs-2 small-hpadding'>{{scorer.rank}}</div>
-  <div class='col-md-4 col-sm-4 col-xs-8 small-hpadding'><a ng-href='#/player-details/{{scorer.id}}'>{{scorer.playerName}}</a></div>
-  <div class='col-md-2 col-sm-4 hidden-xs small-hpadding bold small-text'>{{scorer.teamName}}</div>
-  <div class='col-md-3 col-sm-4 hidden-xs small-hpadding bold small-text'>{{scorer.ownedBy}}</div>
-  <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{scorer.goals}}</div>
-  */
+   <div class='col-md-1 col-sm-2 col-xs-2 small-hpadding'>{{scorer.rank}}</div>
+   <div class='col-md-4 col-sm-4 col-xs-8 small-hpadding'><a ng-href='#/player-details/{{scorer.id}}'>{{scorer.playerName}}</a></div>
+   <div class='col-md-2 col-sm-4 hidden-xs small-hpadding bold small-text'>{{scorer.teamName}}</div>
+   <div class='col-md-3 col-sm-4 hidden-xs small-hpadding bold small-text'>{{scorer.ownedBy}}</div>
+   <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{scorer.goals}}</div>
+   */
 
   $scope.tableHeader = [
     {
@@ -49,13 +49,31 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   $scope.updateData = function () {
 
-    $scope.allRequest = [];
+    console.log('updateData');
 
-    $scope.allLeagueDataObj = {
-      cb: allRequestComplete
-    };
+    var allLeagues = [];
 
-    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
+    // makes a request for all leagues in a loop returns a list of promises
+    var allPromises = $apiFactory.getAllLeagues();
+
+    // waits for an array of promises to resolve, sets allLeagues data
+    $apiFactory.listOfPromises(allPromises, function (result) {
+
+      allLeagues = [];
+
+      result.forEach(function (league, index) {
+        var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
+        localStorageService.set(league.leagueName, goalsMap); // save each league also save to localStorage
+        allLeagues = allLeagues.concat(goalsMap);
+      });
+
+      localStorageService.set('allLeagues', allLeagues); // also save to localStorage
+
+      $scope.allLeagues = allLeagues;
+
+      allRequestComplete();
+
+    });
 
   };
 
@@ -101,28 +119,28 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   //////////////////////////// private
 
-  var defineRESTData = function () {
+  var defineRESTData = function (allLeagueDataObj) {
 
     return [
       {
         name: 'La Liga',
-        source: $scope.allLeagueDataObj.liga
+        source: allLeagueDataObj.liga
       },
       {
         name: 'EPL',
-        source: $scope.allLeagueDataObj.epl
+        source: allLeagueDataObj.epl
       },
       {
         name: 'Serie A',
-        source: $scope.allLeagueDataObj.seri
+        source: allLeagueDataObj.seri
       },
       {
         name: 'Champions League',
-        source: $scope.allLeagueDataObj.chlg
+        source: allLeagueDataObj.chlg
       },
       {
         name: 'Europa League',
-        source: $scope.allLeagueDataObj.uefa
+        source: allLeagueDataObj.uefa
       }
     ];
 
@@ -132,7 +150,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
     $scope.loading = false;
 
-    $scope.allLeagues = defineRESTData();
+    $scope.allLeagues = defineRESTData(allLeagueDataObj);
 
     $scope.selectedLeague = $scope.allLeagues[0];
 

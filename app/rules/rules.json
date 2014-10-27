@@ -1,0 +1,12 @@
+{
+  'allLeaguesStartDate': 'August 16 2014',
+  'eplStartDate': 'August 16 2014',
+  'ligaStartDat': 'August 25 2014',
+  'seriStartDate': 'August 31 2014',
+  'scorePhases': {
+    'groupStage': 'December 10 2014'
+    'round16': 'December 10 2014'
+    'round8': 'December 10 2014',
+    'round4': 'December 10 2014'
+  }
+}
