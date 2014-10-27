@@ -2,7 +2,7 @@
  * Created by Bouse on 10/24/2014
  */
  
-sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $date) {
+sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $arrayLoopers, $date) {
 
   var mapper = {
 
@@ -22,7 +22,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         domesticGoals: 0,
         leagueGoals: 0,
         goals: i.stat,
-        ownedBy: arrayLoopers.getOwnerByID(i.player.id),
+        ownedBy: $arrayLoopers.getOwnerByID(i.player.id),
         league: '',
         transactionsLog: [],
         historyLog: []

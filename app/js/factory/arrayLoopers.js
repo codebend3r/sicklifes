@@ -2,7 +2,7 @@
  * Created by Bouse on 10/2/2014
  */
 
-sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStorageService, $leagueTeams) {
+sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStorageService, $leagueTeams, $apiFactory, $scoringLogic) {
 
   var arrayLoopers = {
 
@@ -37,8 +37,6 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
 
           endPointURL: $textManipulator.getPlayerSummaryURL(teamPlayers.league, teamPlayers.id),
           qCallBack: function (result) {
-
-            console.log('qCallback');
 
             result.data.map(function (i) {
 

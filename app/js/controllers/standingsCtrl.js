@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $arrayLoopers, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
 
   /**
    * TODO
@@ -51,6 +51,11 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
     var url = 'http://api.thescore.com/' + league + '/players/' + id + '/player_records?rpp=100';
     return url;
   };
+  
+  /**
+   * consolidated list of all owned players by a manager
+   */
+  $scope.allLeagues = null;
 
   /**
    * TODO
@@ -61,7 +66,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     $scope.loading = false;
 
-    $scope.allTeams = [
+    $scope.allManagers = [
       $leagueTeams.chester,
       $leagueTeams.frank,
       $leagueTeams.dan,
@@ -70,7 +75,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
       $leagueTeams.joe
     ];
 
-    $scope.allPlayers = $scope.allLeagueDataObj.allLeagues;
+    $scope.allLeagues = allLeagues;
 
     populateTable();
 
@@ -86,7 +91,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
     var masterDeferredList = [];
 
     // 1st loop
-    $scope.allTeams.forEach(function (team) {
+    $scope.allManagers.forEach(function (team) {
 
       team.totalPoints = 0;
 
@@ -102,12 +107,23 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     });
 
-    console.log('END --> masterDeferredList.length:', masterDeferredList.length);
-
     $q.all(masterDeferredList).then(function () {
+      
+      var saveObject = {
+        __lastSynedOn: $date.create();
+        //__allPlayers: $scope.allPlayers,
+        __allLeagues: $scope.allLeagues,
+        //__allTeams: $scope.allTeams,
+        chester: $leagueTeams.chester,
+        frank: $leagueTeams.frank,
+        dan: $leagueTeams.dan,
+        justin: $leagueTeams.justin,
+        mike: $leagueTeams.mike,
+        joe: $leagueTeams.joe
+      };
 
-      $fireBaseService.syncLeagueTeamData();
-      localStorageService.set('allTeams', $scope.allTeams);
+      $fireBaseService.syncLeagueTeamData(saveObject);
+      localStorageService.set('allManagers', $scope.allManagers);
 
     }, function () {
 
@@ -117,6 +133,10 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
 
   };
+  
+  var allLeagues = [];
+  
+  var syncDate;
 
   /**
    * TODO
@@ -125,11 +145,25 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     console.log('updateData');
 
-    $scope.allLeagueDataObj = {
-      cb: allRequestComplete
-    };
+    // makes a request for all leagues in a loop returns a list of promises
+    var allPromises = $apiFactory.getAllLeagues();
+    
+    // waits for an array of promises to resolve, sets allLeagues data
+    $apiFactory.listOfPromises(allPromises, function (result) {
+      
+      allLeagues = [];
+      
+      result.forEach(function (league, index) {
+        var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
+        localStorageService.set(league.leagueName, goalsMap); // save each league also save to localStorage
+        allLeagues = allLeagues.concat(goalsMap);
+      });
+      
+      localStorageService.set('allLeagues', allLeagues); // also save to localStorage
+      
+      allRequestComplete();
 
-    $scope.allLeaguesData = $apiFactory.getAllLeagues($scope.allLeagueDataObj);
+    });
 
   };
 
@@ -153,7 +187,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
       $scope.loading = false;
 
-      $scope.allTeams = allTeams = [
+      $scope.allManagers = allTeams = [
         data.leagueTeamData.chester,
         data.leagueTeamData.frank,
         data.leagueTeamData.dan,
@@ -162,7 +196,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
         data.leagueTeamData.joe
       ];
 
-      $scope.allPlayers = data.__allLeagues;
+      $scope.allLeagues = data.__allLeagues;
 
     });
 

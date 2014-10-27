@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStorageService) {
+sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStorageService, $leagueTeams) {
 
   var ref,
     sync;
@@ -36,18 +36,18 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
 
     },
 
-    syncLeagueData: function () {
+    syncLeagueData: function (allLeagueDataObj) {
 
       console.log('syncLeagueData');
 
       var usersRef = ref.child('leagueData');
 
       var saveObject = {
-        LIGA: $scope.allLeagueDataObj.liga,
-        EPL: $scope.allLeagueDataObj.epl,
-        SERI: $scope.allLeagueDataObj.seri,
-        CHLG: $scope.allLeagueDataObj.chlg,
-        UEFA: $scope.allLeagueDataObj.uefa
+        LIGA: allLeagueDataObj.liga,
+        EPL: allLeagueDataObj.epl,
+        SERI: allLeagueDataObj.seri,
+        CHLG: allLeagueDataObj.chlg,
+        UEFA: allLeagueDataObj.uefa
       };
 
       usersRef.set(saveObject);
@@ -55,7 +55,7 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
 
     },
 
-    syncLeagueTeamData: function () {
+    syncLeagueTeamData: function (saveObject) {
 
       console.log('syncLeagueTeamData');
 
@@ -67,18 +67,6 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
       delete $leagueTeams.justin.$$hashKey;
       delete $leagueTeams.mike.$$hashKey;
       delete $leagueTeams.joe.$$hashKey;
-
-      var saveObject = {
-        __allPlayers: $scope.allPlayers,
-        __allLeagues: $scope.allLeagueDataObj.allLeagues,
-        //__allTeams: $scope.allTeams,
-        chester: $leagueTeams.chester,
-        frank: $leagueTeams.frank,
-        dan: $leagueTeams.dan,
-        justin: $leagueTeams.justin,
-        mike: $leagueTeams.mike,
-        joe: $leagueTeams.joe
-      };
 
       usersRef.set(saveObject);
 

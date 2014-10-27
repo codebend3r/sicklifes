@@ -2,7 +2,7 @@
  * Created by Bouse on 10/24/2014
  */
  
-sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService, $arrayMappers, $date, $textManipulator) {
+sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService, $date, $textManipulator) {
 
   var scope = {};
 
@@ -82,9 +82,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
   /**
    * TODO
    */
-  scope.getAllLeagues = function (cbObj) {
-
-    cbObj.allLeagues = [];
+  scope.getAllLeagues = function () {
 
     var allLeaguesURL = [
         'http://api.thescore.com/liga/leaders?categories=goals',
@@ -105,36 +103,28 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
       leagueRequest.promise.then(function (result) {
 
-        result.data.goals = result.data.goals.map($arrayMapper.goalsMap.bind($arrayMapper, url));
-        cbObj[allLeagues[index]] = result.data.goals; // save league data reference to cbObj
-        localStorageService.set(allLeagues[index], result.data.goals); // save each league also save to localStorage
+        //result.data.goals = result.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, url));
+        //cbObj[allLeagues[index]] = result.data.goals; // save league data reference to cbObj
+        //localStorageService.set(allLeagues[index], result.data.goals); // save each league also save to localStorage
+        result.leagueURL = url;
+        result.leagueName = allLeagues[index];
         listOfResults.push(result);
 
       });
 
-      listOrPromises.push(leagueRequest);
+      listOrPromises.push(leagueRequest.promise);
 
     });
-
-    $q.all(listOrPromises.map(function (defer) {
-
-      return defer.promise;
-
-    })).then(function (result) {
-
-      result.forEach(function (league) {
-        cbObj.allLeagues = cbObj.allLeagues.concat(league.data.goals);
-      });
-      localStorageService.set('allLeagues', cbObj.allLeagues); // also save to localStorage
-      cbObj.lastCheckDate = $date.create();
-      cbObj.cb();
-
-    });
-
-
+    
     return listOrPromises;
 
   };
+  
+  scope.listOfPromises = function(list, callbackFunc) {
+    
+    $q.all(list).then(callbackFunc);
+    
+  }
 
   return scope;
 
