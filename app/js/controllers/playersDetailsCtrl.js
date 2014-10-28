@@ -64,22 +64,9 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
    */
   var playerProfileCallBack = function (result) {
 
-    var selectedInt = result.data.teams.length - 1,
+    var selectedInt = 0,
       id = $routeParams.playerID,
       teamName = result.data.teams[selectedInt].name,
-      playerLeagueProfileRequest,
-      profileLeague = function () {
-        var l = '';
-        result.data.teams.forEach(function (team, i) {
-          team.leagues.forEach(function (league, j) {
-            if ($textManipulator.acceptedLeague(league.slug)) {
-              console.log('IN TEAM', i, result.data.teams[i].name);
-              l = league.slug;
-            }
-          });
-        });
-        return l;
-      },
       leagueName = function () {
         var l = '',
           n = 0;
@@ -107,21 +94,41 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
         });
       };
 
-    checkInLeagues();
-
-    playerLeagueProfileRequest = $apiFactory.getPlayerProfile(profileLeague(), id);
-    playerLeagueProfileRequest.promise.then(function (profileData) {
-      $scope.player.playerPos = profileData.data.position;
-      $scope.player.weight = profileData.data.weight;
-      $scope.player.height = profileData.data.height_feet + '\'' + profileData.data.height_inches;
-      $scope.player.birthdate = profileData.data.birthdate;
-    });
+    console.log('teamName:', teamName);
 
     $scope.player.playerName = $textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
     $scope.player.playerTeam = teamName;
     $scope.player.leagueName = leagueName;
     $scope.player.teamLogo = result.data.teams[selectedInt].sportsnet_logos.large;
     $scope.player.playerImage = result.data.headshots.original;
+
+    checkInLeagues();
+    populatePlayerProfile(result, id);
+
+  };
+
+  var populatePlayerProfile = function (result, playerID) {
+
+    var playerLeagueProfileRequest,
+      profileLeague = function () {
+        var leagueString = '';
+        result.data.teams.forEach(function (team, i) {
+          team.leagues.forEach(function (league, j) {
+            if ($textManipulator.acceptedLeague(league.slug)) {
+              leagueString = league.slug;
+            }
+          });
+        });
+        return leagueString;
+      };
+
+    playerLeagueProfileRequest = $apiFactory.getPlayerProfile(profileLeague(), playerID);
+    playerLeagueProfileRequest.promise.then(function (profileData) {
+      $scope.player.playerPos = profileData.data.position;
+      $scope.player.weight = profileData.data.weight;
+      $scope.player.height = profileData.data.height_feet + '\'' + profileData.data.height_inches;
+      $scope.player.birthdate = profileData.data.birthdate;
+    });
 
     populateGamesLog();
 
@@ -220,6 +227,81 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
   var allGamesLog = [];
 
+  $scope.getAllGameLogs = function () {
+
+    $scope.allManagers.forEach(function (manager) {
+
+      manager.players.forEach(function (player) {
+
+        var ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
+          eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
+          seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
+          chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
+          euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
+
+        player.gamesLog = [];
+
+        ligaGamesRequest.promise.then(function (result) {
+          var ligaGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+          player.gamesLog = player.gamesLog.concat(ligaGameDetails);
+        });
+
+
+        eplGamesRequest.promise.then(function (result) {
+          var eplGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+          player.gamesLog = player.gamesLog.concat(eplGameDetails);
+        });
+
+
+        seriGamesRequest.promise.then(function (result) {
+          var seriGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+          player.gamesLog = player.gamesLog.concat(seriGameDetails);
+        });
+
+
+        chlgGamesRequest.promise.then(function (result) {
+          var chlgGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+          player.gamesLog = player.gamesLog.concat(chlgGameDetails);
+        });
+
+
+        euroGamesRequest.promise.then(function (result) {
+          var euroGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+          player.gamesLog = player.gamesLog.concat(euroGameDetails);
+        });
+
+      });
+
+    });
+
+    setTimeout(function () {
+
+      console.log('//////////////////////////////////////////');
+      console.log('$scope.allManagers', $scope.allManagers);
+      console.log('//////////////////////////////////////////');
+
+      var saveObject = {
+        __lastSynedOn: $date.create(),
+        //__allPlayers: $scope.allPlayers,
+        //__allLeagues: $scope.allLeagues,
+        //__allTeams: $scope.allTeams,
+        chester: $scope.allManagers[0],
+        frank: $scope.allManagers[1],
+        dan: $scope.allManagers[2],
+        justin: $scope.allManagers[3],
+        mike: $scope.allManagers[4],
+        joe: $scope.allManagers[5]
+      };
+
+      console.log('saveObject', saveObject);
+      $fireBaseService.syncLeagueTeamData(saveObject);
+      alert('SYNC COMPLETE');
+
+    }, 45000);
+
+
+  };
+
   var saveGameLogs = function (allGames) {
 
     //console.log('allGames', allGames.length);
@@ -301,4 +383,5 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
   init();
 
-});
+})
+;
