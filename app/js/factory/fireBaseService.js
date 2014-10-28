@@ -69,7 +69,6 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
       delete $leagueTeams.joe.$$hashKey;
 
       usersRef.set(saveObject);
-
       localStorageService.set('leagueTeamData', saveObject);
 
     }

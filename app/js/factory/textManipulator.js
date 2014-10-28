@@ -61,7 +61,7 @@ sicklifesFantasy.factory('$textManipulator', function () {
       }
     },
 
-    getLeagueByURL: function(url) {
+    getLeagueByURL: function (url) {
       if (url.contains('liga')) {
         return 'liga';
       } else if (url.contains('epl')) {
@@ -91,11 +91,11 @@ sicklifesFantasy.factory('$textManipulator', function () {
 
     getPlayerProfileURL: function (league, id) {
       return 'http://origin-api.thescore.com/' + league + '/players/' + id;
-    }
+    },
 
-    /*getTeamInfoURL: function (league, id) {
-      return 'http://origin-api.thescore.com/liga/teams/' + id;
-    }*/
+    getTeamInfoURL: function (id) {
+      return 'http://origin-api.thescore.com/soccer/teams/' + id;
+    }
 
 
   };

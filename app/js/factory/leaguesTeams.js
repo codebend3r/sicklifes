@@ -7,8 +7,8 @@ sicklifesFantasy.factory('$leagueTeams', function () {
   return {
 
     chester: {
-      personName: 'Chester',
-      teamName: 'Inter Max',
+      managersName: 'Chester',
+      teamName: 'Real Kings',
       totalPoints: 0,
       players: [
         {
@@ -159,7 +159,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     },
 
     frank: {
-      personName: 'Frank',
+      managersName: 'Frank',
       teamName: 'Schiraldihno',
       totalPoints: 0,
       players: [
@@ -313,7 +313,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     },
 
     dan: {
-      personName: 'Dan',
+      managersName: 'Dan',
       teamName: '-',
       totalPoints: 0,
       players: [
@@ -466,7 +466,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     },
 
     justin: {
-      personName: 'Justin',
+      managersName: 'Justin',
       teamName: '-',
       totalPoints: 0,
       players: [
@@ -618,16 +618,8 @@ sicklifesFantasy.factory('$leagueTeams', function () {
       ]
     },
 
-    /*
-     MATCH Karim Benzema 1308 arrayMappers.js:51
-     MATCH Gonzalo Higuaín 1318 arrayMappers.js:51
-     MATCH Neymar 14263 arrayMappers.js:51
-     MATCH Raheem Sterling 13749 arrayMappers.js:51
-     MATCH Graziano Pelle 2716
-     */
-
     mike: {
-      personName: 'Mike',
+      managersName: 'Mike',
       teamName: '-',
       totalPoints: 0,
       players: [
@@ -780,7 +772,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     },
 
     joe: {
-      personName: 'Joe',
+      managersName: 'Joe',
       teamName: '-',
       totalPoints: 0,
       players: [

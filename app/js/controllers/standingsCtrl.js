@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $arrayLoopers, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location, localStorageService) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $arrayLoopers, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location) {
 
   /**
    * TODO
@@ -121,7 +121,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
       };
 
       $fireBaseService.syncLeagueTeamData(saveObject);
-      localStorageService.set('allManagers', $scope.allManagers);
 
     }, function () {
 
