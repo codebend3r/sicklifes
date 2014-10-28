@@ -93,11 +93,14 @@ html, body {
       height: 100%;
     }
   }
+  .player-profile-container {
+    z-index: 100;  
+  }
   .background-logo {
     position: absolute;
     top: -60px;
     right: -60px;
-    z-index: -1;
+    z-index: 1;
     opacity: .5;
     width: 350px;
     height: 350px;
@@ -138,6 +141,8 @@ html, body {
       color: #02C2FF;
       text-decoration: underline;
       margin: 0;
+      font-size: 50px;
+      line-height: 60px;
       @media (max-width: 700px) {
         font-size: 40px;
         line-height: 50px;

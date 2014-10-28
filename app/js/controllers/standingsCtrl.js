@@ -84,7 +84,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
    */
   var populateTable = function () {
 
-    console.log('populateTable', allTeams);
+    console.log('populateTable', $scope.allManagers);
 
     var masterDeferredList = [];
 

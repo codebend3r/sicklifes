@@ -17,10 +17,10 @@ sicklifesFantasy.config(function ($routeProvider) {
     templateUrl: 'views/leagues.html',
     controller: 'leaguesCtrl'
 
-  }).when('/players/', {
+  }).when('/managers/', {
 
-    templateUrl: 'views/players.html',
-    controller: 'playersCtrl'
+    templateUrl: 'views/managers.html',
+    controller: 'managersCtrl'
 
   }).when('/player-details/:playerID', {
 

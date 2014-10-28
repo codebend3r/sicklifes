@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('playersCtrl', function ($scope, $apiFactory, $fireBaseService, $routeParams, $arrayMappers, $leagueTeams, $location) {
+sicklifesFantasy.controller('managersCtrl', function ($scope, $apiFactory, $fireBaseService, $routeParams, $arrayMappers, $arrayLoopers, localStorageService, $leagueTeams, $location) {
 
   /**
    * TODO
