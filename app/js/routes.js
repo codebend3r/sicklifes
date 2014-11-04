@@ -4,8 +4,6 @@
 
 sicklifesFantasy.config(function ($routeProvider) {
 
-  'use strict';
-
   $routeProvider.when('/', {
 
     redirectTo: '/leagues/',
@@ -31,6 +29,11 @@ sicklifesFantasy.config(function ($routeProvider) {
 
     templateUrl: 'views/standings.html',
     controller: 'standingsCtrl'
+
+  }).when('/monthlywinners/', {
+
+    templateUrl: 'views/monthly-winners.html',
+    controller: 'monthlyWinnersCtrl'
 
   }).otherwise({
 

@@ -9,11 +9,15 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
     sync;
 
   var fireBaseObj = {
+    
+    list: null,
 
     initialize: function () {
       console.log('initialize');
       ref = new Firebase('https://glaring-fire-9383.firebaseio.com/');
       sync = $firebase(ref);
+      // create a synchronized array for use in our HTML code
+      fireBaseObj.list = sync.$asArray();
     },
 
     getFireBaseData: function () {
@@ -36,19 +40,11 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
 
     },
 
-    syncLeagueData: function (allLeagueDataObj) {
+    syncLeagueData: function (saveObject) {
 
       console.log('syncLeagueData');
 
       var usersRef = ref.child('leagueData');
-
-      var saveObject = {
-        LIGA: allLeagueDataObj.liga,
-        EPL: allLeagueDataObj.epl,
-        SERI: allLeagueDataObj.seri,
-        CHLG: allLeagueDataObj.chlg,
-        UEFA: allLeagueDataObj.uefa
-      };
 
       usersRef.set(saveObject);
       localStorageService.set('leagueData', saveObject);
@@ -57,17 +53,8 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
 
     syncLeagueTeamData: function (saveObject) {
 
-      console.log('syncLeagueTeamData');
-
+      console.log('syncLeagueTeamData --> saveObject:', saveObject);
       var usersRef = ref.child('leagueTeamData');
-
-      delete $leagueTeams.chester.$$hashKey;
-      delete $leagueTeams.frank.$$hashKey;
-      delete $leagueTeams.dan.$$hashKey;
-      delete $leagueTeams.justin.$$hashKey;
-      delete $leagueTeams.mike.$$hashKey;
-      delete $leagueTeams.joe.$$hashKey;
-
       usersRef.set(saveObject);
       localStorageService.set('leagueTeamData', saveObject);
 

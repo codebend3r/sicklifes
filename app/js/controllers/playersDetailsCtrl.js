@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 10/24/2014
+ * Created by Bouse on 11/03/2014
  */
 
 
@@ -59,6 +59,86 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   $scope.inChlg = false;
   $scope.inEuro = false;
 
+  $scope.getAllGameLogs = function () {
+
+    $scope.allManagers.forEach(function (manager) {
+
+      manager.players.forEach(function (player) {
+
+        var ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
+          eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
+          seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
+          chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
+          euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
+
+        player.gamesLog = [];
+
+        ligaGamesRequest.promise.then(function (result) {
+          var ligaGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+          player.gamesLog = player.gamesLog.concat(ligaGameDetails);
+        });
+
+
+        eplGamesRequest.promise.then(function (result) {
+          var eplGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+          player.gamesLog = player.gamesLog.concat(eplGameDetails);
+        });
+
+
+        seriGamesRequest.promise.then(function (result) {
+          var seriGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+          player.gamesLog = player.gamesLog.concat(seriGameDetails);
+        });
+
+
+        chlgGamesRequest.promise.then(function (result) {
+          var chlgGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+          player.gamesLog = player.gamesLog.concat(chlgGameDetails);
+        });
+
+
+        euroGamesRequest.promise.then(function (result) {
+          var euroGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+          player.gamesLog = player.gamesLog.concat(euroGameDetails);
+        });
+
+      });
+
+    });
+
+    setTimeout(function () {
+
+      console.log('//////////////////////////////////////////');
+      console.log('$scope.allManagers', $scope.allManagers);
+      console.log('//////////////////////////////////////////');
+
+      var saveObject = {
+        __lastSynedOn: $date.create().format('{dd}/{MM}/{yy}'),
+        //__allPlayers: $scope.allPlayers,
+        __allLeagues: $scope.allLeagues,
+        //__allTeams: $scope.allTeams,
+        chester: $scope.allManagers[0],
+        frank: $scope.allManagers[1],
+        dan: $scope.allManagers[2],
+        justin: $scope.allManagers[3],
+        mike: $scope.allManagers[4],
+        joe: $scope.allManagers[5]
+      };
+
+      console.log('saveObject', saveObject);
+      $fireBaseService.syncLeagueTeamData(saveObject);
+      alert('SYNC COMPLETE');
+      debugger;
+
+    }, 45000);
+
+
+  };
+  
+  ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+  
   /*
    * TODO
    */
@@ -224,83 +304,8 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     });
 
   };
-
+  
   var allGamesLog = [];
-
-  $scope.getAllGameLogs = function () {
-
-    $scope.allManagers.forEach(function (manager) {
-
-      manager.players.forEach(function (player) {
-
-        var ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
-          eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
-          seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
-          chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
-          euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
-
-        player.gamesLog = [];
-
-        ligaGamesRequest.promise.then(function (result) {
-          var ligaGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
-          player.gamesLog = player.gamesLog.concat(ligaGameDetails);
-        });
-
-
-        eplGamesRequest.promise.then(function (result) {
-          var eplGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
-          player.gamesLog = player.gamesLog.concat(eplGameDetails);
-        });
-
-
-        seriGamesRequest.promise.then(function (result) {
-          var seriGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
-          player.gamesLog = player.gamesLog.concat(seriGameDetails);
-        });
-
-
-        chlgGamesRequest.promise.then(function (result) {
-          var chlgGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
-          player.gamesLog = player.gamesLog.concat(chlgGameDetails);
-        });
-
-
-        euroGamesRequest.promise.then(function (result) {
-          var euroGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
-          player.gamesLog = player.gamesLog.concat(euroGameDetails);
-        });
-
-      });
-
-    });
-
-    setTimeout(function () {
-
-      console.log('//////////////////////////////////////////');
-      console.log('$scope.allManagers', $scope.allManagers);
-      console.log('//////////////////////////////////////////');
-
-      var saveObject = {
-        __lastSynedOn: $date.create(),
-        //__allPlayers: $scope.allPlayers,
-        //__allLeagues: $scope.allLeagues,
-        //__allTeams: $scope.allTeams,
-        chester: $scope.allManagers[0],
-        frank: $scope.allManagers[1],
-        dan: $scope.allManagers[2],
-        justin: $scope.allManagers[3],
-        mike: $scope.allManagers[4],
-        joe: $scope.allManagers[5]
-      };
-
-      console.log('saveObject', saveObject);
-      $fireBaseService.syncLeagueTeamData(saveObject);
-      alert('SYNC COMPLETE');
-
-    }, 45000);
-
-
-  };
 
   var saveGameLogs = function (allGames) {
 

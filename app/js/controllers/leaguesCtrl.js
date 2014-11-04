@@ -1,22 +1,12 @@
 /**
- * Created by Bouse on 10/24/2014
+ * Created by Bouse on 11/03/2014
  */
-
-
 
 sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $arrayMappers, $fireBaseService) {
 
   //////////////////////////// public
 
   $scope.loading = true;
-
-  /*
-   <div class='col-md-1 col-sm-2 col-xs-2 small-hpadding'>{{scorer.rank}}</div>
-   <div class='col-md-4 col-sm-4 col-xs-8 small-hpadding'><a ng-href='#/player-details/{{scorer.id}}'>{{scorer.playerName}}</a></div>
-   <div class='col-md-2 col-sm-4 hidden-xs small-hpadding bold small-text'>{{scorer.teamName}}</div>
-   <div class='col-md-3 col-sm-4 hidden-xs small-hpadding bold small-text'>{{scorer.ownedBy}}</div>
-   <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{scorer.goals}}</div>
-   */
 
   $scope.tableHeader = [
     {
@@ -43,9 +33,13 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   $scope.allRequest = [];
 
+  $scope.consolidatedGoalScorers = [];
+
   $scope.changeLeague = function (league) {
     //
   };
+
+  var allLeaguesObj = {};
 
   $scope.updateData = function () {
 
@@ -63,13 +57,16 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
       result.forEach(function (league, index) {
         var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
-        localStorageService.set(league.leagueName, goalsMap); // save each league also save to localStorage
-        allLeagues = allLeagues.concat(goalsMap);
+        allLeagues.push({
+          name: league.leagueName,
+          source: goalsMap
+        });
+        $scope.consolidatedGoalScorers = $scope.consolidatedGoalScorers.concat(goalsMap);
       });
 
-      localStorageService.set('allLeagues', allLeagues); // also save to localStorage
-
       $scope.allLeagues = allLeagues;
+      console.log('$scope.allLeague', $scope.allLeagues);
+      //console.log('$scope.consolidatedGoalScorers', $scope.consolidatedGoalScorers);
 
       allRequestComplete();
 
@@ -117,44 +114,21 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   };
 
-  //////////////////////////// private
-
-  var defineRESTData = function (allLeagueDataObj) {
-
-    return [
-      {
-        name: 'La Liga',
-        source: allLeagueDataObj.liga
-      },
-      {
-        name: 'EPL',
-        source: allLeagueDataObj.epl
-      },
-      {
-        name: 'Serie A',
-        source: allLeagueDataObj.seri
-      },
-      {
-        name: 'Champions League',
-        source: allLeagueDataObj.chlg
-      },
-      {
-        name: 'Europa League',
-        source: allLeagueDataObj.uefa
-      }
-    ];
-
-  };
-
   var allRequestComplete = function () {
 
     $scope.loading = false;
 
-    $scope.allLeagues = defineRESTData(allLeagueDataObj);
-
     $scope.selectedLeague = $scope.allLeagues[0];
 
-    $fireBaseService.syncLeagueData();
+    var saveObject = {
+      LIGA: $scope.allLeagues[0].source,
+      EPL: $scope.allLeagues[1].source,
+      SERI: $scope.allLeagues[2].source,
+      CHLG: $scope.allLeagues[3].source,
+      UEFA: $scope.allLeagues[4].source
+    };
+
+    $fireBaseService.syncLeagueData(saveObject);
 
   };
 

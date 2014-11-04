@@ -1,0 +1,29 @@
+<nav-menu></nav-menu>
+
+<preloader loading='loading'></preloader>
+
+<div ng-if='!loading' class='panel-body'>
+
+  <h2>Monthly Winners</h2>
+  
+  <select class='form-control' ng-model='selectedMonth' ng-options='option.monthName for option in allMonths' ng-change='changeMonth(selectedMonth)'></select>
+  
+  <button ng-if='admin' type='button' class='btn btn-danger' ng-click='populateTable()'>Update Data</button>
+  <button ng-if='admin' type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save To Data</button>
+  
+  <div class='manager-section' ng-repeat='manager in allManagers'>
+    
+    <h3>{{manager.personName}}</h3>
+    
+    <player-details-table table-body-template='monthly-log' game-details='manager.monthlyGoalsLog.all' table-header='tableHeader'></player-details-table>
+    
+    <p><span class='total-goals'>{{manager.totalGoals}}</span><span> Goals Scored for Month</span></p>
+    <p><span class='total-goals'>{{manager.totalPoints}}</span><span> Goals Points for Month</span></p>
+    
+  </div>
+
+  
+
+</div>
+
+

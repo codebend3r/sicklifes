@@ -78,6 +78,8 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $apiFactory, $fire
       $scope.selectedTeam = $scope.allManagers[0];
     }
 
+    console.log('$scope.selectedTeam', $scope.selectedTeam);
+
     $location.url($location.path() + '?team=' + $scope.selectedTeam.personName); // route change
 
   };

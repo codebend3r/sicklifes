@@ -6,8 +6,7 @@
 
   <h2>Players</h2>
 
-  <select class='form-control' ng-model='selectedTeam' ng-options='option.personName for option in allTeams'
-          ng-change='changeTeam(selectedTeam)'></select>
+  <select class='form-control' ng-model='selectedTeam' ng-options='option.personName for option in allManagers' ng-change='changeTeam(selectedTeam)'></select>
 
   <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
 

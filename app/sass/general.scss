@@ -30,6 +30,12 @@ html, body {
 
 }
 
+.total-goals {
+  font-size: 22px;
+  font-weight: bold;
+  color: rgb(92, 92, 92);
+}
+
 .form-control {
   margin-bottom: 20px;
 }
@@ -176,6 +182,26 @@ html, body {
   }
 
 }
+
+.manager-section {
+ 
+  border-bottom: 1px solid grey;
+  
+}
+
+////////// nav
+
+/*.nav-pills {
+  li {
+    //border-bottom: 1px solid grey;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #666666;
+    margin: 0 -3px 0 0;
+    a {
+      border-radius: 0;
+    }
+  }
+}*/
 
 .player-info {
   font-size: 12px;

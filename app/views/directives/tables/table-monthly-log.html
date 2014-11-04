@@ -1,0 +1,18 @@
+<div class='fantasy-table' ng-if='gameDetails.length > 0'>  
+
+  <div class='header'>
+    <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a>
+    </div>
+  </div>
+
+  <div class='table-body'>
+    <div class='row' ng-repeat='game in gameDetails | orderBy: "-datePlayed"'>
+      <div class='col-md-4'>{{game.playerName}}</div>
+      <div class='col-md-3'>{{game.alignment}} {{game.vsTeam}}</div>
+      <div class='col-md-1'>{{game.goalsScored}}</div>
+      <div class='col-md-2'>{{game.leagueName}}</div>
+      <div class='col-md-2'>{{game.datePlayed}}</div>
+    </div>
+  </div>
+
+</div>

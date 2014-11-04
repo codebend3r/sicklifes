@@ -22,7 +22,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         domesticGoals: 0,
         leagueGoals: 0,
         goals: i.stat,
-        ownedBy: $arrayLoopers.getOwnerByID(i.player.id),
+        ownedBy: $arrayLoopers.getOwnerByID(i.player.id) || 'N/A',
         league: '',
         transactionsLog: [],
         historyLog: []
@@ -31,6 +31,28 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       playerInLeague.league = $textManipulator.getLeagueByURL(url);
       return playerInLeague;
 
+    },
+    
+    monthlyMapper: function (manager, player, game) {
+      
+      var gameMapsObj = {
+        alignment: game.alignment === 'away' ? '@' : 'vs',
+        vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
+        goalsScored: game.goals || 0,
+        leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
+        datePlayed: $date.create(game.box_score.event.game_date).format('{MM}/{dd}/{yy}'),
+        rawDatePlayed: $date.create(game.box_score.event.game_date),
+        playerName: player.playerName,
+        managerName: manager.personName
+      };
+      
+      gameMapsObj.points = $scoringLogic.calculatePoints(gameMapsObj.goalsScored, gameMapsObj.leagueName);
+      
+      manager.totalGoals += gameMapsObj.goalsScored;
+      manager.totalPoints += gameMapsObj.points;
+      
+      return gameMapsObj;
+      
     },
 
     /**
@@ -42,9 +64,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         alignment: game.alignment === 'away' ? '@' : 'vs',
         vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
         result: function () {
-
           var result = '';
-
           if (game.alignment === 'away') {
             if (game.box_score.score.away.score > game.box_score.score.home.score) {
               result = 'W';
@@ -62,14 +82,10 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
               result = 'T';
             }
           }
-
           return result;
-
         },
         finalScore: function () {
-
           var final = '';
-
           if (game.alignment === 'away') {
             final += game.box_score.score.away.score;
             final += '-' + game.box_score.score.home.score;
@@ -77,13 +93,12 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
             final += game.box_score.score.home.score;
             final += '-' + game.box_score.score.away.score;
           }
-
           return final;
-
         },
-        goalsScored: game.goals || '-',
+        goalsScored: game.goals || 0,
         leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
-        datePlayed: $date.create(game.box_score.event.game_date).format('{dd}/{MM}/{yy}')
+        rawDatePlayed: $date.create(game.box_score.event.game_date),
+        datePlayed: $date.create(game.box_score.event.game_date).format('{MM}/{dd}/{yy}')
       };
 
       return gameMapsObj;
