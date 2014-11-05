@@ -6,8 +6,7 @@
 
   <h2>Leagues</h2>
 
-  <select class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues'
-          ng-change='changeLeague(selectedLeague)'></select>
+  <select class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague(selectedLeague)'></select>
 
   <button ng-if='admin' type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
   <button ng-if='admin' type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>

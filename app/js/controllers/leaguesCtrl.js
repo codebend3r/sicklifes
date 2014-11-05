@@ -2,11 +2,13 @@
  * Created by Bouse on 11/03/2014
  */
 
-sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $arrayMappers, $fireBaseService) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $routeParams, $arrayMappers, $dateService, $fireBaseService) {
 
   //////////////////////////// public
 
   $scope.loading = true;
+
+  $scope.admin = $routeParams.admin;
 
   $scope.tableHeader = [
     {
@@ -72,21 +74,21 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   };
 
-  $scope.saveToFireBase = function() {
-    
+  $scope.saveToFireBase = function () {
+
     var allLeagues = angular.copy($scope.allLeagues);
-    
+
     console.log('////////////////////////////////////');
     console.log('allLeagues', allLeagues);
     console.log('////////////////////////////////////');
 
     var saveObject = {
-      _lastSynedOn: $date.create().format('{dd}/{MM}/{yy}@{12hr}:{mm}:{ss}{tt}'),
-      LIGA: $scope.allLeagues[0].source,
-      EPL: $scope.allLeagues[1].source,
-      SERI: $scope.allLeagues[2].source,
-      CHLG: $scope.allLeagues[3].source,
-      UEFA: $scope.allLeagues[4].source
+      _lastSynedOn: $dateService.syncDate(),
+      LIGA: allLeagues[0].source,
+      EPL: allLeagues[1].source,
+      SERI: allLeagues[2].source,
+      CHLG: allLeagues[3].source,
+      UEFA: allLeagues[4].source
     };
 
     $fireBaseService.syncLeagueData(saveObject);

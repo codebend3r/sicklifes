@@ -3,12 +3,14 @@
  */
 
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $arrayLoopers, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $arrayLoopers, $date, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location) {
 
   /**
    * TODO
    */
   $scope.loading = true;
+
+  $scope.admin = $routeParams.admin;
 
   /**
    * TODO
@@ -108,7 +110,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
     $q.all(masterDeferredList).then(function () {
 
       var saveObject = {
-        __lastSynedOn: $date.create(),
+        _lastSynedOn: $dateService.syncDate(),
         //__allPlayers: $scope.allPlayers,
         __allLeagues: $scope.allLeagues,
         //__allTeams: $scope.allTeams,

@@ -10,6 +10,8 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
    */
   $scope.loading = true;
 
+  $scope.admin = $routeParams.admin;
+
   /*
    * TODO
    */
@@ -106,39 +108,38 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
     });
 
-    setTimeout(function () {
+  };
 
-      console.log('//////////////////////////////////////////');
-      console.log('$scope.allManagers', $scope.allManagers);
-      console.log('//////////////////////////////////////////');
+  $scope.saveToFireBase = function () {
 
-      var saveObject = {
-        __lastSynedOn: $date.create().format('{dd}/{MM}/{yy}'),
-        //__allPlayers: $scope.allPlayers,
-        __allLeagues: $scope.allLeagues,
-        //__allTeams: $scope.allTeams,
-        chester: $scope.allManagers[0],
-        frank: $scope.allManagers[1],
-        dan: $scope.allManagers[2],
-        justin: $scope.allManagers[3],
-        mike: $scope.allManagers[4],
-        joe: $scope.allManagers[5]
-      };
+    var allManagers = angular.copy($scope.allManagers);
 
-      console.log('saveObject', saveObject);
-      $fireBaseService.syncLeagueTeamData(saveObject);
-      alert('SYNC COMPLETE');
-      debugger;
+    console.log('//////////////////////////////////////////');
+    console.log('allManagers', allManagers);
+    console.log('//////////////////////////////////////////');
 
-    }, 45000);
+    var saveObject = {
+      _lastSynedOn: $dateService.syncDate(),
+      //__allPlayers: $scope.allPlayers,
+      //__allLeagues: $scope.allLeagues,
+      //__allTeams: $scope.allTeams,
+      chester: allManagers[0],
+      frank: allManagers[1],
+      dan: allManagers[2],
+      justin: allManagers[3],
+      mike: allManagers[4],
+      joe: allManagers[5]
+    };
+
+    $fireBaseService.syncLeagueTeamData(saveObject);
 
 
   };
-  
+
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
-  
+
   /*
    * TODO
    */
@@ -304,7 +305,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     });
 
   };
-  
+
   var allGamesLog = [];
 
   var saveGameLogs = function (allGames) {

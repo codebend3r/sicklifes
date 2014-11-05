@@ -5,46 +5,46 @@
 sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory, $leagueTeams, $routeParams, $fireBaseService, $date, localStorageService, $arrayMappers) {
 
   $scope.loading = true;
-  
+
   $scope.admin = $routeParams.admin;
-  
+
   $scope.allMonths = [
     {
       monthName: 'All Months',
-      range: [ 'August 1 2014', 'March 31 2015' ]
+      range: ['August 1 2014', 'March 31 2015']
     },
     {
       monthName: 'August 2014',
-      range: [ 'August 1 2014', 'August 31 2014' ]
+      range: ['August 1 2014', 'August 31 2014']
     },
     {
       monthName: 'September 2014',
-      range: [ 'September 1 2014', 'September 30 2014' ]
+      range: ['September 1 2014', 'September 30 2014']
     },
     {
       monthName: 'October 2014',
-      range: [ 'October 1 2014', 'October 31 2014' ]
+      range: ['October 1 2014', 'October 31 2014']
     },
     {
       monthName: 'November 2014',
-      range: [ 'November 1 2014', 'November 30 2014' ]
+      range: ['November 1 2014', 'November 30 2014']
     },
     {
       monthName: 'December 2014',
-      range: [ 'December 1 2014', 'December 31 2014' ]
+      range: ['December 1 2014', 'December 31 2014']
     },
     {
       monthName: 'January 2015',
-      range: [ 'January 1 2015', 'January 31 2015' ]
+      range: ['January 1 2015', 'January 31 2015']
     },
     {
       monthName: 'February 2015',
-      range: [ 'February 1 2015', 'February 28 2015' ]
+      range: ['February 1 2015', 'February 28 2015']
     }
   ];
-  
+
   $scope.selectedMonth = $scope.allMonths[0];
-  
+
   $scope.changeMonth = function (month) {
     console.log('changeMonth --> month', month);
     $scope.selectedMonth = month;
@@ -74,18 +74,18 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       text: 'Date'
     }
   ];
-  
+
   var isSelectedMonth = function (game) {
     var gameDate = game.rawDatePlayed || $date.create(game.box_score.event.game_date),
       scoredAGoal = game.goals ? true : false,
       isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
     return isBetween && scoredAGoal;
   };
-  
+
   var allManagers = [];
-  
-  $scope.populateTable = function() {
-    
+
+  $scope.populateTable = function () {
+
     console.log('////////////////////////////////////');
     console.log('allManagers', allManagers);
     console.log('////////////////////////////////////');
@@ -99,10 +99,10 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
           seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
           chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
           euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
-        
+
         manager.totalPoints = 0;
         manager.totalGoals = 0;
-        
+
         manager.monthlyGoalsLog = {
           all: [],
           liga: [],
@@ -145,21 +145,21 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       });
 
     });
-    
+
   };
-  
-  $scope.saveToFireBase = function() {
-    
+
+  $scope.saveToFireBase = function () {
+
     allManagers = angular.copy(allManagers);
-    
+
     console.log('////////////////////////////////////');
     console.log('allManagers', allManagers);
     console.log('////////////////////////////////////');
-      
+
     $scope.allManagers = allManagers;
 
     var saveObject = {
-      _lastSynedOn: $date.create().format('{dd}/{MM}/{yy}@{12hr}:{mm}:{ss}{tt}'),
+      _lastSynedOn: $dateService.syncDate(),
       //__allPlayers: $scope.allPlayers,
       //__allLeagues: $scope.allLeagues,
       //__allTeams: $scope.allTeams,
@@ -174,23 +174,23 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
     $fireBaseService.syncLeagueTeamData(saveObject);
 
   };
-  
-  var updateFilter = function() {
-  
+
+  var updateFilter = function () {
+
     allManagers.forEach(function (manager) {
 
       manager.players.forEach(function (player) {
-        
+
         /*manager.monthlyGoalsLog = {
-          all: []
-        };*/
-        
+         all: []
+         };*/
+
         manager.monthlyGoalsLog.allFiltered = manager.monthlyGoalsLog.all.filter(isSelectedMonth);
 
       });
-      
+
     })
-    
+
   };
 
   var fireBaseLoaded = function (data) {
@@ -205,9 +205,9 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       data.leagueTeamData.mike,
       data.leagueTeamData.joe
     ];
-    
+
     $scope.allManagers = allManagers;
-    
+
     $scope.loading = false;
 
   };
@@ -221,15 +221,15 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
     var firePromise = $fireBaseService.getFireBaseData();
 
-    firePromise.promise.then(fireBaseLoaded, function(){
-      
+    firePromise.promise.then(fireBaseLoaded, function () {
+
       console.log('firebase unavailable');
       $scope.loading = false;
       var localManagers = localStorageService.get('leagueTeamData');
       console.log('localManagers', localManagers);
-      
+
     });
-  
+
 
   };
 
