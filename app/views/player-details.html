@@ -34,7 +34,8 @@
 
   </div>
   
-  <button type='button' class='btn btn-danger' ng-click='getAllGameLogs()'>Update Data</button>
+  <button ng-if='admin' type='button' class='btn btn-danger' ng-click='getAllGameLogs()'>Update Data</button>
+  <button ng-if='admin' type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
 
   <player-details-table table-body-template='game-log' game-details='ligaGameDetails' table-header='tableHeader' league-name='LIGA Games'></player-details-table>
 

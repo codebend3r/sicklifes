@@ -39,8 +39,6 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
     //
   };
 
-  var allLeaguesObj = {};
-
   $scope.updateData = function () {
 
     console.log('updateData');
@@ -74,7 +72,34 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
   };
 
-  $scope.init = function () {
+  $scope.saveToFireBase = function() {
+    
+    var allLeagues = angular.copy($scope.allLeagues);
+    
+    console.log('////////////////////////////////////');
+    console.log('allLeagues', allLeagues);
+    console.log('////////////////////////////////////');
+
+    var saveObject = {
+      _lastSynedOn: $date.create().format('{dd}/{MM}/{yy}@{12hr}:{mm}:{ss}{tt}'),
+      LIGA: $scope.allLeagues[0].source,
+      EPL: $scope.allLeagues[1].source,
+      SERI: $scope.allLeagues[2].source,
+      CHLG: $scope.allLeagues[3].source,
+      UEFA: $scope.allLeagues[4].source
+    };
+
+    $fireBaseService.syncLeagueData(saveObject);
+
+  };
+
+  /////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////
+
+  var allLeaguesObj = {};
+
+  var init = function () {
 
     $fireBaseService.initialize();
 
@@ -109,7 +134,6 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
       $scope.selectedLeague = $scope.allLeagues[0];
 
-
     });
 
   };
@@ -120,18 +144,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
     $scope.selectedLeague = $scope.allLeagues[0];
 
-    var saveObject = {
-      LIGA: $scope.allLeagues[0].source,
-      EPL: $scope.allLeagues[1].source,
-      SERI: $scope.allLeagues[2].source,
-      CHLG: $scope.allLeagues[3].source,
-      UEFA: $scope.allLeagues[4].source
-    };
-
-    $fireBaseService.syncLeagueData(saveObject);
-
   };
 
-  $scope.init();
+  init();
 
 });
