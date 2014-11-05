@@ -2,11 +2,13 @@
  * Created by Bouse on 11/03/2014
  */
 
-sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $location, $arrayMappers, $fireBaseService) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $leagueTeams, $routeParams, $location, $arrayMappers, $textManipulator, $fireBaseService) {
 
   //////////////////////////// public
 
   $scope.loading = true;
+  
+  $scope.admin = $routeParams.admin;
 
   $scope.tableHeader = [
     {
@@ -39,8 +41,6 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
     //
   };
 
-  var allLeaguesObj = {};
-
   $scope.updateData = function () {
 
     console.log('updateData');
@@ -58,21 +58,46 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
       result.forEach(function (league, index) {
         var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
         allLeagues.push({
-          name: league.leagueName,
+          name: $textManipulator.properLeagueName(league.leagueName),
           source: goalsMap
         });
         $scope.consolidatedGoalScorers = $scope.consolidatedGoalScorers.concat(goalsMap);
       });
 
       $scope.allLeagues = allLeagues;
-      console.log('$scope.allLeague', $scope.allLeagues);
-      //console.log('$scope.consolidatedGoalScorers', $scope.consolidatedGoalScorers);
-
       allRequestComplete();
 
     });
 
   };
+  
+  var baseAllLeagues = [
+    {
+      name: 'LA LIGA',
+      source: null,
+      img: '/images/leagues/liga.png'
+    },
+    {
+      name: 'ENGLISH PREMIER LEAGUE',
+      source: null,
+      img: '/images/leagues/epl.png'
+    },
+    {
+      name: 'SERIE A',
+      source: null,
+      img: '/images/leagues/seriea.png'
+    },
+    {
+      name: 'CHAMPIONS LEAGUE',
+      source: null,
+      img: '/images/leagues/chlg.png'
+    },
+    {
+      name: 'EUROPA LEAGUE',
+      source: null,
+      img: '/images/leagues/europa.png'
+    }
+  ];
 
   $scope.init = function () {
 
@@ -86,38 +111,70 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
 
       $scope.allLeagues = [
         {
-          name: 'La Liga',
-          source: data.leagueData.LIGA
+          name: baseAllLeagues[0].name,
+          source: data.leagueData.LIGA,
+          img: './images/leagues/liga.png'
         },
         {
-          name: 'EPL',
-          source: data.leagueData.EPL
+          name: baseAllLeagues[1].name,
+          source: data.leagueData.EPL,
+          img: './images/leagues/epl.png'
         },
         {
-          name: 'Serie A',
-          source: data.leagueData.SERI
+          name: baseAllLeagues[2].name,
+          source: data.leagueData.SERI,
+          img: './images/leagues/seriea.png'
         },
         {
-          name: 'Champions League',
-          source: data.leagueData.CHLG
+          name: baseAllLeagues[3].name,
+          source: data.leagueData.CHLG,
+          img: './images/leagues/chlg.png'
         },
         {
-          name: 'Europa League',
-          source: data.leagueData.UEFA
+          name: baseAllLeagues[4].name,
+          source: data.leagueData.UEFA,
+          img: './images/leagues/europa.png'
         }
       ];
 
       $scope.selectedLeague = $scope.allLeagues[0];
+      
+      console.log('$scope.allLeagues', $scope.allLeagues);
 
 
     });
 
   };
+  
+  $scope.saveToFireBase = function() {
+    
+    var allLeagues = angular.copy($scope.allLeagues);
+    
+    console.log('////////////////////////////////////');
+    console.log('allManagers', allLeagues);
+    console.log('////////////////////////////////////');
+      
+    var saveObject = {
+      LIGA: allLeagues[0].source,
+      EPL: allLeagues[1].source,
+      SERI: allLeagues[2].source,
+      CHLG: allLeagues[3].source,
+      UEFA: allLeagues[4].source
+    };
+
+    $fireBaseService.syncLeagueData(saveObject);;
+
+  };
+  
+  ////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////
+  
+  var allLeaguesObj = {};
 
   var allRequestComplete = function () {
 
     $scope.loading = false;
-
+    
     $scope.selectedLeague = $scope.allLeagues[0];
 
     var saveObject = {

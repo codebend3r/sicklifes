@@ -46,43 +46,32 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
   $scope.selectedMonth = $scope.allMonths[0];
   
   $scope.changeMonth = function (month) {
-    console.log('changeMonth --> month', month);
     $scope.selectedMonth = month;
-    //populateTable();
     updateFilter();
   };
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-4',
+      columnClass: 'col-md-4 col-sm-4 col-xs-5',
       text: 'Player'
     },
     {
-      columnClass: 'col-md-3',
+      columnClass: 'col-md-3 hidden-sm hidden-xs',
       text: 'Opponent'
     },
     {
-      columnClass: 'col-md-1',
+      columnClass: 'col-md-1 col-sm-2 col-xs-3',
       text: 'Goals'
     },
     {
-      columnClass: 'col-md-2',
+      columnClass: 'col-md-2 col-sm-3 hidden-xs',
       text: 'League'
     },
     {
-      columnClass: 'col-md-2',
+      columnClass: 'col-md-2 col-sm-3 col-xs-4',
       text: 'Date'
     }
   ];
-  
-  var isSelectedMonth = function (game) {
-    var gameDate = game.rawDatePlayed || $date.create(game.box_score.event.game_date),
-      scoredAGoal = game.goals ? true : false,
-      isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
-    return isBetween && scoredAGoal;
-  };
-  
-  var allManagers = [];
   
   $scope.populateTable = function() {
     
@@ -102,44 +91,37 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
         
         manager.totalPoints = 0;
         manager.totalGoals = 0;
-        
-        manager.monthlyGoalsLog = {
-          all: [],
-          liga: [],
-          epl: [],
-          seri: [],
-          chlg: [],
-          euro: []
-        };
+        manager.monthlyGoalsLog = [];
+        manager.filteredMonthlyGoalsLog = [];
 
         ligaGamesRequest.promise.then(function (result) {
-          var newInfo = result.data.filter(isSelectedMonth).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-          manager.monthlyGoalsLog.liga = manager.monthlyGoalsLog.liga.concat(newInfo);
-          manager.monthlyGoalsLog.all = manager.monthlyGoalsLog.all.concat(newInfo);
+          var newInfo = result.data.filter(filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+          manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
+          manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
         });
 
         eplGamesRequest.promise.then(function (result) {
-          var newInfo = result.data.filter(isSelectedMonth).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-          manager.monthlyGoalsLog.epl = manager.monthlyGoalsLog.epl.concat(newInfo);
-          manager.monthlyGoalsLog.all = manager.monthlyGoalsLog.all.concat(newInfo);
+          var newInfo = result.data.filter(filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+          manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
+          manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
         });
 
         seriGamesRequest.promise.then(function (result) {
-          var newInfo = result.data.filter(isSelectedMonth).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-          manager.monthlyGoalsLog.seri = manager.monthlyGoalsLog.seri.concat(newInfo);
-          manager.monthlyGoalsLog.all = manager.monthlyGoalsLog.all.concat(newInfo);
+          var newInfo = result.data.filter(filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+          manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
+          manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
         });
 
         chlgGamesRequest.promise.then(function (result) {
-          var newInfo = result.data.filter(isSelectedMonth).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-          manager.monthlyGoalsLog.chlg = manager.monthlyGoalsLog.chlg.concat(newInfo);
-          manager.monthlyGoalsLog.all = manager.monthlyGoalsLog.all.concat(newInfo);
+          var newInfo = result.data.filter(filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+          manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
+          manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
         });
 
         euroGamesRequest.promise.then(function (result) {
-          var newInfo = result.data.filter(isSelectedMonth).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-          manager.monthlyGoalsLog.euro = manager.monthlyGoalsLog.euro.concat(newInfo);
-          manager.monthlyGoalsLog.all = manager.monthlyGoalsLog.all.concat(newInfo);
+          var newInfo = result.data.filter(filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+          manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
+          manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
         });
 
       });
@@ -175,17 +157,39 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   };
   
+  /////////////////////////////////////////////////////////////
+  
+  var filterOnMonth = function (manager, player, game) {
+    var gameDate = $date.create(game.originalDate),
+      scoredAGoal = game.goalsScored ? true : false,
+      isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
+    
+    if (isBetween && scoredAGoal ) {
+      
+      manager.totalGoals += game.goalsScored;
+      manager.totalPoints += game.points;
+      return true;
+      
+    }
+  };
+  
+  var filterGoalsOnly = function (game) {
+    var scoredAGoal = game.goals ? true : false;    
+    return scoredAGoal;
+  };
+  
+  var allManagers = [];
+  
   var updateFilter = function() {
   
     allManagers.forEach(function (manager) {
 
       manager.players.forEach(function (player) {
         
-        /*manager.monthlyGoalsLog = {
-          all: []
-        };*/
+        manager.totalPoints = 0;
+        manager.totalGoals = 0;
         
-        manager.monthlyGoalsLog.allFiltered = manager.monthlyGoalsLog.all.filter(isSelectedMonth);
+        manager.filteredMonthlyGoalsLog = manager.monthlyGoalsLog.filter(filterOnMonth.bind($scope, manager, player));
 
       });
       

@@ -36,12 +36,14 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
     monthlyMapper: function (manager, player, game) {
       
       var gameMapsObj = {
+        id: player.id,
         alignment: game.alignment === 'away' ? '@' : 'vs',
         vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
         goalsScored: game.goals || 0,
         leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
         datePlayed: $date.create(game.box_score.event.game_date).format('{MM}/{dd}/{yy}'),
         rawDatePlayed: $date.create(game.box_score.event.game_date),
+        originalDate: game.box_score.event.game_date,
         playerName: player.playerName,
         managerName: manager.personName
       };
@@ -97,8 +99,9 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         },
         goalsScored: game.goals || 0,
         leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
+        datePlayed: $date.create(game.box_score.event.game_date).format('{MM}/{dd}/{yy}'),
         rawDatePlayed: $date.create(game.box_score.event.game_date),
-        datePlayed: $date.create(game.box_score.event.game_date).format('{MM}/{dd}/{yy}')
+        originalDate: game.box_score.event.game_date
       };
 
       return gameMapsObj;

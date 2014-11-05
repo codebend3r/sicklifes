@@ -60,6 +60,23 @@ sicklifesFantasy.factory('$textManipulator', function () {
         return leagueName.toUpperCase();
       }
     },
+    
+    properLeagueName: function (leagueName) {
+      console.log('leagueName', leagueName);
+      if (leagueName === 'uefa') {
+        return 'EUROPA LEAGUE';
+      } else if (leagueName === 'seri') {
+        return 'SERIE A';
+      } else if (leagueName === 'liga') {
+        return 'LA LIGA';
+      } else if (leagueName === 'epl') {
+        return 'ENGLISH PREMIER LEAGUE';
+      } else if (leagueName === 'chlg') {
+        return 'CHAMPIONS LEAGUE';
+      } else {
+        return leagueName.toUpperCase();
+      }
+    },
 
     getLeagueByURL: function (url) {
       if (url.contains('liga')) {

@@ -15,10 +15,10 @@
     
     <h3>{{manager.personName}}</h3>
     
-    <player-details-table table-body-template='monthly-log' game-details='manager.monthlyGoalsLog.all' table-header='tableHeader'></player-details-table>
+    <player-details-table table-body-template='monthly-log' game-details='manager.filteredMonthlyGoalsLog' table-header='tableHeader'></player-details-table>
     
-    <p><span class='total-goals'>{{manager.totalGoals}}</span><span> Goals Scored for Month</span></p>
-    <p><span class='total-goals'>{{manager.totalPoints}}</span><span> Goals Points for Month</span></p>
+    <p><span class='total-goals'>{{manager.totalGoals}}</span><span> Goals Scored for {{selectedMonth.monthName}}</span></p>
+    <p><span class='total-goals'>{{manager.totalPoints}}</span><span> Goals Points for {{selectedMonth.monthName}}</span></p>
     
   </div>
 

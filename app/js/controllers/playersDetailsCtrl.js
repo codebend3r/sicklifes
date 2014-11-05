@@ -15,7 +15,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
    */
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-4 col-sm-4 col-xs-8',
+      columnClass: 'col-md-4 col-sm-4 col-xs-6',
       text: 'Opponent'
     },
     {
@@ -31,7 +31,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       text: 'League'
     },
     {
-      columnClass: 'col-md-3 col-sm-3 col-xs-2',
+      columnClass: 'col-md-3 col-sm-3 col-xs-4',
       text: 'Date Played'
     }
   ];
@@ -328,7 +328,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     console.log('//////////////////////////////////////////');
 
     var saveObject = {
-      __lastSynedOn: $date.create(),
+      _lastSynedOn: $date.create().format('{dd}/{MM}/{yy}@{12hr}:{mm}:{ss}{tt}'),
       //__allPlayers: $scope.allPlayers,
       //__allLeagues: $scope.allLeagues,
       //__allTeams: $scope.allTeams,

@@ -9,6 +9,8 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $apiFactory, $fire
    * TODO
    */
   $scope.loading = true;
+  
+  $scope.admin = $routeParams.admin;
 
   /**
    * TODO
