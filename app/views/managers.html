@@ -9,6 +9,7 @@
   <select class='form-control' ng-model='selectedTeam' ng-options='option.personName for option in allManagers' ng-change='changeTeam(selectedTeam)'></select>
 
   <button ng-if='admin' type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
+  <button ng-if='admin' type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
 
   <p><b>Name:</b> {{selectedTeam.personName}}</p>
 

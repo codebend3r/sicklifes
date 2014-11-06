@@ -9,7 +9,7 @@
   <select class='form-control' ng-model='selectedMonth' ng-options='option.monthName for option in allMonths' ng-change='changeMonth(selectedMonth)'></select>
   
   <button ng-if='admin' type='button' class='btn btn-danger' ng-click='populateTable()'>Update Data</button>
-  <button ng-if='admin' type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save To Data</button>
+  <button ng-if='admin' type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   
   <div class='manager-section' ng-repeat='manager in allManagers'>
     

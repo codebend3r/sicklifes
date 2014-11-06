@@ -12,6 +12,8 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $apiFactory, $fire
   
   $scope.admin = $routeParams.admin;
 
+  $scope.admin = $routeParams.admin;
+
   /**
    * TODO
    */
@@ -100,7 +102,8 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $apiFactory, $fire
     $q.all($scope.selectedTeam.deferredList).then(function () {
 
       $scope.selectedTeam.deferredList = [];
-      $fireBaseService.syncLeagueTeamData();
+
+      //$fireBaseService.syncLeagueTeamData();
 
     });
 
@@ -145,12 +148,6 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $apiFactory, $fire
   var init = function () {
 
     // TODO - implement localStorage save
-    /*if (localStorageService.get('allLeagues')) {
-
-     } else {
-
-     }*/
-
     $fireBaseService.initialize();
 
     var firePromise = $fireBaseService.getFireBaseData();

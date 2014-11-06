@@ -6,3 +6,4 @@ bower_components
 builds
 *.log
 .tmp
+app/js/templates
