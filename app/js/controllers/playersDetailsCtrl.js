@@ -72,19 +72,15 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   $scope.player = {};
 
   /*
-   * TODO
+   * filters out any games after aug 1
    */
   $scope.filterAfterDate = function (game) {
-    var gameDate = $date.create(game.box_score.event.game_date),
-      isAfter = gameDate.isAfter('August 16 2014');
-    //EPL - Aug 16
-    //LIGA - Aug 25
-    //SERI - Aug 31
-    return isAfter;
+    var gameDate = $date.create(game.box_score.event.game_date);
+    return gameDate.isAfter('August 1 2014');
   };
 
   /*
-   * TODO
+   * go through all players in  all the managers and update the player details
    */
   $scope.getAllGameLogs = function () {
 
@@ -140,7 +136,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   ////////////////////////////////////////////////////////////////////////
 
   /*
-   * TODO
+   * callback for profile end point
    */
   var playerProfileCallBack = function (result) {
 
@@ -174,8 +170,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
         });
       };
 
-    console.log('teamName:', teamName);
-
     $scope.player.playerName = $textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
     $scope.player.playerTeam = teamName;
     $scope.player.leagueName = leagueName;
@@ -188,7 +182,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   };
 
   /*
-   * TODO
+   * popualtes info for specific player
    */
   var populatePlayerProfile = function (result, playerID) {
 
@@ -296,7 +290,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
     }
 
-    $apiFactory.listOfPromises(allLeaguePromises, function(){
+    $apiFactory.listOfPromises(allLeaguePromises, function () {
 
       console.log('ALL LEAGUE DATA FULFILLED');
       saveToFirebase();
@@ -322,9 +316,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     var saveObject = {
       _syncedFrom: 'playersDetailsCtrl',
       _lastSynedOn: $dateService.syncDate(),
-      //__allPlayers: $scope.allPlayers,
-      //__allLeagues: $scope.allLeagues,
-      //__allTeams: $scope.allTeams,
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
@@ -332,7 +323,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       mike: $scope.allManagers[4],
       joe: $scope.allManagers[5]
     };
-    
+
     $fireBaseService.syncLeagueTeamData(saveObject);
 
   };
@@ -356,8 +347,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       data.leagueTeamData.mike,
       data.leagueTeamData.joe
     ];
-
-    $scope.allLeagues = data.__allLeagues;
 
     playerProfileRequest.promise.then(playerProfileCallBack);
 

@@ -9,7 +9,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
    * TODO
    */
   $scope.loading = true;
-  
+
   $scope.admin = $routeParams.admin;
 
   /**
@@ -106,17 +106,14 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
       team.deferredList = [];
 
     });
-    
-    $apiFactory.listOfPromises(masterDeferredList, function() {
+
+    $apiFactory.listOfPromises(masterDeferredList, function () {
 
       console.log('deferredList COMPLETE');
 
       var saveObject = {
         _syncedFrom: 'standingsCtrl',
         _lastSyncedOn: $dateService.syncDate(),
-        //_allPlayers: $scope.allPlayers,
-        _allLeagues: $scope.allLeagues,
-        //_allTeams: $scope.allTeams,
         chester: $scope.$leagueTeams.chester,
         frank: $scope.$leagueTeams.frank,
         dan: $scope.$leagueTeams.dan,
@@ -127,20 +124,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
       $fireBaseService.syncLeagueTeamData(saveObject);
 
-      //$fireBaseService.syncLeagueTeamData();
-
     });
-
-    $q.all(masterDeferredList).then(function () {     
-      
-      
-
-    }, function () {
-
-      console.log('********** ERROR');
-
-    });
-
 
   };
 
@@ -179,13 +163,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
    */
   var init = function () {
 
-    // TODO - implement localStorage save
-    /*if (localStorageService.get('allLeagues')) {
-
-     } else {
-
-     }*/
-
     $fireBaseService.initialize();
 
     var firePromise = $fireBaseService.getFireBaseData();
@@ -202,8 +179,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
         data.leagueTeamData.mike,
         data.leagueTeamData.joe
       ];
-
-      $scope.allLeagues = data._allLeagues;
 
     });
 

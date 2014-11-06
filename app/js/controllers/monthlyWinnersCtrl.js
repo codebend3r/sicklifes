@@ -45,6 +45,8 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   $scope.selectedMonth = $scope.allMonths[0];
 
+  $scope.allManagers = [];
+
   $scope.changeMonth = function (month) {
     $scope.selectedMonth = month;
     updateFilter();
@@ -76,10 +78,10 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
   $scope.populateTable = function () {
 
     console.log('////////////////////////////////////');
-    console.log('allManagers', allManagers);
+    console.log('$scope.allManagers', $scope.allManagers);
     console.log('////////////////////////////////////');
 
-    allManagers.forEach(function (manager) {
+    $scope.allManagers.forEach(function (manager) {
 
       manager.players.forEach(function (player) {
 
@@ -132,32 +134,25 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   $scope.saveToFireBase = function () {
 
-    allManagers = angular.copy(allManagers);
-
     console.log('////////////////////////////////////');
-    console.log('allManagers', allManagers);
+    console.log('$scope.allManagers', $scope.allManagers);
     console.log('////////////////////////////////////');
-
-    $scope.allManagers = allManagers;
 
     var saveObject = {
       _syncedFrom: 'monthlyWinnersCtrl',
       _lastSynedOn: $dateService.syncDate(),
-      //__allPlayers: $scope.allPlayers,
-      //__allLeagues: $scope.allLeagues,
-      //__allTeams: $scope.allTeams,
-      chester: allManagers[0],
-      frank: allManagers[1],
-      dan: allManagers[2],
-      justin: allManagers[3],
-      mike: allManagers[4],
-      joe: allManagers[5]
+      chester: $scope.allManagers[0],
+      frank: $scope.allManagers[1],
+      dan: $scope.allManagers[2],
+      justin: $scope.allManagers[3],
+      mike: $scope.allManagers[4],
+      joe: $scope.allManagers[5]
     };
 
     $fireBaseService.syncLeagueTeamData(saveObject);
 
   };
-  
+
   /////////////////////////////////////////////////////////////
 
   var isSelectedMonth = function (game) {
@@ -166,37 +161,31 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
     return isBetween && scoredAGoal;
   };
-  
+
   var filterOnMonth = function (manager, player, game) {
     var gameDate = $date.create(game.originalDate),
       scoredAGoal = game.goalsScored ? true : false,
       isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
-    
-    if (isBetween && scoredAGoal ) {
-      
+
+    if (isBetween && scoredAGoal) {
       manager.totalGoals += game.goalsScored;
       manager.totalPoints += game.points;
       return true;
-      
     }
   };
-  
+
   var filterGoalsOnly = function (game) {
-    var scoredAGoal = game.goals ? true : false;    
-    return scoredAGoal;
+    return game.goals ? true : false;
   };
-  
-  var allManagers = [];
-  
-  var updateFilter = function() {
-  
-    allManagers.forEach(function (manager) {
+
+  var updateFilter = function () {
+
+    $scope.allManagers.forEach(function (manager) {
 
       manager.players.forEach(function (player) {
-        
+
         manager.totalPoints = 0;
         manager.totalGoals = 0;
-        
         manager.filteredMonthlyGoalsLog = manager.monthlyGoalsLog.filter(filterOnMonth.bind($scope, manager, player));
 
       });
@@ -209,7 +198,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
     console.log('fireBaseLoaded');
 
-    allManagers = [
+    $scope.allManagers = [
       data.leagueTeamData.chester,
       data.leagueTeamData.frank,
       data.leagueTeamData.dan,
@@ -217,8 +206,6 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       data.leagueTeamData.mike,
       data.leagueTeamData.joe
     ];
-
-    $scope.allManagers = allManagers;
 
     $scope.loading = false;
 

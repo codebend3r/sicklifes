@@ -9,7 +9,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
    * TODO
    */
   $scope.loading = true;
-  
+
   $scope.admin = $routeParams.admin;
 
   /**
@@ -59,7 +59,6 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
    */
   $scope.changeTeam = function (selectedTeam) {
 
-    console.log('change team', selectedTeam);
     $scope.selectedTeam = selectedTeam;
     $location.url($location.path() + '?team=' + selectedTeam.personName); // route change
 
@@ -82,16 +81,13 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
       manager.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, manager));
 
       masterDefferedList = masterDefferedList.concat(manager.deferredList);
+
       manager.deferredList = null;
 
     });
 
-    $apiFactory.listOfPromises(masterDefferedList, function() {
-
+    $apiFactory.listOfPromises(masterDefferedList, function () {
       console.log('deferredList COMPLETE');
-
-      //$fireBaseService.syncLeagueTeamData();
-
     });
 
   };
@@ -105,26 +101,19 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
     allLeaguesObj = {};
 
-    var allLeagues = [];
-
     // makes a request for all leagues in a loop returns a list of promises
     var allPromises = $apiFactory.getAllLeagues();
 
     // waits for an array of promises to resolve, sets allLeagues data
     $apiFactory.listOfPromises(allPromises, function (result) {
 
-      allLeagues = [];
+      $scope.allLeagues = [];
 
       result.forEach(function (league, index) {
         var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
         allLeaguesObj[league.leagueName] = goalsMap;
-        allLeagues = allLeagues.concat(goalsMap);
+        $scope.allLeagues = $scope.allLeagues.concat(goalsMap);
       });
-
-      $scope.allLeagues = allLeagues;
-
-      console.log('$scope.allLeagues', $scope.allLeagues);
-      console.log('allLeaguesObj', allLeaguesObj);
 
       allRequestComplete();
 
@@ -141,9 +130,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
     var saveObject = {
       _syncedFrom: 'managersCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      //__allPlayers: $scope.allPlayers,
       __allLeagues: $scope.allLeagues,
-      //__allTeams: $scope.allTeams,
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
@@ -206,7 +193,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
         data.leagueTeamData.joe
       ];
 
-      $scope.allPlayers = data.__allLeagues;
+      //$scope.allPlayers = data._allLeagues;
 
       chooseTeam();
 
@@ -223,15 +210,6 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
     console.log('allRequestComplete');
 
     $scope.loading = false;
-
-    /*$scope.allManagers = [
-      $leagueTeams.chester,
-      $leagueTeams.frank,
-      $leagueTeams.dan,
-      $leagueTeams.justin,
-      $leagueTeams.mike,
-      $leagueTeams.joe
-    ];*/
 
     chooseTeam();
 
