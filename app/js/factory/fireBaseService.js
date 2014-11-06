@@ -43,19 +43,17 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
     syncLeagueData: function (saveObject) {
 
       console.log('syncLeagueData');
-
       var usersRef = ref.child('leagueData');
-
-      usersRef.set(saveObject);
+      usersRef.set(angular.copy(saveObject));
       localStorageService.set('leagueData', saveObject);
 
     },
 
     syncLeagueTeamData: function (saveObject) {
 
-      console.log('syncLeagueTeamData --> saveObject:', saveObject);
+      console.log('syncLeagueTeamData');
       var usersRef = ref.child('leagueTeamData');
-      usersRef.set(saveObject);
+      usersRef.set(angular.copy(saveObject));
       localStorageService.set('leagueTeamData', saveObject);
 
     }

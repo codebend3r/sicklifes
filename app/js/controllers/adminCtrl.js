@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageService, $apiFactory, $fireBaseService, $routeParams, $arrayMappers, $arrayLoopers, $dateService, $leagueTeams, $location) {
+sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, $apiFactory, $fireBaseService, $routeParams, $arrayMappers, $arrayLoopers, $dateService, $leagueTeams, $location) {
 
   /**
    * TODO
@@ -82,17 +82,12 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
       manager.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, manager));
 
       masterDefferedList = masterDefferedList.concat(manager.deferredList);
+      
       manager.deferredList = null;
 
     });
 
-    $apiFactory.listOfPromises(masterDefferedList, function() {
-
-      console.log('deferredList COMPLETE');
-
-      //$fireBaseService.syncLeagueTeamData();
-
-    });
+    $apiFactory.listOfPromises(masterDefferedList, $scope.saveToFireBase);
 
   };
 
@@ -223,15 +218,6 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
     console.log('allRequestComplete');
 
     $scope.loading = false;
-
-    /*$scope.allManagers = [
-      $leagueTeams.chester,
-      $leagueTeams.frank,
-      $leagueTeams.dan,
-      $leagueTeams.justin,
-      $leagueTeams.mike,
-      $leagueTeams.joe
-    ];*/
 
     chooseTeam();
 

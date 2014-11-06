@@ -29,7 +29,7 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
       team.eGoals = 0;
       team.domesticGoals = 0;
 
-      team.deferredList = team.deferredList || [];
+      var deferredList = deferredList || [];
 
       if (angular.isDefined(teamPlayers.league) && teamPlayers.id !== null) {
 
@@ -75,7 +75,8 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
 
       }
 
-      team.deferredList.push(request.promise);
+      deferredList.push(request.promise);
+      console.log('deferredList.length:', deferredList.length);
 
     },
 

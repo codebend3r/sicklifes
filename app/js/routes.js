@@ -35,6 +35,11 @@ sicklifesFantasy.config(function ($routeProvider) {
     templateUrl: 'views/monthly-winners.html',
     controller: 'monthlyWinnersCtrl'
 
+  }).when('/admin/', {
+
+    templateUrl: 'views/admin.html',
+    controller: 'adminCtrl'
+
   }).otherwise({
 
     redirectTo: '/leagues/'

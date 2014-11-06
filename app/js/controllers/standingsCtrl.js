@@ -106,25 +106,34 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
       team.deferredList = [];
 
     });
+    
+    $apiFactory.listOfPromises(masterDeferredList, function() {
 
-    $q.all(masterDeferredList).then(function () {     
-      
-      var leagueTeams = angular.copy($scope.$leagueTeams);
+      console.log('deferredList COMPLETE');
 
       var saveObject = {
-        _lastSynedOn: $date.create().format('{dd}/{MM}/{yy}@{12hr}:{mm}:{ss}{tt}'),
+        _syncedFrom: 'standingsCtrl',
+        _lastSyncedOn: $dateService.syncDate(),
         //_allPlayers: $scope.allPlayers,
         _allLeagues: $scope.allLeagues,
         //_allTeams: $scope.allTeams,
-        chester: leagueTeams.chester,
-        frank: leagueTeams.frank,
-        dan: leagueTeams.dan,
-        justin: leagueTeams.justin,
-        mike: leagueTeams.mike,
-        joe: leagueTeams.joe
+        chester: $scope.$leagueTeams.chester,
+        frank: $scope.$leagueTeams.frank,
+        dan: $scope.$leagueTeams.dan,
+        justin: $scope.$leagueTeams.justin,
+        mike: $scope.$leagueTeams.mike,
+        joe: $scope.$leagueTeams.joe
       };
 
       $fireBaseService.syncLeagueTeamData(saveObject);
+
+      //$fireBaseService.syncLeagueTeamData();
+
+    });
+
+    $q.all(masterDeferredList).then(function () {     
+      
+      
 
     }, function () {
 

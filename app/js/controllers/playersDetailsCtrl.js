@@ -3,13 +3,16 @@
  */
 
 
-sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMappers, $date, $textManipulator, $q, $fireBaseService) {
+sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $date, $dateService, $fireBaseService) {
 
   /*
    * TODO
    */
   $scope.loading = true;
 
+  /*
+   * TODO
+   */
   $scope.admin = $routeParams.admin;
 
   /*
@@ -21,22 +24,47 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       text: 'Opponent'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
+      columnClass: 'col-md-2 col-sm-1 col-xs-2 text-center',
       text: 'G'
     },
     {
-      columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
+      columnClass: 'col-md-2 hidden-sm hidden-xs text-center',
       text: 'Final Score'
     },
     {
-      columnClass: 'col-md-3 col-sm-3 hidden-xs',
+      columnClass: 'col-md-2 col-sm-3 hidden-xs',
       text: 'League'
     },
     {
-      columnClass: 'col-md-3 col-sm-3 col-xs-4',
+      columnClass: 'col-md-2 col-sm-3 col-xs-4',
       text: 'Date Played'
     }
   ];
+
+  /*
+   * TODO
+   */
+  $scope.inLiga = false;
+
+  /*
+   * TODO
+   */
+  $scope.inEPL = false;
+
+  /*
+   * TODO
+   */
+  $scope.inSeri = false;
+
+  /*
+   * TODO
+   */
+  $scope.inChlg = false;
+
+  /*
+   * TODO
+   */
+  $scope.inEuro = false;
 
   /*
    * TODO
@@ -55,12 +83,9 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     return isAfter;
   };
 
-  $scope.inLiga = false;
-  $scope.inEPL = false;
-  $scope.inSeri = false;
-  $scope.inChlg = false;
-  $scope.inEuro = false;
-
+  /*
+   * TODO
+   */
   $scope.getAllGameLogs = function () {
 
     $scope.allManagers.forEach(function (manager) {
@@ -107,32 +132,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       });
 
     });
-
-  };
-
-  $scope.saveToFireBase = function () {
-
-    var allManagers = angular.copy($scope.allManagers);
-
-    console.log('//////////////////////////////////////////');
-    console.log('allManagers', allManagers);
-    console.log('//////////////////////////////////////////');
-
-    var saveObject = {
-      _lastSynedOn: $dateService.syncDate(),
-      //__allPlayers: $scope.allPlayers,
-      //__allLeagues: $scope.allLeagues,
-      //__allTeams: $scope.allTeams,
-      chester: allManagers[0],
-      frank: allManagers[1],
-      dan: allManagers[2],
-      justin: allManagers[3],
-      mike: allManagers[4],
-      joe: allManagers[5]
-    };
-
-    $fireBaseService.syncLeagueTeamData(saveObject);
-
 
   };
 
@@ -188,6 +187,9 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
   };
 
+  /*
+   * TODO
+   */
   var populatePlayerProfile = function (result, playerID) {
 
     var playerLeagueProfileRequest,
@@ -215,6 +217,9 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
   };
 
+  /*
+   * TODO
+   */
   var populateGamesLog = function () {
 
     var ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', id),
@@ -223,12 +228,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', id),
       euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', id),
       allLeaguePromises = [];
-
-    console.log('$scope.inLiga', $scope.inLiga);
-    console.log('$scope.inEPL', $scope.inEPL);
-    console.log('$scope.inSeri', $scope.inSeri);
-    console.log('$scope.inChlg', $scope.inChlg);
-    console.log('$scope.inEuro', $scope.inEuro);
 
     if ($scope.inLiga) {
 
@@ -297,39 +296,32 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
     }
 
-    $q.all(allLeaguePromises).then(function () {
+    $apiFactory.listOfPromises(allLeaguePromises, function(){
 
       console.log('ALL LEAGUE DATA FULFILLED');
-      saveGameLogs(allGamesLog);
+      saveToFirebase();
 
     });
 
   };
 
+  /*
+   * TODO
+   */
   var allGamesLog = [];
 
-  var saveGameLogs = function (allGames) {
-
-    //console.log('allGames', allGames.length);
-
-    $scope.allManagers.forEach(function (manager) {
-
-      manager.players.forEach(function (player) {
-
-        if (player.id === id) {
-          player.gamesLog = allGames;
-        }
-
-      });
-
-    });
+  /*
+   * save data to firebase
+   */
+  var saveToFirebase = function () {
 
     console.log('//////////////////////////////////////////');
     console.log('$scope.allManagers', $scope.allManagers);
     console.log('//////////////////////////////////////////');
 
     var saveObject = {
-      _lastSynedOn: $date.create().format('{dd}/{MM}/{yy}@{12hr}:{mm}:{ss}{tt}'),
+      _syncedFrom: 'playersDetailsCtrl',
+      _lastSynedOn: $dateService.syncDate(),
       //__allPlayers: $scope.allPlayers,
       //__allLeagues: $scope.allLeagues,
       //__allTeams: $scope.allTeams,
@@ -340,12 +332,14 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       mike: $scope.allManagers[4],
       joe: $scope.allManagers[5]
     };
-
-    console.log('saveObject', saveObject);
-    //$fireBaseService.syncLeagueTeamData(saveObject);
+    
+    $fireBaseService.syncLeagueTeamData(saveObject);
 
   };
 
+  /*
+   * firebase data is loaded
+   */
   var fireBaseLoaded = function (data) {
 
     console.log('fireBaseLoaded');
@@ -370,6 +364,9 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
   };
 
+  /*
+   * TODO
+   */
   var id = Number($routeParams.playerID);
 
   /*
@@ -390,4 +387,3 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   init();
 
 })
-;

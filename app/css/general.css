@@ -1,6 +1,29 @@
 html, body {
   font-family: 'Open Sans', sans-serif; }
 
+.manager-info-panel {
+  background-color: #29b1c3;
+  padding: 20px 10px; }
+  .manager-info-panel h3.manager-name {
+    display: inline-block;
+    color: #ffffff;
+    font-size: 38px;
+    width: 40%;
+    margin: 0;
+    height: 100px;
+    line-height: 100px; }
+  .manager-info-panel .goals-container {
+    display: inline-block;
+    color: #ffffff;
+    width: 56%;
+    margin: 0;
+    padding: 0; }
+  .manager-info-panel .total-goals {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: bold;
+    color: #DBDBDB; }
+
 .main-container {
   padding: 10px; }
 
@@ -13,11 +36,6 @@ html, body {
     text-align: center; }
     .sicklifes-menu li.active a {
       border-radius: 0px; } }
-
-.total-goals {
-  font-size: 22px;
-  font-weight: bold;
-  color: #5c5c5c; }
 
 .main-area {
   background-color: #D7D7D7;

@@ -2,6 +2,45 @@ html, body {
   font-family: 'Open Sans', sans-serif;
 }
 
+.manager-info-panel {
+  
+  background-color: #29b1c3;
+  padding: 20px 10px;
+  
+  h3.manager-name {
+    //font-family: serif;    
+    display: inline-block;
+    color: #ffffff;
+    font-size: 38px;
+    width: 40%;
+    margin: 0;
+    //padding: 0;
+    //background-color: #cf25d6;
+    height: 100px;
+    line-height: 100px;
+  }
+  
+  .goals-container {
+    display: inline-block;
+    color: #ffffff;
+    width: 56%;
+    margin: 0;
+    padding: 0;
+    //background-color: green;
+  }
+  
+  .total-goals {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: bold;
+    //color: #535353;
+    color: #DBDBDB;
+  }
+  
+}
+
+//////////////////////////////////
+
 .main-container {
   padding: 10px;
 }
@@ -28,12 +67,6 @@ html, body {
     }
   }
 
-}
-
-.total-goals {
-  font-size: 22px;
-  font-weight: bold;
-  color: rgb(92, 92, 92);
 }
 
 .main-area {

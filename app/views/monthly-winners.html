@@ -13,12 +13,16 @@
   
   <div class='manager-section' ng-repeat='manager in allManagers'>
     
-    <h3>{{manager.personName}}</h3>
+    <div class='manager-info-panel'>
+      <h3 class='manager-name'>{{manager.personName}}</h3>
+      <div class='goals-container'>
+        <p><span class='total-goals'>{{manager.totalGoals}}</span><span> goals in {{selectedMonth.monthName}}</span></p>
+        <p><span class='total-goals'>{{manager.totalPoints}}</span><span> total points in {{selectedMonth.monthName}}</span></p>
+      </div>
+    </div>
     
     <player-details-table table-body-template='monthly-log' game-details='manager.filteredMonthlyGoalsLog' table-header='tableHeader'></player-details-table>
     
-    <p><span class='total-goals'>{{manager.totalGoals}}</span><span> Goals Scored for {{selectedMonth.monthName}}</span></p>
-    <p><span class='total-goals'>{{manager.totalPoints}}</span><span> Goals Points for {{selectedMonth.monthName}}</span></p>
     
   </div>
 

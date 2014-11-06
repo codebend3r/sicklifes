@@ -73,15 +73,6 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
     }
   ];
 
-  var isSelectedMonth = function (game) {
-    var gameDate = game.rawDatePlayed || $date.create(game.box_score.event.game_date),
-      scoredAGoal = game.goals ? true : false,
-      isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
-    return isBetween && scoredAGoal;
-  };
-
-  var allManagers = [];
-
   $scope.populateTable = function () {
 
     console.log('////////////////////////////////////');
@@ -150,6 +141,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
     $scope.allManagers = allManagers;
 
     var saveObject = {
+      _syncedFrom: 'monthlyWinnersCtrl',
       _lastSynedOn: $dateService.syncDate(),
       //__allPlayers: $scope.allPlayers,
       //__allLeagues: $scope.allLeagues,
@@ -167,6 +159,13 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
   };
   
   /////////////////////////////////////////////////////////////
+
+  var isSelectedMonth = function (game) {
+    var gameDate = game.rawDatePlayed || $date.create(game.box_score.event.game_date),
+      scoredAGoal = game.goals ? true : false,
+      isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
+    return isBetween && scoredAGoal;
+  };
   
   var filterOnMonth = function (manager, player, game) {
     var gameDate = $date.create(game.originalDate),

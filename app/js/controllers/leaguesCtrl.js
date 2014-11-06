@@ -110,6 +110,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $q, $l
     console.log('////////////////////////////////////');
 
     var saveObject = {
+      _syncedFrom: 'leaguesCtrl',
       _lastSynedOn: $dateService.syncDate(),
       LIGA: allLeagues[0].source,
       EPL: allLeagues[1].source,
