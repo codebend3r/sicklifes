@@ -4,13 +4,11 @@
 
   <h2>Managers</h2>
 
-  <select class='form-control' ng-model='selectedTeam' ng-options='option.personName for option in allManagers' ng-change='changeTeam(selectedTeam)'></select>
+  <select class='form-control' ng-model='selectedTeam' ng-options='option.managerName for option in allManagers' ng-change='changeTeam(selectedTeam)'></select>
 
   <div class='well'>
 
-    <p><b>Name:</b> {{selectedTeam.personName}}</p>
-
-    <!--<p><b>Team Name:</b> {{selectedTeam.teamName}}</p>-->
+    <p><b>Name:</b> {{selectedTeam.managerName}}</p>
 
     <p><b>Total Points:</b> {{selectedTeam.totalPoints}}</p>
 

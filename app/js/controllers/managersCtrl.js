@@ -60,7 +60,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
   $scope.changeTeam = function (selectedTeam) {
 
     $scope.selectedTeam = selectedTeam;
-    $location.url($location.path() + '?team=' + selectedTeam.personName); // route change
+    $location.url($location.path() + '?team=' + selectedTeam.managerName); // route change
 
   };
 
@@ -154,7 +154,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
     if ($routeParams.team) {
       $scope.allManagers.forEach(function (team) {
-        if (team.personName === $routeParams.team) {
+        if (team.managerName === $routeParams.team) {
           $scope.selectedTeam = team;
         }
       });
@@ -162,7 +162,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
       $scope.selectedTeam = $scope.allManagers[0];
     }
 
-    $location.url($location.path() + '?team=' + $scope.selectedTeam.personName); // route change
+    $location.url($location.path() + '?team=' + $scope.selectedTeam.managerName); // route change
 
   };
 

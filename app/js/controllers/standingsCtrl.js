@@ -68,14 +68,14 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     $scope.loading = false;
 
-    $scope.allManagers = [
-      $leagueTeams.chester,
-      $leagueTeams.frank,
-      $leagueTeams.dan,
-      $leagueTeams.justin,
-      $leagueTeams.mike,
-      $leagueTeams.joe
-    ];
+    /*$scope.allManagers = [
+     $leagueTeams.chester,
+     $leagueTeams.frank,
+     $leagueTeams.dan,
+     $leagueTeams.justin,
+     $leagueTeams.mike,
+     $leagueTeams.joe
+     ];*/
 
     populateTable();
 
@@ -85,8 +85,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
    * TODO
    */
   var populateTable = function () {
-
-    console.log('populateTable', $scope.allManagers);
 
     var masterDeferredList = [];
 
@@ -109,7 +107,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     $apiFactory.listOfPromises(masterDeferredList, function () {
 
-      console.log('deferredList COMPLETE');
+      console.log('SAVE TO FIREBASE');
 
       var saveObject = {
         _syncedFrom: 'standingsCtrl',
