@@ -60,9 +60,42 @@ sicklifesFantasy.factory('$textManipulator', function () {
         return leagueName.toUpperCase();
       }
     },
-    
+
+    result: function (game) {
+      var result = '';
+      if (game.alignment === 'away') {
+        if (game.box_score.score.away.score > game.box_score.score.home.score) {
+          result = 'W';
+        } else if (game.box_score.score.away.score < game.box_score.score.home.score) {
+          result = 'L';
+        } else {
+          result = 'T';
+        }
+      } else {
+        if (game.box_score.score.away.score < game.box_score.score.home.score) {
+          result = 'W';
+        } else if (game.box_score.score.away.score > game.box_score.score.home.score) {
+          result = 'L';
+        } else {
+          result = 'T';
+        }
+      }
+      return result;
+    },
+
+    finalScore: function (game) {
+      var final = '';
+      if (game.alignment === 'away') {
+        final += game.box_score.score.away.score;
+        final += '-' + game.box_score.score.home.score;
+      } else {
+        final += game.box_score.score.home.score;
+        final += '-' + game.box_score.score.away.score;
+      }
+      return final;
+    },
+
     properLeagueName: function (leagueName) {
-      console.log('leagueName', leagueName);
       if (leagueName === 'uefa') {
         return 'EUROPA LEAGUE';
       } else if (leagueName === 'seri') {

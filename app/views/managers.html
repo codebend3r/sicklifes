@@ -6,12 +6,15 @@
 
   <select class='form-control' ng-model='selectedTeam' ng-options='option.managerName for option in allManagers' ng-change='changeTeam(selectedTeam)'></select>
 
-  <div class='well'>
+  <div class="jumbotron">
+    <div class='col-md-4'>
+      <h3 class='manager-name'>{{selectedTeam.managerName}}</h3>
+    </div>
+    <div class='col-md-8'>
+      <p class='info-text'><span class='total-goals'>{{selectedTeam.totalGoals}}</span><span> goals</span></p>
 
-    <p><b>Name:</b> {{selectedTeam.managerName}}</p>
-
-    <p><b>Total Points:</b> {{selectedTeam.totalPoints}}</p>
-
+      <p class='info-text'><span class='total-goals'>{{selectedTeam.totalPoints}}</span><span> points</span></p>
+    </div>
   </div>
 
   <div class='fantasy-table'>

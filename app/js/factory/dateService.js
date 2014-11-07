@@ -7,7 +7,7 @@ sicklifesFantasy.factory('$dateService', function ($date) {
   return {
 
     syncDate: function () {
-      return $date.create().format('{MM}/{dd}/{yy}@{12hr}:{mm}:{ss}{tt}');
+      return $date.create().format('{MM}/{dd}/{yy} {12hr}:{mm}:{ss}{tt}');
     },
 
     goalDate: function () {

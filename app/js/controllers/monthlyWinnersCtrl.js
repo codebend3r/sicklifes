@@ -67,16 +67,20 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-4 col-sm-4 col-xs-5',
+      columnClass: 'col-md-2 col-sm-4 col-xs-5',
       text: 'Player'
     },
     {
-      columnClass: 'col-md-3 hidden-sm hidden-xs',
+      columnClass: 'col-md-2 hidden-sm hidden-xs',
       text: 'Opponent'
     },
     {
-      columnClass: 'col-md-1 col-sm-2 col-xs-3',
+      columnClass: 'text-center col-md-2 col-sm-2 col-xs-3',
       text: 'Goals'
+    },
+    {
+      columnClass: 'text-center col-md-2 col-sm-2 col-xs-3',
+      text: 'Final Score'
     },
     {
       columnClass: 'col-md-2 col-sm-3 hidden-xs',
@@ -109,8 +113,6 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
     console.log('////////////////////////////////////');
 
     $scope.allManagers.forEach(function (manager) {
-
-      console.log('manager', manager);
 
       manager.players.forEach(function (player) {
 
@@ -240,9 +242,18 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
     $scope.manager = $scope.allManagers[0];
 
-    console.log('$scope.manager', $scope.manager);
-
+    //console.log('$scope.manager', $scope.manager);
     //$scope.saveToFireBase();
+
+    $scope.allManagers.forEach(function (manager) {
+
+      manager.players.forEach(function (player) {
+
+        //console.log('manager.filteredMonthlyGoalsLog', manager.filteredMonthlyGoalsLog[0]);
+
+      });
+
+    });
 
   };
 

@@ -19,10 +19,10 @@ sicklifesFantasy.directive('playerDetailsTable', function () {
     },
     link: function ($scope) {
 
-      console.log('gameDetails', $scope.gameDetails);
-      console.log('tableHeader', $scope.tableHeader);
-      console.log('tableName', $scope.tableName);
-      console.log('leagueImg', $scope.leagueImg);
+      /*console.log('gameDetails', $scope.gameDetails);
+       console.log('tableHeader', $scope.tableHeader);
+       console.log('tableName', $scope.tableName);
+       console.log('leagueImg', $scope.leagueImg);*/
 
     }
   }

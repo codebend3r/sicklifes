@@ -45,7 +45,9 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         rawDatePlayed: $date.create(game.box_score.event.game_date),
         originalDate: game.box_score.event.game_date,
         playerName: player.playerName,
-        managerName: manager.managerName
+        managerName: manager.managerName,
+        result: $textManipulator.result.call(gameMapsObj, game),
+        finalScore: $textManipulator.finalScore.call(gameMapsObj, game)
       };
 
       gameMapsObj.points = $scoringLogic.calculatePoints(gameMapsObj.goalsScored, gameMapsObj.leagueName);
@@ -65,38 +67,8 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       var gameMapsObj = {
         alignment: game.alignment === 'away' ? '@' : 'vs',
         vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
-        result: function () {
-          var result = '';
-          if (game.alignment === 'away') {
-            if (game.box_score.score.away.score > game.box_score.score.home.score) {
-              result = 'W';
-            } else if (game.box_score.score.away.score < game.box_score.score.home.score) {
-              result = 'L';
-            } else {
-              result = 'T';
-            }
-          } else {
-            if (game.box_score.score.away.score < game.box_score.score.home.score) {
-              result = 'W';
-            } else if (game.box_score.score.away.score > game.box_score.score.home.score) {
-              result = 'L';
-            } else {
-              result = 'T';
-            }
-          }
-          return result;
-        },
-        finalScore: function () {
-          var final = '';
-          if (game.alignment === 'away') {
-            final += game.box_score.score.away.score;
-            final += '-' + game.box_score.score.home.score;
-          } else {
-            final += game.box_score.score.home.score;
-            final += '-' + game.box_score.score.away.score;
-          }
-          return final;
-        },
+        result: $textManipulator.result.bind(gameMapsObj, game),
+        finalScore: $textManipulator.finalScore.bind(gameMapsObj, game),
         goalsScored: game.goals || 0,
         leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
         datePlayed: $date.create(game.box_score.event.game_date).format('{MM}/{dd}/{yy}'),
