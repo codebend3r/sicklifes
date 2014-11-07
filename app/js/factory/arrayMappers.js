@@ -32,9 +32,9 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       return playerInLeague;
 
     },
-    
+
     monthlyMapper: function (manager, player, game) {
-      
+
       var gameMapsObj = {
         id: player.id,
         alignment: game.alignment === 'away' ? '@' : 'vs',
@@ -45,16 +45,16 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         rawDatePlayed: $date.create(game.box_score.event.game_date),
         originalDate: game.box_score.event.game_date,
         playerName: player.playerName,
-        managerName: manager.personName
+        managerName: manager.managerName
       };
-      
+
       gameMapsObj.points = $scoringLogic.calculatePoints(gameMapsObj.goalsScored, gameMapsObj.leagueName);
-      
+
       manager.totalGoals += gameMapsObj.goalsScored;
       manager.totalPoints += gameMapsObj.points;
-      
+
       return gameMapsObj;
-      
+
     },
 
     /**

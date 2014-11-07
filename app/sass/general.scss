@@ -14,7 +14,6 @@ h1, h2 {
 }
 
 h3.manager-name {
-  //font-family: serif;    
   display: inline-block;
   color: #ffffff;
   font-size: 38px;
@@ -106,19 +105,50 @@ h3.manager-name {
 
 }
 
-/////////////////////////
+/////////////////////////////////////// nav
+
+.player-info {
+  font-size: 12px;
+  color: white;
+}
+
+.player-prop {
+  font-weight: bold;
+  color: rgb(44, 44, 44);
+}
+
+.inline {
+  display: inline;
+  @media (max-width: 700px) {
+
+    font-size: 20px;
+
+  }
+}
+
+.inline-image {
+  display: inline-block;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.standard-text {
+  font-size: 12px;
+}
+
+.small-text {
+  font-size: 10px;
+}
+
+///////////////////////////////////////
 
 .navbar-default {
   a.navbar-brand {
     color: $mainColour;
     font-weight: bold;
   }
-}
-
-.manager-section {
-
-  padding: 0;
-
 }
 
 ///////////////////////////////////////
@@ -157,44 +187,7 @@ h3.manager-name {
 
 }
 
-////////// nav
-
-.player-info {
-  font-size: 12px;
-  color: white;
-}
-
-.player-prop {
-  font-weight: bold;
-  color: rgb(44, 44, 44);
-}
-
-.inline {
-  display: inline;
-  @media (max-width: 700px) {
-
-    font-size: 20px;
-
-  }
-}
-
-.inline-image {
-  display: inline-block;
-}
-
-.bold {
-  font-weight: bold;
-}
-
-.standard-text {
-  font-size: 12px;
-}
-
-.small-text {
-  font-size: 10px;
-}
-
-////////////////
+///////////////////////////////////////
 
 footer {
   width: 100%;

@@ -9,7 +9,7 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
     sync;
 
   var fireBaseObj = {
-    
+
     list: null,
 
     initialize: function () {
@@ -42,19 +42,21 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
 
     syncLeagueData: function (saveObject) {
 
-      console.log('syncLeagueData');
+      console.log('syncLeagueData -- START');
       var usersRef = ref.child('leagueData');
       usersRef.set(angular.copy(saveObject));
-      localStorageService.set('leagueData', saveObject);
+      localStorageService.set('leagueData', angular.copy(saveObject));
+      console.log('syncLeagueTeamData -- COMPLETE');
 
     },
 
     syncLeagueTeamData: function (saveObject) {
 
-      console.log('syncLeagueTeamData');
+      console.log('syncLeagueTeamData -- START');
       var usersRef = ref.child('leagueTeamData');
       usersRef.set(angular.copy(saveObject));
-      localStorageService.set('leagueTeamData', saveObject);
+      localStorageService.set('leagueTeamData', angular.copy(saveObject));
+      console.log('syncLeagueTeamData -- COMPLETE');
 
     }
 

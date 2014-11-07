@@ -5,28 +5,29 @@
   <h2>Monthly Winners</h2>
 
   <select class='form-control' ng-model='selectedMonth' ng-options='option.monthName for option in allMonths' ng-change='changeMonth(selectedMonth)'></select>
+  <select class='form-control' ng-model='manager' ng-options='option.managerName for option in allManagers' ng-change='changeManager(manager)'></select>
 
   <div ng-if='admin' class='well'>
-    <button type='button' class='btn btn-danger' ng-click='populateTable()'>Update Data</button>
+    <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
-  <div class='manager-section' ng-repeat='manager in allManagers'>
-
-    <div class='manager-info-panel'>
-      <h3 class='manager-name'>{{manager.personName}}</h3>
-
-      <div class='goals-container'>
-        <p><span class='total-goals'>{{manager.totalGoals}}</span><span> goals in {{selectedMonth.monthName}}</span></p>
-
-        <p><span class='total-goals'>{{manager.totalPoints}}</span><span> total points in {{selectedMonth.monthName}}</span></p>
-      </div>
+  <div class="jumbotron">
+    <div class='col-md-4'>
+      <h3 class='manager-name'>{{manager.managerName}}</h3>
     </div>
+    <div class='col-md-8'>
+      <p class='info-title'>for {{selectedMonth.monthName}}</p>
 
-    <player-details-table table-body-template='monthly-log' game-details='manager.filteredMonthlyGoalsLog' table-header='tableHeader'></player-details-table>
+      <p class='info-text'><span class='total-goals'>{{manager.totalGoals}}</span><span> goals</span></p>
 
-
+      <p class='info-text'><span class='total-goals'>{{manager.totalPoints}}</span><span> points</span></p>
+    </div>
   </div>
+
+  <hr>
+
+  <player-details-table table-body-template='monthly-log' game-details='manager.filteredMonthlyGoalsLog' table-name='Game Log' table-header='tableHeader'></player-details-table>
 
 
 </div>

@@ -71,13 +71,17 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
    */
   $scope.player = {};
 
+  /**
+   * returns image ref
+   * @type {{liga: string, epl: string, seri: string, chlg: string, euro: string}}
+   */
   $scope.leagueImages = {
 
-    liga: '/images/leagues/liga.png',
-    epl: '/images/leagues/epl.png',
-    seri: '/images/leagues/seriea.png',
-    chlg: '/images/leagues/chlg.png',
-    euro: '/images/leagues/europa.png'
+    liga: './images/leagues/liga.png',
+    epl: './images/leagues/epl.png',
+    seri: './images/leagues/seriea.png',
+    chlg: './images/leagues/chlg.png',
+    euro: './images/leagues/europa.png'
 
   };
 

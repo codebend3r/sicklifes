@@ -7,7 +7,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
   return {
 
     chester: {
-      managersName: 'Chester',
+      managerName: 'Chester',
       teamName: 'Real Kings',
       totalPoints: 0,
       players: [
@@ -159,7 +159,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     },
 
     frank: {
-      managersName: 'Frank',
+      managerName: 'Frank',
       teamName: 'Schiraldihno',
       totalPoints: 0,
       players: [
@@ -313,7 +313,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     },
 
     dan: {
-      managersName: 'Dan',
+      managerName: 'Dan',
       teamName: '-',
       totalPoints: 0,
       players: [
@@ -466,7 +466,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     },
 
     justin: {
-      managersName: 'Justin',
+      managerName: 'Justin',
       teamName: '-',
       totalPoints: 0,
       players: [
@@ -619,7 +619,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     },
 
     mike: {
-      managersName: 'Mike',
+      managerName: 'Mike',
       teamName: '-',
       totalPoints: 0,
       players: [
@@ -772,7 +772,7 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     },
 
     joe: {
-      managersName: 'Joe',
+      managerName: 'Joe',
       teamName: '-',
       totalPoints: 0,
       players: [

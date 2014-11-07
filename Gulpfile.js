@@ -250,20 +250,28 @@ gulp.task('build', function (callback) {
     callback);
 });
 
+gulp.task('re-build-GUI', function (callback) {
+  runSequence(
+    'start',
+    'build-GUI',
+    'bs-reload',
+    callback);
+});
+
 // Watch
 gulp.task('watch', function () {
 
   // Watch all .html files
-  gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], ['bs-reload']);
+  gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], ['re-build-GUI']);
 
   // Watch .scss files
-  gulp.watch(config.app + '/sass/**/*.scss', ['bs-reload']);
+  gulp.watch(config.app + '/sass/**/*.scss', ['re-build-GUI']);
 
   // Watch .js files
-  gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], ['bs-reload']);
+  gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], ['re-build-GUI']);
 
   // Watch image files
-  gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', ['bs-reload']);
+  gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', ['re-build-GUI']);
 
 });
 

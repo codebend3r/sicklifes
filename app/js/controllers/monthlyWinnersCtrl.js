@@ -2,7 +2,7 @@
  * Created by Bouse on 11/03/2014
  */
 
-sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory, $leagueTeams, $routeParams, $fireBaseService, $date, localStorageService, $arrayMappers) {
+sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory, $leagueTeams, $routeParams, $fireBaseService, $date, localStorageService, $dateService, $arrayMappers) {
 
   $scope.loading = true;
 
@@ -47,6 +47,19 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   $scope.allManagers = [];
 
+  /**
+   * TODO
+   */
+  $scope.changeManager = function (selectedManager) {
+
+    $scope.manager = selectedManager;
+    //$location.url($location.path() + '?team=' + selectedTeam.personName); // route change
+
+  };
+
+  /**
+   * TODO
+   */
   $scope.changeMonth = function (month) {
     $scope.selectedMonth = month;
     updateFilter();
@@ -75,13 +88,29 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
     }
   ];
 
-  $scope.populateTable = function () {
+  /**
+   * returns image ref
+   * @type {{liga: string, epl: string, seri: string, chlg: string, euro: string}}
+   */
+  $scope.leagueImages = {
+
+    liga: './images/leagues/liga.png',
+    epl: './images/leagues/epl.png',
+    seri: './images/leagues/seriea.png',
+    chlg: './images/leagues/chlg.png',
+    euro: './images/leagues/europa.png'
+
+  };
+
+  $scope.updateData = function () {
 
     console.log('////////////////////////////////////');
     console.log('$scope.allManagers', $scope.allManagers);
     console.log('////////////////////////////////////');
 
     $scope.allManagers.forEach(function (manager) {
+
+      console.log('manager', manager);
 
       manager.players.forEach(function (player) {
 
@@ -152,16 +181,6 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
     $fireBaseService.syncLeagueTeamData(saveObject);
 
   };
-  
-  /**
-   * TODO
-   */
-  $scope.changeTeam = function (selectedManager) {
-
-    $scope.manager = selectedManager;
-    //$location.url($location.path() + '?team=' + selectedTeam.personName); // route change
-
-  };
 
   /////////////////////////////////////////////////////////////
 
@@ -207,7 +226,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
   var fireBaseLoaded = function (data) {
 
     console.log('fireBaseLoaded');
-    
+
     $scope.loading = false;
 
     $scope.allManagers = [
@@ -218,8 +237,12 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       data.leagueTeamData.mike,
       data.leagueTeamData.joe
     ];
-    
-    $scope.manager = $scope.allManagers[ 0 ];
+
+    $scope.manager = $scope.allManagers[0];
+
+    console.log('$scope.manager', $scope.manager);
+
+    //$scope.saveToFireBase();
 
   };
 

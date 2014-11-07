@@ -102,7 +102,7 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
       arrayLoopers.getAllPlayers().forEach(function (team) {
         team.players.some(function (p) {
           if (p.id === id) {
-            owner = team.managersName;
+            owner = team.managerName;
             return p.id === id
           }
         });
