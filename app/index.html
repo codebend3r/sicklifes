@@ -20,9 +20,10 @@
 </head>
 <body>
 
-<div ng-controller="masterCtrl">
+<div class="master-container container" ng-controller="masterCtrl">
 
-  <div class="sicklifes-container container" ng-view></div>
+  <nav-menu></nav-menu>
+  <div class="main-container container" ng-view></div>
   <footer>Build v{{version}}</footer>
 
 </div>

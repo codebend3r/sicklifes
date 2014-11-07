@@ -12,7 +12,6 @@ var gulp = require('gulp'),
     prod: 'builds/prod',
     release: 'builds/release'
   },
-  env = 'dev',
   gutil = require('gulp-util'),
   browserSync = require('browser-sync'),
   reload = browserSync.reload,
@@ -172,7 +171,6 @@ gulp.task('images', function () {
 
 
 // Clean
-
 gulp.task('clean-all', [
   'clean-templatecache',
   'clean-dev',
@@ -198,7 +196,6 @@ gulp.task('clean-release', function () {
 
 
 // Export GUI
-
 gulp.task('move-GUI-css', [ 'template', 'css' ], function () {
   return gulp.src([config.dev + '/css/*.css'])
     .pipe(gulp.dest(config.dev + '/css'));

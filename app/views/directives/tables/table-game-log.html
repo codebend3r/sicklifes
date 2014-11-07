@@ -1,6 +1,8 @@
-<div class='fantasy-table' ng-if='gameDetails.length > 0'>
-
+<div ng-if='gameDetails.length > 0' class="well well-lg">
   <h4>{{leagueName}}</h4>
+</div>
+
+<div class='fantasy-table' ng-if='gameDetails.length > 0'>
 
   <div class='header'>
     <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a>

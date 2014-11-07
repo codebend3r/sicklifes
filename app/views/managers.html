@@ -1,5 +1,3 @@
-<nav-menu></nav-menu>
-
 <preloader loading='loading'></preloader>
 
 <div ng-if='!loading' class='panel-body'>
@@ -7,12 +5,16 @@
   <h2>Players</h2>
 
   <select class='form-control' ng-model='selectedTeam' ng-options='option.personName for option in allManagers' ng-change='changeTeam(selectedTeam)'></select>
+  
+  <div class="well well-lg">
 
-  <p><b>Name:</b> {{selectedTeam.personName}}</p>
+    <p><b>Name:</b> {{selectedTeam.personName}}</p>
 
-  <!--<p><b>Team Name:</b> {{selectedTeam.teamName}}</p>-->
+    <!--<p><b>Team Name:</b> {{selectedTeam.teamName}}</p>-->
 
-  <p><b>Total Points:</b> {{selectedTeam.totalPoints}}</p>
+    <p><b>Total Points:</b> {{selectedTeam.totalPoints}}</p>
+
+  </div>
 
   <div class='fantasy-table'>
 

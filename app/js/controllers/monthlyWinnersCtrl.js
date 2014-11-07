@@ -152,6 +152,16 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
     $fireBaseService.syncLeagueTeamData(saveObject);
 
   };
+  
+  /**
+   * TODO
+   */
+  $scope.changeTeam = function (selectedManager) {
+
+    $scope.manager = selectedManager;
+    //$location.url($location.path() + '?team=' + selectedTeam.personName); // route change
+
+  };
 
   /////////////////////////////////////////////////////////////
 
@@ -197,6 +207,8 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
   var fireBaseLoaded = function (data) {
 
     console.log('fireBaseLoaded');
+    
+    $scope.loading = false;
 
     $scope.allManagers = [
       data.leagueTeamData.chester,
@@ -206,8 +218,8 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       data.leagueTeamData.mike,
       data.leagueTeamData.joe
     ];
-
-    $scope.loading = false;
+    
+    $scope.manager = $scope.allManagers[ 0 ];
 
   };
 
