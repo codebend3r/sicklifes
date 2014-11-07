@@ -3,38 +3,31 @@
 <div ng-if='!loading' class='panel-body'>
 
   <h2>Monthly Winners</h2>
-  
-  <div class="well well-lg">
-    <select class='form-control' ng-model='selectedMonth' ng-options='option.monthName for option in allMonths' ng-change='changeMonth(selectedMonth)'></select>
-    <select class='form-control' ng-model='manager' ng-options='option.personName for option in allManagers' ng-change='changeTeam(manager)'></select>
-  </div>
-  
-  <div ng-if='admin' class="well well-lg">
+
+  <select class='form-control' ng-model='selectedMonth' ng-options='option.monthName for option in allMonths' ng-change='changeMonth(selectedMonth)'></select>
+
+  <div ng-if='admin' class='well'>
     <button type='button' class='btn btn-danger' ng-click='populateTable()'>Update Data</button>
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
-  
-  <div class='manager-section'>
-    
-    <div class="jumbotron">
-      <div class='col-md-4'>
-        <h3 class='manager-name'>{{manager.personName}}</h3>
-      </div>
-      <div class='col-md-8'>
-        <p class='info-title'>for {{selectedMonth.monthName}}</p>
-        <p class='info-text'><span class='total-goals'>{{manager.totalGoals}}</span><span> goals</span></p>
-        <p class='info-text'><span class='total-goals'>{{manager.totalPoints}}</span><span> points</span></p>
+
+  <div class='manager-section' ng-repeat='manager in allManagers'>
+
+    <div class='manager-info-panel'>
+      <h3 class='manager-name'>{{manager.personName}}</h3>
+
+      <div class='goals-container'>
+        <p><span class='total-goals'>{{manager.totalGoals}}</span><span> goals in {{selectedMonth.monthName}}</span></p>
+
+        <p><span class='total-goals'>{{manager.totalPoints}}</span><span> total points in {{selectedMonth.monthName}}</span></p>
       </div>
     </div>
 
-    <hr>
-    
     <player-details-table table-body-template='monthly-log' game-details='manager.filteredMonthlyGoalsLog' table-header='tableHeader'></player-details-table>
-    
-    
+
+
   </div>
 
-  
 
 </div>
 

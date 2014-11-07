@@ -71,6 +71,16 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
    */
   $scope.player = {};
 
+  $scope.leagueImages = {
+
+    liga: '/images/leagues/liga.png',
+    epl: '/images/leagues/epl.png',
+    seri: '/images/leagues/seriea.png',
+    chlg: '/images/leagues/chlg.png',
+    euro: '/images/leagues/europa.png'
+
+  };
+
   /*
    * filters out any games after aug 1
    */

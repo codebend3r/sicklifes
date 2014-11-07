@@ -1,5 +1,5 @@
 /**
- * Updated by crivas on 9/12/2014.
+ * Updated by crivas on 11/07/2014.
  */
 
 'use strict';
@@ -8,6 +8,7 @@ var gulp = require('gulp'),
   pkg = require('./package.json'),
   config = {
     app: 'app',
+    target: 'builds',
     dev: 'builds/dev',
     prod: 'builds/prod',
     release: 'builds/release'
@@ -15,6 +16,7 @@ var gulp = require('gulp'),
   gutil = require('gulp-util'),
   browserSync = require('browser-sync'),
   reload = browserSync.reload,
+  runSequence = require('run-sequence'),
   templateCache = require('gulp-angular-templatecache'),
   $ = require('gulp-load-plugins')();
 
@@ -22,14 +24,36 @@ var gulp = require('gulp'),
 // TASKS
 //=============================================
 
-// HTML
-gulp.task('html', [ 'js', 'css' ], function () {
+gulp.task('start', function () {
 
   if (gutil.env.prod === true) {
 
+    gutil.log(gutil.colors.yellow('***********************'));
     gutil.log(gutil.colors.yellow('PROD BUILD'));
+    gutil.log(gutil.colors.yellow('***********************'));
 
-    return gulp.src([ config.app + '/index.html' ])
+  } else if (gutil.env.release === true) {
+
+    gutil.log(gutil.colors.green('***********************'));
+    gutil.log(gutil.colors.green('RELEASE BUILD'));
+    gutil.log(gutil.colors.green('***********************'));
+
+  } else {
+
+    gutil.log(gutil.colors.cyan('***********************'));
+    gutil.log(gutil.colors.cyan('DEV BUILD'));
+    gutil.log(gutil.colors.cyan('***********************'));
+
+  }
+
+});
+
+// HTML
+gulp.task('html', ['js', 'css'], function () {
+
+  if (gutil.env.prod === true) {
+
+    return gulp.src([config.app + '/index.html'])
       .pipe($.usemin({
         css: [
           $.rev()
@@ -43,9 +67,7 @@ gulp.task('html', [ 'js', 'css' ], function () {
 
   } else if (gutil.env.release === true) {
 
-    gutil.log(gutil.colors.green('RELEASE BUILD'));
-
-    return gulp.src([ config.app + '/index.html' ])
+    return gulp.src([config.app + '/index.html'])
       .pipe($.usemin({
         css: [
           $.csso(),
@@ -62,9 +84,7 @@ gulp.task('html', [ 'js', 'css' ], function () {
 
   } else {
 
-    gutil.log(gutil.colors.cyan('DEV BUILD'));
-
-    return gulp.src([ config.app + '/index.html' ])
+    return gulp.src([config.app + '/index.html'])
       .pipe(gulp.dest(config.dev))
       .pipe($.size());
 
@@ -72,23 +92,24 @@ gulp.task('html', [ 'js', 'css' ], function () {
 
 });
 
+// PARTIALS
 gulp.task('partials', function () {
 
   if (gutil.env.prod === true) {
 
-    return gulp.src([ config.app + '/views/**/*.html' ])
+    return gulp.src([config.app + '/views/**/*.html'])
       .pipe(gulp.dest(config.prod + '/views'))
       .pipe($.size());
 
   } else if (gutil.env.release === true) {
 
-    return gulp.src([ config.app + '/views/**/*.html' ])
+    return gulp.src([config.app + '/views/**/*.html'])
       .pipe(gulp.dest(config.release + '/views'))
       .pipe($.size());
 
   } else {
 
-    return gulp.src([ config.app + '/views/**/*.html' ])
+    return gulp.src([config.app + '/views/**/*.html'])
       .pipe(gulp.dest(config.dev + '/views'))
       .pipe($.size());
 
@@ -96,6 +117,7 @@ gulp.task('partials', function () {
 
 });
 
+// TEMPLATE
 gulp.task('template', function () {
 
   gulp.src([config.app + '/views/**/*.html'])
@@ -120,7 +142,7 @@ gulp.task('sass', function () {
 });
 
 // CSS
-gulp.task('css', [ 'sass' ], function () {
+gulp.task('css', ['sass'], function () {
 
   if (gutil.env.dev === true) {
 
@@ -133,10 +155,10 @@ gulp.task('css', [ 'sass' ], function () {
 });
 
 // JS
-gulp.task('js', [ 'template' ], function () {
+gulp.task('js', ['template'], function () {
 
   if (gutil.env.dev === true) {
-    return gulp.src([ config.app + '/js/**/*.js' ])
+    return gulp.src([config.app + '/js/**/*.js'])
       .pipe(gulp.dest(config.dev + '/js/'))
   }
 
@@ -146,7 +168,7 @@ gulp.task('js', [ 'template' ], function () {
 gulp.task('bower-all', function () {
 
   if (gutil.env.dev === true) {
-    return gulp.src([ config.app + '/bower_components/**/*.{js,css}' ])
+    return gulp.src([config.app + '/bower_components/**/*.{js,css}'])
       .pipe(gulp.dest(config.dev + '/bower_components/'))
 
   }
@@ -157,13 +179,13 @@ gulp.task('bower-all', function () {
 gulp.task('images', function () {
 
   if (gutil.env.prod === true) {
-    return gulp.src([ config.app + '/images/**/*.{jpg,png,gif}' ])
+    return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
       .pipe(gulp.dest(config.prod + '/images/'));
   } else if (gutil.env.release === true) {
-    return gulp.src([ config.app + '/images/**/*.{jpg,png,gif}' ])
+    return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
       .pipe(gulp.dest(config.release + '/images/'));
   } else {
-    return gulp.src([ config.app + '/images/**/*.{jpg,png,gif}' ])
+    return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
       .pipe(gulp.dest(config.dev + '/images/'));
   }
 
@@ -171,87 +193,85 @@ gulp.task('images', function () {
 
 
 // Clean
-gulp.task('clean-all', [
-  'clean-templatecache',
-  'clean-dev',
-  'clean-prod',
-  'clean-release'
-]);
-
 gulp.task('clean-templatecache', function () {
-  return gulp.src([config.app + '/js/templates/templatescache.js'], { read: false }).pipe($.clean({force: true}));
+  return gulp.src([config.app + '/js/templates/templatescache.js'], {read: false}).pipe($.clean({force: true}));
 });
 
-gulp.task('clean-dev', function () {
-  return gulp.src([config.dev, config.app + '/css/*.css'], { read: false }).pipe($.clean({force: true}));
-});
-
-gulp.task('clean-prod', function () {
-  return gulp.src([config.prod, config.app + '/css/*.css'], { read: false }).pipe($.clean({force: true}));
-});
-
-gulp.task('clean-release', function () {
-  return gulp.src([config.release, config.app + '/css/*.css'], { read: false }).pipe($.clean({force: true}));
+gulp.task('clean-all', function () {
+  return gulp.src([config.target], {read: false}).pipe($.clean({force: false}));
 });
 
 
 // Export GUI
-gulp.task('move-GUI-css', [ 'template', 'css' ], function () {
+gulp.task('move-GUI-css', ['template', 'css'], function () {
   return gulp.src([config.dev + '/css/*.css'])
     .pipe(gulp.dest(config.dev + '/css'));
 });
 
-gulp.task('move-GUI-js', [ 'template', 'scripts' ], function () {
+gulp.task('move-GUI-js', ['template', 'scripts'], function () {
   return gulp.src([config.dev + '/js/**/*.js'])
     .pipe(gulp.dest(config.dev + '/js'));
 });
 
-gulp.task('move-GUI-html', [ 'template' ], function () {
+gulp.task('move-GUI-html', ['template'], function () {
   return gulp.src([config.dev + '/index.html'])
     .pipe(gulp.dest(config.dev + '/index.html'));
 });
 
-gulp.task('move-view-html', [ 'template' ], function () {
+gulp.task('move-view-html', ['template'], function () {
   return gulp.src([config.dev + '/views/*.html', config.dev + '/views/**/*.html'])
     .pipe(gulp.dest(config.dev + '/index.html'));
 });
 
-gulp.task('move-GUI-images', [ 'images' ], function () {
+gulp.task('move-GUI-images', ['images'], function () {
   return gulp.src([config.dev + '/images/**/*.{png,jpg,gif,svg}'])
     .pipe(gulp.dest(config.dev + '/images'));
 });
 
-// Build
-gulp.task('build', [
+/**
+ * Builds GUI
+ */
+gulp.task('build-GUI', [
     'html',
     'bower-all',
     'images'
   ]
 );
 
+/**
+ * Runs in sequence
+ */
+gulp.task('build', function (callback) {
+  runSequence(
+    'start',
+    'build-GUI',
+    'watch',
+    'browser-sync',
+    callback);
+});
+
 // Watch
-gulp.task('watch', [ 'browser-sync' ], function () {
+gulp.task('watch', function () {
 
   // Watch all .html files
-  gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], [ 'bs-reload' ]);
+  gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], ['bs-reload']);
 
   // Watch .scss files
-  gulp.watch(config.app + '/sass/**/*.scss', [ 'bs-reload' ]);
+  gulp.watch(config.app + '/sass/**/*.scss', ['bs-reload']);
 
   // Watch .js files
-  gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], [ 'bs-reload' ]);
+  gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], ['bs-reload']);
 
   // Watch image files
-  // gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', [ 'bs-reload' ]);
+  gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', ['bs-reload']);
 
 });
 
-
-gulp.task('bs-reload', [ 'build' ], function () {
+gulp.task('bs-reload', function () {
   browserSync.reload();
 });
 
-gulp.task('browser-sync', [ 'build' ], function () {
+gulp.task('browser-sync', function () {
 
   if (gutil.env.prod === true) {
 
@@ -287,6 +307,6 @@ gulp.task('browser-sync', [ 'build' ], function () {
 
 });
 
-gulp.task('default', [ 'watch' ]);
+gulp.task('default', ['build']);
 
 module.exports = gulp; // for chrome gulp dev-tools

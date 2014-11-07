@@ -14,7 +14,8 @@ sicklifesFantasy.directive('playerDetailsTable', function () {
     scope: {
       gameDetails: '=',
       tableHeader: '=',
-      leagueName: '@'
+      leagueName: '@',
+      leagueImg: '='
     }
   }
 

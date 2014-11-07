@@ -15,7 +15,7 @@
 
     <div class='col-md-4 col-sm-4 col-xs-4'>
       <img class='profile-pic' ng-src='{{player.playerImage}}'/>
-      
+
       <!--<ul class='stats-list'>
         <li>
           <div class='stat-name'>
@@ -42,33 +42,41 @@
           </div>
         </li>
       </ul>-->
-      
+
     </div>
-    
+
     <div class='col-md-8 col-sm-8 col-xs-8'>
 
       <h1 class='player-name'>{{player.playerName}}</h1>
+
       <h3 class='player-team'>{{player.playerTeam}}</h3><br/>
+
       <p class='player-info'><span class='player-prop'>LEAGUE:</span> {{player.leagueName()}}</p>
+
       <p class='player-info'><span class='player-prop'>POS:</span> {{player.playerPos}}</p>
+
       <p class='player-info'><span class='player-prop'>WEIGHT/HEIGHT:</span> {{player.weight}}lbs/{{player.height}}</p>
+
       <p class='player-info'><span class='player-prop'>BIRTHDATE:</span> {{player.birthdate}}</p>
 
     </div>
 
   </div>
-  
-  <button ng-if='admin' type='button' class='btn btn-danger' ng-click='getAllGameLogs()'>Update Data</button>
-  <button ng-if='admin' type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
 
-  <player-details-table table-body-template='game-log' game-details='ligaGameDetails' table-header='tableHeader' league-name='LIGA Games'></player-details-table>
+  <div ng-if='admin' class='well'>
+    <button type='button' class='btn btn-danger' ng-click='getAllGameLogs()'>Update Data</button>
+    <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
+  </div>
 
-  <player-details-table table-body-template='game-log' game-details='eplGameDetails' table-header='tableHeader' league-name='EPL Games'></player-details-table>
 
-  <player-details-table table-body-template='game-log' game-details='seriGameDetails' table-header='tableHeader' league-name='Serie A Games'></player-details-table>
+  <player-details-table table-body-template='game-log' game-details='ligaGameDetails' table-header='tableHeader' league-img='leagueImages.liga' league-name='LIGA Games'></player-details-table>
 
-  <player-details-table table-body-template='game-log' game-details='chlgGameDetails' table-header='tableHeader' league-name='Champions League Games'></player-details-table>
+  <player-details-table table-body-template='game-log' game-details='eplGameDetails' table-header='tableHeader' league-img='leagueImages.epl' league-name='EPL Games'></player-details-table>
 
-  <player-details-table table-body-template='game-log' game-details='euroGameDetails' table-header='tableHeader' league-name='Europa League Games'></player-details-table>
+  <player-details-table table-body-template='game-log' game-details='seriGameDetails' table-header='tableHeader' league-img='leagueImages.seri' league-name='Serie A Games'></player-details-table>
+
+  <player-details-table table-body-template='game-log' game-details='chlgGameDetails' table-header='tableHeader' league-img='leagueImages.chlg' league-name='Champions League Games'></player-details-table>
+
+  <player-details-table table-body-template='game-log' game-details='euroGameDetails' table-header='tableHeader' league-img='leagueImages.euro' league-name='Europa League Games'></player-details-table>
 
 </div>
