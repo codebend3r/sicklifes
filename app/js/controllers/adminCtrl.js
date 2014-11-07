@@ -9,8 +9,6 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
    * TODO
    */
   $scope.loading = true;
-  
-  $scope.admin = $routeParams.admin;
 
   /**
    * TODO
@@ -54,16 +52,6 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
     }
   ];
 
-  /**
-   * TODO
-   */
-  $scope.changeTeam = function (selectedTeam) {
-
-    console.log('change team', selectedTeam);
-    $scope.selectedTeam = selectedTeam;
-    $location.url($location.path() + '?team=' + selectedTeam.personName); // route change
-
-  };
 
   /**
    * builds table
@@ -82,7 +70,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
       manager.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, manager));
 
       masterDefferedList = masterDefferedList.concat(manager.deferredList);
-      
+
       manager.deferredList = null;
 
     });
@@ -134,11 +122,9 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
     console.log('////////////////////////////////////');
 
     var saveObject = {
-      _syncedFrom: 'managersCtrl',
+      _syncedFrom: 'adminCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      //__allPlayers: $scope.allPlayers,
       __allLeagues: $scope.allLeagues,
-      //__allTeams: $scope.allTeams,
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
