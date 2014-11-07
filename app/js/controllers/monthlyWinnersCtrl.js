@@ -67,7 +67,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-2 col-sm-4 col-xs-5',
+      columnClass: 'col-md-3 col-sm-4 col-xs-5',
       text: 'Player'
     },
     {
@@ -75,11 +75,11 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       text: 'Opponent'
     },
     {
-      columnClass: 'text-center col-md-2 col-sm-2 col-xs-3',
+      columnClass: 'col-md-1 col-sm-2 col-xs-3 text-center',
       text: 'Goals'
     },
     {
-      columnClass: 'text-center col-md-2 col-sm-2 col-xs-3',
+      columnClass: 'col-md-2 col-sm-2 col-xs-3 text-center',
       text: 'Final Score'
     },
     {
