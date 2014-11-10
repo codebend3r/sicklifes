@@ -2,12 +2,47 @@
  * Created by Bouse on 11/03/2014
  */
 
-sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory, $leagueTeams, $routeParams, $fireBaseService, $date, localStorageService, $dateService, $arrayMappers) {
+sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory, $leagueTeams, $routeParams, $fireBaseService, $arrayFilter, localStorageService, $dateService, $arrayMappers) {
+
+  ////////////////////////////////////////
+  /////////////// public /////////////////
+  ////////////////////////////////////////
 
   $scope.loading = true;
 
   $scope.admin = $routeParams.admin;
 
+  $scope.tableHeader = [
+    {
+      columnClass: 'col-md-3 col-sm-4 col-xs-4',
+      text: 'Player'
+    },
+    {
+      columnClass: 'col-md-2 hidden-sm hidden-xs',
+      text: 'Opponent'
+    },
+    {
+      columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center',
+      text: 'Goals'
+    },
+    {
+      columnClass: 'col-md-2 col-sm-2 col-xs-3 text-center',
+      text: 'Score'
+    },
+    {
+      columnClass: 'col-md-2 col-sm-2 hidden-xs',
+      text: 'League'
+    },
+    {
+      columnClass: 'col-md-2 col-sm-2 col-xs-3',
+      text: 'Date'
+    }
+  ];
+
+  /**
+   * all months dropdown options
+   * @type {{monthName: string, range: string[]}[]}
+   */
   $scope.allMonths = [
     {
       monthName: 'All Months',
@@ -40,6 +75,14 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
     {
       monthName: 'February 2015',
       range: ['February 1 2015', 'February 28 2015']
+    },
+    {
+      monthName: 'March 2015',
+      range: ['March 1 2015', 'March 31 2015']
+    },
+    {
+      monthName: 'April 2015',
+      range: ['April 1 2015', 'April 30 2015']
     }
   ];
 
@@ -48,7 +91,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
   $scope.allManagers = [];
 
   /**
-   * TODO
+   * {ng-click} - when manager option changes
    */
   $scope.changeManager = function (selectedManager) {
 
@@ -58,54 +101,16 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
   };
 
   /**
-   * TODO
+   * {ng-click} - when month option is changed
    */
   $scope.changeMonth = function (month) {
     $scope.selectedMonth = month;
     updateFilter();
   };
 
-  $scope.tableHeader = [
-    {
-      columnClass: 'col-md-3 col-sm-4 col-xs-5',
-      text: 'Player'
-    },
-    {
-      columnClass: 'col-md-2 hidden-sm hidden-xs',
-      text: 'Opponent'
-    },
-    {
-      columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center',
-      text: 'Goals'
-    },
-    {
-      columnClass: 'col-md-2 col-sm-2 col-xs-3 text-center',
-      text: 'Final Score'
-    },
-    {
-      columnClass: 'col-md-2 col-sm-2 hidden-xs',
-      text: 'League'
-    },
-    {
-      columnClass: 'col-md-2 col-sm-2 col-xs-2',
-      text: 'Date'
-    }
-  ];
-
   /**
-   * returns image ref
-   * @type {{liga: string, epl: string, seri: string, chlg: string, euro: string}}
+   * scrapes thescore.ca api and updates javascript array
    */
-  $scope.leagueImages = {
-
-    liga: './images/leagues/liga.png',
-    epl: './images/leagues/epl.png',
-    seri: './images/leagues/seriea.png',
-    chlg: './images/leagues/chlg.png',
-    euro: './images/leagues/europa.png'
-
-  };
-
   $scope.updateData = function () {
 
     console.log('UPDATING...');
@@ -114,45 +119,78 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
       manager.players.forEach(function (player) {
 
-        var ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
-          eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
-          seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
-          chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
-          euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
+        var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
 
-        manager.totalPoints = 0;
-        manager.totalGoals = 0;
-        manager.monthlyGoalsLog = [];
-        manager.filteredMonthlyGoalsLog = [];
+        playerProfileRequest.promise.then(function (result) {
 
-        ligaGamesRequest.promise.then(function (result) {
-          var newInfo = result.data.filter(filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-          manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-          manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-        });
+          console.log('PLAYER DATA', result);
 
-        eplGamesRequest.promise.then(function (result) {
-          var newInfo = result.data.filter(filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-          manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-          manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-        });
+          // based on player result data return an object with the valid leagues for this player
+          var validLeagues = $textManipulator.getPlayerValidLeagues(result),
+            ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
+            eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
+            seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
+            chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
+            euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id),
+            allLeaguePromises = [];
 
-        seriGamesRequest.promise.then(function (result) {
-          var newInfo = result.data.filter(filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-          manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-          manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-        });
+          manager.totalPoints = 0;
+          manager.totalGoals = 0;
+          manager.monthlyGoalsLog = [];
+          manager.filteredMonthlyGoalsLog = [];
 
-        chlgGamesRequest.promise.then(function (result) {
-          var newInfo = result.data.filter(filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-          manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-          manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-        });
+          if (validLeagues.inLiga) {
+            ligaGamesRequest.promise.then(function (result) {
+              var newInfo = result.data.filter($arrayFilter.filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+            });
+            allLeaguePromises.push(ligaGamesRequest.promise);
+          }
 
-        euroGamesRequest.promise.then(function (result) {
-          var newInfo = result.data.filter(filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-          manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-          manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+          if (validLeagues.inEPL) {
+            eplGamesRequest.promise.then(function (result) {
+              var newInfo = result.data.filter($arrayFilter.filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+            });
+            allLeaguePromises.push(eplGamesRequest.promise);
+          }
+
+          if (validLeagues.inSeri) {
+            seriGamesRequest.promise.then(function (result) {
+              var newInfo = result.data.filter($arrayFilter.filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+            });
+            allLeaguePromises.push(seriGamesRequest.promise);
+          }
+
+          if (validLeagues.inChlg) {
+            chlgGamesRequest.promise.then(function (result) {
+              var newInfo = result.data.filter($arrayFilter.filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+            });
+            allLeaguePromises.push(chlgGamesRequest.promise);
+          }
+
+          if (validLeagues.inEuro) {
+            euroGamesRequest.promise.then(function (result) {
+              var newInfo = result.data.filter($arrayFilter.filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+            });
+            allLeaguePromises.push(euroGamesRequest.promise);
+          }
+
+          $apiFactory.listOfPromises(allLeaguePromises, function () {
+
+            console.log('ALL LEAGUE DATA FULFILLED');
+            //saveToFirebase();
+
+          });
+
         });
 
       });
@@ -161,6 +199,9 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   };
 
+  /**
+   * saves data to firebase
+   */
   $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
@@ -182,31 +223,13 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   };
 
-  /////////////////////////////////////////////////////////////
+  ////////////////////////////////////////
+  ////////////// private /////////////////
+  ////////////////////////////////////////
 
-  var isSelectedMonth = function (game) {
-    var gameDate = game.rawDatePlayed || $date.create(game.box_score.event.game_date),
-      scoredAGoal = game.goals ? true : false,
-      isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
-    return isBetween && scoredAGoal;
-  };
-
-  var filterOnMonth = function (manager, player, game) {
-    var gameDate = $date.create(game.originalDate),
-      scoredAGoal = game.goalsScored ? true : false,
-      isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
-
-    if (isBetween && scoredAGoal) {
-      manager.totalGoals += game.goalsScored;
-      manager.totalPoints += game.points;
-      return true;
-    }
-  };
-
-  var filterGoalsOnly = function (game) {
-    return game.goals ? true : false;
-  };
-
+  /**
+   * filters game log by selected month
+   */
   var updateFilter = function () {
 
     $scope.allManagers.forEach(function (manager) {
@@ -215,7 +238,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
         manager.totalPoints = 0;
         manager.totalGoals = 0;
-        manager.filteredMonthlyGoalsLog = manager.monthlyGoalsLog.filter(filterOnMonth.bind($scope, manager, player));
+        manager.filteredMonthlyGoalsLog = manager.monthlyGoalsLog.filter($arrayFilter.filterOnMonth.bind($scope, manager, player));
 
       });
 
@@ -223,6 +246,11 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   };
 
+  /**
+   * call when firebase data has loaded
+   * defines $scope.allManagers
+   * @param data
+   */
   var fireBaseLoaded = function (data) {
 
     console.log('fireBaseLoaded');
@@ -248,8 +276,20 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   };
 
-  /*
-   * TODO
+  /**
+   * retrieve data from local storage
+   */
+  var getFromLocalStorage = function () {
+
+    console.log('firebase unavailable');
+    $scope.loading = false;
+    var localManagers = localStorageService.get('leagueTeamData');
+    console.log('localManagers', localManagers);
+
+  };
+
+  /**
+   * init controller
    */
   var init = function () {
 
@@ -257,15 +297,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
     var firePromise = $fireBaseService.getFireBaseData();
 
-    firePromise.promise.then(fireBaseLoaded, function () {
-
-      console.log('firebase unavailable');
-      $scope.loading = false;
-      var localManagers = localStorageService.get('leagueTeamData');
-      console.log('localManagers', localManagers);
-
-    });
-
+    firePromise.promise.then(fireBaseLoaded, getFromLocalStorage);
 
   };
 

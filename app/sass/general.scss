@@ -24,6 +24,17 @@ h3.manager-name {
   line-height: 100px;
 }
 
+.master-container {
+  &.container {
+    padding: 0 0 50px 0;
+  }
+}
+
+.main-container {
+  padding: 0;
+  margin: 50px 0 0 0;
+}
+
 .goals-container {
   display: inline-block;
   color: #ffffff;
@@ -51,14 +62,6 @@ h3.manager-name {
 }
 
 //////////////////////////////////
-
-.master-container {
-  padding: 0 0 50px 0;
-}
-
-.main-container {
-  margin: 50px 0 0 0;
-}
 
 .form-control {
   margin-bottom: 20px;

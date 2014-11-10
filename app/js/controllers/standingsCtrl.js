@@ -5,6 +5,10 @@
 
 sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $arrayLoopers, $dateService, $textManipulator, $scoringLogic, $leagueTeams, $location) {
 
+  ////////////////////////////////////////
+  /////////////// public /////////////////
+  ////////////////////////////////////////
+
   /**
    * TODO
    */
@@ -49,6 +53,10 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
    */
   $scope.allLeagues = null;
 
+  ////////////////////////////////////////
+  ////////////// private /////////////////
+  ////////////////////////////////////////
+
   /**
    * TODO
    */
@@ -87,6 +95,12 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
     });
 
     //$apiFactory.listOfPromises(masterDeferredList, $scope.saveToFireBase);
+
+    console.log('masterDeferredList.length', masterDeferredList.length);
+
+    $apiFactory.listOfPromises(masterDeferredList, function () {
+      console.log('ALL DONE');
+    });
 
   };
 

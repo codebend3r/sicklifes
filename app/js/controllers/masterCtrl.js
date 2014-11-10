@@ -5,6 +5,6 @@
 
 sicklifesFantasy.controller('masterCtrl', function ($scope) {
 
-  $scope.version = '0.3.8';
+  $scope.version = '0.3.10';
 
 });

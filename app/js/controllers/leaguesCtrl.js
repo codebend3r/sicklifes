@@ -4,11 +4,11 @@
 
 sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date, $leagueTeams, $location, $routeParams, $arrayMappers, $dateService, $textManipulator, $fireBaseService) {
 
-  //////////////////////////// public
+  ////////////////////////////////////////
+  /////////////// public /////////////////
+  ////////////////////////////////////////
 
   $scope.loading = true;
-
-  $scope.admin = $routeParams.admin;
 
   $scope.admin = $routeParams.admin;
 
@@ -67,6 +67,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
       });
 
       $scope.allLeagues = allLeagues;
+
       allRequestComplete();
 
     });
@@ -93,39 +94,56 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
 
   };
 
-  /////////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////
-
-  var baseAllLeagues = [
-    {
-      name: 'LA LIGA',
-      source: null,
-      img: '/images/leagues/liga.png'
-    },
-    {
-      name: 'ENGLISH PREMIER LEAGUE',
-      source: null,
-      img: '/images/leagues/epl.png'
-    },
-    {
-      name: 'SERIE A',
-      source: null,
-      img: '/images/leagues/seriea.png'
-    },
-    {
-      name: 'CHAMPIONS LEAGUE',
-      source: null,
-      img: '/images/leagues/chlg.png'
-    },
-    {
-      name: 'EUROPA LEAGUE',
-      source: null,
-      img: '/images/leagues/europa.png'
-    }
-  ];
+  ////////////////////////////////////////
+  ////////////// private /////////////////
+  ////////////////////////////////////////
 
   var allLeaguesObj = {};
+
+  var fireBaseLoaded = function (data) {
+
+    $scope.loading = false;
+
+    $scope.allLeagues = [
+      {
+        name: $textManipulator.leagueLongNames.liga,
+        source: data.leagueData.LIGA,
+        img: $textManipulator.leagueImages.liga
+      },
+      {
+        name: $textManipulator.leagueLongNames.epl,
+        source: data.leagueData.EPL,
+        img: $textManipulator.leagueImages.epl
+      },
+      {
+        name: $textManipulator.leagueLongNames.seri,
+        source: data.leagueData.SERI,
+        img: $textManipulator.leagueImages.seri
+      },
+      {
+        name: $textManipulator.leagueLongNames.chlg,
+        source: data.leagueData.CHLG,
+        img: $textManipulator.leagueImages.chlg
+      },
+      {
+        name: $textManipulator.leagueLongNames.euro,
+        source: data.leagueData.UEFA,
+        img: $textManipulator.leagueImages.euro
+      }
+    ];
+
+    $scope.selectedLeague = $scope.allLeagues[0];
+
+    var syncDate = $date.create(data.leagueData._lastSynedOn);
+
+    console.log('syncDate', data.leagueData._lastSynedOn);
+    console.log('$scope.allLeagues', $scope.allLeagues);
+
+    if (syncDate.isYesterday()) {
+      $scope.updateData();
+    }
+
+  };
 
   var init = function () {
 
@@ -133,58 +151,9 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
 
     var firePromise = $fireBaseService.getFireBaseData();
 
-    firePromise.promise.then(function (data) {
-
-      $scope.loading = false;
-
-      $scope.allLeagues = [
-        {
-          name: baseAllLeagues[0].name,
-          source: data.leagueData.LIGA,
-          img: './images/leagues/liga.png'
-        },
-        {
-          name: baseAllLeagues[1].name,
-          source: data.leagueData.EPL,
-          img: './images/leagues/epl.png'
-        },
-        {
-          name: baseAllLeagues[2].name,
-          source: data.leagueData.SERI,
-          img: './images/leagues/seriea.png'
-        },
-        {
-          name: baseAllLeagues[3].name,
-          source: data.leagueData.CHLG,
-          img: './images/leagues/chlg.png'
-        },
-        {
-          name: baseAllLeagues[4].name,
-          source: data.leagueData.UEFA,
-          img: './images/leagues/europa.png'
-        }
-      ];
-
-      $scope.selectedLeague = $scope.allLeagues[0];
-
-      var syncDate = $date.create(data.leagueData._lastSynedOn);
-
-      console.log('syncDate', data.leagueData._lastSynedOn);
-      console.log('$scope.allLeagues', $scope.allLeagues);
-
-      if (syncDate.isYesterday()) {
-        $scope.updateData();
-      }
-
-
-    });
+    firePromise.promise.then(fireBaseLoaded);
 
   };
-
-  ////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////
-
-  var allLeaguesObj = {};
 
   var allRequestComplete = function () {
 

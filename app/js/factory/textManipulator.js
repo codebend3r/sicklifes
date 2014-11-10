@@ -62,6 +62,52 @@ sicklifesFantasy.factory('$textManipulator', function () {
       }
     },
 
+    /**
+     * returns object will full league names
+     */
+    leagueLongNames: {
+      liga: 'LA LIGA',
+      epl: 'ENGLISH PREMIER LEAGUE',
+      seri: 'SERIE A',
+      chlg: 'CHAMPIONS LEAGUE',
+      euro: 'EUROPA LEAGUE'
+    },
+
+    /**
+     * returns image ref
+     * @type {{liga: string, epl: string, seri: string, chlg: string, euro: string}}
+     */
+    leagueImages: {
+
+      liga: './images/leagues/liga.png',
+      epl: './images/leagues/epl.png',
+      seri: './images/leagues/seriea.png',
+      chlg: './images/leagues/chlg.png',
+      euro: './images/leagues/europa.png'
+
+    },
+
+    /**
+     *
+     * @param result
+     * @returns {{}}
+     */
+    getPlayerValidLeagues: function (result) {
+      var leagueObject = {};
+      result.data.teams.forEach(function (team, i) {
+        team.leagues.forEach(function (league, j) {
+          if (textManipulator.acceptedLeague(league.slug)) {
+            if (league.slug === 'liga') leagueObject.inLiga = true;
+            if (league.slug === 'epl') leagueObject.inEPL = true;
+            if (league.slug === 'seri') leagueObject.inSeri = true;
+            if (league.slug === 'chlg') leagueObject.inChlg = true;
+            if (league.slug === 'uefa') leagueObject.inEuro = true;
+          }
+        });
+      });
+      return leagueObject;
+    },
+
     result: function (game) {
       var result = '';
       if (game.alignment === 'away') {
@@ -135,16 +181,6 @@ sicklifesFantasy.factory('$textManipulator', function () {
     getPlayerPlayerRecordURL: function (league, id) {
       return 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/player_records';
     },
-
-    /**
-     *
-     * @param league
-     * @param id
-     * @returns {string}
-     */
-    /*getPlayerURL: function (league, id) {
-     return 'http://api.thescore.com/' + league + '/players/' + id + '/player_records?rpp=100';
-     },*/
 
     getPlayerSummaryURL: function (league, id) {
       return 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/summary';
