@@ -11,15 +11,32 @@
   h1 {
     font-family: Oswald, sans-serif;
     font-size: 55px;
+    @media (max-width: 750px) {
+      h1 {
+        font-size: 45px;
+      }
+    }
+    &.player-name {
+      color: $secondaryColour;
+      text-decoration: underline;
+      margin: 0;
+      font-size: 50px;
+      line-height: 60px;
+      @media (max-width: 700px) {
+        font-size: 30px;
+        line-height: 40px;
+      }
+    }
   }
 
   .profile-pic {
-    width: 200px;
+    max-width: 160px;
+    min-width: 80px;
     height: auto;
     border: 2px solid $secondaryColour;
+    float: left;
     @media (max-width: 700px) {
-      width: 100%;
-      height: 100%;
+      display: none;
     }
   }
 
@@ -31,7 +48,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 1;
+    z-index: 0;
     opacity: .5;
     width: 350px;
     height: 350px;
@@ -65,18 +82,6 @@
     margin: 0;
   }
 
-  .player-name {
-    color: $secondaryColour;
-    text-decoration: underline;
-    margin: 0;
-    font-size: 50px;
-    line-height: 60px;
-    @media (max-width: 700px) {
-      font-size: 40px;
-      line-height: 50px;
-    }
-  }
-
 }
 
 @media (max-width: 750px) {
@@ -98,6 +103,9 @@
     }
     &.player-jumbo {
       background-image: none;
+    }
+    .player-info {
+      font-size: 10px;
     }
   }
 

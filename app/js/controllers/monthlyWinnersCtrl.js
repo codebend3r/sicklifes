@@ -75,7 +75,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       text: 'Opponent'
     },
     {
-      columnClass: 'col-md-1 col-sm-2 col-xs-3 text-center',
+      columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center',
       text: 'Goals'
     },
     {
@@ -83,11 +83,11 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       text: 'Final Score'
     },
     {
-      columnClass: 'col-md-2 col-sm-3 hidden-xs',
+      columnClass: 'col-md-2 col-sm-2 hidden-xs',
       text: 'League'
     },
     {
-      columnClass: 'col-md-2 col-sm-3 col-xs-4',
+      columnClass: 'col-md-2 col-sm-2 col-xs-2',
       text: 'Date'
     }
   ];
@@ -108,9 +108,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
   $scope.updateData = function () {
 
-    console.log('////////////////////////////////////');
-    console.log('$scope.allManagers', $scope.allManagers);
-    console.log('////////////////////////////////////');
+    console.log('UPDATING...');
 
     $scope.allManagers.forEach(function (manager) {
 
@@ -242,18 +240,11 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
     $scope.manager = $scope.allManagers[0];
 
-    //console.log('$scope.manager', $scope.manager);
-    //$scope.saveToFireBase();
+    //var syncDate = $date.create(data.leagueData._lastSynedOn);
 
-    $scope.allManagers.forEach(function (manager) {
-
-      manager.players.forEach(function (player) {
-
-        //console.log('manager.filteredMonthlyGoalsLog', manager.filteredMonthlyGoalsLog[0]);
-
-      });
-
-    });
+    console.log('syncDate leagueData', data.leagueData._lastSynedOn);
+    console.log('syncDate leagueTeamData', data.leagueTeamData._lastSynedOn);
+    console.log('$scope.allManagers', $scope.allManagers);
 
   };
 

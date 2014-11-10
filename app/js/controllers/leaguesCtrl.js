@@ -2,7 +2,7 @@
  * Created by Bouse on 11/03/2014
  */
 
-sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date, $leagueTeams, $location, $routeParams, $arrayMappers, $dateService, $fireBaseService) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date, $leagueTeams, $location, $routeParams, $arrayMappers, $dateService, $textManipulator, $fireBaseService) {
 
   //////////////////////////// public
 
@@ -45,7 +45,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
 
   $scope.updateData = function () {
 
-    console.log('updateData');
+    console.log('UPDATING...');
 
     var allLeagues = [];
 
@@ -170,9 +170,6 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
       var syncDate = $date.create(data.leagueData._lastSynedOn);
 
       console.log('syncDate', data.leagueData._lastSynedOn);
-      /*console.log('syncDate', syncDate);
-       console.log('currentDate', currentDate);
-       console.log('isYesterday', syncDate.isYesterday());*/
       console.log('$scope.allLeagues', $scope.allLeagues);
 
       if (syncDate.isYesterday()) {

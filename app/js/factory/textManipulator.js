@@ -8,7 +8,8 @@ sicklifesFantasy.factory('$textManipulator', function () {
 
   var textManipulator = {
 
-    stripVowelAccent: function (str) {
+    stripVowelAccent: function
+      (str) {
       var rExps = [
         {re: /[\xC0-\xC6]/g, ch: 'A'},
         {re: /[\xE0-\xE6]/g, ch: 'a'},
@@ -135,6 +136,16 @@ sicklifesFantasy.factory('$textManipulator', function () {
       return 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/player_records';
     },
 
+    /**
+     *
+     * @param league
+     * @param id
+     * @returns {string}
+     */
+    /*getPlayerURL: function (league, id) {
+     return 'http://api.thescore.com/' + league + '/players/' + id + '/player_records?rpp=100';
+     },*/
+
     getPlayerSummaryURL: function (league, id) {
       return 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/summary';
     },
@@ -152,4 +163,5 @@ sicklifesFantasy.factory('$textManipulator', function () {
 
   return textManipulator;
 
-});
+})
+;

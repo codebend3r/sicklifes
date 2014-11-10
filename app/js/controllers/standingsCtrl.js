@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $arrayLoopers, $date, $filter, $textManipulator, $scoringLogic, $leagueTeams, $location) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $arrayLoopers, $dateService, $textManipulator, $scoringLogic, $leagueTeams, $location) {
 
   /**
    * TODO
@@ -43,16 +43,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
     }
   ];
 
-  /**
-   *
-   * @param league
-   * @param id
-   * @returns {string}
-   */
-  $scope.getPlayerURL = function (league, id) {
-    var url = 'http://api.thescore.com/' + league + '/players/' + id + '/player_records?rpp=100';
-    return url;
-  };
 
   /**
    * consolidated list of all owned players by a manager
@@ -67,15 +57,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
     console.log('allRequestComplete');
 
     $scope.loading = false;
-
-    /*$scope.allManagers = [
-     $leagueTeams.chester,
-     $leagueTeams.frank,
-     $leagueTeams.dan,
-     $leagueTeams.justin,
-     $leagueTeams.mike,
-     $leagueTeams.joe
-     ];*/
 
     populateTable();
 
@@ -105,24 +86,28 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     });
 
-    $apiFactory.listOfPromises(masterDeferredList, function () {
+    //$apiFactory.listOfPromises(masterDeferredList, $scope.saveToFireBase);
 
-      console.log('SAVE TO FIREBASE');
+  };
 
-      var saveObject = {
-        _syncedFrom: 'standingsCtrl',
-        _lastSyncedOn: $dateService.syncDate(),
-        chester: $scope.$leagueTeams.chester,
-        frank: $scope.$leagueTeams.frank,
-        dan: $scope.$leagueTeams.dan,
-        justin: $scope.$leagueTeams.justin,
-        mike: $scope.$leagueTeams.mike,
-        joe: $scope.$leagueTeams.joe
-      };
+  $scope.saveToFireBase = function () {
 
-      $fireBaseService.syncLeagueTeamData(saveObject);
+    console.log('////////////////////////////////////');
+    console.log('$scope.allManagers', $scope.allManagers);
+    console.log('////////////////////////////////////');
 
-    });
+    var saveObject = {
+      _syncedFrom: 'standingsCtrl',
+      _lastSynedOn: $dateService.syncDate(),
+      chester: $scope.allManagers[0],
+      frank: $scope.allManagers[1],
+      dan: $scope.allManagers[2],
+      justin: $scope.allManagers[3],
+      mike: $scope.allManagers[4],
+      joe: $scope.allManagers[5]
+    };
+
+    $fireBaseService.syncLeagueTeamData(saveObject);
 
   };
 
@@ -131,7 +116,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
    */
   $scope.updateData = function () {
 
-    console.log('updateData');
+    console.log('UPDATING...');
 
     var allLeagues = [];
 
@@ -156,6 +141,24 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
   };
 
+  var fireBaseLoaded = function (data) {
+
+    $scope.loading = false;
+
+    $scope.allManagers = [
+      data.leagueTeamData.chester,
+      data.leagueTeamData.frank,
+      data.leagueTeamData.dan,
+      data.leagueTeamData.justin,
+      data.leagueTeamData.mike,
+      data.leagueTeamData.joe
+    ];
+
+    console.log('syncDate leagueData', data.leagueData._lastSynedOn);
+    console.log('syncDate leagueTeamData', data.leagueTeamData._lastSynedOn);
+
+  };
+
   /**
    * TODO
    */
@@ -165,20 +168,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
 
     var firePromise = $fireBaseService.getFireBaseData();
 
-    firePromise.promise.then(function (data) {
-
-      $scope.loading = false;
-
-      $scope.allManagers = [
-        data.leagueTeamData.chester,
-        data.leagueTeamData.frank,
-        data.leagueTeamData.dan,
-        data.leagueTeamData.justin,
-        data.leagueTeamData.mike,
-        data.leagueTeamData.joe
-      ];
-
-    });
+    firePromise.promise.then(fireBaseLoaded);
 
 
   };
