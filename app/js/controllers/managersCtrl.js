@@ -69,34 +69,6 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
   };
 
   /**
-   * builds table
-   */
-  $scope.populateTable = function () {
-
-    console.log('$scope.populateTable');
-
-    var masterDefferedList = [];
-
-    $scope.allManagers.forEach(function (manager) {
-
-      manager.deferredList = [];
-
-      // loops through all players and makes request for all goals
-      manager.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, manager));
-
-      masterDefferedList = masterDefferedList.concat(manager.deferredList);
-
-      manager.deferredList = null;
-
-    });
-
-    $apiFactory.listOfPromises(masterDefferedList, function () {
-      console.log('ALL DONE');
-    });
-
-  };
-
-  /**
    * called from ng-click, makes a request from TheScore to get new data
    */
   $scope.updateData = function () {
@@ -113,7 +85,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
       $scope.allLeagues = [];
 
-      result.forEach(function (league, index) {
+      result.forEach(function (league) {
         var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
         allLeaguesObj[league.leagueName] = goalsMap;
         $scope.allLeagues = $scope.allLeagues.concat(goalsMap);
@@ -166,38 +138,94 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
       $scope.selectedTeam = $scope.allManagers[0];
     }
 
-    $location.url($location.path() + '?team=' + $scope.selectedTeam.managerName); // route change
+    //$location.url($location.path() + '?team=' + $scope.selectedTeam.managerName); // route change
 
   };
 
+  /**
+   * builds table
+   */
+  var populateTable = function () {
+
+    console.log('$scope.populateTable');
+
+    var masterDefferedList = [];
+
+    $scope.allManagers.forEach(function (manager) {
+
+      manager.deferredList = [];
+
+      // loops through all players and makes request for all goals
+      manager.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, manager));
+
+      masterDefferedList = masterDefferedList.concat(manager.deferredList);
+
+      manager.deferredList = null;
+
+    });
+
+    console.log('masterDefferedList.length', masterDefferedList.length);
+
+    $apiFactory.listOfPromises(masterDefferedList, function () {
+      console.log('ALL DONE');
+    });
+
+  };
+
+  /**
+   * contains a reference to each league by key
+   */
   var allLeaguesObj = {};
+
+  /**
+   * call when firebase data has loaded
+   * defines $scope.allManagers
+   * @param data
+   */
+  var fireBaseLoaded = function (data) {
+
+    console.log('fireBaseLoaded');
+
+    $scope.loading = false;
+
+    $scope.allManagers = [
+      data.leagueTeamData.chester,
+      data.leagueTeamData.frank,
+      data.leagueTeamData.dan,
+      data.leagueTeamData.justin,
+      data.leagueTeamData.mike,
+      data.leagueTeamData.joe
+    ];
+
+    chooseTeam();
+
+  };
+
+  /**
+   * retrieve data from local storage
+   */
+  var getFromLocalStorage = function () {
+
+    console.log('getFromLocalStorage');
+
+    $scope.loading = false;
+
+    var localManagers = localStorageService.get('leagueTeamData');
+
+    console.log('localManagers', localManagers);
+
+  };
 
   /**
    * init function
    */
   var init = function () {
 
-    // TODO - implement localStorage save
     $fireBaseService.initialize();
 
     var firePromise = $fireBaseService.getFireBaseData();
 
-    firePromise.promise.then(function (data) {
-
-      $scope.loading = false;
-
-      $scope.allManagers = [
-        data.leagueTeamData.chester,
-        data.leagueTeamData.frank,
-        data.leagueTeamData.dan,
-        data.leagueTeamData.justin,
-        data.leagueTeamData.mike,
-        data.leagueTeamData.joe
-      ];
-
-      chooseTeam();
-
-    });
+    firePromise.promise.then(fireBaseLoaded, getFromLocalStorage);
 
   };
 
@@ -211,8 +239,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
     $scope.loading = false;
 
     chooseTeam();
-
-    $scope.populateTable();
+    populateTable();
 
   };
 

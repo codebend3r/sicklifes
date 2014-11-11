@@ -23,10 +23,10 @@ sicklifesFantasy.factory('$scoringLogic', function () {
       }
     },
 
-    findOwnerByID: function(id) {
+    findOwnerByID: function (id) {
 
     }
-    
+
   }
-  
+
 });

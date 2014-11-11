@@ -6,6 +6,11 @@
 
   <select class='form-control' ng-model='selectedTeam' ng-options='option.managerName for option in allManagers' ng-change='changeTeam(selectedTeam)'></select>
 
+  <div ng-if='admin' class='well'>
+    <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
+    <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
+  </div>
+
   <div class="jumbotron">
     <div class='col-md-4'>
       <h3 class='manager-name'>{{selectedTeam.managerName}}</h3>

@@ -6,28 +6,34 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
 
   var arrayLoopers = {
 
-    /**
-     *
-     * @param $scope - controller $scope
-     * @param team - team which contains teamPlayers
-     * @param saveToFireBase
-     * @param teamPlayers - from loop
-     */
-    forEachPlayer: function ($scope, team, teamPlayers) {
+    resetScoreCount: function (manager, teamPlayers) {
 
-      // teamPlayers is a child of team
-
-      teamPlayers.goals = 0; // start at 0;
-      teamPlayers.points = 0; // start at 0;
+      teamPlayers.goals = 0;
+      teamPlayers.points = 0;
       teamPlayers.domesticGoals = 0;
       teamPlayers.leagueGoals = 0;
       teamPlayers.clGoals = 0;
       teamPlayers.eGoals = 0;
 
-      team.totalPoints = 0;
-      team.clGoals = 0;
-      team.eGoals = 0;
-      team.domesticGoals = 0;
+      manager.totalPoints = 0;
+      manager.totalGoals = 0;
+      manager.clGoals = 0;
+      manager.eGoals = 0;
+      manager.domesticGoals = 0;
+      manager.testGoals = 0;
+      manager.testPoints = 0;
+
+    },
+
+    /**
+     *
+     * @param $scope - controller $scope
+     * @param manager - team which contains teamPlayers
+     * @param teamPlayers - from loop
+     */
+    forEachPlayer: function ($scope, manager, teamPlayers) {
+
+      arrayLoopers.resetScoreCount(manager, teamPlayers);
 
       var deferredList = deferredList || [];
 
@@ -36,16 +42,22 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
         var request = $apiFactory.getData({
 
           endPointURL: $textManipulator.getPlayerSummaryURL(teamPlayers.league, teamPlayers.id),
+
           qCallBack: function (result) {
+
+            var league,
+              gameGoals;
 
             result.data.map(function (i) {
 
-              var league = i.league.slug,
-                gameGoals = i.games_goals;
+              league = i.league.slug;
+              gameGoals = i.games_goals;
 
               if ($textManipulator.acceptedLeague(league)) {
 
                 teamPlayers.goals += gameGoals;
+                manager.testGoals += gameGoals;
+                manager.totalGoals += gameGoals;
 
                 if ($textManipulator.isLeagueGoal(league)) {
                   teamPlayers.leagueGoals += gameGoals;
@@ -53,30 +65,47 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
 
                 if ($textManipulator.isDomesticGoal(league)) {
                   teamPlayers.domesticGoals += gameGoals;
+                  manager.domesticGoals += teamPlayers.domesticGoals;
                 } else if ($textManipulator.isChampionsLeagueGoal(league)) {
                   teamPlayers.clGoals += gameGoals;
+                  manager.clGoals += teamPlayers.clGoals;
                 } else if ($textManipulator.isEuropaGoal(league)) {
                   teamPlayers.eGoals += gameGoals;
+                  manager.eGoals += teamPlayers.eGoals;
                 }
 
+                //teamPlayers.points += gameGoals;
                 teamPlayers.points += $scoringLogic.calculatePoints(gameGoals, league);
+                manager.testPoints += $scoringLogic.calculatePoints(gameGoals, league);
+
+                /*if (manager.managerName === 'Chester') {
+                  console.log('--------------------------------------------');
+                  console.log(teamPlayers.playerName);
+                  console.log('scored', teamPlayers.points, 'points');
+                }*/
 
               }
 
             });
 
-            team.totalPoints += teamPlayers.points;
-            team.clGoals += teamPlayers.clGoals;
-            team.eGoals += teamPlayers.eGoals;
-            team.domesticGoals += teamPlayers.domesticGoals;
+            console.log('--------------------------------------------');
+            console.log('managerName', manager.managerName);
+            console.log('playerName', teamPlayers.playerName);
+
+            manager.totalPoints += teamPlayers.points;
+            console.log('teamPlayers.points', teamPlayers.points);
+            console.log('manager.testPoints', manager.testPoints);
+            console.log('manager.totalPoints', manager.totalPoints);
+            console.log('manager.testGoals', manager.testGoals);
+            console.log('manager.totalGoals', manager.totalGoals);              
 
           }
+          
         });
 
       }
 
       deferredList.push(request.promise);
-      console.log('deferredList.length:', deferredList.length);
 
     },
 
