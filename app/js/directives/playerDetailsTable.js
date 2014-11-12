@@ -18,6 +18,8 @@ sicklifesFantasy.directive('playerDetailsTable', function () {
       leagueImg: '='
     },
     link: function ($scope) {
+      
+      $scope.playerSearch = '';
 
       /*console.log('gameDetails', $scope.gameDetails);
        console.log('tableHeader', $scope.tableHeader);

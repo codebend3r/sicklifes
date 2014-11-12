@@ -13,8 +13,32 @@ sicklifesFantasy.directive('navMenu', function ($location) {
     link: function ($scope) {
 
       $scope.isActive = function (viewLocation) {
-        return $location.path().contains('player-details') && viewLocation === '/managers/' || viewLocation === $location.path();
+        //console.log(viewLocation, 'contains', $location.path(), '? ', viewLocation.contains($location.path()));
+        return $location.path().contains('player-details') && viewLocation === '/managers/' ||  viewLocation.contains($location.path());
       };
+      
+      $scope.menuOptions = [
+        {
+          name: 'Leagues',
+          url: '#/leagues/'
+        },
+        {
+          name: 'Managers',
+          url: '#/managers/'
+        },
+        {
+          name: 'Standings',
+          url: '#/standings/'
+        },
+        {
+          name: 'Monthly Winners',
+          url: '#/monthlywinners/'
+        },
+        {
+          name: 'Transfers',
+          url: '#/transfers/'
+        }
+      ];
 
     }
   }

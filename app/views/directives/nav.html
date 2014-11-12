@@ -11,10 +11,7 @@
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 	  <ul class="nav navbar-nav">
-		<li ng-class='{active:isActive("/leagues/")}'><a href='#/leagues'>Leagues</a></li>
-        <li ng-class='{active:isActive("/managers/")}'><a href='#/managers'>Managers</a></li>
-        <li ng-class='{active:isActive("/standings/")}'><a href='#/standings'>Standings</a></li>
-        <li ng-class='{active:isActive("/monthlywinners/")}'><a href='#/monthlywinners'>Monthly Winners</a></li>
+		<li ng-repeat='menu in menuOptions' ng-class='{active:isActive(menu.url)}'><a ng-href='{{menu.url}}'>{{menu.name}}</a></li>
 	  </ul>
 	  <!--<ul class="nav navbar-nav navbar-right">
 		<li><a href="../navbar/">Default</a></li>

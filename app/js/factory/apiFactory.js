@@ -78,11 +78,72 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
     return request;
 
   };
+  
+  /**
+   * TODO
+   */
+  scope.getAllTeams = function() {
+    
+    //http://origin-api.thescore.com/liga/teams/
+    //http://origin-api.thescore.com/liga/teams/44 - Real Madrid
+  
+    var allLeaguesURL = [
+        'http://origin-api.thescore.com/liga/teams/',
+        'http://origin-api.thescore.com/epl/teams/',
+        'http://origin-api.thescore.com/seri/teams/',
+        'http://origin-api.thescore.com/chlg/teams/',
+        'http://origin-api.thescore.com/uefa/teams/'
+      ],
+      listOrPromises = [];
+    
+    allLeaguesURL.forEach(function (url) {
+
+      var leagueRequest = scope.getData({
+        endPointURL: url
+      });
+      
+      leagueRequest.promise.then(function(result) {
+        
+        result.leagueURL = url;
+        
+      });
+      
+      listOrPromises.push(leagueRequest.promise);
+
+    });
+    
+    return listOrPromises;
+    
+  };
+  
+  /**
+   * TODO
+   */
+  scope.getRoster = function(result) {
+    
+    var listOrPromises = [];
+    
+    result.data.forEach(function (leagueData) {
+          
+      var rosterRequest = scope.getData({
+        endPointURL: url + leagueData.id + '/players/'
+      });
+
+      rosterRequest.promise.then(function (result) {
+
+        console.log('>>> result', result);
+        listOrPromises.push(rosterRequest.promise);
+
+      });
+
+    });
+  
+  };
 
   /**
    * TODO
    */
-  scope.getAllLeagues = function () {
+  scope.getAllGoalLeaders = function () {
 
     var allLeaguesURL = [
         'http://api.thescore.com/liga/leaders?categories=goals',
@@ -117,6 +178,9 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
   };
   
+  /**
+   * TODO
+   */
   scope.listOfPromises = function(list, callbackFunc) {
     
     $q.all(list).then(callbackFunc);

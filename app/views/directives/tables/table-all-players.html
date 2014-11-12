@@ -1,0 +1,23 @@
+<div ng-if='gameDetails.length > 0' class='well'>
+  <h3 class='inline'>{{tableName}}</h3>
+</div>
+
+<input class='form-control' name='input' ng-model='playerSearch' placeholder='search for a player'>
+
+<div class='fantasy-table' ng-if='gameDetails.length > 0'>
+
+  <div class='header'>
+    <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a>
+    </div>
+  </div>
+
+  <div class='table-body'>
+    <div class='row' ng-repeat='game in gameDetails | orderBy: "+playerName" | filter: playerSearch | limitTo: 50'>
+      <div class='col-md-3 col-sm-6 col-xs-4'><a ng-href='#/player-details/{{game.id}}'>{{game.playerName}}</a></div>
+      <div class='col-md-3 col-sm-3 col-xs-4 small-hpadding bold small-text'>{{game.ownedBy}}</div>
+      <div class='col-md-3 hidden-sm hidden-xs'>{{game.leagueName}}</div>
+      <div class='col-md-3 col-sm-3 col-xs-4'>{{game.teamName}}</div>
+    </div>
+  </div>
+
+</div>

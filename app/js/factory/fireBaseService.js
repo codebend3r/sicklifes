@@ -44,8 +44,8 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
 
       console.log('syncLeagueData -- START');
       var usersRef = ref.child('leagueData');
-      usersRef.set(angular.copy(saveObject));
       localStorageService.set('leagueData', angular.copy(saveObject));
+      usersRef.set(angular.copy(saveObject));
       console.log('syncLeagueTeamData -- COMPLETE');
 
     },
@@ -54,13 +54,23 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
 
       console.log('syncLeagueTeamData -- START');
       var usersRef = ref.child('leagueTeamData');
-      usersRef.set(angular.copy(saveObject));
       localStorageService.set('leagueTeamData', angular.copy(saveObject));
+      usersRef.set(angular.copy(saveObject));
       console.log('syncLeagueTeamData -- COMPLETE');
 
-    }
+    },
+    
+    syncAllPlayersList: function(saveObject) {
 
-  };
+      console.log('syncAllPlayersList -- START');
+      var usersRef = ref.child('allPlayersData');
+      localStorageService.set('allPlayersData', angular.copy(saveObject));
+      usersRef.set(angular.copy(saveObject));
+      console.log('syncAllPlayersList -- COMPLETE');
+
+    }
+    
+  }
 
   return fireBaseObj;
 

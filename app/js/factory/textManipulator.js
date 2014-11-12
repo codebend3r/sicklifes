@@ -49,7 +49,7 @@ sicklifesFantasy.factory('$textManipulator', function () {
     },
 
     formattedFullName: function (firstName, lastName) {
-      return textManipulator.stripVowelAccent((firstName !== null ? firstName : '') + ' ' + lastName.toUpperCase());
+      return textManipulator.stripVowelAccent((firstName !== null && firstName !== undefined ? firstName : '') + ' ' + lastName.toUpperCase());
     },
 
     formattedLeagueName: function (leagueName) {
