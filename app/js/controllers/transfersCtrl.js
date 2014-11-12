@@ -12,12 +12,24 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
    * TODO
    */
   $scope.loading = true;
-  
+
+  /**
+   * route param
+   * @type {*|$scope.admin}
+   */
   $scope.admin = $routeParams.admin;
-  
+
+  /**
+   * header for table
+   * @type {{columnClass: string, text: string}[]}
+   */
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-3 col-sm-6 col-xs-4',
+      columnClass: 'col-md-1 col-sm-2 col-xs-2',
+      text: 'id'
+    },
+    {
+      columnClass: 'col-md-3 col-sm-4 col-xs-4',
       text: 'Player'
     },
     {
@@ -25,7 +37,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
       text: 'Owned By'
     },
     {
-      columnClass: 'col-md-3 col-sm-6 col-xs-4',
+      columnClass: 'col-md-2 col-sm-6 col-xs-4',
       text: 'League'
     },
     {
@@ -41,18 +53,19 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
     console.log('////////////////////////////////////');
     console.log('$scope.allPlayers', $scope.allPlayers);
+    console.log('LENGTH', $scope.allPlayers.length);
     console.log('////////////////////////////////////');
 
     var saveObject = {
       _syncedFrom: 'transfersCtrl',
       _lastSynedOn: $dateService.syncDate(),
-      allPlayers: $scope.allPlayers,
+      allPlayers: $scope.allPlayers
     };
 
     $fireBaseService.syncAllPlayersList(saveObject);
 
   };
-  
+
   $scope.allPlayers = [];
 
   /**
@@ -61,16 +74,20 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
   $scope.updateData = function () {
 
     console.log('UPDATING...');
-    
+
     var allTeams = $apiFactory.getAllTeams();
-    
+
+    console.log('$scope.allPlayers', $scope.allPlayers);
+
+    $scope.allPlayers = [];
+
     // returns a list of promise with the end point for each league
     $apiFactory.listOfPromises(allTeams, function (result) {
-      
+
       result.forEach(function (leagueData) {
-        
-        leagueData.data.forEach(function(teamData) {
-        
+
+        leagueData.data.forEach(function (teamData) {
+
           // returns a promise with the end point for each team
           var rosterRequest = $apiFactory.getData({
             endPointURL: leagueData.leagueURL + teamData.id + '/players/'
@@ -83,18 +100,13 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
             $scope.allPlayers = $scope.allPlayers.concat(rosterArray);
 
           });
-          
+
         });
 
       });
-      
+
 
     });
-    
-    //listOfResults = listOfResults.concat(result);
-    
-    //console.log('$apiFactory.getAllTeams()', $apiFactory.getAllTeams());
-
 
   };
 
@@ -108,7 +120,6 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
     $scope.allPlayers = data.allPlayersData.allPlayers;
 
     console.log('syncDate allPlayers', data.allPlayersData._lastSynedOn);
-    //$scope.updateData();
 
   };
 

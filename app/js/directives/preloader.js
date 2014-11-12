@@ -8,7 +8,9 @@ sicklifesFantasy.directive('preloader', function () {
     restrict: 'E',
     replace: false,
     templateUrl: 'views/directives/preloader.html',
-    scope: {}
+    scope: {
+      loading: '='
+    }
   }
 
 });

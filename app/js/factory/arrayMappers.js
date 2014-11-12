@@ -23,31 +23,30 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         leagueGoals: 0,
         goals: i.stat,
         ownedBy: $arrayLoopers.getOwnerByID(i.player.id) || 'N/A',
-        league: '',
+        league: $textManipulator.getLeagueByURL(url),
         transactionsLog: [],
         historyLog: []
       };
 
-      playerInLeague.league = $textManipulator.getLeagueByURL(url);
+      //playerInLeague.league = $textManipulator.getLeagueByURL(url);
       return playerInLeague;
 
     },
-    
+
     transferPlayersMap: function (leagueData, teamData, i) {
-      
-      //console.log('i', i);
-      
+
       var playerInLeague = {
         id: i.id,
         playerName: $textManipulator.formattedFullName(i.first_name, i.last_name),
         ownedBy: $arrayLoopers.getOwnerByID(i.id) || 'N/A',
-        teamName: teamData.full_name,
-        leagueName: '',
+        teamName: teamData.full_name.toUpperCase(),
+        leagueName: $textManipulator.getLeagueByURL(leagueData.leagueURL).toUpperCase(),
         transactionsLog: [],
         historyLog: []
       };
-      
-      playerInLeague.leagueName = $textManipulator.getLeagueByURL(leagueData.leagueURL).toUpperCase();
+
+      console.log('playerInLeague', playerInLeague);
+
       return playerInLeague;
 
     },
