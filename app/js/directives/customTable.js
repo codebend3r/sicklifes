@@ -2,7 +2,7 @@
  * Created by Bouse on 9/18/2014.
  */
 
-sicklifesFantasy.directive('playerDetailsTable', function () {
+sicklifesFantasy.directive('customTable', function () {
 
   return {
     restrict: 'E',
@@ -13,6 +13,8 @@ sicklifesFantasy.directive('playerDetailsTable', function () {
     scope: {
       list: '=',
       tableHeader: '=',
+      addPlayer: '&',
+      dropPlayer: '&',
       tableName: '@',
       leagueImg: '='
     },
@@ -21,6 +23,8 @@ sicklifesFantasy.directive('playerDetailsTable', function () {
       $scope.playerSearch = '';
 
       //console.log('list', $scope.list);
+      //console.log('addPlayer', $scope.addPlayer);
+      //console.log('dropPlayer', $scope.dropPlayer);
       //console.log('tableHeader', $scope.tableHeader);
       //console.log('tableName', $scope.tableName);
       //console.log('leagueImg', $scope.leagueImg);

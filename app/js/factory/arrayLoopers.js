@@ -20,8 +20,8 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
       manager.clGoals = 0;
       manager.eGoals = 0;
       manager.domesticGoals = 0;
-      manager.testGoals = 0;
-      manager.testPoints = 0;
+      //manager.testGoals = 0;
+      //manager.testPoints = 0;
 
     },
 
@@ -57,7 +57,7 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
 
                 teamPlayers.goals += gameGoals;
                 manager.testGoals += gameGoals;
-                manager.totalGoals += gameGoals;
+                //manager.totalGoals += gameGoals;
 
                 if ($textManipulator.isLeagueGoal(league)) {
                   teamPlayers.leagueGoals += gameGoals;
@@ -74,33 +74,26 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
                   manager.eGoals += teamPlayers.eGoals;
                 }
 
-                //teamPlayers.points += gameGoals;
                 teamPlayers.points += $scoringLogic.calculatePoints(gameGoals, league);
-                manager.testPoints += $scoringLogic.calculatePoints(gameGoals, league);
-
-                /*if (manager.managerName === 'Chester') {
-                  console.log('--------------------------------------------');
-                  console.log(teamPlayers.playerName);
-                  console.log('scored', teamPlayers.points, 'points');
-                }*/
+                //manager.testPoints += $scoringLogic.calculatePoints(gameGoals, league);
 
               }
 
             });
 
-            console.log('--------------------------------------------');
-            console.log('managerName', manager.managerName);
-            console.log('playerName', teamPlayers.playerName);
-
             manager.totalPoints += teamPlayers.points;
-            console.log('teamPlayers.points', teamPlayers.points);
-            console.log('manager.testPoints', manager.testPoints);
-            console.log('manager.totalPoints', manager.totalPoints);
-            console.log('manager.testGoals', manager.testGoals);
-            console.log('manager.totalGoals', manager.totalGoals);              
+
+            /*console.log('--------------------------------------------');
+             console.log('managerName', manager.managerName);
+             console.log('playerName', teamPlayers.playerName);
+             console.log('teamPlayers.points', teamPlayers.points);
+             console.log('manager.testPoints', manager.testPoints);
+             console.log('manager.totalPoints', manager.totalPoints);
+             console.log('manager.testGoals', manager.testGoals);
+             console.log('manager.totalGoals', manager.totalGoals);*/
 
           }
-          
+
         });
 
       }

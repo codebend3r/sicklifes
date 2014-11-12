@@ -9,6 +9,6 @@
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
-  <player-details-table table-body-template='all-players' list='allPlayers' table-name='All Players' table-header='tableHeader'></player-details-table>
+  <custom-table table-body-template='all-players' add-player='addPlayer(player)' drop-player='dropPlayer(player)' list='allPlayers' table-name='All Players' table-header='tableHeader'></custom-table>
 
 </div>

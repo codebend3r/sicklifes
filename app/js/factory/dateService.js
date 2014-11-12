@@ -12,7 +12,13 @@ sicklifesFantasy.factory('$dateService', function ($date) {
 
     goalDate: function () {
       return $date.create().format('{MM}/{dd}/{yy}');
+    },
+
+    transactionDate: function () {
+      return $date.create().format('{MM}/{dd}/{yy}');
     }
+
+    //transactionDate
 
   }
 

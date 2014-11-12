@@ -110,6 +110,18 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
   };
 
+  $scope.addPlayer = function (player) {
+
+    console.log('addPlayer --> player', player);
+
+  };
+
+  $scope.dropPlayer = function (player) {
+
+    console.log('dropPlayer --> player', player);
+
+  };
+
   /**
    * callback data when firebase is loaded
    */
@@ -119,7 +131,67 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
     $scope.allPlayers = data.allPlayersData.allPlayers;
 
+    $scope.allManagers = [
+      data.leagueTeamData.chester,
+      data.leagueTeamData.frank,
+      data.leagueTeamData.dan,
+      data.leagueTeamData.justin,
+      data.leagueTeamData.mike,
+      data.leagueTeamData.joe
+    ];
+
     console.log('syncDate allPlayers', data.allPlayersData._lastSynedOn);
+
+    $scope.allManagers.forEach(function (manager) {
+      manager.players.forEach(function (eachPlayer) {
+        eachPlayer.status = 'active'
+      });
+    });
+
+    data.leagueTeamData.dan.transactions = [];
+
+    data.leagueTeamData.dan.transactions.push({
+
+      add: {
+        id: '281',
+        playerName: 'Jonathan BIABIANY',
+        league: 'SERIE A',
+        dateOfTransaction: $dateService.transactionDate()
+      },
+      drop: {
+        id: '30268',
+        playerName: 'Filip DJORDJEVIC',
+        league: 'SERIE A',
+        dateOfTransaction: $dateService.transactionDate()
+      }
+
+    });
+
+    data.leagueTeamData.dan.players.forEach(function (eachPlayer) {
+      if (eachPlayer.id === 281) {
+        eachPlayer.status = 'dropped';
+        eachPlayer.dateOfTransaction = $dateService.transactionDate()
+      }
+    });
+
+    //clGoals: 1, domesticGoals: 0, eGoals: 0, goals: 1, id: 3405, league: "EPL", leagueGoals: 1, playerName: "Lukas PODOLSKI", points: 2, status: "active", teamName: "ARSENAL"
+
+    data.leagueTeamData.dan.players.push({
+
+      id: 30268,
+      clGoals: 0,
+      domesticGoals: 0,
+      eGoals: 0,
+      goals: 0,
+      leagueGoals: 0,
+      league: 'SERI',
+      playerName: 'Filip DJORDJEVIC',
+      status: 'added',
+      dateOfTransaction: $dateService.transactionDate()
+
+    });
+
+    console.log('data.leagueTeamData.dan', data.leagueTeamData.dan);
 
   };
 

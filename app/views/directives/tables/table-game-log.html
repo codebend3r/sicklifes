@@ -1,10 +1,10 @@
-<div ng-if='gameDetails.length > 0' class='well'>
+<div ng-if='list.length > 0' class='well'>
   <img class='inline' ng-src='{{leagueImg}}' width='100' height='100'/>
 
   <h3 class='inline'>{{tableName}}</h3>
 </div>
 
-<div class='fantasy-table' ng-if='gameDetails.length > 0'>
+<div class='fantasy-table' ng-if='list.length > 0'>
 
   <div class='header'>
     <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a>
@@ -12,7 +12,7 @@
   </div>
 
   <div class='table-body'>
-    <div class='row' ng-repeat='game in gameDetails'>
+    <div class='row' ng-repeat='game in list'>
       <div class='col-md-4 col-sm-4 col-xs-6'>{{game.alignment}} {{game.vsTeam}}</div>
       <div class='col-md-2 col-sm-1 col-xs-2 text-center'>{{game.goalsScored}}</div>
       <div class='col-md-2 hidden-sm hidden-xs text-center'>{{game.result}} {{game.finalScore}}</div>

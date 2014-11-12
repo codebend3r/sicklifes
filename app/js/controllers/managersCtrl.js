@@ -143,7 +143,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
   };
 
   /**
-   * builds table
+   * modifies array that table is binded to
    */
   var populateTable = function () {
 
