@@ -1060,7 +1060,7 @@ sicklifesFantasy.factory('$managersService', function () {
         }
       ]
     },
-    
+
     /**
      * TODO
      */
@@ -1076,7 +1076,7 @@ sicklifesFantasy.factory('$managersService', function () {
     }
 
   }
-  
+
   return allManagers;
 
 });

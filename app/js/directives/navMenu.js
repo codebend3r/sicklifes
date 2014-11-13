@@ -14,9 +14,9 @@ sicklifesFantasy.directive('navMenu', function ($location) {
 
       $scope.isActive = function (viewLocation) {
         //console.log(viewLocation, 'contains', $location.path(), '? ', viewLocation.contains($location.path()));
-        return $location.path().contains('player-details') && viewLocation === '/managers/' ||  viewLocation.contains($location.path());
+        return $location.path().contains('player-details') && viewLocation === '/managers/' || viewLocation.contains($location.path());
       };
-      
+
       $scope.menuOptions = [
         {
           name: 'Leagues',

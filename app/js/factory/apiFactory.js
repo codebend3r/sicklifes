@@ -1,7 +1,7 @@
 /**
  * Created by Bouse on 10/24/2014
  */
- 
+
 sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService, $date, $textManipulator) {
 
   var scope = {};
@@ -36,8 +36,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
     console.log('get from localStorage');
 
     var currentDate = $date.create(),
-      lDate = localStorageService.get('lastCheckDate'),
-      lastDate = Date.create(lDate);
+      lDate = localStorageService.get('lastCheckDate');
 
     cbObj.allLeagues = localStorageService.get('allLeagues');
     cbObj.liga = localStorageService.get('liga');
@@ -78,15 +77,15 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
     return request;
 
   };
-  
+
   /**
    * TODO
    */
-  scope.getAllTeams = function() {
-    
+  scope.getAllTeams = function () {
+
     //http://origin-api.thescore.com/liga/teams/
     //http://origin-api.thescore.com/liga/teams/44 - Real Madrid
-  
+
     var allLeaguesURL = [
         'http://origin-api.thescore.com/liga/teams/',
         'http://origin-api.thescore.com/epl/teams/',
@@ -95,36 +94,36 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
         'http://origin-api.thescore.com/uefa/teams/'
       ],
       listOrPromises = [];
-    
+
     allLeaguesURL.forEach(function (url) {
 
       var leagueRequest = scope.getData({
         endPointURL: url
       });
-      
-      leagueRequest.promise.then(function(result) {
-        
+
+      leagueRequest.promise.then(function (result) {
+
         result.leagueURL = url;
-        
+
       });
-      
+
       listOrPromises.push(leagueRequest.promise);
 
     });
-    
+
     return listOrPromises;
-    
+
   };
-  
+
   /**
    * TODO
    */
-  scope.getRoster = function(result) {
-    
+  scope.getRoster = function (result) {
+
     var listOrPromises = [];
-    
+
     result.data.forEach(function (leagueData) {
-          
+
       var rosterRequest = scope.getData({
         endPointURL: url + leagueData.id + '/players/'
       });
@@ -137,7 +136,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
       });
 
     });
-  
+
   };
 
   /**
@@ -152,7 +151,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
         'http://api.thescore.com/chlg/leaders?categories=goals',
         'http://api.thescore.com/uefa/leaders?categories=goals'
       ],
-      allLeagues = [ 'liga', 'epl', 'seri', 'chlg', 'uefa' ],
+      allLeagues = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
       listOrPromises = [],
       listOfResults = [];
 
@@ -173,18 +172,18 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
       listOrPromises.push(leagueRequest.promise);
 
     });
-    
+
     return listOrPromises;
 
   };
-  
+
   /**
    * TODO
    */
-  scope.listOfPromises = function(list, callbackFunc) {
-    
+  scope.listOfPromises = function (list, callbackFunc) {
+
     $q.all(list).then(callbackFunc);
-    
+
   }
 
   return scope;

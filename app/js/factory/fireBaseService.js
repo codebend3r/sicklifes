@@ -59,8 +59,8 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
       console.log('syncLeagueTeamData -- COMPLETE');
 
     },
-    
-    syncAllPlayersList: function(saveObject) {
+
+    syncAllPlayersList: function (saveObject) {
 
       console.log('syncAllPlayersList -- START');
       var usersRef = ref.child('allPlayersData');
@@ -69,7 +69,7 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
       console.log('syncAllPlayersList -- COMPLETE');
 
     }
-    
+
   }
 
   return fireBaseObj;

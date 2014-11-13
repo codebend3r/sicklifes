@@ -63,11 +63,11 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
     };
 
     //$fireBaseService.syncAllPlayersList(allPlayersObject);
-    
+
     console.log('////////////////////////////////////');
     console.log('$scope.allManagers', $scope.allManagers);
     console.log('////////////////////////////////////');
-    
+
     debugger;
 
     var managersObject = {
@@ -158,21 +158,25 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
       data.leagueTeamData.mike,
       data.leagueTeamData.joe
     ];
-    
+
     console.log('syncDate allPlayers', data.allPlayersData._lastSynedOn);
-    
+
     //makeTransactions();
-    
-  }
-  
-  var makeTransactions = function() {    
+
+  };
+
+  $scope.setAllPlayersToActive = function () {
 
     $scope.allManagers.forEach(function (manager) {
       manager.players.forEach(function (eachPlayer) {
         eachPlayer.status = 'active'
       });
     });
-    
+
+  };
+
+  $scope.makeTransactions = function () {
+
     var dan = $scope.allManagers[2];
 
     dan.transactions = [];
