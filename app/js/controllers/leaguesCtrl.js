@@ -2,7 +2,7 @@
  * Created by Bouse on 11/03/2014
  */
 
-sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date, $leagueTeams, $location, $routeParams, $arrayMappers, $dateService, $textManipulator, $fireBaseService) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date, $managersService, $location, $routeParams, $arrayMappers, $dateService, $textManipulator, $fireBaseService) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////

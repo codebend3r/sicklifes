@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $managersService, $date, $dateService, $fireBaseService) {
+sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $arrayFilter, $managersService, $date, $dateService, $fireBaseService) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -198,6 +198,8 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     populateGamesLog();
 
   };
+  
+  $scope.leagueImages = $textManipulator.leagueImages;
 
   /**
    * scrapes thescore.ca api and updates javascript array
@@ -219,7 +221,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
       ligaGamesRequest.promise.then(function (result) {
         $scope.loading = false;
-        $scope.ligaGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+        $scope.ligaGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
         allGamesLog = allGamesLog.concat($scope.ligaGameDetails);
       }, function () {
         console.log('LIGA FAIL');
@@ -233,7 +235,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
       eplGamesRequest.promise.then(function (result) {
         $scope.loading = false;
-        $scope.eplGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+        $scope.eplGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
         allGamesLog = allGamesLog.concat($scope.eplGameDetails);
       }, function () {
         console.log('EPL FAIL');
@@ -246,7 +248,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
       seriGamesRequest.promise.then(function (result) {
         $scope.loading = false;
-        $scope.seriGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+        $scope.seriGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
         allGamesLog = allGamesLog.concat($scope.seriGameDetails);
       }, function () {
         console.log('SERI FAIL');
@@ -259,7 +261,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
       chlgGamesRequest.promise.then(function (result) {
         $scope.loading = false;
-        $scope.chlgGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+        $scope.chlgGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
         allGamesLog = allGamesLog.concat($scope.chlgGameDetails);
       }, function () {
         console.log('CHLG FAIL');
@@ -272,7 +274,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
       euroGamesRequest.promise.then(function (result) {
         $scope.loading = false;
-        $scope.euroGameDetails = result.data.filter($scope.filterAfterDate).map($arrayMappers.gameMapper);
+        $scope.euroGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
         allGamesLog = allGamesLog.concat($scope.euroGameDetails);
       }, function () {
         console.log('EURO FAIL');
@@ -285,7 +287,12 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     $apiFactory.listOfPromises(allLeaguePromises, function () {
 
       console.log('ALL LEAGUE DATA FULFILLED');
-      saveToFirebase();
+      console.log('$scope.ligaGameDetails', $scope.ligaGameDetails);
+      console.log('$scope.eplGameDetails', $scope.eplGameDetails);
+      console.log('$scope.seriGameDetails', $scope.seriGameDetails);
+      console.log('$scope.chlgGameDetails', $scope.chlgGameDetails);
+      console.log('$scope.euroGameDetails', $scope.euroGameDetails);
+      //saveToFirebase();
 
     });
 
