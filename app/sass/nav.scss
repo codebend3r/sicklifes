@@ -1,0 +1,33 @@
+@import 'variables';
+
+.navbar-default {
+  a.navbar-brand {
+    color: $secondaryColour;
+    font-weight: bold;
+    &:hover {
+      color: $secondaryColour;
+    }
+  }
+}
+
+.navbar-default.sicklifes-nav {
+  background-color: $mainColour;
+  color: white;
+  .navbar-nav {
+    > li {
+      > a {
+        color: white;
+        &:hover {
+          color: white;
+          background-color: $secondaryColour;
+        }
+      }
+      &.active {
+        a {
+          color: white;
+          background-color: $secondaryDarkColour;
+        }
+      }
+    }
+  }
+}

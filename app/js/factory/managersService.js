@@ -2,158 +2,184 @@
  * Created by crivas on 9/12/2014.
  */
 
-sicklifesFantasy.factory('$leagueTeams', function () {
+sicklifesFantasy.factory('$managersService', function () {
 
-  return {
+  /**
+   * TODO
+   */
+  var allManagers = {
 
     chester: {
       managerName: 'Chester',
-      teamName: 'Real Kings',
-      totalPoints: 0,
+      teamName: 'Reality Kings',
       players: [
         {
           playerName: 'Cristiano RONALDO',
           teamName: 'REAL MADRID',
           league: 'LIGA',
-          id: 1310
+          id: 1310,
+          status: 'active'
         },
         {
           playerName: 'Radamel FALCAO',
           teamName: 'MANCHESTER UNITED',
           league: 'EPL',
-          id: 2328
+          id: 2328,
+          status: 'active'
         },
         {
           playerName: 'Gareth BALE',
           teamName: 'REAL MADRID',
           league: 'LIGA',
-          id: 1890
+          id: 1890,
+          status: 'active'
         },
         {
           playerName: 'Alessio CERCI',
           teamName: 'ATLETICO MADRID',
           league: 'LIGA',
-          id: 316
+          id: 316,
+          status: 'active'
         },
         {
           playerName: 'Yaya TOURE',
           teamName: 'MANCHESTER CITY',
           league: 'EPL',
-          id: 1137
+          id: 1137,
+          status: 'active'
         },
         {
           playerName: 'Wilfried BONY',
           teamName: 'SWANSEA CITY',
           league: 'EPL',
-          id: 8603
+          id: 8603,
+          status: 'active'
         },
         {
           playerName: 'Carlos VELA',
           teamName: 'REAL SOCIEDAD',
           league: 'LIGA',
-          id: 1633
+          id: 1633,
+          status: 'active'
         },
         {
           playerName: 'Juan CUADRADO',
           teamName: 'FIORENTINA',
           league: 'SERI',
-          id: 358
+          id: 358,
+          status: 'active'
         },
         {
           playerName: 'Domenico BERARDI',
           teamName: 'SASSUOLO',
           league: 'SERI',
-          id: 22137
+          id: 22137,
+          status: 'active'
         },
         {
           playerName: 'Arjen ROBBEN',
           teamName: 'BAYERN MUNICH',
           league: 'CHLG',
-          id: 2238
+          id: 2238,
+          status: 'active'
         },
         {
           playerName: 'Loic REMY',
           teamName: 'CHELSEA',
           league: 'EPL',
-          id: 4780
+          id: 4780,
+          status: 'active'
         },
         {
           playerName: 'Marek HAMSIK',
           teamName: 'NAPOLI',
           league: 'SERI',
-          id: 267
+          id: 267,
+          status: 'active'
         },
         {
           playerName: 'HULK',
           teamName: 'ZENIT ST. PETERSBURG',
           league: 'CHLG',
-          id: 2334
+          id: 2334,
+          status: 'active'
         },
         {
           playerName: 'Paul POGBA',
           teamName: 'JUVENTUS',
           league: 'SERI',
-          id: 13802
+          id: 13802,
+          status: 'active'
         },
         {
           playerName: 'Chicharito HERNANDEZ',
           teamName: 'REAL MADRID',
           league: 'LIGA',
-          id: 4225
+          id: 4225,
+          status: 'active'
         },
         {
           playerName: 'Keisuke HONDA',
           teamName: 'AC MILAN',
           league: 'SERI',
-          id: 3913
+          id: 3913,
+          status: 'active'
         },
         {
           playerName: 'Andres INIESTA',
           teamName: 'BARCELONA',
           league: 'LIGA',
-          id: 1120
+          id: 1120,
+          status: 'active'
         },
         {
           playerName: 'Adam LALLANA',
           teamName: 'LIVERPOOL',
           league: 'EPL',
-          id: 7070
+          id: 7070,
+          status: 'active'
         },
         {
           playerName: 'Freddy GUARIN',
           teamName: 'INTER MILAN',
           league: 'SERI',
-          id: 2331
+          id: 2331,
+          status: 'active'
         },
         {
           playerName: 'Roberto SOLDADO',
           teamName: 'TOTTENHAM',
           league: 'EPL',
-          id: 1536
+          id: 1536,
+          status: 'active'
         },
         {
           playerName: 'Henrik MKHITARYAN',
           teamName: 'BORRUSIA DORTMUND',
           league: 'CHLG',
-          id: 10070
+          id: 10070,
+          status: 'active'
         },
         {
           playerName: 'Ibai GOMEZ',
           teamName: 'ATHLETIC BILBAO',
           league: 'LIGA',
-          id: 11373
+          id: 11373,
+          status: 'active'
         },
         {
           playerName: 'Dries MERTENS',
           teamName: 'NAPOLI',
           league: 'SERI',
-          id: 10463
+          id: 10463,
+          status: 'active'
         },
         {
           playerName: 'Mesut OZIL',
           teamName: 'ARSENAL',
           league: 'EPL',
-          id: 3267
+          id: 3267,
+          status: 'active'
         }
       ]
     },
@@ -161,151 +187,174 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     frank: {
       managerName: 'Frank',
       teamName: 'Schiraldihno',
-      totalPoints: 0,
       players: [
         {
           playerName: 'Lionel MESSI',
           teamName: 'BARCELONA',
           league: 'LIGA',
-          id: 1126
+          id: 1126,
+          status: 'active'
         },
         {
           playerName: 'Daniel STURRIDGE',
           teamName: 'LIVERPOOL',
           league: 'EPL',
-          id: 1743
+          id: 1743,
+          status: 'active'
         },
         {
           playerName: 'Edin DZEKO',
           teamName: 'MANCHESTER CITY',
           league: 'EPL',
-          id: 2857
+          id: 2857,
+          status: 'active'
         },
         {
           playerName: 'Stevan JOVETIC',
           teamName: 'MANCHESTER CITY',
           league: 'EPL',
-          id: 123
+          id: 123,
+          status: 'active'
         },
         {
           playerName: 'Eden HAZARD',
           teamName: 'CHELSEA',
           league: 'EPL',
-          id: 8653
+          id: 8653,
+          status: 'active'
         },
         {
           playerName: 'Aaron RAMSEY',
           teamName: 'ARSENAL',
           league: 'EPL',
-          id: 1623
+          id: 1623,
+          status: 'active'
         },
         {
           playerName: 'Fernando TORRES',
           teamName: 'AC MILAN',
           league: 'SERI',
-          id: 1789
+          id: 1789,
+          status: 'active'
         },
         {
           playerName: 'Pablo OSVALDO',
           teamName: 'INTER MILAN',
           league: 'SERI',
-          id: 101
+          id: 101,
+          status: 'active'
         },
         {
           playerName: 'Andre SCHURRLE',
           teamName: 'CHELSEA',
           league: 'EPL',
-          id: 3120
+          id: 3120,
+          status: 'active'
         },
         {
           playerName: 'Cesc FABREGAS',
           teamName: 'CHELSEA',
           league: 'EPL',
-          id: 1613
+          id: 1613,
+          status: 'active'
         },
         {
           playerName: 'NOLITO',
           teamName: 'CELTA VIGO',
           league: 'LIGA',
-          id: 12802
+          id: 12802,
+          status: 'active'
         },
         {
           playerName: 'Christian BENTEKE',
           teamName: 'ASTON VILLA',
           league: 'EPL',
-          id: 15086
+          id: 15086,
+          status: 'active'
         },
         {
           playerName: 'Raul JIMENEZ',
           teamName: 'ATLETICO MADRID',
           league: 'LIGA',
-          id: 16216
+          id: 16216,
+          status: 'active'
         },
         {
           playerName: 'Iker MUNIAIN',
           teamName: 'ATHLETIC BILBAO',
           league: 'LIGA',
-          id: 1103
+          id: 1103,
+          status: 'active'
         },
         {
           playerName: 'Marco SAU',
           teamName: 'CAGLIARI',
           league: 'SERI',
-          id: 10800
+          id: 10800,
+          status: 'active'
         },
         {
           playerName: 'CHARLES',
           teamName: 'CELTA VIGO',
           league: 'LIGA',
-          id: 22502
+          id: 22502,
+          status: 'active'
         },
         {
           playerName: 'MICHU',
           teamName: 'NAPOLI',
           league: 'SERI',
-          id: 15276
+          id: 15276,
+          status: 'active'
         },
         {
           playerName: 'Alberto PALOSCHI',
           teamName: 'CHIEVO',
           league: 'SERI',
-          id: 299
+          id: 299,
+          status: 'active'
         },
         {
           playerName: 'Nathan DYER',
           teamName: 'SWANSEA CITY',
           league: 'EPL',
-          id: 5183
+          id: 5183,
+          status: 'active'
         },
         {
           playerName: 'Antonio CASSANO',
           teamName: 'PARMA',
           league: 'SERI',
-          id: 428
+          id: 428,
+          status: 'active'
         },
         {
           playerName: 'Toni KROOS',
           teamName: 'REAL MADRID',
           league: 'LIGA',
-          id: 2229
+          id: 2229,
+          status: 'active'
         },
         {
           playerName: 'Ciro IMMOBILE',
           teamName: 'BORUSSIA DORTMUND',
           league: 'CHLG',
-          id: 3747
+          id: 3747,
+          status: 'active'
         },
         {
           playerName: 'Angel DI MARIA',
           teamName: 'MANCHESTER UNITED',
           league: 'EPL',
-          id: 4277
+          id: 4277,
+          status: 'active'
         },
         {
           playerName: 'Jonathan DE GUZMAN',
           teamName: 'NAPOLI',
           league: 'SERI',
-          id: 10435
+          id: 10435,
+          status: 'active'
         }
 
       ]
@@ -315,151 +364,174 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     dan: {
       managerName: 'Dan',
       teamName: '-',
-      totalPoints: 0,
       players: [
         {
           playerName: 'Diego COSTA',
           teamName: 'CHELSEA',
           league: 'EPL',
-          id: 1365
+          id: 1365,
+          status: 'active'
         },
         {
           playerName: 'Zlatan IBRAHIMOVIC',
           teamName: 'PSG',
           league: 'CHLG',
-          id: 1119
+          id: 1119,
+          status: 'active'
         },
         {
           playerName: 'Mario BALOTELLI',
           teamName: 'LIVERPOOL',
           league: 'EPL',
-          id: 137
+          id: 137,
+          status: 'active'
         },
         {
           playerName: 'James RODRIGUEZ',
           teamName: 'REAL MADRID',
           league: 'LIGA',
-          id: 12229
+          id: 12229,
+          status: 'active'
         },
         {
           playerName: 'Mattia DESTRO',
           teamName: 'ROMA',
           league: 'SERI',
-          id: 3729
+          id: 3729,
+          status: 'active'
         },
         {
           playerName: 'Wayne ROONEY',
           teamName: 'MANCHESTER UNITED',
           league: 'EPL',
-          id: 1851
+          id: 1851,
+          status: 'active'
         },
         {
           playerName: 'PEDRO',
           teamName: 'BARCELONA',
           league: 'LIGA',
-          id: 1132
+          id: 1132,
+          status: 'active'
         },
         {
           playerName: 'Arturo VIDAL',
           teamName: 'JUVENTUS',
           league: 'SERI',
-          id: 3436
+          id: 3436,
+          status: 'active'
         },
         {
           playerName: 'Simone ZAZA',
           teamName: 'SASSUOLO',
           league: 'SERI',
-          id: 11367
+          id: 11367,
+          status: 'active'
         },
         {
           playerName: 'AMAURI',
           teamName: 'TORINO',
           league: 'SERI',
-          id: 163
+          id: 163,
+          status: 'active'
         },
         {
           playerName: 'ISCO',
           teamName: 'REAL MADRID',
           league: 'LIGA',
-          id: 7987
+          id: 7987,
+          status: 'active'
         },
         {
           playerName: 'GERVINHO',
           teamName: 'ROMA',
           league: 'SERI',
-          id: 4910
+          id: 4910,
+          status: 'active'
         },
         {
           playerName: 'Pablo PIATTI',
           teamName: 'VALENCIA',
           league: 'LIGA',
-          id: 1025
+          id: 1025,
+          status: 'active'
         },
         {
           playerName: 'Steven GERRARD',
           teamName: 'LIVERPOOL',
           league: 'EPL',
-          id: 1767
+          id: 1767,
+          status: 'active'
         },
         {
           playerName: 'OSCAR',
           teamName: 'CHELSEA',
           league: 'EPL',
-          id: 16228
+          id: 16228,
+          status: 'active'
         },
         {
           playerName: 'Aleix VIDAL',
           teamName: 'SEVILLA',
           league: 'LIGA',
-          id: 22498
+          id: 22498,
+          status: 'active'
         },
         {
           playerName: 'Mauricio PINILLA',
           teamName: 'GENOA',
           league: 'SERI',
-          id: 10712
+          id: 10712,
+          status: 'active'
         },
         {
           playerName: 'Jonathan BIABIANY',
           teamName: 'PARMA',
           league: 'SERI',
-          id: 281
+          id: 281,
+          status: 'active'
         },
         {
           playerName: 'Alvaro MORATA',
           teamName: 'JUVENTUS',
           league: 'SERI',
-          id: 13168
+          id: 13168,
+          status: 'active'
         },
         {
           playerName: 'Abel HERNANDEZ',
           teamName: 'Hull City',
           league: 'EPL',
-          id: 494
+          id: 494,
+          status: 'active'
         },
         {
           playerName: 'Richmond BOAKYE',
           teamName: 'ATALANTA',
           league: 'SERI',
-          id: 7625
+          id: 7625,
+          status: 'active'
         },
         {
           playerName: 'Kingsley COMAN',
           teamName: 'JUVENTUS',
           league: 'SERI',
-          id: 23718
+          id: 23718,
+          status: 'active'
         },
         {
           playerName: 'Fabio BORINI',
           teamName: 'LIVERPOOL',
           league: 'EPL',
-          id: 1722
+          id: 1722,
+          status: 'active'
         },
         {
           playerName: 'Lukas PODOLSKI',
           teamName: 'ARSENAL',
           league: 'EPL',
-          id: 3405
+          id: 3405,
+          status: 'active'
         }
 
       ]
@@ -468,31 +540,34 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     justin: {
       managerName: 'Justin',
       teamName: '-',
-      totalPoints: 0,
       players: [
         {
           playerName: 'Alexis SANCHEZ',
           teamName: 'ARSENAL',
           league: 'EPL',
-          id: 4364
+          id: 4364,
+          status: 'active'
         },
         {
           playerName: 'Carlos TEVEZ',
           teamName: 'JUVENTUS',
           league: 'SERI',
-          id: 1815
+          id: 1815,
+          status: 'active'
         },
         {
           playerName: 'Aritz ADURIZ',
           teamName: 'ATHLETIC BILBAO',
           league: 'LIGA',
-          id: 1227
+          id: 1227,
+          status: 'active'
         },
         {
           playerName: 'Romelu LUKAKU',
           teamName: 'EVERTON',
           league: 'EPL',
-          id: 2204
+          id: 2204,
+          status: 'active'
         },
         {
           playerName: 'Carlos BACCA',
@@ -504,43 +579,50 @@ sicklifesFantasy.factory('$leagueTeams', function () {
           playerName: 'Mario GOMEZ',
           teamName: 'FIORENTINA',
           league: 'SERI',
-          id: 2225
+          id: 2225,
+          status: 'active'
         },
         {
           playerName: 'Antonio DI NATALE',
           teamName: 'UDINESE',
           league: 'SERI',
-          id: 349
+          id: 349,
+          status: 'active'
         },
         {
           playerName: 'Mauro ICARDI',
           teamName: 'INTER',
           league: 'SERI',
-          id: 17567
+          id: 17567,
+          status: 'active'
         },
         {
           playerName: 'Steven NAISMITH',
           teamName: 'EVERTON',
           league: 'EPL',
-          id: 2474
+          id: 2474,
+          status: 'active'
         },
         {
           playerName: 'Sergio GARCIA',
           teamName: 'ESPANYOL',
           league: 'LIGA',
-          id: 11794
+          id: 11794,
+          status: 'active'
         },
         {
           playerName: 'Ishak BELFODIL',
           teamName: 'PARMA',
           league: 'SERI',
-          id: 3002
+          id: 3002,
+          status: 'active'
         },
         {
           playerName: 'Edinson CAVANI',
           teamName: 'PSG',
           league: 'CHLG',
-          id: 490
+          id: 490,
+          status: 'active'
         },
         {
           playerName: 'Ikechukwu UCHE',
@@ -552,67 +634,78 @@ sicklifesFantasy.factory('$leagueTeams', function () {
           playerName: 'Paco ALCACER',
           teamName: 'VALENCIA',
           league: 'LIGA',
-          id: 12141
+          id: 12141,
+          status: 'active'
         },
         {
           playerName: 'Nikica JELAVIC',
           teamName: 'HULL CITY',
           league: 'EPL',
-          id: 8290
+          id: 8290,
+          status: 'active'
         },
         {
           playerName: 'Keita BALDE',
           teamName: 'LAZIO',
           league: 'SERI',
-          id: 21854
+          id: 21854,
+          status: 'active'
         },
         {
           playerName: 'Mame DIOUF',
           teamName: 'STOKE CITY',
           league: 'EPL',
-          id: 3921
+          id: 3921,
+          status: 'active'
         },
         {
           playerName: 'Alvaro VAZQUEZ',
           teamName: 'GETAFE',
           league: 'LIGA',
-          id: 12661
+          id: 12661,
+          status: 'active'
         },
         {
           playerName: 'Charlie AUSTIN',
           teamName: 'QPR',
           league: 'EPL',
-          id: 7485
+          id: 7485,
+          status: 'active'
         },
         {
           playerName: 'Luis MURIEL',
           teamName: 'UDINESE',
           league: 'SERI',
-          id: 14082
+          id: 14082,
+          status: 'active'
         },
         {
           playerName: 'Marcelo LARRONDO',
           teamName: 'TORINO',
           league: 'SERI',
-          id: 470
+          id: 470,
+          status: 'active'
         },
         {
           playerName: 'Peter CROUCH',
           teamName: 'STOKE CITY',
           league: 'EPL',
-          id: 1895
+          id: 1895,
+          status: 'active'
         },
         {
           playerName: 'Adrian RAMOS',
           teamName: 'BORUSSIA DORTMUND',
           league: 'CHLG',
-          id: 3209
+          id: 3209,
+          status: 'active'
         },
         {
           playerName: 'Paulo DYBALA',
           teamName: 'PALERMO',
           league: 'SERI',
-          id: 18403
+          id: 18403,
+          status: 'active'
         }
 
       ]
@@ -621,103 +714,118 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     mike: {
       managerName: 'Mike',
       teamName: '-',
-      totalPoints: 0,
       players: [
         {
           playerName: 'Karim BENZEMA',
           teamName: 'REAL MADRID',
           league: 'LIGA',
-          id: 1308
+          id: 1308,
+          status: 'active'
         },
         {
           playerName: 'Fernando LLORENTE',
           teamName: 'JUVENTUS',
           league: 'SERI',
-          id: 1102
+          id: 1102,
+          status: 'active'
         },
         {
           playerName: 'Gonzalo HIGUAIN',
           teamName: 'NAPOLI',
           league: 'SERI',
-          id: 1318
+          id: 1318,
+          status: 'active'
         },
         {
           playerName: 'NEYMAR',
           teamName: 'BARCELONA',
           league: 'LIGA',
-          id: 14263
+          id: 14263,
+          status: 'active'
         },
         {
           playerName: 'Robin VAN PERSIE',
           teamName: 'MANCHESTER UNITED',
           league: 'EPL',
-          id: 1632
+          id: 1632,
+          status: 'active'
         },
         {
           playerName: 'Emmanuel ADEBAYOR',
           teamName: 'TOTTENHAM',
           league: 'EPL',
-          id: 1792
+          id: 1792,
+          status: 'active'
         },
         {
           playerName: 'Alvaro NEGREDO',
           teamName: 'VALENCIA',
           league: 'LIGA',
-          id: 1453
+          id: 1453,
+          status: 'active'
         },
         {
           playerName: 'Danny WELBECK',
           teamName: 'ARSENAL',
           league: 'EPL',
-          id: 1857
+          id: 1857,
+          status: 'active'
         },
         {
           playerName: 'Robert LEWANDOWSKI',
           teamName: 'BAYERN MUNICH',
           league: 'CHLG',
-          id: 9563
+          id: 9563,
+          status: 'active'
         },
         {
           playerName: 'Luca TONI',
           teamName: 'VERONA',
           league: 'SERI',
-          id: 2241
+          id: 2241,
+          status: 'active'
         },
         {
           playerName: 'Raul GARCIA',
           teamName: 'ATLETICO MADRID',
           league: 'LIGA',
-          id: 1505
+          id: 1505,
+          status: 'active'
         },
         {
           playerName: 'Raheem STERLING',
           teamName: 'LIVERPOOL',
           league: 'EPL',
-          id: 13749
+          id: 13749,
+          status: 'active'
         },
         {
           playerName: 'Fabio QUAGLIARELLA',
           teamName: 'TORINO',
           league: 'SERI',
-          id: 274
+          id: 274,
+          status: 'active'
         },
         {
           playerName: 'Miroslav KLOSE',
           teamName: 'LAZIO',
           league: 'SERI',
-          id: 2227
+          id: 2227,
+          status: 'active'
         },
         {
           playerName: 'Francesco TOTTI',
           teamName: 'ROMA',
           league: 'SERI',
-          id: 336
+          id: 336,
+          status: 'active'
         },
         {
           playerName: 'Didier DROGBA',
           teamName: 'CHELSEA',
           league: 'EPL',
-          id: 1730
+          id: 1730,
+          status: 'active'
         },
         {
           playerName: 'Graziano PELLE',
@@ -729,43 +837,50 @@ sicklifesFantasy.factory('$leagueTeams', function () {
           playerName: 'Emmanuel RIVIERE',
           teamName: 'NEWCASTLE',
           league: 'EPL',
-          id: 30846
+          id: 30846,
+          status: 'active'
         },
         {
           playerName: 'Stephan EL SHAARAWY',
           teamName: 'AC MILAN',
           league: 'SERI',
-          id: 403
+          id: 403,
+          status: 'active'
         },
         {
           playerName: 'Steven FLETCHER',
           teamName: 'SUNDERLAND',
           league: 'EPL',
-          id: 1550
+          id: 1550,
+          status: 'active'
         },
         {
           playerName: 'Youssef EL ARABI',
           teamName: 'GRANADA',
           league: 'LIGA',
-          id: 17786
+          id: 17786,
+          status: 'active'
         },
         {
           playerName: 'Imanol AGIRRETXE',
           teamName: 'REAL SOCIEDAD',
           league: 'LIGA',
-          id: 10171
+          id: 10171,
+          status: 'active'
         },
         {
           playerName: 'Bojan KRKIC',
           teamName: 'STOKE CITY',
           league: 'EPL',
-          id: 1124
+          id: 1124,
+          status: 'active'
         },
         {
           playerName: 'Tomer HEMED',
           teamName: 'ALMERIA',
           league: 'LIGA',
-          id: 14670
+          id: 14670,
+          status: 'active'
         }
 
       ]
@@ -774,156 +889,194 @@ sicklifesFantasy.factory('$leagueTeams', function () {
     joe: {
       managerName: 'Joe',
       teamName: '-',
-      totalPoints: 0,
       players: [
         {
           playerName: 'Sergio AGUERO',
           teamName: 'MANCHESTER CITY',
           league: 'EPL',
-          id: 1499
+          id: 1499,
+          status: 'active'
         },
         {
           playerName: 'Mario MANDZUKIC',
           teamName: 'ATLETICO MADRID',
           league: 'LIGA',
-          id: 8492
+          id: 8492,
+          status: 'active'
         },
         {
           playerName: 'Olivier GIROUD',
           teamName: 'ARSENAL',
           league: 'EPL',
-          id: 10689
+          id: 10689,
+          status: 'active'
         },
         {
           playerName: 'Luis SUAREZ',
           teamName: 'BARCELONA',
           league: 'LIGA',
-          id: 4433
+          id: 4433,
+          status: 'active'
         },
         {
           playerName: 'Kevin GAMEIRO',
           teamName: 'SEVILLA',
           league: 'LIGA',
-          id: 15143
+          id: 15143,
+          status: 'active'
         },
         {
           playerName: 'Jose Maria CALLEJON',
           teamName: 'NAPOLI',
           league: 'SERI',
-          id: 1141
+          id: 1141,
+          status: 'active'
         },
         {
           playerName: 'Antoine GRIEZMANN',
           teamName: 'ATLETICO MADRID',
           league: 'LIGA',
-          id: 10181
+          id: 10181,
+          status: 'active'
         },
         {
           playerName: 'Rodrigo PALACIO',
           teamName: 'INTER MILAN',
           league: 'SERI',
-          id: 415
+          id: 415,
+          status: 'active'
         },
         {
           playerName: 'Rickie LAMBERT',
           teamName: 'LIVERPOOL',
           league: 'EPL',
-          id: 7071
+          id: 7071,
+          status: 'active'
         },
         {
           playerName: 'Samuel ETO\'O',
           teamName: 'EVERTON',
           league: 'EPL',
-          id: 142
+          id: 142,
+          status: 'active'
         },
         {
           playerName: 'Thomas MULLER',
           teamName: 'BAYERN MUNICH',
           league: 'CHLG',
-          id: 2232
+          id: 2232,
+          status: 'active'
         },
         {
           playerName: 'German DENIS',
           teamName: 'ATALANTA',
           league: 'SERI',
-          id: 263
+          id: 263,
+          status: 'active'
         },
         {
           playerName: 'Jay RODRIGUEZ',
           teamName: 'SOUTHAMPTON',
           league: 'EPL',
-          id: 1563
+          id: 1563,
+          status: 'active'
         },
         {
           playerName: 'Alberto BUENO',
           teamName: 'RAYO VALLECANO',
           league: 'LIGA',
-          id: 1362
+          id: 1362,
+          status: 'active'
         },
         {
           playerName: 'EDER',
           teamName: 'SAMPDORIA',
           league: 'SERI',
-          id: 11949
+          id: 11949,
+          status: 'active'
         },
         {
           playerName: 'Giovani DOS SANTOS',
           teamName: 'VILLARREAL',
           league: 'LIGA',
-          id: 1900
+          id: 1900,
+          status: 'active'
         },
         {
           playerName: 'Antonio CANDREVA',
           teamName: 'LAZIO',
           league: 'SERI',
-          id: 540
+          id: 540,
+          status: 'active'
         },
         {
           playerName: 'David SILVA',
           teamName: 'MANCHESTER CITY',
           league: 'EPL',
-          id: 1354
+          id: 1354,
+          status: 'active'
         },
         {
           playerName: 'Jeremy MENEZ',
           teamName: 'AC MILAN',
           league: 'SERI',
-          id: 326
+          id: 326,
+          status: 'active'
         },
         {
           playerName: 'Marco REUS',
           teamName: 'BORUSSIA DORTMUND',
           league: 'CHLG',
-          id: 3062
+          id: 3062,
+          status: 'active'
         },
         {
           playerName: 'Munir EL HADDADI',
           teamName: 'BARCELONA',
           league: 'LIGA',
-          id: 32210
+          id: 32210,
+          status: 'active'
         },
         {
           playerName: 'Bafetimbi GOMIS',
           teamName: 'SWANSEA CITY',
           league: 'EPL',
-          id: 3015
+          id: 3015,
+          status: 'active'
         },
         {
           playerName: 'Samir NASRI',
           teamName: 'MANCHESTER CITY',
           league: 'EPL',
-          id: 1622
+          id: 1622,
+          status: 'active'
         },
         {
           playerName: 'Sergio RAMOS',
           teamName: 'REAL MADRID',
           league: 'LIGA',
-          id: 1325
+          id: 1325,
+          status: 'active'
         }
-
       ]
+    },
+    
+    /**
+     * TODO
+     */
+    getAllPlayers: function () {
+      return [
+        allManagers.chester,
+        allManagers.frank,
+        allManagers.dan,
+        allManagers.justin,
+        allManagers.mike,
+        allManagers.joe
+      ];
     }
 
   }
+  
+  return allManagers;
 
 });

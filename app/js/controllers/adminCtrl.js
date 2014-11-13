@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, $apiFactory, $fireBaseService, $routeParams, $arrayMappers, $arrayLoopers, $dateService, $leagueTeams, $location) {
+sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, $apiFactory, $fireBaseService, $routeParams, $arrayMappers, $arrayLoopers, $dateService, $managersService) {
 
   /**
    * TODO
@@ -106,9 +106,6 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
 
       $scope.allLeagues = allLeagues;
 
-      console.log('$scope.allLeagues', $scope.allLeagues);
-      console.log('allLeaguesObj', allLeaguesObj);
-
       allRequestComplete();
 
     });
@@ -124,7 +121,6 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
     var saveObject = {
       _syncedFrom: 'adminCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      __allLeagues: $scope.allLeagues,
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
@@ -136,31 +132,29 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
     $fireBaseService.syncLeagueTeamData(saveObject);
 
   };
-
-  ////////////////////////////////////
-  ////////////////////////////////////
-  ////////////////////////////////////
-
-  /**
-   * defines $scope.selectedTeam
-   */
-  var chooseTeam = function () {
-
-    if ($routeParams.team) {
-      $scope.allManagers.forEach(function (team) {
-        if (team.personName === $routeParams.team) {
-          $scope.selectedTeam = team;
-        }
-      });
-    } else {
-      $scope.selectedTeam = $scope.allManagers[0];
-    }
-
-    console.log('$scope.selectedTeam', $scope.selectedTeam);
-
-    $location.url($location.path() + '?team=' + $scope.selectedTeam.personName); // route change
-
+  
+  $scope.resetToDefault = function() {
+    
+    $scope.allManagers = $managersService.getAllPlayers();
+    
+    /*[
+      $managersService.chester,
+      $managersService.frank,
+      $managersService.dan,
+      $managersService.justin,
+      $managersService.mike,
+      $managersService.joe
+    ];*/
+    
+    console.log('////////////////////////////////////');
+    console.log('$scope.allManagers', $scope.allManagers);
+    console.log('////////////////////////////////////');
+    
   };
+
+  ////////////////////////////////////
+  ////////////////////////////////////
+  ////////////////////////////////////
 
   var allLeaguesObj = {};
 
@@ -177,20 +171,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
     firePromise.promise.then(function (data) {
 
       $scope.loading = false;
-
-      $scope.allManagers = [
-        data.leagueTeamData.chester,
-        data.leagueTeamData.frank,
-        data.leagueTeamData.dan,
-        data.leagueTeamData.justin,
-        data.leagueTeamData.mike,
-        data.leagueTeamData.joe
-      ];
-
-      $scope.allPlayers = data.__allLeagues;
-
-      chooseTeam();
-
+      console.log('init');
 
     });
 
@@ -204,9 +185,6 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
     console.log('allRequestComplete');
 
     $scope.loading = false;
-
-    chooseTeam();
-
     $scope.populateTable();
 
   };

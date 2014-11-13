@@ -2,26 +2,12 @@
 
 <div ng-if='!loading' class='panel-body'>
 
-  <h2>Standings</h2>
+  <h2>Admin</h2>
 
-  <button ng-if='admin' type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
-
-  <div class='fantasy-table'>
-
-    <div class='header'>
-      <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable' ng-title='{{header.hoverTitle}}'>{{header.text}}</a></div>
-    </div>
-
-    <div class='table-body'>
-      <div class='row' ng-repeat='team in allManagers | orderBy:"totalPoints":true'>
-        <div class='col-md-4 col-xs-4 small-hpadding'><a ng-href='#/managers?team={{team.personName}}'>{{team.personName}}</a></div>
-        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.domesticGoals}}</div>
-        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.clGoals}}</div>
-        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.eGoals}}</div>
-        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.totalPoints}}</div>
-      </div>
-    </div>
-
+  <div class='well'>
+    <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
+    <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
+    <button type='button' class='btn btn-danger' ng-click='resetToDefault()'>Reset to Default</button>
   </div>
 
 </div>

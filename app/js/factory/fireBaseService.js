@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStorageService, $leagueTeams) {
+sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStorageService, $managersService) {
 
   var ref,
     sync;

@@ -2,7 +2,7 @@
  * Created by Bouse on 10/2/2014
  */
 
-sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStorageService, $leagueTeams, $apiFactory, $scoringLogic) {
+sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStorageService, $managersService, $apiFactory, $scoringLogic) {
 
   var arrayLoopers = {
 
@@ -56,8 +56,8 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
               if ($textManipulator.acceptedLeague(league)) {
 
                 teamPlayers.goals += gameGoals;
-                manager.testGoals += gameGoals;
-                //manager.totalGoals += gameGoals;
+                //manager.testGoals += gameGoals;
+                manager.totalGoals += gameGoals;
 
                 if ($textManipulator.isLeagueGoal(league)) {
                   teamPlayers.leagueGoals += gameGoals;
@@ -105,23 +105,9 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
     /**
      * TODO
      */
-    getAllPlayers: function () {
-      return [
-        $leagueTeams.chester,
-        $leagueTeams.frank,
-        $leagueTeams.dan,
-        $leagueTeams.justin,
-        $leagueTeams.mike,
-        $leagueTeams.joe
-      ];
-    },
-
-    /**
-     * TODO
-     */
     getOwnerByID: function (id) {
       var owner = 'Free Agent';
-      arrayLoopers.getAllPlayers().forEach(function (team) {
+      $managersService.getAllPlayers().forEach(function (team) {
         team.players.some(function (p) {
           if (p.id === id) {
             owner = team.managerName;

@@ -52,17 +52,36 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
   $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
-    console.log('$scope.allPlayers', $scope.allPlayers);
+    //console.log('$scope.allPlayers', $scope.allPlayers);
     console.log('LENGTH', $scope.allPlayers.length);
     console.log('////////////////////////////////////');
 
-    var saveObject = {
+    var allPlayersObject = {
       _syncedFrom: 'transfersCtrl',
       _lastSynedOn: $dateService.syncDate(),
       allPlayers: $scope.allPlayers
     };
 
-    $fireBaseService.syncAllPlayersList(saveObject);
+    //$fireBaseService.syncAllPlayersList(allPlayersObject);
+    
+    console.log('////////////////////////////////////');
+    console.log('$scope.allManagers', $scope.allManagers);
+    console.log('////////////////////////////////////');
+    
+    debugger;
+
+    var managersObject = {
+      _syncedFrom: 'transfersCtrl',
+      _lastSynedOn: $dateService.syncDate(),
+      chester: $scope.allManagers[0],
+      frank: $scope.allManagers[1],
+      dan: $scope.allManagers[2],
+      justin: $scope.allManagers[3],
+      mike: $scope.allManagers[4],
+      joe: $scope.allManagers[5]
+    };
+
+    $fireBaseService.syncLeagueTeamData(managersObject);
 
   };
 
@@ -139,18 +158,26 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
       data.leagueTeamData.mike,
       data.leagueTeamData.joe
     ];
-
+    
     console.log('syncDate allPlayers', data.allPlayersData._lastSynedOn);
+    
+    //makeTransactions();
+    
+  }
+  
+  var makeTransactions = function() {    
 
     $scope.allManagers.forEach(function (manager) {
       manager.players.forEach(function (eachPlayer) {
         eachPlayer.status = 'active'
       });
     });
+    
+    var dan = $scope.allManagers[2];
 
-    data.leagueTeamData.dan.transactions = [];
+    dan.transactions = [];
 
-    data.leagueTeamData.dan.transactions.push({
+    dan.transactions.push({
 
       add: {
         id: '281',
@@ -167,7 +194,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
     });
 
-    data.leagueTeamData.dan.players.forEach(function (eachPlayer) {
+    dan.players.forEach(function (eachPlayer) {
       if (eachPlayer.id === 281) {
         eachPlayer.status = 'dropped';
         eachPlayer.dateOfTransaction = $dateService.transactionDate()
@@ -176,7 +203,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
     //clGoals: 1, domesticGoals: 0, eGoals: 0, goals: 1, id: 3405, league: "EPL", leagueGoals: 1, playerName: "Lukas PODOLSKI", points: 2, status: "active", teamName: "ARSENAL"
 
-    data.leagueTeamData.dan.players.push({
+    dan.players.push({
 
       id: 30268,
       clGoals: 0,
@@ -186,12 +213,15 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
       leagueGoals: 0,
       league: 'SERI',
       playerName: 'Filip DJORDJEVIC',
+      teamName: 'Lazio',
       status: 'added',
       dateOfTransaction: $dateService.transactionDate()
 
     });
 
-    console.log('data.leagueTeamData.dan', data.leagueTeamData.dan);
+    console.log('dan', dan);
+    //$scope.allManagers[2] = dan;
+    console.log('$scope.allManagers', $scope.allManagers);
 
   };
 

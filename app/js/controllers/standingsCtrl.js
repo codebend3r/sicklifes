@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, $routeParams, $fireBaseService, $arrayMappers, $arrayLoopers, $dateService, $textManipulator, $scoringLogic, $leagueTeams, $location) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $routeParams, $fireBaseService, $arrayMappers, $arrayLoopers, $dateService, $textManipulator, $scoringLogic, $managersService, $location) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -135,7 +135,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $q, 
     var allLeagues = [];
 
     // makes a request for all leagues in a loop returns a list of promises
-    var allPromises = $apiFactory.getAllLeagues();
+    var allPromises = $apiFactory.getAllGoalLeaders();
 
     // waits for an array of promises to resolve, sets allLeagues data
     $apiFactory.listOfPromises(allPromises, function (result) {
