@@ -130,7 +130,6 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
       rosterRequest.promise.then(function (result) {
 
-        console.log('>>> result', result);
         listOrPromises.push(rosterRequest.promise);
 
       });

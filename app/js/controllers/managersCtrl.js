@@ -78,7 +78,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
     allLeaguesObj = {};
 
     // makes a request for all leagues in a loop returns a list of promises
-    var allPromises = $apiFactory.getAllLeagues();
+    var allPromises = $apiFactory.getAllGoalLeaders();
 
     // waits for an array of promises to resolve, sets allLeagues data
     $apiFactory.listOfPromises(allPromises, function (result) {

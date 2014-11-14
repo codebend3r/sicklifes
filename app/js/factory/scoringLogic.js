@@ -6,10 +6,17 @@ sicklifesFantasy.factory('$scoringLogic', function () {
 
   return {
 
-    calculatePoints: function (goals, league, debug) {
+    calculatePoints: function (goals, league, player, debug) {
+      debug = debug || false;
       league = league.toLowerCase();
       league = league.replace(/^\/|\/$/g, '');
+      
       if (debug) console.log(goals, 'goals for league:', league);
+      
+      if (player.status === 'added') {
+        //goals.date isBefore player.dateOfTransaction
+      }
+      
       if (league === 'uefa' || league === 'europa') {
         if (debug) {
           console.log('return 1 point');
@@ -24,7 +31,7 @@ sicklifesFantasy.factory('$scoringLogic', function () {
     },
 
     findOwnerByID: function (id) {
-
+      //TODO
     }
 
   }

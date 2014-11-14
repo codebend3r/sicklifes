@@ -6,14 +6,14 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
 
   var arrayLoopers = {
 
-    resetScoreCount: function (manager, teamPlayers) {
+    resetScoreCount: function (manager, players) {
 
-      teamPlayers.goals = 0;
-      teamPlayers.points = 0;
-      teamPlayers.domesticGoals = 0;
-      teamPlayers.leagueGoals = 0;
-      teamPlayers.clGoals = 0;
-      teamPlayers.eGoals = 0;
+      players.goals = 0;
+      players.points = 0;
+      players.domesticGoals = 0;
+      players.leagueGoals = 0;
+      players.clGoals = 0;
+      players.eGoals = 0;
 
       manager.totalPoints = 0;
       manager.totalGoals = 0;
@@ -26,22 +26,22 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
     },
 
     /**
-     *
+     * loops through all players and fetches goals and calculates points
      * @param $scope - controller $scope
-     * @param manager - team which contains teamPlayers
-     * @param teamPlayers - from loop
+     * @param manager - manager which contains players
+     * @param players - from loop
      */
-    forEachPlayer: function ($scope, manager, teamPlayers) {
+    forEachPlayer: function ($scope, manager, players) {
 
-      arrayLoopers.resetScoreCount(manager, teamPlayers);
+      arrayLoopers.resetScoreCount(manager, players);
 
       var deferredList = deferredList || [];
 
-      if (angular.isDefined(teamPlayers.league) && teamPlayers.id !== null) {
+      if (angular.isDefined(players.league) && players.id !== null) {
 
         var request = $apiFactory.getData({
 
-          endPointURL: $textManipulator.getPlayerSummaryURL(teamPlayers.league, teamPlayers.id),
+          endPointURL: $textManipulator.getPlayerSummaryURL(players.league, players.id),
 
           qCallBack: function (result) {
 
@@ -49,44 +49,48 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
               gameGoals;
 
             result.data.map(function (i) {
+              
+              if (players.playerName === 'Filip DJORDJEVIC') {
+                console.log('updated_at', i.updated_at);
+              }
 
               league = i.league.slug;
               gameGoals = i.games_goals;
 
               if ($textManipulator.acceptedLeague(league)) {
 
-                teamPlayers.goals += gameGoals;
+                players.goals += gameGoals;
                 //manager.testGoals += gameGoals;
                 manager.totalGoals += gameGoals;
 
                 if ($textManipulator.isLeagueGoal(league)) {
-                  teamPlayers.leagueGoals += gameGoals;
+                  players.leagueGoals += gameGoals;
                 }
 
                 if ($textManipulator.isDomesticGoal(league)) {
-                  teamPlayers.domesticGoals += gameGoals;
-                  manager.domesticGoals += teamPlayers.domesticGoals;
+                  players.domesticGoals += gameGoals;
+                  manager.domesticGoals += players.domesticGoals;
                 } else if ($textManipulator.isChampionsLeagueGoal(league)) {
-                  teamPlayers.clGoals += gameGoals;
-                  manager.clGoals += teamPlayers.clGoals;
+                  players.clGoals += gameGoals;
+                  manager.clGoals += players.clGoals;
                 } else if ($textManipulator.isEuropaGoal(league)) {
-                  teamPlayers.eGoals += gameGoals;
-                  manager.eGoals += teamPlayers.eGoals;
+                  players.eGoals += gameGoals;
+                  manager.eGoals += players.eGoals;
                 }
 
-                teamPlayers.points += $scoringLogic.calculatePoints(gameGoals, league);
+                players.points += $scoringLogic.calculatePoints(gameGoals, league, players);
                 //manager.testPoints += $scoringLogic.calculatePoints(gameGoals, league);
 
               }
 
             });
 
-            manager.totalPoints += teamPlayers.points;
+            manager.totalPoints += players.points;
 
             /*console.log('--------------------------------------------');
              console.log('managerName', manager.managerName);
-             console.log('playerName', teamPlayers.playerName);
-             console.log('teamPlayers.points', teamPlayers.points);
+             console.log('playerName', players.playerName);
+             console.log('players.points', players.points);
              console.log('manager.testPoints', manager.testPoints);
              console.log('manager.totalPoints', manager.totalPoints);
              console.log('manager.testGoals', manager.testGoals);

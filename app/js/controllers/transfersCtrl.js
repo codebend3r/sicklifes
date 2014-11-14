@@ -68,8 +68,6 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
     console.log('$scope.allManagers', $scope.allManagers);
     console.log('////////////////////////////////////');
 
-    debugger;
-
     var managersObject = {
       _syncedFrom: 'transfersCtrl',
       _lastSynedOn: $dateService.syncDate(),
@@ -183,16 +181,18 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
     dan.transactions.push({
 
-      add: {
+      drop: {
         id: '281',
         playerName: 'Jonathan BIABIANY',
         league: 'SERIE A',
+        teamName: 'PARMA',
         dateOfTransaction: $dateService.transactionDate()
       },
-      drop: {
+      add: {
         id: '30268',
         playerName: 'Filip DJORDJEVIC',
         league: 'SERIE A',
+        teamName: 'LAZIO',
         dateOfTransaction: $dateService.transactionDate()
       }
 
@@ -217,14 +217,13 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
       leagueGoals: 0,
       league: 'SERI',
       playerName: 'Filip DJORDJEVIC',
-      teamName: 'Lazio',
+      teamName: 'LAZIO',
       status: 'added',
       dateOfTransaction: $dateService.transactionDate()
 
     });
 
     console.log('dan', dan);
-    //$scope.allManagers[2] = dan;
     console.log('$scope.allManagers', $scope.allManagers);
 
   };
