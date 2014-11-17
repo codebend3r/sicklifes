@@ -9,9 +9,20 @@ sicklifesFantasy.factory('$arrayFilter', function ($date) {
     /*
      * filters out any games after aug 1
      */
-    filterAfterDate: function (game) {
+    filterAfterDate: function (player, game) {
+      //console.log('game', game);
+      //console.log('player', player);
       var gameDate = $date.create(game.box_score.event.game_date);
-      return gameDate.isAfter('August 1 2014');
+      if (player.status === 'added') {
+        console.log('filtering added player');
+        //console.log(player.status);
+        //console.log(player.dateOfTransaction);
+        //debugger;
+        return gameDate.isAfter(player.dateOfTransaction);
+      } else {
+        return gameDate.isAfter('August 1 2014');
+      }
+      //return true;
     },
 
     filterGoalsOnly: function (game) {

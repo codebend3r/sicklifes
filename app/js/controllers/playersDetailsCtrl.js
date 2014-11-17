@@ -198,7 +198,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     populateGamesLog();
 
   };
-  
+
   $scope.leagueImages = $textManipulator.leagueImages;
 
   /**

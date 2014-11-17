@@ -115,7 +115,16 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
     console.log('UPDATING...');
 
+    var allLeaguePromises = [];
+
     $scope.allManagers.forEach(function (manager) {
+
+      console.log('manager.managerName', manager.managerName);
+
+      manager.totalPoints = 0;
+      manager.totalGoals = 0;
+      manager.monthlyGoalsLog = [];
+      manager.filteredMonthlyGoalsLog = [];
 
       manager.players.forEach(function (player) {
 
@@ -123,21 +132,13 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
         playerProfileRequest.promise.then(function (result) {
 
-          console.log('PLAYER DATA', result);
-
           // based on player result data return an object with the valid leagues for this player
           var validLeagues = $textManipulator.getPlayerValidLeagues(result),
             ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
             eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
             seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
             chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
-            euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id),
-            allLeaguePromises = [];
-
-          manager.totalPoints = 0;
-          manager.totalGoals = 0;
-          manager.monthlyGoalsLog = [];
-          manager.filteredMonthlyGoalsLog = [];
+            euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
 
           if (validLeagues.inLiga) {
             ligaGamesRequest.promise.then(function (result) {
@@ -184,14 +185,14 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
             allLeaguePromises.push(euroGamesRequest.promise);
           }
 
-          $apiFactory.listOfPromises(allLeaguePromises, function () {
-
-            console.log('ALL LEAGUE DATA FULFILLED');
-            //saveToFirebase();
-
-          });
-
         });
+
+      });
+
+      $apiFactory.listOfPromises(allLeaguePromises, function () {
+
+        console.log('DONE...');
+        //saveToFirebase();
 
       });
 
