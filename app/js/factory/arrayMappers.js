@@ -45,7 +45,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         historyLog: []
       };
 
-      console.log('playerInLeague', playerInLeague);
+      //console.log('playerInLeague', playerInLeague);
 
       return playerInLeague;
 
@@ -67,12 +67,56 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         result: $textManipulator.result.call(gameMapsObj, game),
         finalScore: $textManipulator.finalScore.call(gameMapsObj, game)
       };
+    
+      var gameGoals = gameMapsObj.goalsScored,
+        league = gameMapsObj.leagueName;
+      
+      if ($textManipulator.acceptedLeague(league)) {
+        
+        var computedPoints = $scoringLogic.calculatePoints(gameGoals, league);
 
-      gameMapsObj.points = $scoringLogic.calculatePoints(gameMapsObj.goalsScored, gameMapsObj.leagueName);
+        if ($textManipulator.isLeagueGoal(league)) {
+          
+          player.leagueGoals += gameGoals;
+          
+        }
 
-      manager.totalGoals += gameMapsObj.goalsScored;
-      manager.totalPoints += gameMapsObj.points;
+        if ($textManipulator.isDomesticGoal(league)) {
+          
+          player.domesticGoals += gameGoals;
+          manager.domesticGoals += gameGoals;
+          
+        } else if ($textManipulator.isChampionsLeagueGoal(league)) {
+          
+          player.clGoals += gameGoals;
+          manager.clGoals += gameGoals;
+          
+        } else if ($textManipulator.isEuropaGoal(league)) {
+          
+          player.eGoals += gameGoals;
+          manager.eGoals += gameGoals;
+          
+        }
+        
+        // incriment goals for each player
+        player.goals += gameGoals;
+        
+        // incriment goals for the manager
+        manager.totalGoals += gameGoals;
 
+        // icriment points
+        player.points += computedPoints;
+        manager.testPoints += computedPoints;
+        
+        //console.log('manager.totalGoals', manager.totalGoals);
+        //console.log('player.points', player.points);
+        console.log(player.playerName, 'scored', gameGoals , 'for', computedPoints,'points', 'in', league, 'league on', gameMapsObj.datePlayed);
+        //console.log('///////////////////////////////');
+
+      }
+      
+
+      // gameMapsObj maps to a player
       return gameMapsObj;
 
     },

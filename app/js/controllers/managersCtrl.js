@@ -83,15 +83,21 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
     $scope.allManagers.forEach(function (manager) {
 
       //console.log('manager.managerName', manager.managerName);
+      
+      manager.totalPoints = 0;
+      manager.testPoints = 0;
+      manager.totalGoals = 0;
+      manager.testGoals = 0;
+      manager.monthlyGoalsLog = [];
+      manager.filteredMonthlyGoalsLog = [];
 
       if (manager.managerName === 'Chester') {
 
         manager.players.forEach(function (player) {
-
-          manager.totalPoints = 0;
-          manager.totalGoals = 0;
-          manager.monthlyGoalsLog = [];
-          manager.filteredMonthlyGoalsLog = [];
+          
+          player.domesticGoals = 0;
+          player.leagueGoals = 0;
+          player.points = 0;
 
           var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
 

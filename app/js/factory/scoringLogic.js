@@ -22,6 +22,7 @@ sicklifesFantasy.factory('$scoringLogic', function () {
         if (debug) {
           console.log('return 2 point');
         }
+        //return goals * 1;
         return goals * 2;
       }
     },
