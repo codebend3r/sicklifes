@@ -3,14 +3,34 @@
 <div ng-if='!loading' class='panel-body'>
 
   <h2>Transfers</h2>
+  <h3>Transaction for: <b>{{ selectedManager.managerName }}</b></h3>
 
-  <div ng-if='admin' class='well'>
+  <div class='transfer-container' ng-if='transactionPlayerAdded || transactionPlayerRemoved'>
+    <div class='col-md-6' ng-if='transactionPlayerAdded'>
+      <p class='bold green'>ADDS PLAYER</p>
+      <p>Player ID: <b>{{ addedPlayerObject.id }}</b></p>
+      <p>Player Name: <b>{{ addedPlayerObject.playerName }}</b></p>
+      <p>Team: <b>{{ addedPlayerObject.teamName }}</b></p>
+      <p>League: <b>{{ addedPlayerObject.leagueName }}</b></p>
+    </div>
+    <div class='col-md-6' ng-if='transactionPlayerRemoved'>
+      <p class='bold red'>DROPS PLAYER</p>
+      <p>Player ID: <b>{{ removePlayerObject.id }}</b></p>
+      <p>Player Name: <b>{{ removePlayerObject.playerName }}</b></p>
+      <p>Team: <b>{{ removePlayerObject.teamName }}</b></p>
+      <p>League: <b>{{ removePlayerObject.leagueName }}</b></p>
+    </div>
+  </div>
+
+  <div class='well'>
+    <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in allManagers' ng-change='changeManager(selectedManager)'></select>
     <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save to Firebase</button>
     <button type='button' class='btn btn-danger' ng-click='setAllPlayersToActive()'>Set All To Active</button>
     <button type='button' class='btn btn-danger' ng-click='makeTransactions()'>Make Transactions</button>
   </div>
 
-  <custom-table table-body-template='all-players' add-player='addPlayer(player)' drop-player='dropPlayer(player)' list='allPlayers' table-name='All Players' table-header='tableHeader'></custom-table>
+  <custom-table ng-if='!transactionPlayerAdded' table-body-template='all-players' add-player='addPlayer(player)' drop-player='dropPlayer(player)' list='allPlayers' table-name='All Players' table-header='tableHeader'></custom-table>
+  <custom-table ng-if='transactionPlayerAdded' table-body-template='manager-players' drop-player='dropPlayer(player)' list='selectedPlayers' table-name='Manager Players' table-header='managersTableHeader'></custom-table>
 
 </div>

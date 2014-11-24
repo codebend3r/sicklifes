@@ -26,13 +26,13 @@ var gulp = require('gulp'),
 
 gulp.task('start', function () {
 
-  if (gutil.env.prod === true) {
+  if (gutil.env.build === 'prod') {
 
     gutil.log(gutil.colors.yellow('***********************'));
     gutil.log(gutil.colors.yellow('PROD BUILD'));
     gutil.log(gutil.colors.yellow('***********************'));
 
-  } else if (gutil.env.release === true) {
+  } else if (gutil.env.build === 'release') {
 
     gutil.log(gutil.colors.green('***********************'));
     gutil.log(gutil.colors.green('RELEASE BUILD'));
@@ -51,7 +51,7 @@ gulp.task('start', function () {
 // HTML
 gulp.task('html', ['js', 'css'], function () {
 
-  if (gutil.env.prod === true) {
+  if (gutil.env.build === 'prod') {
 
     return gulp.src([config.app + '/index.html'])
       .pipe($.usemin({
@@ -65,7 +65,7 @@ gulp.task('html', ['js', 'css'], function () {
       .pipe(gulp.dest(config.prod))
       .pipe($.size());
 
-  } else if (gutil.env.release === true) {
+  } else if (gutil.env.build === 'release') {
 
     return gulp.src([config.app + '/index.html'])
       .pipe($.usemin({
@@ -95,13 +95,13 @@ gulp.task('html', ['js', 'css'], function () {
 // PARTIALS
 gulp.task('partials', function () {
 
-  if (gutil.env.prod === true) {
+  if (gutil.env.build === 'prod') {
 
     return gulp.src([config.app + '/views/**/*.html'])
       .pipe(gulp.dest(config.prod + '/views'))
       .pipe($.size());
 
-  } else if (gutil.env.release === true) {
+  } else if (gutil.env.build === 'release') {
 
     return gulp.src([config.app + '/views/**/*.html'])
       .pipe(gulp.dest(config.release + '/views'))
@@ -117,6 +117,30 @@ gulp.task('partials', function () {
 
 });
 
+gulp.task('modal-views', function () {
+
+  if (gutil.env.build === 'prod') {
+
+    return gulp.src([config.app + '/views/modal/*.html'])
+      .pipe(gulp.dest(config.prod + '/views/modal'))
+      .pipe($.size());
+
+  } else if (gutil.env.build === 'release') {
+
+    return gulp.src([config.app + '/views/modal/*.html'])
+      .pipe(gulp.dest(config.release + '/views/modal'))
+      .pipe($.size());
+
+  } else {
+
+    return gulp.src([config.app + '/views/modal/*.html'])
+      .pipe(gulp.dest(config.dev + '/views/modal'))
+      .pipe($.size());
+
+  }
+
+});
+
 // TEMPLATE
 gulp.task('template', function () {
 
@@ -126,7 +150,8 @@ gulp.task('template', function () {
       standalone: false,
       root: './views/'
     }))
-    .pipe(gulp.dest(config.app + '/js/templates/templatescache.js'));
+    .pipe(gulp.dest(config.app + '/js/templates/templatescache.js'))
+    .pipe($.size());
 
 });
 
@@ -138,28 +163,31 @@ gulp.task('sass', function () {
       outputStyle: 'expanded'
     }))
     .pipe(gulp.dest(config.app + '/css/'))
+    .pipe($.size());
 
 });
 
 // CSS
 gulp.task('css', ['sass'], function () {
 
-  if (gutil.env.dev === true) {
+  if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
 
     return gulp.src([config.app + '/css/**/*.css'])
       .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
       .pipe(gulp.dest(config.dev + '/css/'))
+      .pipe($.size());
 
   }
 
 });
 
-// JS
+// JS (partials or template)
 gulp.task('js', ['template'], function () {
 
-  if (gutil.env.dev === true) {
+  if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
     return gulp.src([config.app + '/js/**/*.js'])
       .pipe(gulp.dest(config.dev + '/js/'))
+      .pipe($.size());
   }
 
 });
@@ -167,9 +195,35 @@ gulp.task('js', ['template'], function () {
 // Bower
 gulp.task('bower-all', function () {
 
-  if (gutil.env.dev === true) {
+  if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
     return gulp.src([config.app + '/bower_components/**/*.{js,css}'])
       .pipe(gulp.dest(config.dev + '/bower_components/'))
+      .pipe($.size());
+
+  }
+
+});
+
+// Fonts
+gulp.task('fonts', function () {
+
+  if (gutil.env.build === 'prod') {
+
+    return gulp.src(config.app + '/bower_components/**/*.{woff,ttf}')
+      .pipe(gulp.dest(config.prod + '/bower_components/'))
+      .pipe($.size());
+
+  } else if (gutil.env.build === 'release') {
+
+    return gulp.src(config.app + '/bower_components/**/*.{woff,ttf}')
+      .pipe(gulp.dest(config.release + '/bower_components/'))
+      .pipe($.size());
+
+  } else {
+
+    return gulp.src(config.app + '/bower_components/**/*.{woff,ttf}')
+      .pipe(gulp.dest(config.dev + '/bower_components/'))
+      .pipe($.size());
 
   }
 
@@ -178,54 +232,37 @@ gulp.task('bower-all', function () {
 // Images
 gulp.task('images', function () {
 
-  if (gutil.env.prod === true) {
+  if (gutil.env.build === 'prod') {
+
     return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
-      .pipe(gulp.dest(config.prod + '/images/'));
-  } else if (gutil.env.release === true) {
+      .pipe(gulp.dest(config.prod + '/images/'))
+      .pipe($.size());
+
+  } else if (gutil.env.build === 'release') {
+
     return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
-      .pipe(gulp.dest(config.release + '/images/'));
+      .pipe(gulp.dest(config.release + '/images/'))
+      .pipe($.size());
+
   } else {
+
     return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
-      .pipe(gulp.dest(config.dev + '/images/'));
+      .pipe(gulp.dest(config.dev + '/images/'))
+      .pipe($.size());
+
   }
 
 });
 
-
 // Clean
 gulp.task('clean-templatecache', function () {
-  return gulp.src([config.app + '/js/templates/templatescache.js'], {read: false}).pipe($.clean({force: true}));
+  return gulp.src([config.app + '/js/templates/templatescache.js'], {read: false}).pipe($.clean({force: true}))
+    .pipe($.size());
 });
 
 gulp.task('clean-all', function () {
-  return gulp.src([config.target], {read: false}).pipe($.clean({force: false}));
-});
-
-
-// Export GUI
-gulp.task('move-GUI-css', ['template', 'css'], function () {
-  return gulp.src([config.dev + '/css/*.css'])
-    .pipe(gulp.dest(config.dev + '/css'));
-});
-
-gulp.task('move-GUI-js', ['template', 'scripts'], function () {
-  return gulp.src([config.dev + '/js/**/*.js'])
-    .pipe(gulp.dest(config.dev + '/js'));
-});
-
-gulp.task('move-GUI-html', ['template'], function () {
-  return gulp.src([config.dev + '/index.html'])
-    .pipe(gulp.dest(config.dev + '/index.html'));
-});
-
-gulp.task('move-view-html', ['template'], function () {
-  return gulp.src([config.dev + '/views/*.html', config.dev + '/views/**/*.html'])
-    .pipe(gulp.dest(config.dev + '/index.html'));
-});
-
-gulp.task('move-GUI-images', ['images'], function () {
-  return gulp.src([config.dev + '/images/**/*.{png,jpg,gif,svg}'])
-    .pipe(gulp.dest(config.dev + '/images'));
+  return gulp.src([config.target], {read: false}).pipe($.clean({force: false}))
+    .pipe($.size());
 });
 
 /**
@@ -234,7 +271,9 @@ gulp.task('move-GUI-images', ['images'], function () {
 gulp.task('build-GUI', [
     'html',
     'bower-all',
-    'images'
+    'modal-views',
+    'images',
+    'fonts'
   ]
 );
 
@@ -281,20 +320,20 @@ gulp.task('bs-reload', function () {
 
 gulp.task('browser-sync', function () {
 
-  if (gutil.env.prod === true) {
+  if (gutil.env.build === 'prod') {
 
     browserSync({
-      open: gutil.env.open,
+      open: gutil.env.open === true,
       port: 8888,
       server: {
         baseDir: config.prod
       }
     });
 
-  } else if (gutil.env.release === true) {
+  } else if (gutil.env.build === 'release') {
 
     browserSync({
-      open: gutil.env.open,
+      open: gutil.env.open === true,
       port: 8888,
       server: {
         baseDir: config.release
@@ -304,7 +343,7 @@ gulp.task('browser-sync', function () {
   } else {
 
     browserSync({
-      open: gutil.env.open,
+      open: gutil.env.open === true,
       port: 8888,
       server: {
         baseDir: config.dev

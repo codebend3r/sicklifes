@@ -1,0 +1,29 @@
+<div ng-if='list.length > 0' class='well'>
+  <h3 class='inline'>{{tableName}}</h3>
+</div>
+
+<div class='fantasy-table'>
+
+  <div class='header'>
+    <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a>
+    </div>
+  </div>
+
+  <div class='table-body'>
+    <div class='row' ng-repeat='player in list'>
+      <div class='col-md-4 col-sm-5 col-xs-6'>
+        <button type='button' ng-click='dropPlayer({player:player})' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-minus'></span></button>
+        &nbsp;
+        <a ng-href='#/player-details/{{scorer.id}}'>
+          {{player.playerName}}
+        </a>
+      </div>
+      <div class='col-md-3 col-sm-4 hidden-xs small-text bold'>{{player.teamName}}</div>
+      <div class='col-md-2 hidden-sm hidden-xs'>{{player.league}}</div>
+      <div class='col-md-1 col-sm-1 col-xs-2 text-center'>{{player.domesticGoals}}</div>
+      <div class='col-md-1 col-sm-1 col-xs-2 text-center'>{{player.leagueGoals}}</div>
+      <div class='col-md-1 col-sm-1 col-xs-2 text-center'>{{player.points}}</div>
+    </div>
+  </div>
+
+</div>

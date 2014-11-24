@@ -29,17 +29,31 @@ sicklifesFantasy.factory('$arrayFilter', function ($date) {
       return game.goals ? true : false;
     },
 
-    isSelectedMonth: function (game) {
+    /**
+     *
+     * @param selectedMonth
+     * @param game
+     * @returns {*|boolean}
+     */
+    isSelectedMonth: function (selectedMonth, game) {
       var gameDate = game.rawDatePlayed || $date.create(game.box_score.event.game_date),
         scoredAGoal = game.goals ? true : false,
-        isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
+        isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
       return isBetween && scoredAGoal;
     },
 
-    filterOnMonth: function (manager, player, game) {
+    /**
+     *
+     * @param manager
+     * @param player
+     * @param selectedMonth
+     * @param game
+     * @returns {boolean}
+     */
+    filterOnMonth: function (manager, player, selectedMonth, game) {
       var gameDate = $date.create(game.originalDate),
         scoredAGoal = game.goalsScored ? true : false,
-        isBetween = gameDate.isBetween($scope.selectedMonth.range[0], $scope.selectedMonth.range[1]);
+        isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
 
       if (isBetween && scoredAGoal) {
         manager.totalGoals += game.goalsScored;

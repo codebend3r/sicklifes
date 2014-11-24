@@ -15,6 +15,7 @@ var sicklifesFantasy = angular.module('sicklifesFantasy', [
   'ngSanitize',
   'LocalStorageModule',
   'firebase',
+  'ui.bootstrap',
   'angular.filter'
 
 ]);

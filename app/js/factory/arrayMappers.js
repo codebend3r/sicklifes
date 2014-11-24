@@ -22,6 +22,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         domesticGoals: 0,
         leagueGoals: 0,
         goals: i.stat,
+        status: 'active',
         ownedBy: $arrayLoopers.getOwnerByID(i.player.id) || 'N/A',
         league: $textManipulator.getLeagueByURL(url),
         transactionsLog: [],
@@ -45,8 +46,6 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         historyLog: []
       };
 
-      //console.log('playerInLeague', playerInLeague);
-
       return playerInLeague;
 
     },
@@ -67,54 +66,63 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         result: $textManipulator.result.call(gameMapsObj, game),
         finalScore: $textManipulator.finalScore.call(gameMapsObj, game)
       };
-    
+
+      /*
+      var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
+      playerProfileRequest.promise.then(function (result) {
+        console.log('result >>', result);
+      });
+      */
+
       var gameGoals = gameMapsObj.goalsScored,
-        league = gameMapsObj.leagueName;
-      
+        league = gameMapsObj.leagueName,
+        computedPoints;
+
+      player.leagueName = gameMapsObj.leagueName;
+
       if ($textManipulator.acceptedLeague(league)) {
-        
-        var computedPoints = $scoringLogic.calculatePoints(gameGoals, league);
+
+        computedPoints = $scoringLogic.calculatePoints(gameGoals, league);
 
         if ($textManipulator.isLeagueGoal(league)) {
-          
+
           player.leagueGoals += gameGoals;
-          
+
         }
 
         if ($textManipulator.isDomesticGoal(league)) {
-          
+
           player.domesticGoals += gameGoals;
           manager.domesticGoals += gameGoals;
-          
+
         } else if ($textManipulator.isChampionsLeagueGoal(league)) {
-          
+
           player.clGoals += gameGoals;
           manager.clGoals += gameGoals;
-          
+
         } else if ($textManipulator.isEuropaGoal(league)) {
-          
+
           player.eGoals += gameGoals;
           manager.eGoals += gameGoals;
-          
+
         }
-        
-        // incriment goals for each player
+
+        // increment goals for each player
         player.goals += gameGoals;
-        
-        // incriment goals for the manager
+
+        // increment goals for the manager
         manager.totalGoals += gameGoals;
 
-        // icriment points
+        // increment points
         player.points += computedPoints;
-        manager.testPoints += computedPoints;
-        
-        //console.log('manager.totalGoals', manager.totalGoals);
-        //console.log('player.points', player.points);
-        console.log(player.playerName, 'scored', gameGoals , 'for', computedPoints,'points', 'in', league, 'league on', gameMapsObj.datePlayed);
-        //console.log('///////////////////////////////');
+        manager.totalPoints += computedPoints;
+
+        console.log(manager.managerName, 'GOALS', manager.totalGoals);
+        console.log(manager.managerName, 'POINTS', manager.totalPoints);
+        //console.log(player.playerName, 'has', player.points, 'points in', player.leagueName, 'league.');
+        //console.log(player.playerName, 'scored', gameGoals, 'for', computedPoints, 'points', 'in', league, 'league on', gameMapsObj.datePlayed);
 
       }
-      
 
       // gameMapsObj maps to a player
       return gameMapsObj;

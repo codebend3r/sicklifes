@@ -59,15 +59,15 @@ sicklifesFantasy.factory('$textManipulator', function () {
     formattedLeagueName: function (league) {
       league = league.toLocaleLowerCase();
       if (league === 'uefa' || league === 'europa') {
-        return 'europa';
+        return 'EUROPA';
       } else if (league === 'seri') {
-        return 'seri';
+        return 'SERIE A';
       } else if (league === 'liga') {
-        return 'liga';
+        return 'LIGA';
       } else if (league === 'epl') {
-        return 'epl';
+        return 'EPL';
       } else if (league === 'chlg') {
-        return 'chlg';
+        return 'CHLG';
       } else {
         return league.toUpperCase();
       }
@@ -141,6 +141,20 @@ sicklifesFantasy.factory('$textManipulator', function () {
       return result;
     },
 
+    validLeagueNamesFormatted: function (result) {
+      var l = '',
+        n = 0;
+      result.data.teams.forEach(function (team) {
+        team.leagues.forEach(function (league) {
+          if (textManipulator.acceptedLeague(league.slug)) {
+            n ? l += '/' + league.slug : l += league.slug;
+            n += 1;
+          }
+        });
+      });
+      return l.toUpperCase();
+    },
+
     finalScore: function (game) {
       var final = '';
       if (game.alignment === 'away') {
@@ -188,9 +202,7 @@ sicklifesFantasy.factory('$textManipulator', function () {
 
     acceptedLeague: function (league) {
       league = league.toLocaleLowerCase();
-      //console.log('league', league)
-      //return league === 'liga' || league === 'epl' || league === 'seri' || league === 'chlg' || league === 'europa';
-      return true;
+      return league === 'liga' || league === 'epl' || league === 'seri' || league === 'chlg' || league === 'europa' || league === 'uefa';
     },
 
     getPlayerPlayerRecordURL: function (league, id) {

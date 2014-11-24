@@ -75,6 +75,14 @@ h3.manager-name {
   border-radius: 50%;
 }
 
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
 .fantasy-table {
 
   padding: 0;
@@ -103,6 +111,12 @@ h3.manager-name {
 
 }
 
+///////////////////////////////////////
+
+.transfer-container {
+  background-color: #9bc4ff;
+}
+
 /////////////////////////////////////// nav
 
 .player-info {
@@ -118,9 +132,7 @@ h3.manager-name {
 .inline {
   display: inline;
   @media (max-width: 700px) {
-
     font-size: 20px;
-
   }
 }
 

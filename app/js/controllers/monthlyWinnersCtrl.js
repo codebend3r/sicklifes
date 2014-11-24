@@ -132,6 +132,8 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
         playerProfileRequest.promise.then(function (result) {
 
+          player.allLeaguesName = $textManipulator.validLeagueNamesFormatted(result);
+
           // based on player result data return an object with the valid leagues for this player
           var validLeagues = $textManipulator.getPlayerValidLeagues(result),
             ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
@@ -239,7 +241,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
         manager.totalPoints = 0;
         manager.totalGoals = 0;
-        manager.filteredMonthlyGoalsLog = manager.monthlyGoalsLog.filter($arrayFilter.filterOnMonth.bind($scope, manager, player));
+        manager.filteredMonthlyGoalsLog = manager.monthlyGoalsLog.filter($arrayFilter.filterOnMonth.bind($scope, manager, $scope.selectedMonth, player));
 
       });
 

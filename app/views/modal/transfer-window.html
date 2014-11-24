@@ -1,0 +1,22 @@
+<div class='modal-header'>
+  <h2 class='modal-title'>Transfer Window</h2>
+  <h3>Manager Name: <b>{{ playerObject.managerName }}</b></h3>
+</div>
+<div class='modal-body'>
+  <div ng-switch on='playerObject.transactionType'>
+    <div ng-switch-when='ADD'>
+      <p><span class='bold green'>ADDS PLAYER</span></p>
+    </div>
+    <div ng-switch-when='DROP'>
+      <p><span class='bold red'>DROPS PLAYER</span></p>
+    </div>
+  </div>
+  <p>Player ID: <b>{{ playerObject.id }}</b></p>
+  <p>Player Name: <b>{{ playerObject.playerName }}</b></p>
+  <p>Team: <b>{{ playerObject.teamName }}</b></p>
+  <p>League: <b>{{ playerObject.leagueName }}</b></p>
+</div>
+<div class='modal-footer'>
+  <button class='btn btn-primary' ng-click='ok()'>OK</button>
+  <button class='btn btn-primary' ng-click='cancel()'>Cancel</button>
+</div>

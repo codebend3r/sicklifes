@@ -141,27 +141,15 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
     var selectedInt = 0,
       id = $routeParams.playerID,
-      teamName = result.data.teams[selectedInt].name,
-      leagueName = function () {
-        var l = '',
-          n = 0;
-        result.data.teams.forEach(function (team, i) {
-          team.leagues.forEach(function (league, j) {
-            if ($textManipulator.acceptedLeague(league.slug)) {
-              n ? l += '/' + league.slug : l += league.slug;
-              n += 1;
-            }
-          });
-        });
-        return l.toUpperCase();
-      };
+      teamName = result.data.teams[selectedInt].name;
 
     // based on player result data return an object with the valid leagues for this player
     validLeagues = $textManipulator.getPlayerValidLeagues(result);
 
     $scope.player.playerName = $textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
     $scope.player.playerTeam = teamName;
-    $scope.player.leagueName = leagueName;
+    // get all valid league names string seperated by slashes
+    $scope.player.leagueName = $textManipulator.validLeagueNamesFormatted(result);
     $scope.player.teamLogo = result.data.teams[selectedInt].sportsnet_logos.large;
     $scope.player.playerImage = result.data.headshots.original;
 
@@ -170,7 +158,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   };
 
   /**
-   * populates info for specific player
+   * populates info for specific player such as weight, height and position
    */
   var populatePlayerProfile = function (result, playerID) {
 

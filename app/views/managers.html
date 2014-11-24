@@ -4,7 +4,7 @@
 
   <h2>Managers</h2>
 
-  <select class='form-control' ng-model='selectedTeam' ng-options='option.managerName for option in allManagers' ng-change='changeTeam(selectedTeam)'></select>
+  <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in allManagers' ng-change='changeManager(selectedManager)'></select>
 
   <div ng-if='admin' class='well'>
     <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
@@ -13,12 +13,12 @@
 
   <div class="jumbotron">
     <div class='col-md-4'>
-      <h3 class='manager-name'>{{selectedTeam.managerName}}</h3>
+      <h3 class='manager-name'>{{selectedManager.managerName}}</h3>
     </div>
     <div class='col-md-8'>
-      <p class='info-text'><span class='total-goals'>{{selectedTeam.totalGoals}}</span><span> goals</span></p>
+      <p class='info-text'><span class='total-goals'>{{selectedManager.totalGoals}}</span><span> goals</span></p>
 
-      <p class='info-text'><span class='total-goals'>{{selectedTeam.totalPoints}}</span><span> points</span></p>
+      <p class='info-text'><span class='total-goals'>{{selectedManager.totalPoints}}</span><span> points</span></p>
     </div>
   </div>
 
@@ -30,7 +30,7 @@
     </div>
 
     <div class='table-body'>
-      <div class='row' ng-repeat='scorer in selectedTeam.players'>
+      <div class='row' ng-repeat='scorer in selectedManager.players'>
         <div class='col-md-4 col-sm-5 col-xs-6'><a ng-href='#/player-details/{{scorer.id}}'>{{scorer.playerName}}</a></div>
         <div class='col-md-3 col-sm-4 hidden-xs small-text bold'>{{scorer.teamName}}</div>
         <div class='col-md-2 hidden-sm hidden-xs'>{{scorer.league}}</div>

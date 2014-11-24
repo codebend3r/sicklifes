@@ -1,8 +1,8 @@
 /**
- * Created by Bouse on 11/11/2014
+ * Created by Bouse on 11/23/2014
  */
 
-sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService, $apiFactory, $arrayMappers, $dateService, $routeParams) {
+sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService, $apiFactory, $modal, $arrayMappers, $dateService, $routeParams) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -26,7 +26,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
   $scope.tableHeader = [
     {
       columnClass: 'col-md-1 col-sm-2 col-xs-2',
-      text: 'id'
+      text: 'ID'
     },
     {
       columnClass: 'col-md-3 col-sm-4 col-xs-4',
@@ -43,6 +43,45 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
     {
       columnClass: 'col-md-3 col-sm-6 col-xs-4',
       text: 'Team'
+    }
+  ];
+
+  $scope.managersTableHeader = [
+    {
+      columnClass: 'col-md-4 col-sm-5 col-xs-6',
+      text: 'Player',
+      hoverText: 'Player',
+      orderCriteria: 'player'
+    },
+    {
+      columnClass: 'col-md-3 col-sm-4 hidden-xs',
+      text: 'Team',
+      hoverText: 'Team',
+      orderCriteria: 'team'
+    },
+    {
+      columnClass: 'col-md-2 hidden-sm hidden-xs',
+      text: 'League',
+      hoverText: 'League Goals',
+      orderCriteria: 'league'
+    },
+    {
+      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
+      text: 'DG',
+      hoverText: 'Domestic Goals',
+      orderCriteria: 'domestic'
+    },
+    {
+      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
+      text: 'LG',
+      hoverText: 'Champions League Goals',
+      orderCriteria: 'champions'
+    },
+    {
+      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
+      text: 'P',
+      hoverText: 'Total Points',
+      orderCriteria: 'points()'
     }
   ];
 
@@ -127,15 +166,79 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
   };
 
-  $scope.addPlayer = function (player) {
+  /**
+   *
+   * @type {object}
+   */
+  $scope.selectedPlayers = null;
 
-    console.log('addPlayer --> player', player);
+  /**
+   * {ng-click} - when manager option changes
+   */
+  $scope.changeManager = function (selectedManager) {
+
+    $scope.selectedManager = selectedManager;
+    $scope.selectedPlayers = selectedManager.players;
+    //console.log('$scope.selectedManager', $scope.selectedManager);
+    console.log('$scope.selectedPlayers', $scope.selectedPlayers);
 
   };
 
+  /**
+   *
+   */
+  $scope.addPlayer = function (player) {
+
+    //console.log('addPlayer --> player', player);
+    player.managerName = $scope.selectedManager.managerName;
+    player.transactionType = 'ADD';
+    $scope.openModal(player);
+
+  };
+
+  /**
+   *
+   */
   $scope.dropPlayer = function (player) {
 
-    console.log('dropPlayer --> player', player);
+    //console.log('dropPlayer --> player', player);
+    player.managerName = $scope.selectedManager.managerName;
+    player.transactionType = 'DROP';
+    $scope.openModal(player);
+
+  };
+
+  $scope.transactionPlayerAdded = false;
+
+  $scope.transactionPlayerRemoved = false;
+
+  /**
+   *
+   */
+  $scope.openModal = function (player) {
+
+    var modalInstance = $modal.open({
+      templateUrl: './views/modal/transfer-window.html',
+      controller: 'transferWindowCtrl',
+      resolve: {
+        playerObject: function () {
+          return player;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedPlayer) {
+
+      if (selectedPlayer.transactionType === 'ADD') {
+        $scope.transactionPlayerAdded = true;
+        $scope.addedPlayerObject = selectedPlayer;
+      } else if (selectedPlayer.transactionType === 'DROP') {
+        $scope.transactionPlayerRemoved = true;
+        $scope.removePlayerObject = selectedPlayer;
+      }
+    }, function () {
+      console.log('Modal dismissed');
+    });
 
   };
 
@@ -159,6 +262,9 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
     console.log('syncDate allPlayers', data.allPlayersData._lastSynedOn);
 
+    $scope.selectedManager = $scope.allManagers[0];
+    $scope.selectedPlayers = $scope.selectedManager.players;
+
     //makeTransactions();
 
   };
@@ -173,7 +279,13 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
   };
 
+  $scope.makeTransfer = function(playerAdded, playerDropped) {
+
+  };
+
   $scope.makeTransactions = function () {
+
+    //1. Dan
 
     var dan = $scope.allManagers[2];
 
@@ -204,8 +316,6 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
         eachPlayer.dateOfTransaction = $dateService.transactionDate()
       }
     });
-
-    //clGoals: 1, domesticGoals: 0, eGoals: 0, goals: 1, id: 3405, league: "EPL", leagueGoals: 1, playerName: "Lukas PODOLSKI", points: 2, status: "active", teamName: "ARSENAL"
 
     dan.players.push({
 
