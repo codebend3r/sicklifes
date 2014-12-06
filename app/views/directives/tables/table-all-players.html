@@ -15,7 +15,7 @@
       <div class='col-md-1 col-sm-2 col-xs-2'>
         {{player.id}}
       </div>
-      <div class='col-md-3 col-sm-4 col-xs-4'>
+      <div class='col-md-3 col-sm-4 col-xs-4 player-column'>
         <span ng-switch on='player.ownedBy'>
           <button ng-switch-when='Free Agent' ng-click='addPlayer({player:player})' type='button' class='btn btn-primary btn-xs'><span class='glyphicon glyphicon-plus'></span></button>
           <button ng-switch-default type='button' ng-click='dropPlayer({player:player})' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-minus'></span></button>

@@ -20,23 +20,28 @@ sicklifesFantasy.directive('navMenu', function ($location) {
       $scope.menuOptions = [
         {
           name: 'Leagues',
-          url: '#/leagues/'
+          url: '#/leagues/',
+          active: true
         },
         {
           name: 'Managers',
-          url: '#/managers/'
+          url: '#/managers/',
+          active: true
         },
         {
           name: 'Standings',
-          url: '#/standings/'
+          url: '#/standings/',
+          active: true
         },
         {
           name: 'Monthly Winners',
-          url: '#/monthlywinners/'
+          url: '#/monthlywinners/',
+          active: true
         },
         {
           name: 'Transfers',
-          url: '#/transfers/'
+          url: '#/transfers/',
+          active: false
         }
       ];
 

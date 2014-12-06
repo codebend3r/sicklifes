@@ -11,10 +11,15 @@
       <p><span class='bold red'>DROPS PLAYER</span></p>
     </div>
   </div>
-  <p>Player ID: <b>{{ playerObject.id }}</b></p>
-  <p>Player Name: <b>{{ playerObject.playerName }}</b></p>
-  <p>Team: <b>{{ playerObject.teamName }}</b></p>
-  <p>League: <b>{{ playerObject.leagueName }}</b></p>
+  <div class='col-md-4'>
+    <img class='profile-pic' ng-src='{{playerObject.playerImage}}'/>
+  </div>
+  <div class='col-md-8'>
+    <p>Player ID: <b>{{ playerObject.id }}</b></p>
+    <p>Player Name: <b>{{ playerObject.playerName }}</b></p>
+    <p>Team: <b>{{ playerObject.teamName }}</b></p>
+    <p>League: <b>{{ playerObject.leagueName }}</b></p>
+  </div>
 </div>
 <div class='modal-footer'>
   <button class='btn btn-primary' ng-click='ok()'>OK</button>

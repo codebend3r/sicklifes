@@ -8,7 +8,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
     /**
      * maps each player's stats
-     * @param $url
+     * @param url
      * @param i
      */
     goalsMap: function (url, i) {
@@ -24,7 +24,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         goals: i.stat,
         status: 'active',
         ownedBy: $arrayLoopers.getOwnerByID(i.player.id) || 'N/A',
-        league: $textManipulator.getLeagueByURL(url),
+        leagueName: $textManipulator.getLeagueByURL(url),
         transactionsLog: [],
         historyLog: []
       };
@@ -58,6 +58,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
         goalsScored: game.goals || 0,
         leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
+        leagueSlug: game.box_score.event.league.slug,
         datePlayed: $date.create(game.box_score.event.game_date).format('{MM}/{dd}/{yy}'),
         rawDatePlayed: $date.create(game.box_score.event.game_date),
         originalDate: game.box_score.event.game_date,
@@ -67,43 +68,36 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         finalScore: $textManipulator.finalScore.call(gameMapsObj, game)
       };
 
-      /*
-      var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
-      playerProfileRequest.promise.then(function (result) {
-        console.log('result >>', result);
-      });
-      */
-
       var gameGoals = gameMapsObj.goalsScored,
-        league = gameMapsObj.leagueName,
+        leagueSlug = gameMapsObj.leagueSlug,
         computedPoints;
 
       player.leagueName = gameMapsObj.leagueName;
 
-      if ($textManipulator.acceptedLeague(league)) {
+      if ($textManipulator.acceptedLeague(leagueSlug)) {
 
-        computedPoints = $scoringLogic.calculatePoints(gameGoals, league);
+        computedPoints = $scoringLogic.calculatePoints(gameGoals, leagueSlug);
 
-        if ($textManipulator.isLeagueGoal(league)) {
+        if ($textManipulator.isLeagueGoal(leagueSlug)) {
 
           player.leagueGoals += gameGoals;
 
         }
 
-        if ($textManipulator.isDomesticGoal(league)) {
+        if ($textManipulator.isDomesticGoal(leagueSlug)) {
 
           player.domesticGoals += gameGoals;
-          manager.domesticGoals += gameGoals;
+          //manager.domesticGoals += gameGoals;
 
-        } else if ($textManipulator.isChampionsLeagueGoal(league)) {
+        } else if ($textManipulator.isChampionsLeagueGoal(leagueSlug)) {
 
           player.clGoals += gameGoals;
-          manager.clGoals += gameGoals;
+          //manager.clGoals += gameGoals;
 
-        } else if ($textManipulator.isEuropaGoal(league)) {
+        } else if ($textManipulator.isEuropaGoal(leagueSlug)) {
 
           player.eGoals += gameGoals;
-          manager.eGoals += gameGoals;
+          //manager.eGoals += gameGoals;
 
         }
 
@@ -117,9 +111,12 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         player.points += computedPoints;
         manager.totalPoints += computedPoints;
 
-        console.log(manager.managerName, 'GOALS', manager.totalGoals);
-        console.log(manager.managerName, 'POINTS', manager.totalPoints);
+        //console.log(manager.managerName, 'GOALS', manager.totalGoals);
+        //console.log(manager.managerName, 'POINTS', manager.totalPoints);
         //console.log(player.playerName, 'has', player.points, 'points in', player.leagueName, 'league.');
+        if (manager.managerName === 'Chester' && player.playerName === 'Juan CUADRADO') {
+          //console.log(Math.random() * 10, manager.managerName, '|', player.playerName, 'scored', game.goals, 'goals in', player.leagueName, '| manager totalGoals', manager.totalGoals);
+        }
         //console.log(player.playerName, 'scored', gameGoals, 'for', computedPoints, 'points', 'in', league, 'league on', gameMapsObj.datePlayed);
 
       }

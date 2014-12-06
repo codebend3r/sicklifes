@@ -87,23 +87,39 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
     //http://origin-api.thescore.com/liga/teams/44 - Real Madrid
 
     var allLeaguesURL = [
-        'http://origin-api.thescore.com/liga/teams/',
-        'http://origin-api.thescore.com/epl/teams/',
-        'http://origin-api.thescore.com/seri/teams/',
-        'http://origin-api.thescore.com/chlg/teams/',
-        'http://origin-api.thescore.com/uefa/teams/'
+        {
+          url: 'http://origin-api.thescore.com/liga/teams/',
+          leagueName: 'liga'
+        },
+        {
+          url: 'http://origin-api.thescore.com/epl/teams/',
+          leagueName: 'epl'
+        },
+        {
+          url: 'http://origin-api.thescore.com/seri/teams/',
+          leagueName: 'seri'
+        },
+        {
+          url: 'http://origin-api.thescore.com/chlg/teams/',
+          leagueName: 'chlg'
+        },
+        {
+          url: 'http://origin-api.thescore.com/uefa/teams/',
+          leagueName: 'uefa'
+        }
       ],
       listOrPromises = [];
 
-    allLeaguesURL.forEach(function (url) {
+    allLeaguesURL.forEach(function (urlObj) {
 
       var leagueRequest = scope.getData({
-        endPointURL: url
+        endPointURL: urlObj.url
       });
 
       leagueRequest.promise.then(function (result) {
 
-        result.leagueURL = url;
+        result.leagueURL = urlObj.url;
+        result.leagueName = urlObj.leagueName;
 
       });
 

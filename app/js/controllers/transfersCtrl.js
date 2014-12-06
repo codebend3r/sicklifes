@@ -91,8 +91,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
   $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
-    //console.log('$scope.allPlayers', $scope.allPlayers);
-    console.log('LENGTH', $scope.allPlayers.length);
+    console.log('$scope.allPlayers', $scope.allPlayers, '|', $scope.allPlayers.length);
     console.log('////////////////////////////////////');
 
     var allPlayersObject = {
@@ -101,7 +100,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
       allPlayers: $scope.allPlayers
     };
 
-    //$fireBaseService.syncAllPlayersList(allPlayersObject);
+    $fireBaseService.syncAllPlayersList(allPlayersObject);
 
     console.log('////////////////////////////////////');
     console.log('$scope.allManagers', $scope.allManagers);
@@ -133,8 +132,6 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
     var allTeams = $apiFactory.getAllTeams();
 
-    console.log('$scope.allPlayers', $scope.allPlayers);
-
     $scope.allPlayers = [];
 
     // returns a list of promise with the end point for each league
@@ -144,9 +141,11 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
         leagueData.data.forEach(function (teamData) {
 
+          var url = 'http://api.thescore.com/' + leagueData.leagueName + '/teams/' + teamData.id + '/players/?rpp=-1';
+
           // returns a promise with the end point for each team
           var rosterRequest = $apiFactory.getData({
-            endPointURL: leagueData.leagueURL + teamData.id + '/players/'
+            endPointURL: url
           });
 
           rosterRequest.promise.then(function (playerData) {
@@ -179,7 +178,6 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
     $scope.selectedManager = selectedManager;
     $scope.selectedPlayers = selectedManager.players;
-    //console.log('$scope.selectedManager', $scope.selectedManager);
     console.log('$scope.selectedPlayers', $scope.selectedPlayers);
 
   };
@@ -208,9 +206,57 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
   };
 
+  $scope.addedPlayerImage = '';
+
+  $scope.droppedPlayerImage = '';
+
+  /**
+   * whether a player has been added to a roster
+   * @type {boolean}
+   */
   $scope.transactionPlayerAdded = false;
 
+  /**
+   * whether a player has been removed from a roster
+   * @type {boolean}
+   */
   $scope.transactionPlayerRemoved = false;
+
+  /**
+   * saves the added and dropped players to the current manager's roster
+   */
+  $scope.saveRoster = function () {
+
+    if (!angular.isDefined($scope.selectedManager.transactions)) {
+      $scope.selectedManager.transactions = [];
+    }
+
+    $scope.selectedManager.transactions.push({
+
+      drop: $scope.droppedPlayerObject,
+      add: $scope.addedPlayerObject
+
+    });
+
+    //$scope.droppedPlayerObject = cleanPlayer($scope.droppedPlayerObject);
+    //$scope.addedPlayerObject = cleanPlayer($scope.addedPlayerObject);
+
+    // add
+    $scope.selectedManager.players.push(cleanPlayer($scope.addedPlayerObject));
+
+    // drop
+    $scope.selectedManager.players.forEach(function (eachPlayer) {
+      if (eachPlayer.id === $scope.droppedPlayerObject.id) {
+        eachPlayer.status = 'dropped';
+        eachPlayer.dateOfTransaction = $dateService.transactionDate('11/17/14');
+      }
+    });
+
+    console.log('///////////////////////////////////////////');
+    console.log('$scope.selectedManager', $scope.selectedManager);
+    console.log('///////////////////////////////////////////');
+
+  };
 
   /**
    *
@@ -230,12 +276,21 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
     modalInstance.result.then(function (selectedPlayer) {
 
       if (selectedPlayer.transactionType === 'ADD') {
+        console.log('ADDING PLAYER');
         $scope.transactionPlayerAdded = true;
-        $scope.addedPlayerObject = selectedPlayer;
+        $scope.addedPlayerObject = cleanPlayer(selectedPlayer);
+        $scope.addedPlayerObject.status = 'added';
+        if (angular.isDefined($scope.addedPlayerObject.ownedBy)) delete $scope.addedPlayerObject.ownedBy;
+
       } else if (selectedPlayer.transactionType === 'DROP') {
+        console.log('REMOVING PLAYER');
         $scope.transactionPlayerRemoved = true;
-        $scope.removePlayerObject = selectedPlayer;
+        $scope.droppedPlayerObject = cleanPlayer(selectedPlayer);
+        $scope.droppedPlayerObject.status = 'dropped';
+        if (angular.isDefined($scope.droppedPlayerObject.ownedBy)) delete $scope.droppedPlayerObject.ownedBy;
+
       }
+
     }, function () {
       console.log('Modal dismissed');
     });
@@ -269,72 +324,45 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
   };
 
-  $scope.setAllPlayersToActive = function () {
+  $scope.resetAllPlayers = function () {
+
+    console.log('>> $scope.allManagers', $scope.allManagers);
 
     $scope.allManagers.forEach(function (manager) {
-      manager.players.forEach(function (eachPlayer) {
-        eachPlayer.status = 'active'
-      });
-    });
+      /*
+       if(angular.isDefined(manager.status)) delete manager.status;
 
-  };
+       if (!angular.isDefined(manager.transactions)) {
+       manager.transactions = [];
+       }
 
-  $scope.makeTransfer = function(playerAdded, playerDropped) {
+       if (manager.clGoals) delete manager.clGoals;
+       if (manager.domesticGoals) delete manager.domesticGoals;
+       if (manager.eGoals) delete manager.eGoals;
+       if (manager.goals) delete manager.goals;
+       if (manager.leagueGoals) delete manager.leagueGoals;
+       if (manager.points) delete manager.points;
+       */
 
-  };
+      if (angular.isDefined(manager.clGoals)) delete manager.clGoals;
+      if (angular.isDefined(manager.domesticGoals)) delete manager.domesticGoals;
+      if (angular.isDefined(manager.eGoals)) delete manager.eGoals;
+      if (angular.isDefined(manager.goals)) delete manager.goals;
+      if (angular.isDefined(manager.leagueGoals)) delete manager.leagueGoals;
 
-  $scope.makeTransactions = function () {
+      //if (manager.domesticGoals) delete manager.domesticGoals;
+      //if (manager.eGoals) delete manager.eGoals;
+      //if (manager.goals) delete manager.goals;
+      //if (manager.leagueGoals) delete manager.leagueGoals;
 
-    //1. Dan
-
-    var dan = $scope.allManagers[2];
-
-    dan.transactions = [];
-
-    dan.transactions.push({
-
-      drop: {
-        id: '281',
-        playerName: 'Jonathan BIABIANY',
-        league: 'SERIE A',
-        teamName: 'PARMA',
-        dateOfTransaction: $dateService.transactionDate()
-      },
-      add: {
-        id: '30268',
-        playerName: 'Filip DJORDJEVIC',
-        league: 'SERIE A',
-        teamName: 'LAZIO',
-        dateOfTransaction: $dateService.transactionDate()
-      }
+      //manager.players.forEach(function (eachPlayer) {
+        //eachPlayer.status = 'active';
+        //eachPlayer.managerName = manager.managerName;
+      //});
 
     });
 
-    dan.players.forEach(function (eachPlayer) {
-      if (eachPlayer.id === 281) {
-        eachPlayer.status = 'dropped';
-        eachPlayer.dateOfTransaction = $dateService.transactionDate()
-      }
-    });
-
-    dan.players.push({
-
-      id: 30268,
-      clGoals: 0,
-      domesticGoals: 0,
-      eGoals: 0,
-      goals: 0,
-      leagueGoals: 0,
-      league: 'SERI',
-      playerName: 'Filip DJORDJEVIC',
-      teamName: 'LAZIO',
-      status: 'added',
-      dateOfTransaction: $dateService.transactionDate()
-
-    });
-
-    console.log('dan', dan);
-    console.log('$scope.allManagers', $scope.allManagers);
+    console.log('>> $scope.allManagers', $scope.allManagers);
 
   };
 
@@ -350,6 +378,17 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
     firePromise.promise.then(fireBaseLoaded);
 
 
+  };
+
+  var cleanPlayer = function (p) {
+    p.dateOfTransaction = $dateService.transactionDate('11/17/14');
+    p.clGoals = 0;
+    p.domesticGoals = 0;
+    p.eGoals = 0;
+    p.goals = 0;
+    p.leagueGoals = 0;
+    p.points = 0;
+    return p;
   };
 
 

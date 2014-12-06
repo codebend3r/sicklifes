@@ -1,16 +1,23 @@
 @import 'variables';
 
-.modal.fade {
-  opacity: 1;
-}
-
-.modal.fade .modal-dialog, .modal.in .modal-dialog {
-  -webkit-transform: translate(0, 0);
-  -ms-transform: translate(0, 0);
-  transform: translate(0, 0);
-}
-
 body.modal-open {
   overflow:inherit;
   padding-right:inherit !important;
 }
+
+.modal-body {
+  height: 200px;
+}
+
+/*
+.modal.fade {
+  opacity: 1;
+}
+*/
+
+/*.modal.fade .modal-dialog, .modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+  transition: transform 0.2s ease-out;
+}*/

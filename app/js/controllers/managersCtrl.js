@@ -77,27 +77,24 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
   $scope.updateData = function () {
 
     console.log('--- updateData ---');
+    console.log('////////////////////////////////////');
+    console.log('$scope.allManagers', $scope.allManagers);
+    console.log('////////////////////////////////////');
 
     var allLeaguePromises = [];
 
     $scope.allManagers.forEach(function (manager) {
 
-      //console.log('manager.managerName', manager.managerName);
-
       manager.totalPoints = 0;
-      //manager.testPoints = 0;
       manager.totalGoals = 0;
-      //manager.testGoals = 0;
       manager.monthlyGoalsLog = [];
       manager.filteredMonthlyGoalsLog = [];
-
 
       manager.players.forEach(function (player) {
 
         player.domesticGoals = 0;
         player.leagueGoals = 0;
         player.points = 0;
-        player.status = 'active';
 
         var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
 
@@ -113,7 +110,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
           if (validLeagues.inLiga) {
             ligaGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterAfterDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterValidDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -122,7 +119,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
           if (validLeagues.inEPL) {
             eplGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterAfterDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterValidDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -131,7 +128,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
           if (validLeagues.inSeri) {
             seriGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterAfterDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterValidDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -140,7 +137,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
           if (validLeagues.inChlg) {
             chlgGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterAfterDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterValidDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -149,7 +146,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
           if (validLeagues.inEuro) {
             euroGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterAfterDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterValidDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -173,7 +170,6 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
     var saveObject = {
       _syncedFrom: 'managersCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      __allLeagues: $scope.allLeagues,
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
@@ -205,8 +201,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
       $scope.selectedManager = $scope.allManagers[0];
     }
 
-    console.log('$scope.selectedManager', $scope.selectedManager);
-
+    //console.log('$scope.selectedManager', $scope.selectedManager);
     //$location.url($location.path() + '?team=' + $scope.selectedTeam.managerName); // route change
 
   };
@@ -215,8 +210,6 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
    * modifies array that table is binded to
    */
   var populateTable = function () {
-
-    console.log('$scope.populateTable');
 
     var masterDefferedList = [];
 

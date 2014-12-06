@@ -2,38 +2,56 @@
  * Created by Bouse on 10/2/2014
  */
 
-sicklifesFantasy.factory('$arrayFilter', function ($date) {
+sicklifesFantasy.factory('$arrayFilter', function ($date, $scoringLogic) {
 
   var arrayFilters = {
 
+    filterAfterDate: function (game) {
+      var gameDate = $date.create(game.box_score.event.game_date);
+      //console.log('gameDate', gameDate);
+      return gameDate.isAfter('August 1 2014');
+      //return false;
+    },
+
     /*
      * filters out any games after aug 1
+     * @returns {boolean}
      */
-    filterAfterDate: function (player, game) {
-      //console.log('game', game);
-      //console.log('player', player);
+    filterValidDate: function (player, game) {
       var gameDate = $date.create(game.box_score.event.game_date);
       if (player.status === 'added') {
-        console.log('filtering added player');
-        //console.log(player.status);
-        //console.log(player.dateOfTransaction);
-        //debugger;
         return gameDate.isAfter(player.dateOfTransaction);
+      } else if (player.status === 'dropped') {
+        return gameDate.isBefore(player.dateOfTransaction);
       } else {
         return gameDate.isAfter('August 1 2014');
       }
-      //return true;
     },
 
-    filterGoalsOnly: function (game) {
-      return game.goals ? true : false;
+    /**
+     * filters out games with goals
+     * @returns {boolean}
+     */
+    filterOnValidGoals: function (player, game) {
+      if (game.goals) {
+        var gameDate = $date.create(game.box_score.event.game_date);
+        if (player.status === 'added') {
+          return gameDate.isAfter(player.dateOfTransaction);
+        } else if (player.status === 'dropped') {
+          return gameDate.isBefore(player.dateOfTransaction);
+        } else {
+          return true;
+        }
+      } else {
+        return false;
+      }
     },
 
     /**
      *
      * @param selectedMonth
      * @param game
-     * @returns {*|boolean}
+     * @returns {boolean}
      */
     isSelectedMonth: function (selectedMonth, game) {
       var gameDate = game.rawDatePlayed || $date.create(game.box_score.event.game_date),
@@ -45,19 +63,20 @@ sicklifesFantasy.factory('$arrayFilter', function ($date) {
     /**
      *
      * @param manager
-     * @param player
      * @param selectedMonth
+     * @param player
      * @param game
      * @returns {boolean}
      */
-    filterOnMonth: function (manager, player, selectedMonth, game) {
+    filterOnMonth: function (manager, selectedMonth, player, game) {
+
       var gameDate = $date.create(game.originalDate),
         scoredAGoal = game.goalsScored ? true : false,
         isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
 
       if (isBetween && scoredAGoal) {
         manager.totalGoals += game.goalsScored;
-        manager.totalPoints += game.points;
+        manager.totalPoints += $scoringLogic.calculatePoints(game.goalsScored, game.leagueSlug);
         return true;
       }
     }

@@ -144,7 +144,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
           if (validLeagues.inLiga) {
             ligaGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -153,7 +153,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
           if (validLeagues.inEPL) {
             eplGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -162,7 +162,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
           if (validLeagues.inSeri) {
             seriGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -171,7 +171,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
           if (validLeagues.inChlg) {
             chlgGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -180,7 +180,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
           if (validLeagues.inEuro) {
             euroGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterGoalsOnly).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -271,6 +271,8 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
     $scope.manager = $scope.allManagers[0];
 
+    updateFilter();
+
     //var syncDate = $date.create(data.leagueData._lastSynedOn);
 
     console.log('syncDate leagueData', data.leagueData._lastSynedOn);
@@ -297,9 +299,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
   var init = function () {
 
     $fireBaseService.initialize();
-
     var firePromise = $fireBaseService.getFireBaseData();
-
     firePromise.promise.then(fireBaseLoaded, getFromLocalStorage);
 
   };

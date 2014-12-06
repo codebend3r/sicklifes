@@ -61,6 +61,13 @@ h3.manager-name {
   color: $secondaryLightColour;
 }
 
+.player-column {
+  a {
+    font-weight: bold;
+    font-size: 12px;
+  }
+}
+
 //////////////////////////////////
 
 .form-control {
@@ -73,6 +80,8 @@ h3.manager-name {
 
 .profile-pic {
   border-radius: 50%;
+  width: 100%;
+  height: auto;
 }
 
 .green {
@@ -114,7 +123,10 @@ h3.manager-name {
 ///////////////////////////////////////
 
 .transfer-container {
-  background-color: #9bc4ff;
+  //background-color: #9bc4ff;
+  background-color: #B4D3FF;
+  padding: 10px;
+  overflow: auto;
 }
 
 /////////////////////////////////////// nav
@@ -142,6 +154,20 @@ h3.manager-name {
 
 .bold {
   font-weight: bold;
+}
+
+.dropped {
+  color: #a8a8a8;
+  text-decoration: line-through;
+  a {
+    color: #a8a8a8;
+  }
+}
+
+.added {
+  a {
+    color: #1f8613;
+  }
 }
 
 .standard-text {

@@ -155,6 +155,21 @@ sicklifesFantasy.factory('$textManipulator', function () {
       return l.toUpperCase();
     },
 
+    getLeagueSlug: function(result) {
+
+      var leagueString = '';
+      result.data.teams.some(function (team, i) {
+        team.leagues.some(function (league, j) {
+          if (textManipulator.acceptedLeague(league.slug)) {
+            leagueString = league.slug;
+            return true;
+          }
+        });
+      });
+      return leagueString;
+
+    },
+
     finalScore: function (game) {
       var final = '';
       if (game.alignment === 'away') {

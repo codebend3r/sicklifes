@@ -20,8 +20,6 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
       manager.clGoals = 0;
       manager.eGoals = 0;
       manager.domesticGoals = 0;
-      //manager.testGoals = 0;
-      //manager.testPoints = 0;
 
     },
 
@@ -49,10 +47,6 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
               gameGoals;
 
             result.data.map(function (i) {
-              
-              if (players.playerName === 'Filip DJORDJEVIC') {
-                console.log('updated_at', i.updated_at);
-              }
 
               league = i.league.slug;
               gameGoals = i.games_goals;
@@ -122,7 +116,7 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
       return owner;
     }
 
-  }
+  };
 
   return arrayLoopers;
 

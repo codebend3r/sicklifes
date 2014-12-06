@@ -14,11 +14,13 @@ sicklifesFantasy.factory('$dateService', function ($date) {
       return $date.create().format('{MM}/{dd}/{yy}');
     },
 
-    transactionDate: function () {
-      return $date.create().format('{MM}/{dd}/{yy}');
+    transactionDate: function (date) {
+      if (date) {
+        return date;
+      } else {
+        return $date.create().format('{MM}/{dd}/{yy}');
+      }
     }
-
-    //transactionDate
 
   }
 
