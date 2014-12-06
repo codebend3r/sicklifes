@@ -2,7 +2,7 @@
  * Created by Bouse on 11/23/2014
  */
 
-sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService, $apiFactory, $modal, $arrayMappers, $dateService, $routeParams) {
+sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService, $apiFactory, $objectUtils, $modal, $arrayMappers, $dateService, $routeParams) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -278,14 +278,14 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
       if (selectedPlayer.transactionType === 'ADD') {
         console.log('ADDING PLAYER');
         $scope.transactionPlayerAdded = true;
-        $scope.addedPlayerObject = cleanPlayer(selectedPlayer);
+        $scope.addedPlayerObject = $objectUtils.cleanPlayer(selectedPlayer);
         $scope.addedPlayerObject.status = 'added';
         if (angular.isDefined($scope.addedPlayerObject.ownedBy)) delete $scope.addedPlayerObject.ownedBy;
 
       } else if (selectedPlayer.transactionType === 'DROP') {
         console.log('REMOVING PLAYER');
         $scope.transactionPlayerRemoved = true;
-        $scope.droppedPlayerObject = cleanPlayer(selectedPlayer);
+        $scope.droppedPlayerObject = $objectUtils.cleanPlayer(selectedPlayer);
         $scope.droppedPlayerObject.status = 'dropped';
         if (angular.isDefined($scope.droppedPlayerObject.ownedBy)) delete $scope.droppedPlayerObject.ownedBy;
 
@@ -378,17 +378,6 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
     firePromise.promise.then(fireBaseLoaded);
 
 
-  };
-
-  var cleanPlayer = function (p) {
-    p.dateOfTransaction = $dateService.transactionDate('11/17/14');
-    p.clGoals = 0;
-    p.domesticGoals = 0;
-    p.eGoals = 0;
-    p.goals = 0;
-    p.leagueGoals = 0;
-    p.points = 0;
-    return p;
   };
 
 

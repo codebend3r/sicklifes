@@ -45,18 +45,15 @@
 
     </div>
 
-    <div class='col-md-8 col-sm-8 col-xs-12'>
+    <div class='col-md-8 col-sm-8 col-xs-12 manager-jumbotron'>
 
       <h1 class='player-name'>{{player.playerName}}</h1>
-
       <h3 class='player-team'>{{player.playerTeam}}</h3><br/>
-
+      <p class='info-text'><span class='player-prop'>GOALS: </span><span>{{player.goals}}</span></p>
+      <p class='info-text'><span class='player-prop'>POINTS: </span><span>{{player.points}}</span></p>
       <p class='player-info'><span class='player-prop'>LEAGUE:</span> {{player.leagueName}}</p>
-
-      <p class='player-info'><span class='player-prop'>POS:</span> {{player.playerPos}}</p>
-
+      <p class='player-info'><span class='player-prop'>POSITION:</span> {{player.playerPos}}</p>
       <p class='player-info'><span class='player-prop'>WEIGHT/HEIGHT:</span> {{player.weight}}lbs/{{player.height}}</p>
-
       <p class='player-info'><span class='player-prop'>BIRTHDATE:</span> {{player.birthdate}}</p>
 
     </div>

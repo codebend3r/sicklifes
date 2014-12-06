@@ -11,13 +11,18 @@
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
-  <div class="jumbotron">
+  <div class='jumbotron manager-jumbotron'>
     <div class='col-md-4'>
       <h3 class='manager-name'>{{selectedManager.managerName}}</h3>
     </div>
     <div class='col-md-8'>
-      <p class='info-text'><span class='total-goals'>{{selectedManager.totalGoals}}</span><span> goals</span></p>
-      <p class='info-text'><span class='total-goals'>{{selectedManager.totalPoints}}</span><span> points</span></p>
+      <p class='info-text'><span>Goals: </span><span class='totals'>{{selectedManager.totalGoals}}</span></p>
+      <p class='info-text'><span>Points: </span><span class='totals'>{{selectedManager.totalPoints}}</span></p>
+      <hr></hr>
+      <p class='info-text'><span># of Serie A Players: </span><span class='totals'>{{selectedManager.seriCount}}</span></p>
+      <p class='info-text'><span># of La Liga Players: </span><span class='totals'>{{selectedManager.ligaCount}}</span></p>
+      <p class='info-text'><span># of EPL Players: </span><span class='totals'>{{selectedManager.eplCount}}</span></p>
+      <p class='info-text'><span># of Wildcard Players: </span><span class='totals'>{{selectedManager.wildCardCount}}</span></p>
     </div>
   </div>
 

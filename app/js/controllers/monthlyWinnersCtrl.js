@@ -2,7 +2,7 @@
  * Created by Bouse on 11/03/2014
  */
 
-sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory, $managersService, $routeParams, $textManipulator, $fireBaseService, $arrayFilter, localStorageService, $dateService, $arrayMappers) {
+sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory, $managersService, $routeParams, $textManipulator, $objectUtils, $fireBaseService, $arrayFilter, localStorageService, $dateService, $arrayMappers) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -109,7 +109,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
   };
 
   /**
-   * scrapes thescore.ca api and updates javascript array
+   * scrapes thescore.ca api and updates local array
    */
   $scope.updateData = function () {
 
@@ -119,14 +119,17 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
     $scope.allManagers.forEach(function (manager) {
 
-      console.log('manager.managerName', manager.managerName);
+      // reset goal counts
+      manager = $objectUtils.cleanManager(manager, true);
 
-      manager.totalPoints = 0;
-      manager.totalGoals = 0;
-      manager.monthlyGoalsLog = [];
-      manager.filteredMonthlyGoalsLog = [];
+      manager.seriCount = 0;
+      manager.ligaCount = 0;
+      manager.eplCount = 0;
+      manager.wildCardCount = 0;
 
       manager.players.forEach(function (player) {
+
+        player = $objectUtils.playerResetGoalPoints(player)
 
         var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
 
@@ -143,6 +146,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
             euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
 
           if (validLeagues.inLiga) {
+            if (player.status !== 'dropped') manager.ligaCount += 1;
             ligaGamesRequest.promise.then(function (result) {
               var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
@@ -152,6 +156,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
           }
 
           if (validLeagues.inEPL) {
+            if (player.status !== 'dropped') manager.eplCount += 1;
             eplGamesRequest.promise.then(function (result) {
               var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
@@ -161,6 +166,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
           }
 
           if (validLeagues.inSeri) {
+            if (player.status !== 'dropped') manager.seriCount += 1;
             seriGamesRequest.promise.then(function (result) {
               var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
@@ -187,6 +193,11 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
             allLeaguePromises.push(euroGamesRequest.promise);
           }
 
+          // logical definition for a wildcard player
+          if ((validLeagues.inChlg || validLeagues.inEuro) && !validLeagues.inLiga && !validLeagues.inEPL && !validLeagues.inSeri) {
+            if (player.status !== 'dropped') manager.wildCardCount += 1;
+          }
+
         });
 
       });
@@ -194,7 +205,6 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
       $apiFactory.listOfPromises(allLeaguePromises, function () {
 
         console.log('DONE...');
-        //saveToFirebase();
 
       });
 
@@ -239,8 +249,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
 
       manager.players.forEach(function (player) {
 
-        manager.totalPoints = 0;
-        manager.totalGoals = 0;
+        manager = $objectUtils.cleanManager(manager, false);
         manager.filteredMonthlyGoalsLog = manager.monthlyGoalsLog.filter($arrayFilter.filterOnMonth.bind($scope, manager, $scope.selectedMonth, player));
 
       });

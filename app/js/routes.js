@@ -10,7 +10,17 @@ sicklifesFantasy.config(function ($routeProvider) {
     templateUrl: 'views/leagues.html',
     controller: 'leaguesCtrl'
 
-  }).when('/leagues/', {
+  })/*.when('/login/', {
+
+    templateUrl: 'views/login.html',
+    login: true
+
+  }).when('/signup/', {
+
+    templateUrl: 'views/signup.html',
+    public: true
+
+  })*/.when('/leagues/', {
 
     templateUrl: 'views/leagues.html',
     controller: 'leaguesCtrl'

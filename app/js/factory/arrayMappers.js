@@ -87,17 +87,17 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         if ($textManipulator.isDomesticGoal(leagueSlug)) {
 
           player.domesticGoals += gameGoals;
-          //manager.domesticGoals += gameGoals;
+          manager.domesticGoals += gameGoals;
 
         } else if ($textManipulator.isChampionsLeagueGoal(leagueSlug)) {
 
           player.clGoals += gameGoals;
-          //manager.clGoals += gameGoals;
+          manager.clGoals += gameGoals;
 
         } else if ($textManipulator.isEuropaGoal(leagueSlug)) {
 
           player.eGoals += gameGoals;
-          //manager.eGoals += gameGoals;
+          manager.eGoals += gameGoals;
 
         }
 

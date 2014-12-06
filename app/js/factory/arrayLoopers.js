@@ -2,26 +2,9 @@
  * Created by Bouse on 10/2/2014
  */
 
-sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStorageService, $managersService, $apiFactory, $scoringLogic) {
+sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, $objectUtils, localStorageService, $managersService, $apiFactory, $scoringLogic) {
 
   var arrayLoopers = {
-
-    resetScoreCount: function (manager, players) {
-
-      players.goals = 0;
-      players.points = 0;
-      players.domesticGoals = 0;
-      players.leagueGoals = 0;
-      players.clGoals = 0;
-      players.eGoals = 0;
-
-      manager.totalPoints = 0;
-      manager.totalGoals = 0;
-      manager.clGoals = 0;
-      manager.eGoals = 0;
-      manager.domesticGoals = 0;
-
-    },
 
     /**
      * loops through all players and fetches goals and calculates points
@@ -32,6 +15,9 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
     forEachPlayer: function ($scope, manager, players) {
 
       arrayLoopers.resetScoreCount(manager, players);
+
+      players = objectUtils.playerResetGoalPoints(players)
+      manager = objectUtils.managerResetGoalPoints(manager)
 
       var deferredList = deferredList || [];
 
@@ -54,7 +40,6 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
               if ($textManipulator.acceptedLeague(league)) {
 
                 players.goals += gameGoals;
-                //manager.testGoals += gameGoals;
                 manager.totalGoals += gameGoals;
 
                 if ($textManipulator.isLeagueGoal(league)) {
@@ -73,7 +58,6 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, localStora
                 }
 
                 players.points += $scoringLogic.calculatePoints(gameGoals, league, players);
-                //manager.testPoints += $scoringLogic.calculatePoints(gameGoals, league);
 
               }
 

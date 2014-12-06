@@ -11,7 +11,6 @@ sicklifesFantasy.controller('transferWindowCtrl', function ($scope, $modalInstan
   var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', $scope.playerObject.id);
   playerProfileRequest.promise.then(function (d) {
     $scope.playerObject.playerImage = d.data.headshots.original;
-    console.log('>>>>>>', $scope.playerObject.playerImage);
   });
 
   $scope.ok = function () {

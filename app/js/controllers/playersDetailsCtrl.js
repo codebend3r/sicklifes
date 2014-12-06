@@ -330,10 +330,28 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       data.leagueTeamData.joe
     ];
 
+    $scope.allManagers.some(function(manager){
+
+      manager.players.some(function(player){
+
+        if (player.id === id) {
+          $scope.player = player;
+          return true;
+        }
+
+      });
+
+    });
+
+    console.log('>> CURRENT PLAYER', $scope.player);
+    getPlayerData();
+
+  };
+
+  var getPlayerData = function() {
+
     var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', id);
     playerProfileRequest.promise.then(playerProfileCallBack.bind($scope, id));
-
-    console.log('/////////////////////');
 
   };
 
