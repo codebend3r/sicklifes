@@ -138,7 +138,9 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
         datePlayed: $date.create(game.box_score.event.game_date).format('{MM}/{dd}/{yy}'),
         rawDatePlayed: $date.create(game.box_score.event.game_date),
-        originalDate: game.box_score.event.game_date
+        originalDate: game.box_score.event.game_date,
+        result: $textManipulator.result.call(gameMapsObj, game),
+        finalScore: $textManipulator.finalScore.call(gameMapsObj, game)
       };
 
       return gameMapsObj;
