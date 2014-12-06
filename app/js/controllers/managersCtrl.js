@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageService, $apiFactory, $fireBaseService, $routeParams, $arrayMappers, $arrayLoopers, $arrayFilter, $textManipulator, $dateService, $managersService, $location) {
+sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageService, $apiFactory, $fireBaseService, $routeParams, $objectUtils, $arrayMappers, $arrayLoopers, $arrayFilter, $textManipulator, $dateService, $managersService, $location) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -24,38 +24,50 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
    */
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-4 col-sm-5 col-xs-6',
+      columnClass: 'col-md-3 col-sm-3 col-xs-4',
       text: 'Player',
       hoverText: 'Player',
-      orderCriteria: 'player'
+      orderCriteria: 'playerName'
     },
     {
-      columnClass: 'col-md-3 col-sm-4 hidden-xs',
+      columnClass: 'col-md-2 col-sm-3 col-xs-4',
       text: 'Team',
       hoverText: 'Team',
-      orderCriteria: 'team'
+      orderCriteria: 'teamName'
     },
     {
-      columnClass: 'col-md-2 hidden-sm hidden-xs',
+      columnClass: 'col-md-2 col-sm-2 hidden-xs',
       text: 'League',
-      hoverText: 'League Goals',
-      orderCriteria: 'league'
+      hoverText: 'League',
+      orderCriteria: 'leagueName'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
+      columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center',
+      text: 'TG',
+      hoverText: 'Total Goals',
+      orderCriteria: 'goals'
+    },
+    {
+      columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
       text: 'DG',
       hoverText: 'Domestic Goals',
-      orderCriteria: 'domestic'
+      orderCriteria: 'domesticGoals'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
-      text: 'LG',
+      columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
+      text: 'CLG',
       hoverText: 'Champions League Goals',
-      orderCriteria: 'champions'
+      orderCriteria: 'clGoals'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
-      text: 'P',
+      columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
+      text: 'ELG',
+      hoverText: 'Europa League Goals',
+      orderCriteria: 'eGoals'
+    },
+    {
+      columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center',
+      text: 'TP',
       hoverText: 'Total Points',
       orderCriteria: 'points()'
     }
@@ -76,29 +88,29 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
    */
   $scope.updateData = function () {
 
-    console.log('--- updateData ---');
-    console.log('////////////////////////////////////');
-    console.log('$scope.allManagers', $scope.allManagers);
-    console.log('////////////////////////////////////');
+    console.log('UPDATING...');
 
     var allLeaguePromises = [];
 
     $scope.allManagers.forEach(function (manager) {
 
-      manager.totalPoints = 0;
-      manager.totalGoals = 0;
-      manager.monthlyGoalsLog = [];
-      manager.filteredMonthlyGoalsLog = [];
+      // reset goal counts
+      manager = $objectUtils.cleanManager(manager, true);
+
+      manager.seriCount = 0;
+      manager.ligaCount = 0;
+      manager.eplCount = 0;
+      manager.wildCardCount = 0;
 
       manager.players.forEach(function (player) {
 
-        player.domesticGoals = 0;
-        player.leagueGoals = 0;
-        player.points = 0;
+        player = $objectUtils.playerResetGoalPoints(player)
 
         var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
 
         playerProfileRequest.promise.then(function (result) {
+
+          player.allLeaguesName = $textManipulator.validLeagueNamesFormatted(result);
 
           // based on player result data return an object with the valid leagues for this player
           var validLeagues = $textManipulator.getPlayerValidLeagues(result),
@@ -109,8 +121,9 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
             euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
 
           if (validLeagues.inLiga) {
+            if (player.status !== 'dropped') manager.ligaCount += 1;
             ligaGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterValidDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -118,8 +131,9 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
           }
 
           if (validLeagues.inEPL) {
+            if (player.status !== 'dropped') manager.eplCount += 1;
             eplGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterValidDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -127,8 +141,9 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
           }
 
           if (validLeagues.inSeri) {
+            if (player.status !== 'dropped') manager.seriCount += 1;
             seriGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterValidDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -137,7 +152,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
           if (validLeagues.inChlg) {
             chlgGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterValidDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
@@ -146,14 +161,25 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
           if (validLeagues.inEuro) {
             euroGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterValidDate.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
+              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
             });
             allLeaguePromises.push(euroGamesRequest.promise);
           }
 
+          // logical definition for a wildcard player
+          if ((validLeagues.inChlg || validLeagues.inEuro) && !validLeagues.inLiga && !validLeagues.inEPL && !validLeagues.inSeri) {
+            if (player.status !== 'dropped') manager.wildCardCount += 1;
+          }
+
         });
+
+      });
+
+      $apiFactory.listOfPromises(allLeaguePromises, function () {
+
+        console.log('DONE...');
 
       });
 
@@ -261,6 +287,8 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
 
     chooseTeam();
 
+    console.log('$scope.allManagers', $scope.allManagers);
+
   };
 
   /**
@@ -294,9 +322,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
   var init = function () {
 
     $fireBaseService.initialize();
-
     var firePromise = $fireBaseService.getFireBaseData();
-
     firePromise.promise.then(fireBaseLoaded, getFromLocalStorage);
 
   };

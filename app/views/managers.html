@@ -26,26 +26,6 @@
     </div>
   </div>
 
-  <!-- <div class='fantasy-table'>
-
-    <div class='header'>
-      <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable'>{{header.text}}</a>
-      </div>
-    </div>
-
-    <div class='table-body'>
-      <div class='row' ng-repeat='scorer in selectedManager.players'>
-        <div class='col-md-4 col-sm-5 col-xs-6' ng-class='{dropped: scorer.status === "dropped", added: scorer.status === "added"}'><a ng-href='#/player-details/{{scorer.id}}'>{{scorer.playerName}}</a></div>
-        <div class='col-md-3 col-sm-4 hidden-xs small-text bold'>{{scorer.teamName}}</div>
-        <div class='col-md-2 hidden-sm hidden-xs'>{{scorer.leagueName}}</div>
-        <div class='col-md-1 col-sm-1 col-xs-2 text-center'>{{scorer.domesticGoals}}</div>
-        <div class='col-md-1 col-sm-1 col-xs-2 text-center'>{{scorer.leagueGoals}}</div>
-        <div class='col-md-1 col-sm-1 col-xs-2 text-center'>{{scorer.points}}</div>
-      </div>
-    </div>
-
-  </div> -->
-
   <custom-table table-body-template='managers-standard' list='selectedManager.players' table-header='tableHeader'></custom-table>
 
 </div>

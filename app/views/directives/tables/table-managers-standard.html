@@ -7,14 +7,16 @@
 
   <div class='table-body'>
     <div class='row' ng-repeat='player in list'>
-      <div class='col-md-4 col-sm-5 col-xs-6 player-column' ng-class='{dropped: player.status === "dropped", added: player.status === "added"}'>
+      <div class='col-md-3 col-sm-3 col-xs-4 player-column' ng-class='{dropped: player.status === "dropped", added: player.status === "added"}'>
         <a ng-href='#/player-details/{{player.id}}'>{{player.playerName}}</a>
       </div>
-      <div class='col-md-3 col-sm-4 hidden-xs small-text bold'>{{player.teamName}}</div>
-      <div class='col-md-2 hidden-sm hidden-xs'>{{player.leagueName}}</div>
-      <div class='col-md-1 col-sm-1 col-xs-2 text-center'>{{player.domesticGoals}}</div>
-      <div class='col-md-1 col-sm-1 col-xs-2 text-center'>{{player.leagueGoals}}</div>
-      <div class='col-md-1 col-sm-1 col-xs-2 text-center'>{{player.points}}</div>
+      <div class='col-md-2 col-sm-3 col-xs-4 small-text bold'>{{player.teamName}}</div>
+      <div class='col-md-2 col-sm-2 hidden-xs'>{{player.leagueName}}</div>
+      <div class='col-md-1 col-sm-2 col-xs-2 text-center'>{{player.goals}}</div>
+      <div class='col-md-1 hidden-sm hidden-xs text-center'>{{player.domesticGoals}}</div>
+      <div class='col-md-1 hidden-sm hidden-xs text-center'>{{player.clGoals}}</div>
+      <div class='col-md-1 hidden-sm hidden-xs text-center'>{{player.eGoals}}</div>
+      <div class='col-md-1 col-sm-2 col-xs-2 text-center'>{{player.points}}</div>
     </div>
   </div>
 

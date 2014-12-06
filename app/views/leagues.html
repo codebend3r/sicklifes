@@ -3,7 +3,7 @@
 <div ng-if='!loading' class='panel-body'>
 
   <h2>Leagues</h2>
-  <div>Welcome {{ user.first_name }}!</div>
+  <!-- <div>Welcome {{ user.first_name }}!</div> -->
 
   <select class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague(selectedLeague)'></select>
 
