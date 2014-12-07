@@ -1,8 +1,6 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Updated by Bouse on 12/06/2014
  */
-
-
 
 sicklifesFantasy.factory('$objectUtils', function () {
 

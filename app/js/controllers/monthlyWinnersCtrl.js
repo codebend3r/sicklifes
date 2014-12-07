@@ -1,8 +1,8 @@
 /**
- * Created by Bouse on 11/03/2014
+ * Updated by Bouse on 12/06/2014
  */
 
-sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory, $managersService, $routeParams, $textManipulator, $objectUtils, $fireBaseService, $arrayFilter, localStorageService, $dateService, $arrayMappers) {
+sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $managersService, $routeParams, $updateDataUtils, $objectUtils, $arrayFilter, $fireBaseService, localStorageService, $dateService) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -108,109 +108,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
     updateFilter();
   };
 
-  /**
-   * scrapes thescore.ca api and updates local array
-   */
-  $scope.updateData = function () {
-
-    console.log('UPDATING...');
-
-    var allLeaguePromises = [];
-
-    $scope.allManagers.forEach(function (manager) {
-
-      // reset goal counts
-      manager = $objectUtils.cleanManager(manager, true);
-
-      manager.seriCount = 0;
-      manager.ligaCount = 0;
-      manager.eplCount = 0;
-      manager.wildCardCount = 0;
-
-      manager.players.forEach(function (player) {
-
-        player = $objectUtils.playerResetGoalPoints(player)
-
-        var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
-
-        playerProfileRequest.promise.then(function (result) {
-
-          player.allLeaguesName = $textManipulator.validLeagueNamesFormatted(result);
-
-          // based on player result data return an object with the valid leagues for this player
-          var validLeagues = $textManipulator.getPlayerValidLeagues(result),
-            ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
-            eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
-            seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
-            chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
-            euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
-
-          if (validLeagues.inLiga) {
-            if (player.status !== 'dropped') manager.ligaCount += 1;
-            ligaGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            });
-            allLeaguePromises.push(ligaGamesRequest.promise);
-          }
-
-          if (validLeagues.inEPL) {
-            if (player.status !== 'dropped') manager.eplCount += 1;
-            eplGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            });
-            allLeaguePromises.push(eplGamesRequest.promise);
-          }
-
-          if (validLeagues.inSeri) {
-            if (player.status !== 'dropped') manager.seriCount += 1;
-            seriGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            });
-            allLeaguePromises.push(seriGamesRequest.promise);
-          }
-
-          if (validLeagues.inChlg) {
-            chlgGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            });
-            allLeaguePromises.push(chlgGamesRequest.promise);
-          }
-
-          if (validLeagues.inEuro) {
-            euroGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            });
-            allLeaguePromises.push(euroGamesRequest.promise);
-          }
-
-          // logical definition for a wildcard player
-          if ((validLeagues.inChlg || validLeagues.inEuro) && !validLeagues.inLiga && !validLeagues.inEPL && !validLeagues.inSeri) {
-            if (player.status !== 'dropped') manager.wildCardCount += 1;
-          }
-
-        });
-
-      });
-
-      $apiFactory.listOfPromises(allLeaguePromises, function () {
-
-        console.log('DONE...');
-
-      });
-
-    });
-
-  };
+  $scope.updateAllManagerData = null;
 
   /**
    * saves data to firebase
@@ -270,22 +168,23 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $apiFactory,
     $scope.loading = false;
 
     $scope.allManagers = [
-      data.leagueTeamData.chester,
-      data.leagueTeamData.frank,
-      data.leagueTeamData.dan,
-      data.leagueTeamData.justin,
-      data.leagueTeamData.mike,
-      data.leagueTeamData.joe
+      data.managersData.chester,
+      data.managersData.frank,
+      data.managersData.dan,
+      data.managersData.justin,
+      data.managersData.mike,
+      data.managersData.joe
     ];
 
     $scope.manager = $scope.allManagers[0];
 
+    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
+
     updateFilter();
 
-    //var syncDate = $date.create(data.leagueData._lastSynedOn);
-
+    console.log('syncDate allPlayersData', data.allPlayersData._lastSynedOn);
     console.log('syncDate leagueData', data.leagueData._lastSynedOn);
-    console.log('syncDate leagueTeamData', data.leagueTeamData._lastSynedOn);
+    console.log('syncDate managersData', data.managersData._lastSyncedOn);
     console.log('$scope.allManagers', $scope.allManagers);
 
   };

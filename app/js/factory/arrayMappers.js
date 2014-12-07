@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 10/24/2014
+ * Updated by Bouse on 12/06/2014
  */
 
 sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $arrayLoopers, $date) {
@@ -78,9 +78,9 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
         computedPoints = $scoringLogic.calculatePoints(gameGoals, leagueSlug);
 
-        if ($textManipulator.isLeagueGoal(leagueSlug)) {
+        //if ($textManipulator.isLeagueGoal(leagueSlug)) {
           //player.leagueGoals += gameGoals;
-        }
+        //}
 
         if ($textManipulator.isDomesticGoal(leagueSlug)) {
 
@@ -113,7 +113,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         //console.log(manager.managerName, 'POINTS', manager.totalPoints);
         //console.log(player.playerName, 'has', player.points, 'points in', player.leagueName, 'league.');
         //if (manager.managerName === 'Chester' && player.playerName === 'Juan CUADRADO') {
-          //console.log(Math.random() * 10, manager.managerName, '|', player.playerName, 'scored', game.goals, 'goals in', player.leagueName, '| manager totalGoals', manager.totalGoals);
+        //console.log(Math.random() * 10, manager.managerName, '|', player.playerName, 'scored', game.goals, 'goals in', player.leagueName, '| manager totalGoals', manager.totalGoals);
         //}
         //console.log(player.playerName, 'scored', gameGoals, 'for', computedPoints, 'points', 'in', league, 'league on', gameMapsObj.datePlayed);
 

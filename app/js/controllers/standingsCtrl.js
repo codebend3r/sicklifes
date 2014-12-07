@@ -126,140 +126,27 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
   };
 
   /**
-   * DEPCRECATED
-   * called from ng-click, makes a request from TheScore to get new data
+   * call when firebase data has loaded
+   * defines $scope.allManagers
+   * @param data
    */
-  /*$scope.updateData = function () {
-
-    console.log('UPDATING...');
-
-    var allLeagues = [];
-
-    // makes a request for all leagues in a loop returns a list of promises
-    var allPromises = $apiFactory.getAllGoalLeaders();
-
-    // waits for an array of promises to resolve, sets allLeagues data
-    $apiFactory.listOfPromises(allPromises, function (result) {
-
-      allLeagues = [];
-
-      result.forEach(function (league, index) {
-        var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
-        allLeagues = allLeagues.concat(goalsMap);
-      });
-
-      $scope.allLeagues = allLeagues;
-
-      allRequestComplete();
-
-    });
-
-  };*/
-
-  /**
-   * scrapes thescore.ca api and updates local array
-   */
-  $scope.updateData = function () {
-
-    console.log('UPDATING...');
-
-    var allLeaguePromises = [];
-
-    $scope.allManagers.forEach(function (manager) {
-
-      // reset goal counts
-      manager = $objectUtils.cleanManager(manager, true);
-
-      manager.players.forEach(function (player) {
-
-        var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
-
-        playerProfileRequest.promise.then(function (result) {
-
-          player.allLeaguesName = $textManipulator.validLeagueNamesFormatted(result);
-
-          // based on player result data return an object with the valid leagues for this player
-          var validLeagues = $textManipulator.getPlayerValidLeagues(result),
-            ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
-            eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
-            seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
-            chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
-            euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
-
-          if (validLeagues.inLiga) {
-            ligaGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            });
-            allLeaguePromises.push(ligaGamesRequest.promise);
-          }
-
-          if (validLeagues.inEPL) {
-            eplGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            });
-            allLeaguePromises.push(eplGamesRequest.promise);
-          }
-
-          if (validLeagues.inSeri) {
-            seriGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            });
-            allLeaguePromises.push(seriGamesRequest.promise);
-          }
-
-          if (validLeagues.inChlg) {
-            chlgGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            });
-            allLeaguePromises.push(chlgGamesRequest.promise);
-          }
-
-          if (validLeagues.inEuro) {
-            euroGamesRequest.promise.then(function (result) {
-              var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind($scope, player)).map($arrayMappers.monthlyMapper.bind($scope, manager, player));
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            });
-            allLeaguePromises.push(euroGamesRequest.promise);
-          }
-
-        });
-
-      });
-
-      $apiFactory.listOfPromises(allLeaguePromises, function () {
-
-        console.log('DONE...');
-
-      });
-
-    });
-
-  };
-
   var fireBaseLoaded = function (data) {
 
     $scope.loading = false;
 
     $scope.allManagers = [
-      data.leagueTeamData.chester,
-      data.leagueTeamData.frank,
-      data.leagueTeamData.dan,
-      data.leagueTeamData.justin,
-      data.leagueTeamData.mike,
-      data.leagueTeamData.joe
+      data.managersData.chester,
+      data.managersData.frank,
+      data.managersData.dan,
+      data.managersData.justin,
+      data.managersData.mike,
+      data.managersData.joe
     ];
 
+    console.log('syncDate allPlayersData', data.allPlayersData._lastSynedOn);
     console.log('syncDate leagueData', data.leagueData._lastSynedOn);
-    console.log('syncDate leagueTeamData', data.leagueTeamData._lastSynedOn);
+    console.log('syncDate managersData', data.managersData._lastSyncedOn);
+    console.log('$scope.allManagers', $scope.allManagers);
 
   };
 
@@ -269,14 +156,11 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
   var init = function () {
 
     $fireBaseService.initialize();
-
     var firePromise = $fireBaseService.getFireBaseData();
-
     firePromise.promise.then(fireBaseLoaded);
 
 
   };
-
 
   init();
 

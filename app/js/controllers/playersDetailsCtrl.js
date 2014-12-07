@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 11/03/2014
+ * Updated by Bouse on 12/06/2014
  */
 
 
@@ -140,10 +140,9 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   var playerProfileCallBack = function (playerID, result) {
 
     var selectedInt = 0,
-      teamName = result.data.teams[selectedInt].name;
-
-    // based on player result data return an object with the valid leagues for this player
-    validLeagues = $textManipulator.getPlayerValidLeagues(result);
+      teamName = result.data.teams[selectedInt].name,
+      // based on player result data return an object with the valid leagues for this player
+      validLeagues = $textManipulator.getPlayerValidLeagues(result);
 
     // name of player
     $scope.player.playerName = $textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
@@ -201,12 +200,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', id),
       allLeaguePromises = [];
 
-    console.log('////////////////////////////////////////////');
-    console.log('validLeagues', validLeagues);
-    console.log('////////////////////////////////////////////');
-
     if (validLeagues.inLiga) {
-
       ligaGamesRequest.promise.then(function (result) {
         $scope.loading = false;
         $scope.ligaGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
@@ -220,7 +214,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     }
 
     if (validLeagues.inEPL) {
-
       eplGamesRequest.promise.then(function (result) {
         $scope.loading = false;
         $scope.eplGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
@@ -233,7 +226,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     }
 
     if (validLeagues.inSeri) {
-
       seriGamesRequest.promise.then(function (result) {
         $scope.loading = false;
         $scope.seriGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
@@ -246,7 +238,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     }
 
     if (validLeagues.inChlg) {
-
       chlgGamesRequest.promise.then(function (result) {
         $scope.loading = false;
         $scope.chlgGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
@@ -259,7 +250,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     }
 
     if (validLeagues.inEuro) {
-
       euroGamesRequest.promise.then(function (result) {
         $scope.loading = false;
         $scope.euroGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
@@ -313,7 +303,9 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   };
 
   /**
-   * firebase data is loaded
+   * call when firebase data has loaded
+   * defines $scope.allManagers
+   * @param data
    */
   var fireBaseLoaded = function (data) {
 
@@ -322,12 +314,12 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     $scope.loading = false;
 
     $scope.allManagers = [
-      data.leagueTeamData.chester,
-      data.leagueTeamData.frank,
-      data.leagueTeamData.dan,
-      data.leagueTeamData.justin,
-      data.leagueTeamData.mike,
-      data.leagueTeamData.joe
+      data.managersData.chester,
+      data.managersData.frank,
+      data.managersData.dan,
+      data.managersData.justin,
+      data.managersData.mike,
+      data.managersData.joe
     ];
 
     $scope.allManagers.some(function(manager){
@@ -344,7 +336,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     });
 
     console.log('>> CURRENT PLAYER', $scope.player);
-    getPlayerData();
+    //getPlayerData();
 
   };
 

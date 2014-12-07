@@ -3,12 +3,21 @@
 <div ng-if='!loading' class='panel-body'>
 
   <h2>Admin</h2>
+  
+  <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in allManagers' ng-change='changeManager(selectedManager)'></select>
 
   <div class='well'>
-    <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
+    <button type='button' class='btn btn-danger' ng-click='updatePlayerPoolData()'>Update Player Pool Data</button>
+    <button type='button' class='btn btn-danger' ng-click='updateAllManagerData()'>Update All Managers Data</button>
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
     <button type='button' class='btn btn-danger' ng-click='resetToDefault()'>Reset to Default</button>
   </div>
+  
+  <manager-jumbotron manager='selectedManager'></manager-jumbotron>
+
+  <hr>
+
+  <custom-table table-body-template='monthly-log' list='selectedManager.filteredMonthlyGoalsLog' table-name='Game Log' table-header='tableHeader'></custom-table>
 
 </div>
 

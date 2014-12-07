@@ -6,51 +6,18 @@
 
   <div class='jumbotron'>
 
-    <!--<div class='col-md-3'>
-      <span class='background-dark'></span>
-      <span class='pattern'></span>
-    </div>-->
-
     <img class='background-logo inline-image' ng-src='{{player.teamLogo}}'/>
 
     <div class='col-md-4 col-sm-4 hidden-xs'>
       <img class='profile-pic' ng-src='{{player.playerImage}}'/>
-
-      <!--<ul class='stats-list'>
-        <li>
-          <div class='stat-name'>
-            Games
-          </div>
-          <div class='stat-value'>
-            8
-          </div>
-        </li>
-        <li>
-          <div class='stat-name'>
-            Games
-          </div>
-          <div class='stat-value'>
-            9
-          </div>
-        </li>
-        <li>
-          <div class='stat-name'>
-            Games
-          </div>
-          <div class='stat-value'>
-            5
-          </div>
-        </li>
-      </ul>-->
-
     </div>
 
     <div class='col-md-8 col-sm-8 col-xs-12 manager-jumbotron'>
 
       <h1 class='player-name'>{{player.playerName}}</h1>
       <h3 class='player-team'>{{player.playerTeam}}</h3><br/>
-      <p class='info-text'><span class='player-prop'>GOALS: </span><span>{{player.goals}}</span></p>
-      <p class='info-text'><span class='player-prop'>POINTS: </span><span>{{player.points}}</span></p>
+      <p class='player-info'><span class='player-prop'>GOALS: </span><span>{{player.goals}}</span></p>
+      <p class='player-info'><span class='player-prop'>POINTS: </span><span>{{player.points}}</span></p>
       <p class='player-info'><span class='player-prop'>LEAGUE:</span> {{player.leagueName}}</p>
       <p class='player-info'><span class='player-prop'>POSITION:</span> {{player.playerPos}}</p>
       <p class='player-info'><span class='player-prop'>WEIGHT/HEIGHT:</span> {{player.weight}}lbs/{{player.height}}</p>
@@ -65,14 +32,14 @@
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
-  <custom-table table-body-template='game-log' list='ligaGameDetails' table-header='tableHeader' league-img='leagueImages.liga' table-name='Game Logs'></custom-table>
+  <custom-table table-body-template='game-log' list='player.ligaGameLog' table-header='tableHeader' league-img='leagueImages.liga' table-name='Game Logs'></custom-table>
 
-  <custom-table table-body-template='game-log' list='eplGameDetails' table-header='tableHeader' league-img='leagueImages.epl' table-name='Game Logs'></custom-table>
+  <custom-table table-body-template='game-log' list='player.eplGameLog' table-header='tableHeader' league-img='leagueImages.epl' table-name='Game Logs'></custom-table>
 
-  <custom-table table-body-template='game-log' list='seriGameDetails' table-header='tableHeader' league-img='leagueImages.seri' table-name='Game Logs'></custom-table>
+  <custom-table table-body-template='game-log' list='player.seriGameLog' table-header='tableHeader' league-img='leagueImages.seri' table-name='Game Logs'></custom-table>
 
-  <custom-table table-body-template='game-log' list='chlgGameDetails' table-header='tableHeader' league-img='leagueImages.chlg' table-name='Game Logs'></custom-table>
+  <custom-table table-body-template='game-log' list='player.chlgGameLog' table-header='tableHeader' league-img='leagueImages.chlg' table-name='Game Logs'></custom-table>
 
-  <custom-table table-body-template='game-log' list='euroGameDetails' table-header='tableHeader' league-img='leagueImages.euro' table-name='Game Logs'></custom-table>
+  <custom-table table-body-template='game-log' list='player.euroGameLog' table-header='tableHeader' league-img='leagueImages.euro' table-name='Game Logs'></custom-table>
 
 </div>

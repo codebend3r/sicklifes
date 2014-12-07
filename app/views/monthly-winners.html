@@ -8,26 +8,11 @@
   <select class='form-control' ng-model='manager' ng-options='option.managerName for option in allManagers' ng-change='changeManager(manager)'></select>
 
   <div ng-if='admin' class='well'>
-    <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
+    <button type='button' class='btn btn-danger' ng-click='updateAllManagerData()'>Update All Managers Data</button>
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
-
-  <div class='jumbotron manager-jumbotron'>
-    <div class='col-md-4'>
-      <h3 class='manager-name'>{{manager.managerName}}</h3>
-    </div>
-    <div class='col-md-8'>
-      <p class='info-title'>for {{selectedMonth.monthName}}</p>
-      <hr></hr>
-      <p class='info-text'><span>Goals: </span><span class='totals'>{{manager.totalGoals}}</span></p>
-      <p class='info-text'><span>Points: </span><span class='totals'>{{manager.totalPoints}}</span></p>
-      <hr></hr>
-      <p class='info-text'><span># of Serie A Players: </span><span class='totals'>{{manager.seriCount}}</span></p>
-      <p class='info-text'><span># of La Liga Players: </span><span class='totals'>{{manager.ligaCount}}</span></p>
-      <p class='info-text'><span># of EPL Players: </span><span class='totals'>{{manager.eplCount}}</span></p>
-      <p class='info-text'><span># of Wildcard Players: </span><span class='totals'>{{manager.wildCardCount}}</span></p>
-    </div>
-  </div>
+  
+  <manager-jumbotron manager='manager' selected-month='selectedMonth'></manager-jumbotron>
 
   <hr>
 

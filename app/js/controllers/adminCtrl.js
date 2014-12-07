@@ -1,9 +1,9 @@
 /**
- * Created by Bouse on 10/24/2014
+ * Updated by Bouse on 12/06/2014
  */
 
 
-sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, $apiFactory, $fireBaseService, $routeParams, $arrayMappers, $arrayLoopers, $dateService, $managersService) {
+sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, $fireBaseService, $routeParams, $apiFactory, $updateDataUtils, $dateService, $managersService) {
 
   /**
    * TODO
@@ -15,103 +15,107 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
    */
   $scope.tableHeader = [
     {
-      columnClass: 'col-md-4 col-sm-5 col-xs-6',
+      columnClass: 'col-md-3 col-sm-3 col-xs-4',
       text: 'Player',
       hoverText: 'Player',
-      orderCriteria: ''
+      orderCriteria: 'playerName'
     },
     {
-      columnClass: 'col-md-3 col-sm-4 hidden-xs',
+      columnClass: 'col-md-2 col-sm-3 col-xs-4',
       text: 'Team',
       hoverText: 'Team',
-      orderCriteria: ''
+      orderCriteria: 'teamName'
     },
     {
-      columnClass: 'col-md-2 hidden-sm hidden-xs',
+      columnClass: 'col-md-2 col-sm-2 hidden-xs',
       text: 'League',
-      hoverText: 'League Goals',
-      orderCriteria: 'league'
+      hoverText: 'League',
+      orderCriteria: 'leagueName'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
+      columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center',
+      text: 'TG',
+      hoverText: 'Total Goals',
+      orderCriteria: 'goals'
+    },
+    {
+      columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
       text: 'DG',
       hoverText: 'Domestic Goals',
-      orderCriteria: 'domestic'
+      orderCriteria: 'domesticGoals'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
-      text: 'LG',
+      columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
+      text: 'CLG',
       hoverText: 'Champions League Goals',
-      orderCriteria: 'champions'
+      orderCriteria: 'clGoals'
     },
     {
-      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
-      text: 'P',
+      columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
+      text: 'ELG',
+      hoverText: 'Europa League Goals',
+      orderCriteria: 'eGoals'
+    },
+    {
+      columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center',
+      text: 'TP',
       hoverText: 'Total Points',
       orderCriteria: 'points()'
     }
   ];
+  
+  /**
+   * all months dropdown options
+   * @type {{monthName: string, range: string[]}[]}
+   */
+  $scope.allMonths = [
+    {
+      monthName: 'All Months',
+      range: ['August 1 2014', 'March 31 2015']
+    },
+    {
+      monthName: 'August 2014',
+      range: ['August 1 2014', 'August 31 2014']
+    },
+    {
+      monthName: 'September 2014',
+      range: ['September 1 2014', 'September 30 2014']
+    },
+    {
+      monthName: 'October 2014',
+      range: ['October 1 2014', 'October 31 2014']
+    },
+    {
+      monthName: 'November 2014',
+      range: ['November 1 2014', 'November 30 2014']
+    },
+    {
+      monthName: 'December 2014',
+      range: ['December 1 2014', 'December 31 2014']
+    },
+    {
+      monthName: 'January 2015',
+      range: ['January 1 2015', 'January 31 2015']
+    },
+    {
+      monthName: 'February 2015',
+      range: ['February 1 2015', 'February 28 2015']
+    },
+    {
+      monthName: 'March 2015',
+      range: ['March 1 2015', 'March 31 2015']
+    },
+    {
+      monthName: 'April 2015',
+      range: ['April 1 2015', 'April 30 2015']
+    }
+  ];
 
+  $scope.selectedMonth = $scope.allMonths[0];
 
   /**
-   * builds table
+   * saves data to firebase
    */
-  $scope.populateTable = function () {
-
-    console.log('$scope.populateTable');
-
-    var masterDefferedList = [];
-
-    $scope.allManagers.forEach(function (manager) {
-
-      manager.deferredList = [];
-
-      // loops through all players and makes request for all goals
-      manager.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, manager));
-
-      masterDefferedList = masterDefferedList.concat(manager.deferredList);
-
-      manager.deferredList = null;
-
-    });
-
-    $apiFactory.listOfPromises(masterDefferedList, $scope.saveToFireBase);
-
-  };
-
-  /**
-   * called from ng-click, makes a request from TheScore to get new data
-   */
-  $scope.updateData = function () {
-
-    console.log('updateData');
-
-    allLeaguesObj = {};
-
-    var allLeagues = [];
-
-    // makes a request for all leagues in a loop returns a list of promises
-    var allPromises = $apiFactory.getAllLeagues();
-
-    // waits for an array of promises to resolve, sets allLeagues data
-    $apiFactory.listOfPromises(allPromises, function (result) {
-
-      allLeagues = [];
-
-      result.forEach(function (league, index) {
-        var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
-        allLeaguesObj[league.leagueName] = goalsMap;
-        allLeagues = allLeagues.concat(goalsMap);
-      });
-
-      $scope.allLeagues = allLeagues;
-
-      allRequestComplete();
-
-    });
-
-  };
-
   $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
@@ -132,19 +136,13 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
     $fireBaseService.syncLeagueTeamData(saveObject);
 
   };
-  
+
+  /**
+   *
+   */
   $scope.resetToDefault = function() {
     
     $scope.allManagers = $managersService.getAllPlayers();
-    
-    /*[
-      $managersService.chester,
-      $managersService.frank,
-      $managersService.dan,
-      $managersService.justin,
-      $managersService.mike,
-      $managersService.joe
-    ];*/
     
     console.log('////////////////////////////////////');
     console.log('$scope.allManagers', $scope.allManagers);
@@ -152,28 +150,75 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
     
   };
 
+  $scope.allPlayers = [];
+
+  $scope.updatePlayerPoolData = null;
+
+  $scope.updateAllManagerData = null;
+
   ////////////////////////////////////
   ////////////////////////////////////
   ////////////////////////////////////
 
+  var chooseTeam = function () {
+
+    if ($routeParams.manager) {
+      $scope.allManagers.forEach(function (manager) {
+        if (manager.managerName === $routeParams.manager) {
+          $scope.selectedManager = manager;
+        }
+      });
+    } else {
+      $scope.selectedManager = $scope.allManagers[0];
+    }
+
+  };
+
+  /**
+   *
+   * @type {{}}
+   */
   var allLeaguesObj = {};
+
+  /**
+   * call when firebase data has loaded
+   * defines $scope.allManagers
+   * @param data
+   */
+  var fireBaseLoaded = function (data) {
+
+    $scope.loading = false;
+
+    $scope.allManagers = [
+      data.managersData.chester,
+      data.managersData.frank,
+      data.managersData.dan,
+      data.managersData.justin,
+      data.managersData.mike,
+      data.managersData.joe
+    ];
+
+    $scope.updatePlayerPoolData = $updateDataUtils.updatePlayerPoolData.bind($scope, $scope.allPlayers);
+
+    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
+
+    chooseTeam();
+
+    console.log('syncDate allPlayersData', data.allPlayersData._lastSynedOn);
+    console.log('syncDate leagueData', data.leagueData._lastSynedOn);
+    console.log('syncDate managersData', data.managersData._lastSyncedOn);
+    console.log('$scope.allManagers', $scope.allManagers);
+
+  };
 
   /**
    * init function
    */
   var init = function () {
 
-    // TODO - implement localStorage save
     $fireBaseService.initialize();
-
     var firePromise = $fireBaseService.getFireBaseData();
-
-    firePromise.promise.then(function (data) {
-
-      $scope.loading = false;
-      console.log('init');
-
-    });
+    firePromise.promise.then(fireBaseLoaded);
 
   };
 
@@ -181,8 +226,6 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
    * all requests complete
    */
   var allRequestComplete = function () {
-
-    console.log('allRequestComplete');
 
     $scope.loading = false;
     $scope.populateTable();
@@ -192,5 +235,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
   init();
 
 });
+
+
 
 

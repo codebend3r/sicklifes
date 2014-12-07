@@ -5,6 +5,18 @@
   <h2>Transfers</h2>
   <h3>Transaction for: <b>{{ selectedManager.managerName }}</b></h3>
 
+  <div class='well'>
+    <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in allManagers' ng-change='changeManager(selectedManager)'></select>
+  </div>
+
+  <div ng-if='admin' class='well'>
+    <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
+    <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save to Firebase</button>
+    <button type='button' class='btn btn-danger' ng-click='resetAllPlayers()'>Reset All Players</button>
+    <button type='button' class='btn btn-danger' ng-click='makeTransactions()'>Make Transactions</button>
+    <button type='button' class='btn btn-danger' ng-click='saveRoster()'>Save Roster</button>
+  </div>
+
   <div class='transfer-container' ng-if='transactionPlayerAdded || transactionPlayerRemoved'>
     <div class='col-md-6' ng-if='transactionPlayerAdded'>
       <div class='col-md-4'>
@@ -30,15 +42,6 @@
         <p>League: <b>{{ droppedPlayerObject.leagueName }}</b></p>
       </div>
     </div>
-  </div>
-
-  <div class='well'>
-    <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in allManagers' ng-change='changeManager(selectedManager)'></select>
-    <button type='button' class='btn btn-danger' ng-click='updateData()'>Update Data</button>
-    <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save to Firebase</button>
-    <button type='button' class='btn btn-danger' ng-click='resetAllPlayers()'>Reset All Players</button>
-    <button type='button' class='btn btn-danger' ng-click='makeTransactions()'>Make Transactions</button>
-    <button type='button' class='btn btn-danger' ng-click='saveRoster()'>Save Roster</button>
   </div>
 
   <custom-table ng-if='!transactionPlayerAdded' table-body-template='all-players' add-player='addPlayer(player)' drop-player='dropPlayer(player)' list='allPlayers' table-name='All Players' table-header='tableHeader'></custom-table>

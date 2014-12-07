@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 9/18/2014.
+ * Updated by Bouse on 12/06/2014
  */
 
 sicklifesFantasy.directive('customTable', function () {
@@ -21,14 +21,7 @@ sicklifesFantasy.directive('customTable', function () {
     link: function ($scope) {
 
       $scope.playerSearch = '';
-
-      //console.log('list', $scope.list);
-      //console.log('addPlayer', $scope.addPlayer);
-      //console.log('dropPlayer', $scope.dropPlayer);
-      //console.log('tableHeader', $scope.tableHeader);
-      //console.log('tableName', $scope.tableName);
-      //console.log('leagueImg', $scope.leagueImg);
-
+      
     }
   }
 

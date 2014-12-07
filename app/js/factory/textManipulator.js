@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Updated by Bouse on 12/06/2014
  */
 
 
@@ -220,22 +220,25 @@ sicklifesFantasy.factory('$textManipulator', function () {
       return league === 'liga' || league === 'epl' || league === 'seri' || league === 'chlg' || league === 'europa' || league === 'uefa';
     },
 
-    getPlayerPlayerRecordURL: function (league, id) {
-      return 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/player_records';
+    getPlayerPlayerRecordURL: function (leagueSlug, id) {
+      return 'http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id + '/player_records';
     },
 
-    getPlayerSummaryURL: function (league, id) {
-      return 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id + '/summary';
+    getPlayerSummaryURL: function (leagueSlug, id) {
+      return 'http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id + '/summary';
     },
 
-    getPlayerProfileURL: function (league, id) {
-      return 'http://origin-api.thescore.com/' + league.toLowerCase() + '/players/' + id;
+    getPlayerProfileURL: function (leagueSlug, id) {
+      return 'http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id;
     },
 
     getTeamInfoURL: function (id) {
       return 'http://origin-api.thescore.com/soccer/teams/' + id;
+    },
+    
+    getTeamRosterURL: function (leagueSlug, id) {
+      return 'http://api.thescore.com/' + leagueSlug.toLowerCase() + '/teams/' + id + '/players/?rpp=-1';
     }
-
 
   };
 
