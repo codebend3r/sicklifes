@@ -75,34 +75,34 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
    */
   /*var populateTable = function () {
 
-    var masterDeferredList = [];
+   var masterDeferredList = [];
 
-    // 1st loop
-    $scope.allManagers.forEach(function (team) {
+   // 1st loop
+   $scope.allManagers.forEach(function (team) {
 
-      team.totalPoints = 0;
+   team.totalPoints = 0;
 
-      // clear team deferred before the loop that populates it
-      team.deferredList = [];
+   // clear team deferred before the loop that populates it
+   team.deferredList = [];
 
-      // 2nd loop
-      team.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, team));
+   // 2nd loop
+   team.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, team));
 
-      masterDeferredList = masterDeferredList.concat(team.deferredList);
+   masterDeferredList = masterDeferredList.concat(team.deferredList);
 
-      team.deferredList = [];
+   team.deferredList = [];
 
-    });
+   });
 
-    //$apiFactory.listOfPromises(masterDeferredList, $scope.saveToFireBase);
+   //$apiFactory.listOfPromises(masterDeferredList, $scope.saveToFireBase);
 
-    console.log('masterDeferredList.length', masterDeferredList.length);
+   console.log('masterDeferredList.length', masterDeferredList.length);
 
-    $apiFactory.listOfPromises(masterDeferredList, function () {
-      console.log('ALL DONE');
-    });
+   $apiFactory.listOfPromises(masterDeferredList, function () {
+   console.log('ALL DONE');
+   });
 
-  };*/
+   };*/
 
   $scope.saveToFireBase = function () {
 

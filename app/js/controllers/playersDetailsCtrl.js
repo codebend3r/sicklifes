@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $arrayFilter, $managersService, $date, $dateService, $fireBaseService) {
+sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $managersService, $date, $dateService, $fireBaseService) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -128,155 +128,14 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
   };
 
-  ////////////////////////////////////////
-  ////////////// private /////////////////
-  ////////////////////////////////////////
-
-  var validLeagues = null;
-
-  /**
-   * callback for profile end point
-   */
-  var playerProfileCallBack = function (playerID, result) {
-
-    var selectedInt = 0,
-      teamName = result.data.teams[selectedInt].name,
-      // based on player result data return an object with the valid leagues for this player
-      validLeagues = $textManipulator.getPlayerValidLeagues(result);
-
-    // name of player
-    $scope.player.playerName = $textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
-
-    // team player belongs to
-    $scope.player.playerTeam = teamName;
-
-    // get all valid league names string seperated by slashes
-    $scope.player.leagueName = $textManipulator.validLeagueNamesFormatted(result);
-
-    $scope.player.teamLogo = result.data.teams[selectedInt].sportsnet_logos.large;
-
-    $scope.player.playerImage = result.data.headshots.original;
-
-    populatePlayerProfile(playerID, result);
-
-  };
-
-  /**
-   * populates info for specific player such as weight, height and position
-   */
-  var populatePlayerProfile = function (playerID, result) {
-
-    var playerLeagueProfileRequest,
-      profileLeague = $textManipulator.getLeagueSlug(result);
-
-    playerLeagueProfileRequest = $apiFactory.getPlayerProfile(profileLeague, playerID);
-    playerLeagueProfileRequest.promise.then(function (profileData) {
-
-      $scope.player.playerPos = profileData.data.position;
-      $scope.player.weight = profileData.data.weight;
-      $scope.player.height = profileData.data.height_feet + '\'' + profileData.data.height_inches;
-      $scope.player.birthdate = profileData.data.birthdate;
-
-    });
-
-    populateGamesLog();
-
-  };
-
   /**
    * league images
    */
   $scope.leagueImages = $textManipulator.leagueImages;
 
-  /**
-   * scrapes thescore.ca api and updates javascript array
-   */
-  var populateGamesLog = function () {
-
-    var ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', id),
-      eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', id),
-      seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', id),
-      chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', id),
-      euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', id),
-      allLeaguePromises = [];
-
-    if (validLeagues.inLiga) {
-      ligaGamesRequest.promise.then(function (result) {
-        $scope.loading = false;
-        $scope.ligaGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
-        allGamesLog = allGamesLog.concat($scope.ligaGameDetails);
-      }, function () {
-        console.log('LIGA FAIL');
-      });
-
-      allLeaguePromises.push(ligaGamesRequest.promise);
-
-    }
-
-    if (validLeagues.inEPL) {
-      eplGamesRequest.promise.then(function (result) {
-        $scope.loading = false;
-        $scope.eplGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
-        allGamesLog = allGamesLog.concat($scope.eplGameDetails);
-      }, function () {
-        console.log('EPL FAIL');
-      });
-
-      allLeaguePromises.push(eplGamesRequest.promise);
-    }
-
-    if (validLeagues.inSeri) {
-      seriGamesRequest.promise.then(function (result) {
-        $scope.loading = false;
-        $scope.seriGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
-        allGamesLog = allGamesLog.concat($scope.seriGameDetails);
-      }, function () {
-        console.log('SERI FAIL');
-      });
-      allLeaguePromises.push(seriGamesRequest.promise);
-
-    }
-
-    if (validLeagues.inChlg) {
-      chlgGamesRequest.promise.then(function (result) {
-        $scope.loading = false;
-        $scope.chlgGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
-        allGamesLog = allGamesLog.concat($scope.chlgGameDetails);
-      }, function () {
-        console.log('CHLG FAIL');
-      });
-
-      allLeaguePromises.push(chlgGamesRequest.promise);
-    }
-
-    if (validLeagues.inEuro) {
-      euroGamesRequest.promise.then(function (result) {
-        $scope.loading = false;
-        $scope.euroGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
-        allGamesLog = allGamesLog.concat($scope.euroGameDetails);
-      }, function () {
-        console.log('EURO FAIL');
-      });
-
-      allLeaguePromises.push(euroGamesRequest.promise);
-
-    }
-
-    $apiFactory.listOfPromises(allLeaguePromises, function () {
-
-      console.log('ALL LEAGUE DATA FULFILLED');
-      console.log('//////////////////////////////////////////');
-      console.log('$scope.allManagers', $scope.allManagers);
-      console.log('//////////////////////////////////////////');
-
-    });
-
-  };
-
-  /**
-   * TODO
-   */
-  var allGamesLog = [];
+  ////////////////////////////////////////
+  ////////////// private /////////////////
+  ////////////////////////////////////////
 
   /**
    * save data to firebase
@@ -312,6 +171,8 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     console.log('fireBaseLoaded');
 
     $scope.loading = false;
+    
+    $scope.allPlayers = data.allPlayersData.allPlayers;
 
     $scope.allManagers = [
       data.managersData.chester,
@@ -321,29 +182,28 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
       data.managersData.mike,
       data.managersData.joe
     ];
+    
+    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
+    console.log('syncDate managersData', data.managersData._lastSyncedOn);
 
-    $scope.allManagers.some(function(manager){
-
-      manager.players.some(function(player){
-
-        if (player.id === id) {
-          $scope.player = player;
-          return true;
-        }
-
-      });
-
-    });
-
-    console.log('>> CURRENT PLAYER', $scope.player);
-    //getPlayerData();
+    findPlayerByID();
+    
+    var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', $scope.player.id);
+    playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, $scope.player));
 
   };
 
-  var getPlayerData = function() {
+  var findPlayerByID = function () {
 
-    var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', id);
-    playerProfileRequest.promise.then(playerProfileCallBack.bind($scope, id));
+    $scope.allPlayers.some(function (manager) {
+      if (player.id === id) {
+        $scope.player = player;
+        return true;
+      }
+    });
+
+    console.log('>> CURRENT PLAYER', $scope.player);
 
   };
 
@@ -358,7 +218,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   var init = function () {
 
     id = Number($routeParams.playerID);
-    $fireBaseService.initialize();
+    $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
     firePromise.promise.then(fireBaseLoaded);
 

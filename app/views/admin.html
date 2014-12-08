@@ -16,8 +16,10 @@
   <manager-jumbotron manager='selectedManager'></manager-jumbotron>
 
   <hr>
-
-  <custom-table table-body-template='monthly-log' list='selectedManager.filteredMonthlyGoalsLog' table-name='Game Log' table-header='tableHeader'></custom-table>
+  
+  <custom-table table-body-template='managers-standard' list='selectedManager.players' table-header='managersTableHeader'></custom-table>
+  
+  <custom-table table-body-template='all-players-standard' list='allPlayers' table-name='All Players' table-header='allPlayersTableHeader'></custom-table>
 
 </div>
 

@@ -32,28 +32,33 @@ sicklifesFantasy.factory('$textManipulator', function () {
 
     },
 
-    isDomesticGoal: function (league) {
+    isDomesticLeague: function (league) {
       league = league.toLocaleLowerCase();
       return league === 'liga' || league === 'epl' || league === 'seri';
     },
 
-    isLeagueGoal: function (league) {
+    isTournamentLeague: function (league) {
       league = league.toLocaleLowerCase();
       return league === 'chlg' || league === 'uefa';
     },
 
-    isChampionsLeagueGoal: function (league) {
+    isChampionsLeague: function (league) {
       league = league.toLocaleLowerCase();
       return league === 'chlg';
     },
 
-    isEuropaGoal: function (league) {
+    isEuropaLeague: function (league) {
       league = league.toLocaleLowerCase();
       return league === 'uefa' || league === 'europa';
     },
+    
+    isWildCardLeague: function(validLeagues) {
+      return ((validLeagues.inChlg || validLeagues.inEuro) && !validLeagues.inLiga && !validLeagues.inEPL && !validLeagues.inSeri);
+      
+    },
 
     formattedFullName: function (firstName, lastName) {
-      return textManipulator.stripVowelAccent((firstName !== null && firstName !== undefined ? firstName : '') + ' ' + lastName.toUpperCase());
+      return textManipulator.stripVowelAccent((firstName !== null && firstName !== undefined ? firstName + ' ' : '') + lastName.toUpperCase());
     },
 
     formattedLeagueName: function (league) {
@@ -63,11 +68,11 @@ sicklifesFantasy.factory('$textManipulator', function () {
       } else if (league === 'seri') {
         return 'SERIE A';
       } else if (league === 'liga') {
-        return 'LIGA';
+        return 'LA LIGA';
       } else if (league === 'epl') {
         return 'EPL';
       } else if (league === 'chlg') {
-        return 'CHLG';
+        return 'CHAMPIONS LEAGUE';
       } else {
         return league.toUpperCase();
       }

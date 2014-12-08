@@ -12,8 +12,8 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
 
   /**
    * TODO
-   */
-  $scope.tableHeader = [
+   */  
+  $scope.managersTableHeader = [
     {
       columnClass: 'col-md-3 col-sm-3 col-xs-4',
       text: 'Player',
@@ -64,67 +64,54 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
     }
   ];
   
-  /**
-   * all months dropdown options
-   * @type {{monthName: string, range: string[]}[]}
-   */
-  $scope.allMonths = [
+  $scope.allPlayersTableHeader = [
     {
-      monthName: 'All Months',
-      range: ['August 1 2014', 'March 31 2015']
+      columnClass: 'col-md-1 col-sm-2 col-xs-2',
+      text: 'ID'
     },
     {
-      monthName: 'August 2014',
-      range: ['August 1 2014', 'August 31 2014']
+      columnClass: 'col-md-3 col-sm-4 col-xs-4',
+      text: 'Player'
     },
     {
-      monthName: 'September 2014',
-      range: ['September 1 2014', 'September 30 2014']
+      columnClass: 'col-md-3 col-sm-6 col-xs-4',
+      text: 'Owned By'
     },
     {
-      monthName: 'October 2014',
-      range: ['October 1 2014', 'October 31 2014']
+      columnClass: 'col-md-2 col-sm-6 col-xs-4',
+      text: 'League'
     },
     {
-      monthName: 'November 2014',
-      range: ['November 1 2014', 'November 30 2014']
-    },
-    {
-      monthName: 'December 2014',
-      range: ['December 1 2014', 'December 31 2014']
-    },
-    {
-      monthName: 'January 2015',
-      range: ['January 1 2015', 'January 31 2015']
-    },
-    {
-      monthName: 'February 2015',
-      range: ['February 1 2015', 'February 28 2015']
-    },
-    {
-      monthName: 'March 2015',
-      range: ['March 1 2015', 'March 31 2015']
-    },
-    {
-      monthName: 'April 2015',
-      range: ['April 1 2015', 'April 30 2015']
+      columnClass: 'col-md-3 col-sm-6 col-xs-4',
+      text: 'Team'
     }
   ];
 
-  $scope.selectedMonth = $scope.allMonths[0];
-
+  
   /**
-   * saves data to firebase
+   * save data to firebase
    */
   $scope.saveToFireBase = function () {
+
+    console.log('////////////////////////////////////');
+    console.log('$scope.allPlayers', $scope.allPlayers, '|', $scope.allPlayers.length);
+    console.log('////////////////////////////////////');
+
+    var allPlayersObject = {
+      _syncedFrom: 'adminCtrl',
+      _lastSyncedOn: $dateService.syncDate(),
+      allPlayers: $scope.allPlayers
+    };
+
+    $fireBaseService.syncAllPlayersList(allPlayersObject);
 
     console.log('////////////////////////////////////');
     console.log('$scope.allManagers', $scope.allManagers);
     console.log('////////////////////////////////////');
 
-    var saveObject = {
+    var managersObject = {
       _syncedFrom: 'adminCtrl',
-      _lastSyncedOn: $dateService.syncDate(),
+      _lastSynedOn: $dateService.syncDate(),
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
@@ -133,7 +120,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
       joe: $scope.allManagers[5]
     };
 
-    $fireBaseService.syncLeagueTeamData(saveObject);
+    $fireBaseService.syncLeagueTeamData(managersObject);
 
   };
 
@@ -186,8 +173,12 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
    * @param data
    */
   var fireBaseLoaded = function (data) {
+    
+    console.log('$scope.syncedObject', $scope.syncedObject);
 
     $scope.loading = false;
+    
+    $scope.allPlayers = data.allPlayersData.allPlayers;
 
     $scope.allManagers = [
       data.managersData.chester,
@@ -204,8 +195,8 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
 
     chooseTeam();
 
-    console.log('syncDate allPlayersData', data.allPlayersData._lastSynedOn);
-    console.log('syncDate leagueData', data.leagueData._lastSynedOn);
+    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
     console.log('$scope.allManagers', $scope.allManagers);
 
@@ -216,7 +207,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
    */
   var init = function () {
 
-    $fireBaseService.initialize();
+    $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
     firePromise.promise.then(fireBaseLoaded);
 

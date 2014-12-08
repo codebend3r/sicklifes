@@ -88,16 +88,33 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, $objectUti
      * TODO
      */
     getOwnerByID: function (id) {
+      
       var owner = 'Free Agent';
-      $managersService.getAllPlayers().forEach(function (team) {
-        team.players.some(function (p) {
-          if (p.id === id) {
-            owner = team.managerName;
-            return p.id === id
-          }
+      return;
+      
+      var managersPromise = $managersService.getAllPlayers();
+      
+      managersPromise.promise.then(function(data){
+        
+        $scope.allManagers = [
+          data.managersData.chester,
+          data.managersData.frank,
+          data.managersData.dan,
+          data.managersData.justin,
+          data.managersData.mike,
+          data.managersData.joe
+        ];
+        
+        allManagers.some(function (manager) {
+          manager.players.some(function (p) {
+            return p.id === id && owner == team.managerName;
+          });
         });
+        return owner;
+        
       });
-      return owner;
+      
+      
     }
 
   };
@@ -105,3 +122,5 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, $objectUti
   return arrayLoopers;
 
 });
+
+

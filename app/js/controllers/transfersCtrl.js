@@ -96,7 +96,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
     var allPlayersObject = {
       _syncedFrom: 'transfersCtrl',
-      _lastSynedOn: $dateService.syncDate(),
+      _lastSyncedOn: $dateService.syncDate(),
       allPlayers: $scope.allPlayers
     };
 
@@ -279,10 +279,12 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
       data.managersData.mike,
       data.managersData.joe
     ];
-    
-    console.log('syncDate allPlayersData', data.allPlayersData._lastSynedOn);
-    console.log('syncDate leagueData', data.leagueData._lastSynedOn);
+
+    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
+    
+    $scope.updatePlayerPoolData = $updateDataUtils.updatePlayerPoolData.bind($scope, $scope.allPlayers);
 
     $scope.selectedManager = $scope.allManagers[0];
     $scope.selectedPlayers = $scope.selectedManager.players;
@@ -294,7 +296,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
     $scope.allManagers.forEach(function (manager) {
 
       manager.players.forEach(function (eachPlayer) {
-        
+
       });
 
     });
@@ -308,7 +310,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
    */
   var init = function () {
 
-    $fireBaseService.initialize();
+    $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
     firePromise.promise.then(fireBaseLoaded);
 

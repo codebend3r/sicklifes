@@ -2,7 +2,7 @@
  * Created by crivas on 9/12/2014.
  */
 
-sicklifesFantasy.factory('$managersService', function () {
+sicklifesFantasy.factory('$managersService', function ($fireBaseService) {
 
   /**
    * TODO
@@ -1065,14 +1065,28 @@ sicklifesFantasy.factory('$managersService', function () {
      * TODO
      */
     getAllPlayers: function () {
-      return [
-        allManagers.chester,
-        allManagers.frank,
-        allManagers.dan,
-        allManagers.justin,
-        allManagers.mike,
-        allManagers.joe
-      ];
+      
+      //$fireBaseService.initialize(allManagers);
+      var firePromise = $fireBaseService.getFireBaseData();
+      firePromise.promise.then(function(data){
+        
+        return data;
+        
+      }, function() {
+        
+        return [
+          allManagers.chester,
+          allManagers.frank,
+          allManagers.dan,
+          allManagers.justin,
+          allManagers.mike,
+          allManagers.joe
+        ];
+        
+      });
+      
+      return firePromise;
+    
     }
 
   }

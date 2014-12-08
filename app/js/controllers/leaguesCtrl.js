@@ -82,7 +82,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
 
     var saveObject = {
       _syncedFrom: 'leaguesCtrl',
-      _lastSynedOn: $dateService.syncDate(),
+      _lastSyncedOn: $dateService.syncDate(),
       LIGA: $scope.allLeagues[0].source,
       EPL: $scope.allLeagues[1].source,
       SERI: $scope.allLeagues[2].source,
@@ -136,8 +136,9 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
 
     var syncDate = $date.create(data.leagueData._lastSynedOn);
 
-    console.log('syncDate', data.leagueData._lastSynedOn);
-    console.log('$scope.allLeagues', $scope.allLeagues);
+    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
+    console.log('syncDate managersData', data.managersData._lastSyncedOn);
 
     if (syncDate.isYesterday()) {
       $scope.updateData();
@@ -147,10 +148,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
 
   var init = function () {
 
-    $fireBaseService.initialize();
-
+    $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
-
     firePromise.promise.then(fireBaseLoaded);
 
   };
@@ -158,9 +157,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
   var allRequestComplete = function () {
 
     $scope.loading = false;
-
     $scope.selectedLeague = $scope.allLeagues[0];
-
     $scope.saveToFireBase();
 
   };

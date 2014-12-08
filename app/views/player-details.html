@@ -15,12 +15,14 @@
     <div class='col-md-8 col-sm-8 col-xs-12 manager-jumbotron'>
 
       <h1 class='player-name'>{{player.playerName}}</h1>
-      <h3 class='player-team'>{{player.playerTeam}}</h3><br/>
+      <h3 class='player-team'>{{player.teamName}}</h3><br/>
       <p class='player-info'><span class='player-prop'>GOALS: </span><span>{{player.goals}}</span></p>
       <p class='player-info'><span class='player-prop'>POINTS: </span><span>{{player.points}}</span></p>
-      <p class='player-info'><span class='player-prop'>LEAGUE:</span> {{player.leagueName}}</p>
+      <p ng-if='player.domesticLeagueName' class='player-info'><span class='player-prop'>DOMESTIC LEAGUE:</span> {{player.domesticLeagueName}}</p>
+      <p ng-if='player.tournamentLeagueName' class='player-info'><span class='player-prop'>TOURNAMENT LEAGUE:</span> {{player.tournamentLeagueName}}</p>
       <p class='player-info'><span class='player-prop'>POSITION:</span> {{player.playerPos}}</p>
       <p class='player-info'><span class='player-prop'>WEIGHT/HEIGHT:</span> {{player.weight}}lbs/{{player.height}}</p>
+      <p class='player-info'><span class='player-prop'>BIRTHPLACE:</span> {{player.birthplace}}</p>
       <p class='player-info'><span class='player-prop'>BIRTHDATE:</span> {{player.birthdate}}</p>
 
     </div>

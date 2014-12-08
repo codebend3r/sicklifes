@@ -121,7 +121,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $managersSer
 
     var saveObject = {
       _syncedFrom: 'monthlyWinnersCtrl',
-      _lastSynedOn: $dateService.syncDate(),
+      _lastSyncedOn: $dateService.syncDate(),
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
@@ -182,8 +182,8 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $managersSer
 
     updateFilter();
 
-    console.log('syncDate allPlayersData', data.allPlayersData._lastSynedOn);
-    console.log('syncDate leagueData', data.leagueData._lastSynedOn);
+    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
     console.log('$scope.allManagers', $scope.allManagers);
 
@@ -206,7 +206,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $managersSer
    */
   var init = function () {
 
-    $fireBaseService.initialize();
+    $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
     firePromise.promise.then(fireBaseLoaded, getFromLocalStorage);
 
