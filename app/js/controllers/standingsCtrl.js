@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $routeParams, $fireBaseService, $arrayMappers, $objectUtils, $arrayLoopers, $dateService, $textManipulator, $scoringLogic, $managersService, $location) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $routeParams, $fireBaseService, $updateDataUtils, $objectUtils, $dateService, $managersService, $location) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -52,6 +52,8 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
    * consolidated list of all owned players by a manager
    */
   $scope.allLeagues = null;
+  
+  $scope.updateAllManagerData = null;
 
   ////////////////////////////////////////
   ////////////// private /////////////////
@@ -70,40 +72,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
 
   };
 
-  /**
-   * DEPCRECATED
-   */
-  /*var populateTable = function () {
-
-   var masterDeferredList = [];
-
-   // 1st loop
-   $scope.allManagers.forEach(function (team) {
-
-   team.totalPoints = 0;
-
-   // clear team deferred before the loop that populates it
-   team.deferredList = [];
-
-   // 2nd loop
-   team.players.forEach($arrayLoopers.forEachPlayer.bind($scope, $scope, team));
-
-   masterDeferredList = masterDeferredList.concat(team.deferredList);
-
-   team.deferredList = [];
-
-   });
-
-   //$apiFactory.listOfPromises(masterDeferredList, $scope.saveToFireBase);
-
-   console.log('masterDeferredList.length', masterDeferredList.length);
-
-   $apiFactory.listOfPromises(masterDeferredList, function () {
-   console.log('ALL DONE');
-   });
-
-   };*/
-
   $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
@@ -112,7 +80,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
 
     var saveObject = {
       _syncedFrom: 'standingsCtrl',
-      _lastSynedOn: $dateService.syncDate(),
+      _lastSyncedOn: $dateService.syncDate(),
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
@@ -143,10 +111,12 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
       data.managersData.joe
     ];
 
-    console.log('syncDate allPlayersData', data.allPlayersData._lastSynedOn);
-    console.log('syncDate leagueData', data.leagueData._lastSynedOn);
+    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
     console.log('$scope.allManagers', $scope.allManagers);
+    
+    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
 
   };
 
@@ -155,7 +125,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
    */
   var init = function () {
 
-    $fireBaseService.initialize();
+    $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
     firePromise.promise.then(fireBaseLoaded);
 

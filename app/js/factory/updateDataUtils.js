@@ -63,7 +63,7 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
      */
     updateAllManagerData: function (allManagers) {
 
-      console.log('UPDATING ALL MANAGERS...', allManagers);
+      console.log('UPDATING ALL MANAGERS...');
 
       var allLeaguePromises = [];
 
@@ -173,6 +173,37 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
           //console.log('DONE...');
 
         });
+
+      });
+
+    },
+    
+    updateLeaguesData: function () {
+
+      console.log('UPDATING ALL LEAGUES');
+
+      var allLeagues = [];
+
+      // makes a request for all leagues in a loop returns a list of promises
+      var allPromises = $apiFactory.getAllGoalLeaders();
+
+      // waits for an array of promises to resolve, sets allLeagues data
+      $apiFactory.listOfPromises(allPromises, function (result) {
+
+        allLeagues = [];
+
+        result.forEach(function (league, index) {
+          var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
+          allLeagues.push({
+            name: $textManipulator.properLeagueName(league.leagueName),
+            source: goalsMap
+          });
+          $scope.consolidatedGoalScorers = $scope.consolidatedGoalScorers.concat(goalsMap);
+        });
+
+        $scope.allLeagues = allLeagues;
+
+        allRequestComplete();
 
       });
 

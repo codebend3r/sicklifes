@@ -179,6 +179,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $managersSer
     $scope.manager = $scope.allManagers[0];
 
     $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
+    
 
     updateFilter();
 
