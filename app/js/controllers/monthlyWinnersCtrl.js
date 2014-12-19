@@ -163,7 +163,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $managersSer
    */
   var fireBaseLoaded = function (data) {
 
-    console.log('fireBaseLoaded');
+    console.log('fireBaseLoaded -- monthlyWinnersCtrl');
 
     $scope.loading = false;
 
@@ -186,7 +186,6 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $managersSer
     console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
-    console.log('$scope.allManagers', $scope.allManagers);
 
   };
 

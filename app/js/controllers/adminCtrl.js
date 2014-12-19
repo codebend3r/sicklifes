@@ -111,7 +111,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
 
     var managersObject = {
       _syncedFrom: 'adminCtrl',
-      _lastSynedOn: $dateService.syncDate(),
+      _lastSyncedOn: $dateService.syncDate(),
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
@@ -173,8 +173,6 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
    * @param data
    */
   var fireBaseLoaded = function (data) {
-    
-    console.log('$scope.syncedObject', $scope.syncedObject);
 
     $scope.loading = false;
     
@@ -198,7 +196,6 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
     console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
-    console.log('$scope.allManagers', $scope.allManagers);
 
   };
 

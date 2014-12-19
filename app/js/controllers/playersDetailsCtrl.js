@@ -148,7 +148,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
     var saveObject = {
       _syncedFrom: 'playersDetailsCtrl',
-      _lastSynedOn: $dateService.syncDate(),
+      _lastSyncedOn: $dateService.syncDate(),
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
@@ -168,7 +168,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
    */
   var fireBaseLoaded = function (data) {
 
-    console.log('fireBaseLoaded');
+    console.log('fireBaseLoaded -- playersDetailsCtrl');
 
     $scope.loading = false;
     

@@ -178,11 +178,12 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
 
     },
     
-    updateLeaguesData: function () {
+    updateLeaguesData: function (leagues) {
 
       console.log('UPDATING ALL LEAGUES');
 
       var allLeagues = [];
+      var consolidatedGoalScorers = [];
 
       // makes a request for all leagues in a loop returns a list of promises
       var allPromises = $apiFactory.getAllGoalLeaders();
@@ -194,16 +195,46 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
 
         result.forEach(function (league, index) {
           var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
+          console.log('league.leagueName', league.leagueName);
           allLeagues.push({
             name: $textManipulator.properLeagueName(league.leagueName),
-            source: goalsMap
+            source: goalsMap,
+            img: $textManipulator.leagueImages.liga
           });
-          $scope.consolidatedGoalScorers = $scope.consolidatedGoalScorers.concat(goalsMap);
+          consolidatedGoalScorers = consolidatedGoalScorers.concat(goalsMap);
         });
 
-        $scope.allLeagues = allLeagues;
+        leagues = allLeagues;
+        console.log('> leagues', leagues);
 
-        allRequestComplete();
+        /*var allLeagues = [
+        {
+          name: $textManipulator.leagueLongNames.liga,
+          source: data.leagueData.LIGA,
+          img: $textManipulator.leagueImages.liga
+        },
+        {
+          name: $textManipulator.leagueLongNames.epl,
+          source: data.leagueData.EPL,
+          img: $textManipulator.leagueImages.epl
+        },
+        {
+          name: $textManipulator.leagueLongNames.seri,
+          source: data.leagueData.SERI,
+          img: $textManipulator.leagueImages.seri
+        },
+        {
+          name: $textManipulator.leagueLongNames.chlg,
+          source: data.leagueData.CHLG,
+          img: $textManipulator.leagueImages.chlg
+        },
+        {
+          name: $textManipulator.leagueLongNames.euro,
+          source: data.leagueData.UEFA,
+          img: $textManipulator.leagueImages.euro
+        }
+      ];*/
+        
 
       });
 

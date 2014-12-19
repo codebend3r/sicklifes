@@ -2,7 +2,7 @@
  * Created by Bouse on 11/03/2014
  */
 
-sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date, $managersService, $location, $routeParams, $arrayMappers, $dateService, $textManipulator, $fireBaseService) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date, $managersService, $location, $routeParams, $updateDataUtils, $arrayMappers, $dateService, $textManipulator, $fireBaseService) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -37,8 +37,6 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
 
   $scope.allRequest = [];
 
-  $scope.consolidatedGoalScorers = [];
-
   $scope.changeLeague = function (league) {
     //
   };
@@ -64,7 +62,6 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
 
     $fireBaseService.syncLeagueData(saveObject);
     
-    $scope.updateLeaguesData = $updateDataUtils.updateLeaguesData.bind($scope, $scope.allLeagues);
 
   };
 
@@ -113,6 +110,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
     console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
+
+    $scope.updateLeaguesData = $updateDataUtils.updateLeaguesData.bind($scope, []);
 
     if (syncDate.isYesterday()) {
       $scope.updateData();

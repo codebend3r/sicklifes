@@ -100,6 +100,8 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
    */
   var fireBaseLoaded = function (data) {
 
+    console.log('fireBaseLoaded -- standingsCtrl');
+
     $scope.loading = false;
 
     $scope.allManagers = [
@@ -114,7 +116,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
     console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
-    console.log('$scope.allManagers', $scope.allManagers);
     
     $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
 
