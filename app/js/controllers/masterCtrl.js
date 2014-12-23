@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Created by Bouse on 12/23/2014
  */
 
 sicklifesFantasy.controller('masterCtrl', function ($scope) {

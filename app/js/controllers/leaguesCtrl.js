@@ -111,7 +111,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
 
-    $scope.updateLeaguesData = $updateDataUtils.updateLeaguesData.bind($scope, []);
+    $scope.updateLeaguesData = $updateDataUtils.updateLeaguesData.bind($scope, $scope.allLeagues);
 
     if (syncDate.isYesterday()) {
       $scope.updateData();

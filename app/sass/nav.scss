@@ -2,11 +2,21 @@
 
 .navbar-default {
   a.navbar-brand {
-    color: $secondaryColour;
     font-weight: bold;
+    color: $secondaryColour;
+    background-color: $mainColour;
     &:hover {
-      color: $secondaryColour;
+      color: $mainColour;
+      background-color: $secondaryColour;
     }
+    &:active, &:visited {
+      color: $mainColour;
+      background-color: $secondaryColour;
+    }
+  }
+  .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+    color: $mainColour;
+    background-color: $secondaryColour;
   }
 }
 

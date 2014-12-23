@@ -1,5 +1,5 @@
 /**
- * Updated by Bouse on 12/06/2014
+ * Updated by Bouse on 12/23/2014
  */
 
 sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils, $textManipulator, $arrayMappers, $arrayFilter) {
@@ -195,46 +195,15 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
 
         result.forEach(function (league, index) {
           var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
-          console.log('league.leagueName', league.leagueName);
           allLeagues.push({
             name: $textManipulator.properLeagueName(league.leagueName),
             source: goalsMap,
-            img: $textManipulator.leagueImages.liga
+            img: $textManipulator.leagueImages[league.leagueName]
           });
           consolidatedGoalScorers = consolidatedGoalScorers.concat(goalsMap);
         });
-
-        leagues = allLeagues;
-        console.log('> leagues', leagues);
-
-        /*var allLeagues = [
-        {
-          name: $textManipulator.leagueLongNames.liga,
-          source: data.leagueData.LIGA,
-          img: $textManipulator.leagueImages.liga
-        },
-        {
-          name: $textManipulator.leagueLongNames.epl,
-          source: data.leagueData.EPL,
-          img: $textManipulator.leagueImages.epl
-        },
-        {
-          name: $textManipulator.leagueLongNames.seri,
-          source: data.leagueData.SERI,
-          img: $textManipulator.leagueImages.seri
-        },
-        {
-          name: $textManipulator.leagueLongNames.chlg,
-          source: data.leagueData.CHLG,
-          img: $textManipulator.leagueImages.chlg
-        },
-        {
-          name: $textManipulator.leagueLongNames.euro,
-          source: data.leagueData.UEFA,
-          img: $textManipulator.leagueImages.euro
-        }
-      ];*/
         
+        leagues = allLeagues;
 
       });
 

@@ -187,16 +187,16 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
 
-    findPlayerByID();
-    
-    var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', $scope.player.id);
-    playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, $scope.player));
+    findPlayerByID();    
 
   };
 
   var findPlayerByID = function () {
 
-    $scope.allPlayers.some(function (manager) {
+    console.log('findPlayerByID');
+
+    $scope.allPlayers.some(function (player) {
+      console.log(player.id, '|', id);
       if (player.id === id) {
         $scope.player = player;
         return true;
@@ -204,6 +204,9 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     });
 
     console.log('>> CURRENT PLAYER', $scope.player);
+
+    var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', $scope.player.id);
+    playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, $scope.player));
 
   };
 
