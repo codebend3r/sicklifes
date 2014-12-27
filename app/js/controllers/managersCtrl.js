@@ -158,10 +158,9 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
       data.managersData.joe
     ];
 
-    console.log('syncDate allPlayersData', data.allPlayersData._lastSynedOn);
-    console.log('syncDate leagueData', data.leagueData._lastSynedOn);
+    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
-    console.log('$scope.allManagers', $scope.allManagers);
 
     chooseTeam();
 
@@ -198,7 +197,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
    */
   var init = function () {
 
-    $fireBaseService.initialize();
+    $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
     firePromise.promise.then(fireBaseLoaded, getFromLocalStorage);
 

@@ -63,9 +63,8 @@ sicklifesFantasy.factory('$objectUtils', function () {
 
     }
 
-  }
+  };
 
   return objectUtils;
 
-})
-;
+});

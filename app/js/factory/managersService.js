@@ -1089,7 +1089,7 @@ sicklifesFantasy.factory('$managersService', function ($fireBaseService) {
     
     }
 
-  }
+  };
 
   return allManagers;
 

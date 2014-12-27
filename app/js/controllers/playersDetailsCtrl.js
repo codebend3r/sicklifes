@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $managersService, $date, $dateService, $fireBaseService) {
+sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $date, $dateService, $fireBaseService) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -174,14 +174,14 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     
     $scope.allPlayers = data.allPlayersData.allPlayers;
 
-    $scope.allManagers = [
-      data.managersData.chester,
-      data.managersData.frank,
-      data.managersData.dan,
-      data.managersData.justin,
-      data.managersData.mike,
-      data.managersData.joe
-    ];
+    $scope.allManagers = {
+      chester: data.managersData.chester,
+      frank: data.managersData.frank,
+      dan: data.managersData.dan,
+      justin: data.managersData.justin,
+      mike: data.managersData.mike,
+      joe: data.managersData.joe
+    };
     
     console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
@@ -191,27 +191,46 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
   };
 
+  var onRequestFinished = function() {
+
+    console.log('>> 2 CURRENT PLAYER:', $scope.player);
+
+  };
+
   var findPlayerByID = function () {
 
     console.log('findPlayerByID');
 
     $scope.allPlayers.some(function (player) {
-      console.log(player.id, '|', id);
       if (player.id === id) {
         $scope.player = player;
         return true;
       }
     });
 
-    console.log('>> CURRENT PLAYER', $scope.player);
+    console.log('>> 1 CURRENT PLAYER:', $scope.player);
+    console.log('>> 1 OWNER A:', $scope.player.ownedBy);
+    console.log('>> 1 OWNER B:', $scope.player.managerName);
+
+    //var manager = $scope.allManagers[$scope.player.ownedBy.toLowerCase()] || null;
+    var manager = $scope.allManagers[$scope.player.managerName.toLowerCase()] || null;
+
+    console.log('>> 1 MANAGER:', manager);
+
+    $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
 
     var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', $scope.player.id);
-    playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, $scope.player));
+
+    // populates data related to player info like place of birth
+    playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, $scope.player, onRequestFinished));
+
+    // populates game logs data
+    playerProfileRequest.promise.then($arrayMappers.playerGamesLog.bind(this, { player: $scope.player, manager: manager }));
 
   };
 
   /**
-   * TODO
+   * id used to identify a player from thescore.ca api
    */
   var id = Number($routeParams.playerID);
 
