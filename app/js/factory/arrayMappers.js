@@ -173,15 +173,17 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
     transferPlayersMap: function (leagueData, teamData, player) {
 
+      //console.log('PLAYER ID', player.id);
+
       var playerObject = {
         id: player.id,
         playerName: $textManipulator.formattedFullName(player.first_name, player.last_name),
-        ownedBy: $arrayLoopers.getOwnerByID(player.player.id),
+        ownedBy: $arrayLoopers.getOwnerByID(player.id),
         teamName: $textManipulator.stripVowelAccent(teamData.full_name).toUpperCase(),
         leagueName: $textManipulator.getLeagueByURL(leagueData.leagueURL).toUpperCase()
       };
       
-      console.log('TEAM:', teamData.full_name, ', PLAYER:', playerObject.playerName);
+      console.log('TEAM:', teamData.full_name + ',', ' PLAYER:', playerObject.playerName);
       
       //var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
       //playerProfileRequest.promise.then(arrayMaper.playerInfo.bind(this, playerObject));

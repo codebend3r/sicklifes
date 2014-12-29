@@ -37,11 +37,11 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
       text: 'Owned By'
     },
     {
-      columnClass: 'col-md-2 col-sm-6 col-xs-4',
+      columnClass: 'col-md-2 col-sm-6 hidden-xs',
       text: 'League'
     },
     {
-      columnClass: 'col-md-3 col-sm-6 col-xs-4',
+      columnClass: 'col-md-3 col-sm-6 col-xs-2',
       text: 'Team'
     }
   ];
@@ -213,7 +213,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
     $scope.selectedManager.players.forEach(function (eachPlayer) {
       if (eachPlayer.id === $scope.droppedPlayerObject.id) {
         eachPlayer.status = 'dropped';
-        eachPlayer.dateOfTransaction = $dateService.transactionDate('11/17/14');
+        eachPlayer.dateOfTransaction = $dateService.transactionDate();
       }
     });
 

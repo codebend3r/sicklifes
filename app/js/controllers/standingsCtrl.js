@@ -68,8 +68,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
 
     $scope.loading = false;
 
-    populateTable();
-
   };
 
   $scope.saveToFireBase = function () {

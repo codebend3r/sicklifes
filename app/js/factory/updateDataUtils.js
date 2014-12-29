@@ -16,7 +16,7 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
       var allTeams = $apiFactory.getAllTeams();
 
       allPlayers = [];
-      
+
       var count = 0;
 
       // returns a list of promise with the end point for each league
@@ -25,7 +25,7 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
         result.forEach(function (leagueData) {
 
           leagueData.data.forEach(function (teamData) {
-            
+
             console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
 
             // returns a promise with the end point for each team
@@ -34,15 +34,15 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
             });
 
             rosterRequest.promise.then(function (playerData) {
-              
+
               count += 1;
 
               // each player on each team
               var rosterArray = playerData.data.map($arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
               allPlayers = allPlayers.concat(rosterArray);
-              
+
               console.log('count', count);
-              
+
               if (count >= 140) {
                 console.log('allPlayers', allPlayers);
               }
@@ -87,7 +87,7 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
       });
 
     },
-    
+
     updateLeaguesData: function (leagues) {
 
       console.log('UPDATING ALL LEAGUES');
@@ -112,7 +112,7 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
           });
           consolidatedGoalScorers = consolidatedGoalScorers.concat(goalsMap);
         });
-        
+
         leagues = allLeagues;
 
       });
@@ -120,7 +120,7 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
     }
 
   };
-  
+
   return updateDataUtils;
 
 });
