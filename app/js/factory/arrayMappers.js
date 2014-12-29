@@ -38,8 +38,8 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       var player = dataObj.player || null,
           manager = dataObj.manager || null;
 
-      console.log('player', player);
-      console.log('manager', manager);
+      //console.log('player', player);
+      //console.log('manager', manager);
 
       if (manager) {
         manager.seriCount = 0;
@@ -213,6 +213,10 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         leagueSlug = gameMapsObj.leagueSlug,
         computedPoints;
 
+      console.log('slug:', game.box_score.event.league.slug);
+      console.log('leagueSlug:', leagueSlug);
+      console.log('leagueName:', gameMapsObj.leagueName);
+
       player.leagueName = gameMapsObj.leagueName;
 
       if ($textManipulator.acceptedLeague(leagueSlug)) {
@@ -245,6 +249,9 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         // increment points
         player.points += computedPoints;
         manager.totalPoints += computedPoints;
+
+        console.log('player:', player);
+        console.log('----------------------------------');
   
         //if (manager.managerName === 'Chester' && player.playerName === 'Juan CUADRADO') {
         //console.log(Math.random() * 10, manager.managerName, '|', player.playerName, 'scored', game.goals, 'goals in', player.leagueName, '| manager totalGoals', manager.totalGoals);

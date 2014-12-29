@@ -46,87 +46,9 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   ];
 
   /*
-   * TODO
-   */
-  $scope.inLiga = false;
-
-  /*
-   * TODO
-   */
-  $scope.inEPL = false;
-
-  /*
-   * TODO
-   */
-  $scope.inSeri = false;
-
-  /*
-   * TODO
-   */
-  $scope.inChlg = false;
-
-  /*
-   * TODO
-   */
-  $scope.inEuro = false;
-
-  /*
-   * TODO
+   * player
    */
   $scope.player = {};
-
-
-  /*
-   * go through all players in  all the managers and update the player details
-   */
-  $scope.getAllGameLogs = function () {
-
-    $scope.allManagers.forEach(function (manager) {
-
-      manager.players.forEach(function (player) {
-
-        var ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
-          eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
-          seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
-          chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
-          euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
-
-        player.gamesLog = [];
-
-        ligaGamesRequest.promise.then(function (result) {
-          var ligaGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
-          player.gamesLog = player.gamesLog.concat(ligaGameDetails);
-        });
-
-
-        eplGamesRequest.promise.then(function (result) {
-          var eplGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
-          player.gamesLog = player.gamesLog.concat(eplGameDetails);
-        });
-
-
-        seriGamesRequest.promise.then(function (result) {
-          var seriGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
-          player.gamesLog = player.gamesLog.concat(seriGameDetails);
-        });
-
-
-        chlgGamesRequest.promise.then(function (result) {
-          var chlgGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
-          player.gamesLog = player.gamesLog.concat(chlgGameDetails);
-        });
-
-
-        euroGamesRequest.promise.then(function (result) {
-          var euroGameDetails = result.data.filter($arrayFilter.filterAfterDate).map($arrayMappers.gameMapper);
-          player.gamesLog = player.gamesLog.concat(euroGameDetails);
-        });
-
-      });
-
-    });
-
-  };
 
   /**
    * league images
@@ -209,8 +131,8 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
     });
 
     console.log('>> 1 CURRENT PLAYER:', $scope.player);
-    console.log('>> 1 OWNER A:', $scope.player.ownedBy);
-    console.log('>> 1 OWNER B:', $scope.player.managerName);
+    //console.log('>> 1 OWNER A:', $scope.player.ownedBy);
+    //console.log('>> 1 OWNER B:', $scope.player.managerName);
 
     //var manager = $scope.allManagers[$scope.player.ownedBy.toLowerCase()] || null;
     var manager = $scope.allManagers[$scope.player.managerName.toLowerCase()] || null;

@@ -73,9 +73,9 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
   ];
 
   /**
-   *
+   * all managers data
    */
-  $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
+  $scope.updateAllManagerData = null;
 
   /**
    *
@@ -161,6 +161,8 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
     console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
+
+    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
 
     chooseTeam();
 

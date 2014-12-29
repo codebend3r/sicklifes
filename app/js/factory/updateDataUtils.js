@@ -78,7 +78,7 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
 
           var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
 
-          playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, player));
+          playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, player, function(){}));
 
           playerProfileRequest.promise.then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }));
 
