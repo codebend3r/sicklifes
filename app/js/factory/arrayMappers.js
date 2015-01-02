@@ -33,10 +33,10 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
     },
 
-    playerGamesLog: function(dataObj) {
+    playerGamesLog: function (dataObj) {
 
       var player = dataObj.player || null,
-          manager = dataObj.manager || null;
+        manager = dataObj.manager || null;
 
       //console.log('player', player);
       //console.log('manager', manager);
@@ -52,11 +52,11 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
       // based on player result data return an object with the valid leagues for this player
       var validLeagues = player.validLeagues,
-          ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
-          eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
-          seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
-          chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
-          euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
+        ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
+        eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
+        seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
+        chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
+        euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
 
       if (validLeagues.inLiga) {
         // if player is not dropped then count on active roster
@@ -134,7 +134,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       }
 
     },
-    
+
     playerInfo: function (player, onRequestFinished, result) {
 
       var selectedInt = 0,
@@ -182,9 +182,9 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         teamName: $textManipulator.stripVowelAccent(teamData.full_name).toUpperCase(),
         leagueName: $textManipulator.getLeagueByURL(leagueData.leagueURL).toUpperCase()
       };
-      
+
       console.log('TEAM:', teamData.full_name + ',', ' PLAYER:', playerObject.playerName);
-      
+
       //var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
       //playerProfileRequest.promise.then(arrayMaper.playerInfo.bind(this, playerObject));
 
@@ -254,7 +254,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
         console.log('player:', player);
         console.log('----------------------------------');
-  
+
         //if (manager.managerName === 'Chester' && player.playerName === 'Juan CUADRADO') {
         //console.log(Math.random() * 10, manager.managerName, '|', player.playerName, 'scored', game.goals, 'goals in', player.leagueName, '| manager totalGoals', manager.totalGoals);
         //}
