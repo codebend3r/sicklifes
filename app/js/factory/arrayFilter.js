@@ -6,6 +6,10 @@ sicklifesFantasy.factory('$arrayFilter', function ($date, $scoringLogic) {
 
   var arrayFilters = {
 
+    /**
+     * filters out any games after aug 1
+     * @returns {boolean}
+     */
     filterAfterDate: function (game) {
       var gameDate = $date.create(game.box_score.event.game_date);
       //console.log('gameDate', gameDate);
@@ -13,8 +17,8 @@ sicklifesFantasy.factory('$arrayFilter', function ($date, $scoringLogic) {
       //return false;
     },
 
-    /*
-     * filters out any games after aug 1
+    /**
+     * filters out any games after from players added or dropped aug 1
      * @returns {boolean}
      */
     filterValidDate: function (player, game) {
