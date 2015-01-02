@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, $fireBaseService, $routeParams, $apiFactory, $updateDataUtils, $dateService, $managersService) {
+sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseService, $routeParams, $apiFactory, $updateDataUtils, $dateService, $managersService) {
 
   /**
    * TODO
@@ -220,7 +220,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, localStorageService, 
 
   };
 
-  init();
+  $timeout(init, 250);
 
 });
 

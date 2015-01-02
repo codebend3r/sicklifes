@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $routeParams, $fireBaseService, $updateDataUtils, $objectUtils, $dateService, $managersService, $location) {
+sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFactory, $routeParams, $fireBaseService, $updateDataUtils, $objectUtils, $dateService, $managersService, $location) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -120,7 +120,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
   };
 
   /**
-   * TODO
+   * init function
    */
   var init = function () {
 
@@ -131,6 +131,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $apiFactory, $rou
 
   };
 
-  init();
+  $timeout(init, 250);
 
 });

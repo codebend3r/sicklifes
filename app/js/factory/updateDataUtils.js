@@ -114,6 +114,7 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
         });
 
         leagues = allLeagues;
+        console.log('ALL LEAGUES COMPLETE');
 
       });
 

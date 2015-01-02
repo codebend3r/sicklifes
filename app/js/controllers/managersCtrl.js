@@ -1,8 +1,8 @@
 /**
- * Updated by Bouse on 12/06/2014
+ * Created by Bouse on 01/01/2015
  */
 
-sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageService, $updateDataUtils, $fireBaseService, $routeParams, $dateService, $managersService, $location) {
+sicklifesFantasy.controller('managersCtrl', function ($scope, $timeout, $updateDataUtils, $fireBaseService, $routeParams, $dateService, $managersService, $location) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -199,13 +199,14 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, localStorageServic
    */
   var init = function () {
 
+    console.log('managersCtrl - init');
     $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
     firePromise.promise.then(fireBaseLoaded, getFromLocalStorage);
 
   };
 
-  init();
+  $timeout(init, 250);
 
 });
 

@@ -2,7 +2,7 @@
  * Updated by Bouse on 12/06/2014
  */
 
-sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $managersService, $routeParams, $updateDataUtils, $objectUtils, $arrayFilter, $fireBaseService, localStorageService, $dateService) {
+sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $timeout, $managersService, $routeParams, $updateDataUtils, $objectUtils, $arrayFilter, $fireBaseService, localStorageService, $dateService) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -206,12 +206,13 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $managersSer
    */
   var init = function () {
 
+    console.log('monthlyWinnersCtrl - init');
     $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
     firePromise.promise.then(fireBaseLoaded, getFromLocalStorage);
 
   };
 
-  init();
+  $timeout(init, 250);
 
 });

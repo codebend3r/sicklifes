@@ -1,8 +1,8 @@
 /**
- * Created by Bouse on 11/03/2014
+ * Created by Bouse on 01/01/2015
  */
 
-sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date, $managersService, $location, $routeParams, $updateDataUtils, $arrayMappers, $dateService, $textManipulator, $fireBaseService) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $timeout, $apiFactory, $date, $managersService, $location, $routeParams, $updateDataUtils, $arrayMappers, $dateService, $textManipulator, $fireBaseService) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -121,6 +121,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
 
   var init = function () {
 
+    console.log('leaguesCtrl - init');
     $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
     firePromise.promise.then(fireBaseLoaded);
@@ -135,6 +136,6 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $apiFactory, $date,
 
   };
 
-  init();
+  $timeout(init, 250);
 
 });

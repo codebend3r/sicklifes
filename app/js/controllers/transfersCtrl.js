@@ -2,7 +2,7 @@
  * Updated by Bouse on 12/06/2014
  */
 
-sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $dateService, $routeParams) {
+sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $dateService, $routeParams) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -317,7 +317,6 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $fireBaseService,
 
   };
 
-
-  init();
+  $timeout(init, 250);
 
 });

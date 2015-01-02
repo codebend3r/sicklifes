@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $date, $dateService, $fireBaseService) {
+sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $date, $dateService, $fireBaseService) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -157,7 +157,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
   var id = Number($routeParams.playerID);
 
   /**
-   * TODO
+   * init function
    */
   var init = function () {
 
@@ -168,6 +168,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $apiFactory,
 
   };
 
-  init();
+  $timeout(init, 250);
 
 });
