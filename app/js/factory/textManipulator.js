@@ -51,10 +51,10 @@ sicklifesFantasy.factory('$textManipulator', function () {
       league = league.toLocaleLowerCase();
       return league === 'uefa' || league === 'europa';
     },
-    
-    isWildCardLeague: function(validLeagues) {
+
+    isWildCardLeague: function (validLeagues) {
       return ((validLeagues.inChlg || validLeagues.inEuro) && !validLeagues.inLiga && !validLeagues.inEPL && !validLeagues.inSeri);
-      
+
     },
 
     formattedFullName: function (firstName, lastName) {
@@ -160,7 +160,7 @@ sicklifesFantasy.factory('$textManipulator', function () {
       return l.toUpperCase();
     },
 
-    getLeagueSlug: function(result) {
+    getLeagueSlug: function (result) {
 
       var leagueString = '';
       result.data.teams.some(function (team, i) {
@@ -240,7 +240,7 @@ sicklifesFantasy.factory('$textManipulator', function () {
     getTeamInfoURL: function (id) {
       return 'http://origin-api.thescore.com/soccer/teams/' + id;
     },
-    
+
     getTeamRosterURL: function (leagueSlug, id) {
       return 'http://api.thescore.com/' + leagueSlug.toLowerCase() + '/teams/' + id + '/players/?rpp=-1';
     }

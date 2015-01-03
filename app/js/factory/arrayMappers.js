@@ -2,7 +2,7 @@
  * Updated by Bouse on 12/06/2014
  */
 
-sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $arrayLoopers, $arrayFilter, $apiFactory, $date) {
+sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $arrayLoopers, $dateService, $arrayFilter, $apiFactory, $date) {
 
   var arrayMaper = {
 
@@ -11,7 +11,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
      * @param url
      * @param i
      */
-    goalsMap: function (url, i) {
+    goalsMap: function (allManagers, url, i) {
 
       var playerInLeague = {
         id: i.player.id,
@@ -22,8 +22,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         domesticGoals: 0,
         leagueGoals: 0,
         goals: i.stat,
-        status: 'active',
-        ownedBy: $arrayLoopers.getOwnerByID(i.player.id),
+        managerName: $arrayLoopers.getOwnerByID(allManagers, i.player.id),
         leagueName: $textManipulator.getLeagueByURL(url),
         transactionsLog: [],
         historyLog: []
@@ -130,7 +129,10 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       // logical definition for a wildcard player
       if ((validLeagues.inChlg || validLeagues.inEuro) && !validLeagues.inLiga && !validLeagues.inEPL && !validLeagues.inSeri) {
         // if player is not dropped then count on active roster
-        if (player.status !== 'dropped' && manager) manager.wildCardCount += 1;
+        if (player.status !== 'dropped' && manager) {
+          console.log('WILDCARD');
+          manager.wildCardCount += 1;
+        }
       }
 
     },
@@ -171,22 +173,20 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
     },
 
-    transferPlayersMap: function (leagueData, teamData, player) {
-
-      //console.log('PLAYER ID', player.id);
+    transferPlayersMap: function (allManagers, leagueData, teamData, i) {
 
       var playerObject = {
-        id: player.id,
-        playerName: $textManipulator.formattedFullName(player.first_name, player.last_name),
-        ownedBy: $arrayLoopers.getOwnerByID(player.id),
+        id: i.id,
+        playerName: $textManipulator.formattedFullName(i.first_name, i.last_name),
+        managerName: $arrayLoopers.getOwnerByID(allManagers, i.id),
         teamName: $textManipulator.stripVowelAccent(teamData.full_name).toUpperCase(),
         leagueName: $textManipulator.getLeagueByURL(leagueData.leagueURL).toUpperCase()
       };
 
-      console.log('TEAM:', teamData.full_name + ',', ' PLAYER:', playerObject.playerName);
+      //console.log('TEAM:', teamData.full_name + ',', ' PLAYER:', playerObject.playerName);
 
       //var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
-      //playerProfileRequest.promise.then(arrayMaper.playerInfo.bind(this, playerObject));
+      //playerProfileRequest.promise.then(arrayMapper.playerInfo.bind(this, playerObject));
 
       return playerObject;
 
@@ -202,7 +202,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         goalsScored: game.goals || 0,
         leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
         leagueSlug: game.box_score.event.league.slug,
-        datePlayed: $date.create(game.box_score.event.game_date).format('{MM}/{dd}/{yy}'),
+        datePlayed: $dateService.goalLogDate(game.box_score.event.game_date),
         rawDatePlayed: $date.create(game.box_score.event.game_date),
         originalDate: game.box_score.event.game_date,
         playerName: $textManipulator.stripVowelAccent(player.playerName),
@@ -215,9 +215,9 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         leagueSlug = gameMapsObj.leagueSlug,
         computedPoints;
 
-      console.log('slug:', game.box_score.event.league.slug);
-      console.log('leagueSlug:', leagueSlug);
-      console.log('leagueName:', gameMapsObj.leagueName);
+      //console.log('slug:', game.box_score.event.league.slug);
+      //console.log('leagueSlug:', leagueSlug);
+      //console.log('leagueName:', gameMapsObj.leagueName);
 
       player.leagueName = gameMapsObj.leagueName;
 
@@ -255,10 +255,6 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         console.log('player:', player);
         console.log('----------------------------------');
 
-        //if (manager.managerName === 'Chester' && player.playerName === 'Juan CUADRADO') {
-        //console.log(Math.random() * 10, manager.managerName, '|', player.playerName, 'scored', game.goals, 'goals in', player.leagueName, '| manager totalGoals', manager.totalGoals);
-        //}
-
       }
 
       // gameMapsObj maps to a player
@@ -274,11 +270,9 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       var gameMapsObj = {
         alignment: game.alignment === 'away' ? '@' : 'vs',
         vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
-        result: $textManipulator.result.bind(gameMapsObj, game),
-        finalScore: $textManipulator.finalScore.bind(gameMapsObj, game),
         goalsScored: game.goals || 0,
         leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
-        datePlayed: $date.create(game.box_score.event.game_date).format('{MM}/{dd}/{yy}'),
+        datePlayed: $dateService.goalLogDate(game.box_score.event.game_date),
         rawDatePlayed: $date.create(game.box_score.event.game_date),
         originalDate: game.box_score.event.game_date,
         result: $textManipulator.result.call(gameMapsObj, game),

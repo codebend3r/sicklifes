@@ -9,7 +9,7 @@
       <div class='col-md-1 col-sm-1 col-xs-2 small-hpadding'>{{scorer.rank}}</div>
       <div class='col-md-4 col-sm-5 col-xs-8 small-hpadding'><a ng-href='#/player-details/{{scorer.id}}'>{{scorer.playerName}}</a></div>
       <div class='col-md-2 col-sm-4 hidden-xs small-hpadding bold small-text'>{{scorer.teamName}}</div>
-      <div class='col-md-3 hidden-sm hidden-xs small-hpadding bold small-text'>{{scorer.ownedBy}}</div>
+      <div class='col-md-3 hidden-sm hidden-xs small-hpadding bold small-text' ng-class='{"free-agent": scorer.managerName === "Free Agent"}'>{{scorer.managerName}}</div>
       <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{scorer.goals}}</div>
     </div>
   </div>

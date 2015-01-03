@@ -102,13 +102,13 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
 
     $fireBaseService.syncAllPlayersList(allPlayersObject);
 
-    console.log('////////////////////////////////////');
+    /*console.log('////////////////////////////////////');
     console.log('$scope.allManagers', $scope.allManagers);
     console.log('////////////////////////////////////');
 
     var managersObject = {
       _syncedFrom: 'transfersCtrl',
-      _lastSynedOn: $dateService.syncDate(),
+      _lastSyncedOn: $dateService.syncDate(),
       chester: $scope.allManagers[0],
       frank: $scope.allManagers[1],
       dan: $scope.allManagers[2],
@@ -117,7 +117,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
       joe: $scope.allManagers[5]
     };
 
-    $fireBaseService.syncLeagueTeamData(managersObject);
+    $fireBaseService.syncLeagueTeamData(managersObject);*/
 
   };
 
@@ -262,10 +262,16 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
 
   };
 
+  var onAllPlayersLoaded = function (allPlayers) {
+    $scope.allPlayers = allPlayers;
+  };
+
   /**
    * callback data when firebase is loaded
    */
   var fireBaseLoaded = function (data) {
+
+    console.log('fireBaseLoaded -- transfersCtrl');
 
     $scope.loading = false;
 
@@ -280,11 +286,11 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
       data.managersData.joe
     ];
 
-    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
-    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
-    console.log('syncDate managersData', data.managersData._lastSyncedOn);
-    
-    $scope.updatePlayerPoolData = $updateDataUtils.updatePlayerPoolData.bind($scope, $scope.allPlayers);
+    console.log('syncDate allPlayersData:', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate leagueData:', data.leagueData._lastSyncedOn);
+    console.log('syncDate managersData:', data.managersData._lastSyncedOn);
+
+    $scope.updatePlayerPoolData = $updateDataUtils.updatePlayerPoolData.bind($scope, $scope.allManagers, $scope.allPlayers, onAllPlayersLoaded);
 
     $scope.selectedManager = $scope.allManagers[0];
     $scope.selectedPlayers = $scope.selectedManager.players;

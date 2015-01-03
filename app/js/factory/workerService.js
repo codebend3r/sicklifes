@@ -4,25 +4,22 @@
 
 sicklifesFantasy.factory('$workerService', function () {
 
+  var worker,
+    defer;
+
+  worker = new Worker('./js/workers/statsFetcher.js');
+
+  worker.addEventListener('message', function (e) {
+    console.log('Worker said: ', e.data);
+    defer.resolve(e.data);
+  }, false);
+
   return {
-
-    //var worker = new Worker('./js/workers/statsFetcher.js');
-
-    var defer;
-
-    worker.addEventListener('message', function(e) {
-      console.log('Worker said: ', e.data);
-      defer.resolve(e.data);
-    }, false);
-
-    return {
-      doWork : function(myData){
-        defer = $q.defer();
-        worker.postMessage(myData); // Send data to our worker. 
-        return defer.promise;
-      }
-    };
-
-  }
+    doWork: function (myData) {
+      defer = $q.defer();
+      worker.postMessage(myData); // Send data to our worker.
+      return defer.promise;
+    }
+  };
 
 });

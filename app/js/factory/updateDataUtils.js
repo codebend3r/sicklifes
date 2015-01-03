@@ -9,7 +9,7 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
     /**
      * gets data from all of the players in all valid leagues
      */
-    updatePlayerPoolData: function (allPlayers) {
+    updatePlayerPoolData: function (allManagers, allPlayers, callback) {
 
       console.log('UPDATING PLAYER POOL...');
 
@@ -38,13 +38,13 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
               count += 1;
 
               // each player on each team
-              var rosterArray = playerData.data.map($arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
+              var rosterArray = playerData.data.map($arrayMappers.transferPlayersMap.bind(this, allManagers, leagueData, teamData));
               allPlayers = allPlayers.concat(rosterArray);
 
-              console.log('count', count);
-
               if (count >= 140) {
-                console.log('allPlayers', allPlayers);
+                console.log('ALL PLAYERS UPDATED');
+                //console.log('allPlayers', allPlayers);
+                callback(allPlayers);
               }
 
             });
@@ -78,9 +78,11 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
 
           var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
 
-          playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, player, function(){}));
+          playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, player, function () {
+            //
+          }));
 
-          playerProfileRequest.promise.then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }));
+          playerProfileRequest.promise.then($arrayMappers.playerGamesLog.bind(this, {player: player, manager: manager}));
 
         });
 
@@ -88,33 +90,34 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
 
     },
 
-    updateLeaguesData: function (leagues) {
+    updateLeaguesData: function (allManagers, callback) {
 
       console.log('UPDATING ALL LEAGUES');
 
-      var allLeagues = [];
-      var consolidatedGoalScorers = [];
-
-      // makes a request for all leagues in a loop returns a list of promises
-      var allPromises = $apiFactory.getAllGoalLeaders();
+      var allLeagues = [],
+        // list of all goal scorers in all leagues
+        consolidatedGoalScorers = [],
+        // makes a request for all leagues in a loop returns a list of promises
+        allPromises = $apiFactory.getAllGoalLeaders();
 
       // waits for an array of promises to resolve, sets allLeagues data
       $apiFactory.listOfPromises(allPromises, function (result) {
 
         allLeagues = [];
 
-        result.forEach(function (league, index) {
-          var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, league.leagueURL));
+        result.forEach(function (league) {
+          var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, allManagers, league.leagueURL));
           allLeagues.push({
             name: $textManipulator.properLeagueName(league.leagueName),
             source: goalsMap,
+            className: league.leagueName,
             img: $textManipulator.leagueImages[league.leagueName]
           });
           consolidatedGoalScorers = consolidatedGoalScorers.concat(goalsMap);
         });
 
-        leagues = allLeagues;
-        console.log('ALL LEAGUES COMPLETE');
+        console.log('ALL LEAGUES COMPLETE', allLeagues);
+        callback(allLeagues);
 
       });
 

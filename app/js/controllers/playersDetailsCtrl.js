@@ -104,10 +104,10 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
       mike: data.managersData.mike,
       joe: data.managersData.joe
     };
-    
-    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
-    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
-    console.log('syncDate managersData', data.managersData._lastSyncedOn);
+
+    console.log('syncDate allPlayersData:', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate leagueData:', data.leagueData._lastSyncedOn);
+    console.log('syncDate managersData:', data.managersData._lastSyncedOn);
 
     findPlayerByID();    
 
@@ -121,8 +121,6 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
 
   var findPlayerByID = function () {
 
-    console.log('findPlayerByID');
-
     $scope.allPlayers.some(function (player) {
       if (player.id === id) {
         $scope.player = player;
@@ -131,17 +129,14 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
     });
 
     console.log('>> 1 CURRENT PLAYER:', $scope.player);
-    //console.log('>> 1 OWNER A:', $scope.player.ownedBy);
-    //console.log('>> 1 OWNER B:', $scope.player.managerName);
+    console.log('>> 1 MANAGER NAME:', $scope.player.managerName);
 
-    //var manager = $scope.allManagers[$scope.player.ownedBy.toLowerCase()] || null;
-    var manager = $scope.allManagers[$scope.player.managerName.toLowerCase()] || null;
-
-    console.log('>> 1 MANAGER:', manager);
+    var manager = $scope.allManagers[$scope.player.managerName] || null,
+      playerProfileRequest;
 
     $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
 
-    var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', $scope.player.id);
+    playerProfileRequest = $apiFactory.getPlayerProfile('soccer', $scope.player.id);
 
     // populates data related to player info like place of birth
     playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, $scope.player, onRequestFinished));

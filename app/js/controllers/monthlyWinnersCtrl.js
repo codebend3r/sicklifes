@@ -179,13 +179,12 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $timeout, $m
     $scope.manager = $scope.allManagers[0];
 
     $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
-    
 
     updateFilter();
 
-    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
-    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
-    console.log('syncDate managersData', data.managersData._lastSyncedOn);
+    console.log('syncDate allPlayersData:', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate leagueData:', data.leagueData._lastSyncedOn);
+    console.log('syncDate managersData:', data.managersData._lastSyncedOn);
 
   };
 

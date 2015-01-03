@@ -297,6 +297,14 @@ gulp.task('re-build-GUI', function (callback) {
     callback);
 });
 
+gulp.task('deploy', function (callback) {
+  runSequence(
+    'clean-all',
+    'start',
+    'build-GUI',
+    callback);
+});
+
 // Watch
 gulp.task('watch', function () {
 

@@ -85,36 +85,23 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, $objectUti
     },
 
     /**
-     * TODO
+     * finds owner by id
      */
-    getOwnerByID: function (id) {
-      
+    getOwnerByID: function (allManagers, id) {
+
       var owner = 'Free Agent';
-      return;
-      
-      var managersPromise = $managersService.getAllPlayers();
-      
-      managersPromise.promise.then(function(data){
-        
-        $scope.allManagers = [
-          data.managersData.chester,
-          data.managersData.frank,
-          data.managersData.dan,
-          data.managersData.justin,
-          data.managersData.mike,
-          data.managersData.joe
-        ];
-        
-        allManagers.some(function (manager) {
-          manager.players.some(function (p) {
-            return p.id === id && owner == team.managerName;
-          });
+
+      allManagers.some(function (manager) {
+        manager.players.some(function (p) {
+          if (p.id === id){
+            owner = manager.managerName;
+            return true;
+          }
         });
-        return owner;
-        
       });
-      
-      
+
+      return owner;
+
     }
 
   };
