@@ -2,7 +2,7 @@
  * Updated by Bouse on 12/23/2014
  */
 
-sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils, $textManipulator, $arrayMappers, $arrayFilter) {
+sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils, $textManipulator, $arrayMappers) {
 
   var updateDataUtils = {
 
@@ -43,7 +43,6 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
 
               if (count >= 140) {
                 console.log('ALL PLAYERS UPDATED');
-                //console.log('allPlayers', allPlayers);
                 callback(allPlayers);
               }
 
@@ -81,6 +80,11 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
           playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, player, function () {
             //
           }));
+
+          manager.seriCount = 0;
+          manager.ligaCount = 0;
+          manager.eplCount = 0;
+          manager.wildCardCount = 0;
 
           playerProfileRequest.promise.then($arrayMappers.playerGamesLog.bind(this, {player: player, manager: manager}));
 

@@ -93,7 +93,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
     console.log('fireBaseLoaded -- playersDetailsCtrl');
 
     $scope.loading = false;
-    
+
     $scope.allPlayers = data.allPlayersData.allPlayers;
 
     $scope.allManagers = {
@@ -109,11 +109,11 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
     console.log('syncDate leagueData:', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData:', data.managersData._lastSyncedOn);
 
-    findPlayerByID();    
+    findPlayerByID();
 
   };
 
-  var onRequestFinished = function() {
+  var onRequestFinished = function () {
 
     console.log('>> 2 CURRENT PLAYER:', $scope.player);
 
@@ -142,7 +142,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
     playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, $scope.player, onRequestFinished));
 
     // populates game logs data
-    playerProfileRequest.promise.then($arrayMappers.playerGamesLog.bind(this, { player: $scope.player, manager: manager }));
+    playerProfileRequest.promise.then($arrayMappers.playerGamesLog.bind(this, {player: $scope.player, manager: manager}));
 
   };
 
