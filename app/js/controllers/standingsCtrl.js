@@ -14,6 +14,21 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
    */
   $scope.loading = true;
 
+  $scope.chartConfig = {
+    options: {
+      chart: {
+        type: 'bar'
+      }
+    },
+    series: [{
+      data: [10, 15, 12, 8, 7]
+    }],
+    title: {
+      text: 'Hello'
+    },
+    loading: false
+  }
+
   $scope.admin = $routeParams.admin;
 
   /**

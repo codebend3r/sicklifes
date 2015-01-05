@@ -33,15 +33,15 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
       text: 'Player'
     },
     {
-      columnClass: 'col-md-3 col-sm-6 col-xs-4',
+      columnClass: 'col-md-3 col-sm-3 hidden-xs',
       text: 'Owned By'
     },
     {
-      columnClass: 'col-md-2 col-sm-6 hidden-xs',
+      columnClass: 'col-md-2 hidden-sm hidden-xs',
       text: 'League'
     },
     {
-      columnClass: 'col-md-3 col-sm-6 col-xs-2',
+      columnClass: 'col-md-3 col-sm-3 col-xs-6',
       text: 'Team'
     }
   ];

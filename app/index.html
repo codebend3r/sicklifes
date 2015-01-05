@@ -28,7 +28,7 @@
 
   <nav-menu></nav-menu>
   <div class="main-container container" ng-view></div>
-  <footer>Build v{{version}}</footer>
+  <footer ng-if='loaded'>Build v{{version}}</footer>
 
 </div>
 
@@ -44,8 +44,11 @@
 <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
 <script src="bower_components/angular-filter/dist/angular-filter.js"></script>
 
-<script src="bower_components/userapp/userapp.client.js"></script>
-<script src="bower_components/userapp-angular/angularjs.userapp.js"></script>
+<!-- <script src="bower_components/userapp/userapp.client.js"></script> -->
+<!-- <script src="bower_components/userapp-angular/angularjs.userapp.js"></script> -->
+
+<script src='bower_components/highcharts-release/highcharts.js'></script>
+<script src='bower_components/highcharts-ng/dist/highcharts-ng.js'></script>
 
 <script src='bower_components/angular-modal-service/dst/angular-modal-service.js'></script>
 <script src='bower_components/angular-bootstrap/ui-bootstrap-tpls.js'></script>

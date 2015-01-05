@@ -1,6 +1,7 @@
 <div ng-if='list.length > 0' class='well'>
   <h3 class='inline'>{{tableName}}</h3>
-  <input class='form-control' name='input' ng-model='playerSearch' ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" placeholder='SEARCH FOR ANY PLAYER'>
+  <!--<input class='form-control' name='input' ng-model='playerSearch' ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" placeholder='SEARCH FOR ANY PLAYER'>-->
+  <input class='form-control' name='input' ng-model='playerSearch' placeholder='SEARCH FOR ANY PLAYER'>
 </div>
 
 <div class='fantasy-table' ng-if='list.length > 0'>

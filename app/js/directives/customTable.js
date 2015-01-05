@@ -16,11 +16,12 @@ sicklifesFantasy.directive('customTable', function () {
       addPlayer: '&',
       dropPlayer: '&',
       tableName: '@',
+      playerSearch: '@',
       leagueImg: '='
     },
     link: function ($scope) {
 
-      $scope.playerSearch = '';
+      //$scope.playerSearch = '';
       
     }
   }

@@ -14,15 +14,16 @@ var sicklifesFantasy = angular.module('sicklifesFantasy', [
   'ngResource',
   'ngSanitize',
   'LocalStorageModule',
-  'UserApp',
+  //'UserApp',
   'firebase',
   'ui.bootstrap',
-  'angular.filter'
+  'angular.filter',
+  'highcharts-ng'
 
 ]);
 
-sicklifesFantasy.run(function(user) {
+//sicklifesFantasy.run(function(user) {
   //user.init({ appId: '5482b3c1ebdc7' });
-});
+//});
 
 sicklifesFantasy.constant('$date', Date);

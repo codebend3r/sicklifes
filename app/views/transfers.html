@@ -43,7 +43,7 @@
     </div>
   </div>
 
-  <custom-table ng-if='!transactionPlayerAdded' table-body-template='all-players' add-player='addPlayer(player)' drop-player='dropPlayer(player)' list='allPlayers' table-name='All Players' table-header='tableHeader'></custom-table>
+  <custom-table ng-if='!transactionPlayerAdded' table-body-template='all-players' player-search='Milan' add-player='addPlayer(player)' drop-player='dropPlayer(player)' list='allPlayers' table-name='All Players' table-header='tableHeader'></custom-table>
   <custom-table ng-if='transactionPlayerAdded' table-body-template='manager-players' drop-player='dropPlayer(player)' list='selectedPlayers' table-name='Manager Players' table-header='managersTableHeader'></custom-table>
 
 </div>

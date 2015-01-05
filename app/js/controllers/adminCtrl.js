@@ -139,8 +139,16 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
 
   $scope.allPlayers = [];
 
+  /**
+   * click function binding to fetch player pool data after firebase is loaded
+   * @type {null}
+   */
   $scope.updatePlayerPoolData = null;
 
+  /**
+   * click function binding to fetch manager and player data after firebase is loaded
+   * @type {null}
+   */
   $scope.updateAllManagerData = null;
 
   ////////////////////////////////////
@@ -160,12 +168,6 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
     }
 
   };
-
-  /**
-   *
-   * @type {{}}
-   */
-  var allLeaguesObj = {};
 
   /**
    * call when firebase data has loaded
