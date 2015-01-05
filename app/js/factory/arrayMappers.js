@@ -8,6 +8,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
     /**
      * maps each player's stats
+     * @param allManagers
      * @param url
      * @param i
      */
@@ -32,6 +33,10 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
     },
 
+    /**
+     *
+     * @param dataObj
+     */
     playerGamesLog: function (dataObj) {
 
       var player = dataObj.player || null,
@@ -149,6 +154,13 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
     },
 
+    /**
+     * makes request for addition into a first param: player
+     * including valid leagues, physical attributes
+     * @param player - the player object, used in the loop to get sub property
+     * @param onRequestFinished - callback function
+     * @param result - result data passed in from api call
+     */
     playerInfo: function (player, onRequestFinished, result) {
 
       var selectedInt = 0,

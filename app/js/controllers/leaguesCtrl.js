@@ -82,8 +82,6 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $timeout, $apiFacto
 
   var fireBaseLoaded = function (data) {
 
-    $scope.loading = false;
-
     $scope.allLeagues = [
       {
         name: $textManipulator.leagueLongNames.liga,
@@ -139,6 +137,8 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $timeout, $apiFacto
     if (syncDate.isYesterday()) {
       $scope.updateData();
     }
+
+    $scope.loading = false;
 
   };
 

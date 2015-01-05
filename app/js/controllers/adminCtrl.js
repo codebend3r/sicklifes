@@ -173,8 +173,6 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
    * @param data
    */
   var fireBaseLoaded = function (data) {
-
-    $scope.loading = false;
     
     $scope.allPlayers = data.allPlayersData.allPlayers;
 
@@ -196,6 +194,8 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
     console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
+
+    $scope.loading = false;
 
   };
 

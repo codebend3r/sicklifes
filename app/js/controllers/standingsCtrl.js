@@ -100,8 +100,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
 
     console.log('fireBaseLoaded -- standingsCtrl');
 
-    $scope.loading = false;
-
     $scope.allManagers = [
       data.managersData.chester,
       data.managersData.frank,
@@ -116,6 +114,8 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
     
     $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
+
+    $scope.loading = false;
 
   };
 

@@ -102,23 +102,6 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
 
     $fireBaseService.syncAllPlayersList(allPlayersObject);
 
-    /*console.log('////////////////////////////////////');
-    console.log('$scope.allManagers', $scope.allManagers);
-    console.log('////////////////////////////////////');
-
-    var managersObject = {
-      _syncedFrom: 'transfersCtrl',
-      _lastSyncedOn: $dateService.syncDate(),
-      chester: $scope.allManagers[0],
-      frank: $scope.allManagers[1],
-      dan: $scope.allManagers[2],
-      justin: $scope.allManagers[3],
-      mike: $scope.allManagers[4],
-      joe: $scope.allManagers[5]
-    };
-
-    $fireBaseService.syncLeagueTeamData(managersObject);*/
-
   };
 
   $scope.allPlayers = [];
@@ -262,6 +245,20 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
 
   };
 
+  $scope.resetAllPlayers = function () {
+
+    $scope.allManagers.forEach(function (manager) {
+
+      manager.players.forEach(function (eachPlayer) {
+
+      });
+
+    });
+
+    console.log('>> $scope.allManagers', $scope.allManagers);
+
+  };
+
   var onAllPlayersLoaded = function (allPlayers) {
     $scope.allPlayers = allPlayers;
   };
@@ -272,8 +269,6 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
   var fireBaseLoaded = function (data) {
 
     console.log('fireBaseLoaded -- transfersCtrl');
-
-    $scope.loading = false;
 
     $scope.allPlayers = data.allPlayersData.allPlayers;
 
@@ -295,19 +290,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
     $scope.selectedManager = $scope.allManagers[0];
     $scope.selectedPlayers = $scope.selectedManager.players;
 
-  };
-
-  $scope.resetAllPlayers = function () {
-
-    $scope.allManagers.forEach(function (manager) {
-
-      manager.players.forEach(function (eachPlayer) {
-
-      });
-
-    });
-
-    console.log('>> $scope.allManagers', $scope.allManagers);
+    $scope.loading = false;
 
   };
 

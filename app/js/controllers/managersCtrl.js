@@ -147,8 +147,6 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $timeout, $updateD
 
     console.log('fireBaseLoaded');
 
-    $scope.loading = false;
-
     $scope.allManagers = [
       data.managersData.chester,
       data.managersData.frank,
@@ -167,6 +165,8 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $timeout, $updateD
     chooseTeam();
 
     console.log('$scope.allManagers', $scope.allManagers);
+
+    $scope.loading = false;
 
   };
 
