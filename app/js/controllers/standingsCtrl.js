@@ -102,27 +102,28 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
 
     $scope.allManagers.forEach(function (manager) {
 
-      $scope.chartConfig.series.push({
-        name: manager.managerName,
-        data: []
-      });
+      console.log('managerName', manager.managerName);
 
-      console.log($scope.chartConfig.series);
-      console.log($scope.chartConfig.series.data);
+      currentData = [];
 
-      var n = $scope.chartConfig.series.length;
-      var p = $scope.chartConfig.series[n].data[0].length;
+      var dateInLoop;
 
-      var currentData = $scope.chartConfig.series[n];
-
-      //console.log('manager', manager);
       manager.monthlyGoalsLog.forEach(function (game) {
 
+        console.log('playerName', game.playerName);
         console.log('datePlayed', game.datePlayed);
-        console.log('goals', currentData);
-        currentData.push(currentData);
+        console.log('goals', game.goalsScored);
+        console.log('======================');
+        currentData.push(game.goalsScored);
 
       });
+
+      var dataObj = {
+        name: manager.managerName,
+        data: currentData
+      };
+
+      $scope.chartConfig.series.push(dataObj);
 
 
     });
