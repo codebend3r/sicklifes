@@ -15,19 +15,39 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
   $scope.loading = true;
 
   $scope.chartConfig = {
-    options: {
-      chart: {
-        type: 'bar'
+    chart: {
+      type: 'line'
+    },
+    title: {
+      text: null
+    },
+    subtitle: {
+      text: null
+    },
+    xAxis: {
+      categories: ['Sep 2014', 'Oct 2014', 'Nov 2014', 'Dec 2014', 'Jan 2015', 'Feb 2015', 'Mar 2015', 'Apr 2015', 'May 2015']
+    },
+    yAxis: {
+      title: {
+        text: 'Total Goals'
+      }
+    },
+    plotOptions: {
+      line: {
+        dataLabels: {
+          enabled: true
+        },
+        enableMouseTracking: false
       }
     },
     series: [{
-      data: [10, 15, 12, 8, 7]
-    }],
-    title: {
-      text: 'Hello'
-    },
-    loading: false
-  }
+      name: 'Tokyo',
+      data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+    }, {
+      name: 'London',
+      data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+    }]
+  };
 
   $scope.admin = $routeParams.admin;
 
@@ -67,12 +87,47 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
    * consolidated list of all owned players by a manager
    */
   $scope.allLeagues = null;
-  
+
   $scope.updateAllManagerData = null;
 
   ////////////////////////////////////////
   ////////////// private /////////////////
   ////////////////////////////////////////
+
+  var populateChart = function () {
+
+    $scope.chartConfig.series = [];
+
+    console.log('$scope.allManagers', $scope.allManagers);
+
+    $scope.allManagers.forEach(function (manager) {
+
+      $scope.chartConfig.series.push({
+        name: manager.managerName,
+        data: []
+      });
+
+      console.log($scope.chartConfig.series);
+      console.log($scope.chartConfig.series.data);
+
+      var n = $scope.chartConfig.series.length;
+      var p = $scope.chartConfig.series[n].data[0].length;
+
+      var currentData = $scope.chartConfig.series[n];
+
+      //console.log('manager', manager);
+      manager.monthlyGoalsLog.forEach(function (game) {
+
+        console.log('datePlayed', game.datePlayed);
+        console.log('goals', currentData);
+        currentData.push(currentData);
+
+      });
+
+
+    });
+
+  };
 
   /**
    * TODO
@@ -127,8 +182,10 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
     console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
-    
+
     $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
+
+    populateChart();
 
     $scope.loading = false;
 
@@ -142,7 +199,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
     $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
     firePromise.promise.then(fireBaseLoaded);
-
 
   };
 
