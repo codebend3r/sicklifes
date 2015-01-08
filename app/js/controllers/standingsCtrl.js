@@ -25,7 +25,19 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
       text: null
     },
     xAxis: {
-      categories: ['Sep 2014', 'Oct 2014', 'Nov 2014', 'Dec 2014', 'Jan 2015', 'Feb 2015', 'Mar 2015', 'Apr 2015', 'May 2015']
+      borderWidth: 0,
+      gridLineWidth: 0,
+      tickPositions: [],
+      labels: {
+        enabled: true,
+        step: 1,
+        formatter: function () {
+          return $dateService.goalDate(this.value);
+        }
+      },
+      title: {
+        text: null
+      }
     },
     yAxis: {
       title: {
@@ -81,6 +93,51 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
       text: 'PTS'
     }
   ];
+  
+  var mapPastMonitor function (tickPositions, element, index) {
+
+        var managers = [
+          {
+            name: 'Joe'
+          },
+          {
+            name: 'Chester'
+          },
+          {
+            name: 'Frank'
+          },
+          {
+            name: 'Dan'
+          },
+          {
+            name: 'Justin'
+          },
+          {
+            name: 'Mike'
+          }
+        ];
+
+        var evenTick = true;
+
+        return {
+          index: index,
+          //statusIndex: statusInt,
+          time: $dateService.goalDate(element.data.x),
+          name: managers[statusInt].status,
+          //color: $highChartsSettings.colors[statusInt],
+          data: element.data.map(function (d, barIndex) {
+            if (!index && evenTick) tickPositions.push(d.x);
+            evenTick = !evenTick;
+            return {
+              x: d.x,
+              y: d.y,
+              time: $dateService.getTimeShort(d.x),
+              barIndex: barIndex
+            };
+          })
+        };
+
+      }
 
 
   /**
@@ -99,6 +156,8 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
     $scope.chartConfig.series = [];
 
     console.log('$scope.allManagers', $scope.allManagers);
+    
+    $scope.sparkline.series = data.map($arrayMapper.mapPastMonitor.bind($scope, $scope.sparkline.options.xAxis.tickPositions));
 
     $scope.allManagers.forEach(function (manager) {
 
