@@ -1,17 +1,30 @@
 /**
- * Created by Bouse on 11/05/2014
+ * Created by Bouse on 01/19/2014
  */
 
 sicklifesFantasy.factory('$dateService', function ($date) {
 
   return {
 
+    getDate: function(date) {
+      return $date.create(date)
+    },
+
     syncDate: function () {
       return $date.create().format('{yyyy}/{MM}/{dd} {12hr}:{mm}:{ss}{tt}');
     },
 
+    chartDate: function () {
+      return $date.create().format('{MM}/{dd}/{yyyy}');
+    },
+
     goalDate: function () {
       return $date.create().format('{yyyy}/{MM}/{dd}');
+    },
+
+    getUnixTime: function (date) {
+      date = date || '';
+      return $date.create(date).getTime();
     },
 
     transactionDate: function (date) {
