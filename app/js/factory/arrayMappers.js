@@ -46,7 +46,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
       // based on player result data return an object with the valid leagues for this player
       var validLeagues = player.validLeagues,
-        ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id),
+        ligaGamesRequest = $apiFactory.getPlayerGameDetails("liga", player.id),
         eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id),
         seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id),
         chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id),
