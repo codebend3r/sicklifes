@@ -33,7 +33,7 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
               endPointURL: $textManipulator.getTeamRosterURL(leagueData.leagueName, teamData.id)
             });
 
-            rosterRequest.promise.then(function (playerData) {
+            rosterRequest.then(function (playerData) {
 
               count += 1;
 
@@ -75,21 +75,26 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
 
           player = $objectUtils.playerResetGoalPoints(player);
 
-          var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
-
-          playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, player, function () {
-            //
-          }));
-
           manager.seriCount = 0;
           manager.ligaCount = 0;
           manager.eplCount = 0;
           manager.wildCardCount = 0;
 
-          playerProfileRequest.promise.then($arrayMappers.playerGamesLog.bind(this, {player: player, manager: manager}));
+          var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
+
+          allLeaguePromises.push(playerProfileRequest);
+
+          playerProfileRequest
+            .then($arrayMappers.playerInfo.bind(this, player))
+            .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }));
+          //playerProfileRequest.then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }));
 
         });
 
+      });
+
+      $apiFactory.listOfPromises(allLeaguePromises, function (result) {
+        console.log('updateAllManagerData - ALL DATA LOADED');
       });
 
     },
@@ -99,9 +104,9 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
       console.log('UPDATING ALL LEAGUES');
 
       var allLeagues = [],
-        // list of all goal scorers in all leagues
+      // list of all goal scorers in all leagues
         consolidatedGoalScorers = [],
-        // makes a request for all leagues in a loop returns a list of promises
+      // makes a request for all leagues in a loop returns a list of promises
         allPromises = $apiFactory.getAllGoalLeaders();
 
       // waits for an array of promises to resolve, sets allLeagues data

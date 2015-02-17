@@ -14,8 +14,8 @@ sicklifesFantasy.factory('$dateService', function ($date) {
       return $date.create().format('{yyyy}/{MM}/{dd} {12hr}:{mm}:{ss}{tt}');
     },
 
-    chartDate: function () {
-      return $date.create().format('{MM}/{dd}/{yyyy}');
+    chartDate: function (date) {
+      return $date.create(date).format('{MM}/{dd}/{yyyy}');
     },
 
     goalDate: function () {

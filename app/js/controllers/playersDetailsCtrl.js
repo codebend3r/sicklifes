@@ -60,28 +60,34 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
   ////////////////////////////////////////
 
   /**
-   * save data to firebase
+   * saves current data to firebase
    */
-  var saveToFirebase = function () {
+  var saveToFireBase = function () {
 
-    console.log('//////////////////////////////////////////');
-    console.log('$scope.allManagers', $scope.allManagers);
-    console.log('//////////////////////////////////////////');
+    console.log('////////////////////////////////////');
+    console.log('allManagers', allManagers);
+    console.log('////////////////////////////////////');
 
     var saveObject = {
-      _syncedFrom: 'playersDetailsCtrl',
+      _syncedFrom: 'playerDetailsCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      chester: $scope.allManagers[0],
-      frank: $scope.allManagers[1],
-      dan: $scope.allManagers[2],
-      justin: $scope.allManagers[3],
-      mike: $scope.allManagers[4],
-      joe: $scope.allManagers[5]
+      chester: allManagers.chester,
+      frank: allManagers.frank,
+      dan: allManagers.dan,
+      justin: allManagers.justin,
+      mike: allManagers.mike,
+      joe: allManagers.joe
     };
 
     $fireBaseService.syncLeagueTeamData(saveObject);
 
   };
+
+  /**
+   *
+   * @type {{}}
+   */
+  var allManagers = {};
 
   /**
    * call when firebase data has loaded
@@ -96,7 +102,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
 
     $scope.allPlayers = data.allPlayersData.allPlayers;
 
-    $scope.allManagers = {
+    allManagers = {
       chester: data.managersData.chester,
       frank: data.managersData.frank,
       dan: data.managersData.dan,
@@ -113,9 +119,11 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
 
   };
 
-  var onRequestFinished = function () {
+  var onRequestFinished = function (data) {
 
-    console.log('>> 2 CURRENT PLAYER:', $scope.player);
+    console.log('DATA:', data);
+    //console.log('CURRENT PLAYER:', $scope.player);
+    //console.log(data);
 
   };
 
@@ -128,21 +136,24 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
       }
     });
 
-    console.log('>> 1 CURRENT PLAYER:', $scope.player);
-    console.log('>> 1 MANAGER NAME:', $scope.player.managerName);
+    var manager = allManagers[$scope.player.managerName] || null;
 
-    var manager = $scope.allManagers[$scope.player.managerName] || null,
-      playerProfileRequest;
-
+    // results goal totals to zero
     $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
 
-    playerProfileRequest = $apiFactory.getPlayerProfile('soccer', $scope.player.id);
-
-    // populates data related to player info like place of birth
-    playerProfileRequest.promise.then($arrayMappers.playerInfo.bind(this, $scope.player, onRequestFinished));
-
-    // populates game logs data
-    playerProfileRequest.promise.then($arrayMappers.playerGamesLog.bind(this, {player: $scope.player, manager: manager}));
+    $apiFactory.getPlayerProfile('soccer', $scope.player.id)
+      .then($arrayMappers.playerInfo.bind(this, $scope.player))
+      .then(function (data) {
+        console.log('4. player profile step');
+        $scope.player.teamName = data.teamName;
+        $scope.player.leagueName = data.leagueName;
+        $scope.player.domesticLeagueName = data.leagueName;
+      })
+      .then($arrayMappers.playerGamesLog.bind(this, { player: $scope.player, manager: manager }))
+      .then(function () {
+        console.log('6. player data ready to be saved');
+        saveToFireBase()
+      });
 
   };
 

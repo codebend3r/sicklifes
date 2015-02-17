@@ -4,7 +4,7 @@
 
 sicklifesFantasy.controller('masterCtrl', function ($scope) {
 
-  $scope.version = '0.4.7';
+  $scope.version = '0.5.0';
 
   $scope.loaded = true;
 

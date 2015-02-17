@@ -89,7 +89,7 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $timeout, $updateD
   };
 
   /**
-   *
+   * saves current data to firebase
    */
   $scope.saveToFireBase = function () {
 
@@ -132,11 +132,6 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $timeout, $updateD
     }
 
   };
-
-  /**
-   * contains a reference to each league by key
-   */
-  var allLeaguesObj = {};
 
   /**
    * call when firebase data has loaded

@@ -17,10 +17,10 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
       
       ref = new Firebase('https://glaring-fire-9383.firebaseio.com/');
       sync = $firebase(ref);
+
       // create a synchronized array for use in our HTML code
       //var syncArray = sync.$asArray();
       syncObject = sync.$asObject();
-      //console.log('syncObject', syncObject);
       
       syncObject.$bindTo(scope, 'syncedObject');
       
@@ -31,7 +31,6 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
       var defer = $q.defer();
 
       ref.on('value', function (snapshot) {
-        console.log('>> snapshot', snapshot.val());
         defer.resolve(snapshot.val());
       }, function (errorObject) {
         console.log('The read failed: ' + errorObject.code);
@@ -71,7 +70,7 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
 
     }
 
-  }
+  };
 
   return fireBaseObj;
 

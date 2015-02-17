@@ -4,12 +4,12 @@
 
 sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService, $date, $textManipulator) {
 
-  var scope = {};
+  var apiFactory = {};
 
   /**
    * TODO
    */
-  scope.getData = function (endPoint) {
+  apiFactory.getData = function (endPoint) {
 
     var defer = $q.defer(),
       httpObject = {
@@ -24,14 +24,14 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
     });
 
-    return defer;
+    return defer.promise;
 
   };
 
   /**
    * TODO
    */
-  scope.getFromLocalStorage = function (cbObj) {
+  apiFactory.getFromLocalStorage = function (cbObj) {
 
     console.log('get from localStorage');
 
@@ -51,11 +51,11 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
   };
 
   /**
-   * TODO
+   * gets players game log and goal per game details
    */
-  scope.getPlayerGameDetails = function (league, id) {
+  apiFactory.getPlayerGameDetails = function (league, id) {
 
-    var request = scope.getData({
+    var request = apiFactory.getData({
       endPointURL: $textManipulator.getPlayerPlayerRecordURL(league, id)
     });
 
@@ -64,27 +64,24 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
   };
 
   /**
-   * TODO
+   * gets player's league related data
    */
-  scope.getPlayerProfile = function (league, id) {
+  apiFactory.getPlayerProfile = function (league, id) {
+
+    league === 'soccer' ? console.log('1. getPlayerProfile') : console.log('3. getPlayerProfile');
 
     if (typeof league === 'undefined') league = 'soccer';
 
-    var request = scope.getData({
+    return apiFactory.getData({
       endPointURL: $textManipulator.getPlayerProfileURL(league, id)
     });
-
-    return request;
 
   };
 
   /**
    * TODO
    */
-  scope.getAllTeams = function () {
-
-    //http://origin-api.thescore.com/liga/teams/
-    //http://origin-api.thescore.com/liga/teams/44 - Real Madrid
+  apiFactory.getAllTeams = function () {
 
     var allLeaguesURL = [
         {
@@ -112,7 +109,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
     allLeaguesURL.forEach(function (urlObj) {
 
-      var leagueRequest = scope.getData({
+      var leagueRequest = apiFactory.getData({
         endPointURL: urlObj.url
       });
 
@@ -134,17 +131,17 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
   /**
    * TODO
    */
-  scope.getRoster = function (result) {
+  apiFactory.getRoster = function (result) {
 
     var listOrPromises = [];
 
     result.data.forEach(function (leagueData) {
 
-      var rosterRequest = scope.getData({
+      var rosterRequest = apiFactory.getData({
         endPointURL: url + leagueData.id + '/players/'
       });
 
-      rosterRequest.promise.then(function (result) {
+      rosterRequest.promise.then(function () {
 
         listOrPromises.push(rosterRequest.promise);
 
@@ -157,7 +154,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
   /**
    * TODO
    */
-  scope.getAllGoalLeaders = function () {
+  apiFactory.getAllGoalLeaders = function () {
 
     var allLeaguesURL = [
         'http://api.thescore.com/liga/leaders?categories=goals',
@@ -172,7 +169,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
     allLeaguesURL.forEach(function (url, index) {
 
-      var leagueRequest = scope.getData({
+      var leagueRequest = apiFactory.getData({
         endPointURL: url
       });
 
@@ -193,14 +190,14 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
   };
 
   /**
-   * TODO
+   * waits for an array of promises to resolve
    */
-  scope.listOfPromises = function (list, callbackFunc) {
+  apiFactory.listOfPromises = function (list, callbackFunc) {
 
     $q.all(list).then(callbackFunc);
 
-  }
+  };
 
-  return scope;
+  return apiFactory;
 
 });

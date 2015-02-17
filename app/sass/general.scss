@@ -6,16 +6,16 @@ html, body {
 }
 
 a {
-  color: $mainColour;
+  color: $textColour;
 }
 
 h1, h2 {
-  color: $mainColour;
+  color: $textColour;
 }
 
 h3.manager-name {
   display: inline-block;
-  color: #ffffff;
+  color: $textColour;
   font-size: 38px;
   width: 40%;
   margin: 0;
@@ -37,14 +37,14 @@ h3.manager-name {
 
 .goals-container {
   display: inline-block;
-  color: #ffffff;
+  color: $textColour;
   width: 56%;
   margin: 0;
   padding: 0;
 }
 
 .info-text {
-  color: #ffffff;
+  color: $textColour;
   font-weight: normal;
   font-size: 16px;
 }
@@ -129,6 +129,10 @@ h3.manager-name {
 }
 
 /////////////////////////////////////// nav
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 
 .player-info {
   font-size: 12px;

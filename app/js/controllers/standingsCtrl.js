@@ -9,6 +9,9 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
   /////////////// public /////////////////
   ////////////////////////////////////////
 
+  var oneDayInMill = 86400000;
+  var weekInMill = 604800000;
+
   /**
    * TODO
    */
@@ -27,12 +30,17 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
     xAxis: {
       borderWidth: 0,
       gridLineWidth: 0,
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      categories: [],
+      tickPixelInterval: 1000,
+      //categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      //tickInterval: 10,
+      tickInterval: null,
       //tickPositions: [],
       /*labels: {
        enabled: true,
-       step: 1,
+       step: 10,
        formatter: function () {
+       debugger;
        return $dateService.goalDate(this.value);
        }
        },*/
@@ -53,13 +61,71 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
         enableMouseTracking: false
       }
     },
-    series: [{
-      name: 'Chester',
-      data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-    }, {
-      name: 'Frank',
-      data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-    }]
+    series: [
+      {
+        name: 'Chester',
+        data: [
+          {
+            x: '10/29/14',
+            y: Math.round(Math.random() * 10),
+            time: '10/29/14'
+          },
+          {
+            x: '11/05/14',
+            y: Math.round(Math.random() * 10),
+            time: '11/05/14'
+          },
+          {
+            x: '11/16/14',
+            y: Math.round(Math.random() * 10),
+            time: '11/16/14'
+          },
+          {
+            x: '11/21/14',
+            y: Math.round(Math.random() * 10),
+            time: '11/21/14'
+          },
+          {
+            x: '11/28/14',
+            y: Math.round(Math.random() * 10),
+            time: '11/28/14'
+          },
+          {
+            x: '12/02/14',
+            y: Math.round(Math.random() * 10),
+            time: '12/02/14'
+          }
+
+        ]
+        //data: []
+      },
+      /*{
+        name: 'Frank',
+        data: [
+          {
+            x: 1408939200000 + (oneDayInMill * 5),
+            y: Math.round(Math.random() * 10),
+            time: '11/29/14'
+          },
+          {
+            x: 1408939200000 + (oneDayInMill * 15),
+            y: Math.round(Math.random() * 10),
+            time: '11/29/14'
+          },
+          {
+            x: 1408939200000 + (oneDayInMill * 20),
+            y: Math.round(Math.random() * 10),
+            time: '11/29/14'
+          },
+          {
+            x: 1408939200000 + (oneDayInMill * 25),
+            y: Math.round(Math.random() * 10),
+            time: '11/29/14'
+          }
+        ]
+        //data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+      }*/
+    ]
   };
 
   $scope.admin = $routeParams.admin;
@@ -177,87 +243,69 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
 
     $scope.chartConfig.xAxis.categories = [];
 
-    var weekInMill = 604800000;
-    //var startDate = '09/01/2014';
-    var startDate = $dateService.getDate();
+    var startDateString = '08/15/2014';
+    var startDate = $dateService.getDate(startDateString);
     var startDateInMilli = $dateService.getUnixTime(startDate);
-    var nextWeekInMill = startDate;
+    var nextWeekInMill = startDateInMilli;
 
-    //var unixTime = $dateService.getUnixTime(game.datePlayed);
-
-    for (var i = 0; i < 28; i++) {
+    for (var i = 0; i < 10; i++) {
       if (!i) {
-        $scope.chartConfig.xAxis.categories.push(startDate);
+        //$scope.chartConfig.xAxis.categories.push(formattedWeek);
+        $scope.chartConfig.xAxis.categories.push(startDateString);
       } else {
-        nextWeekInMill += weekInMill;
-        console.log('nextWeekInMill', nextWeekInMill);
+        //nextWeekInMill = nextWeekInMill + oneDayInMill;
+        nextWeekInMill = nextWeekInMill + weekInMill;
         var nextWeekDate = $dateService.getDate(nextWeekInMill);
         var nextWeekFormatted = $dateService.chartDate(nextWeekDate);
+        //$scope.chartConfig.xAxis.categories.push(nextWeekInMill);
         $scope.chartConfig.xAxis.categories.push(nextWeekFormatted);
       }
     }
 
-    $scope.allManagers[0].monthlyGoalsLog.forEach(function (game) {
+    /*var goalsObject = {};
 
-      //console.log('playerName', game.playerName);
-      //console.log('datePlayed', game.datePlayed);
-      //console.log('goals', game.goalsScored)
+     $scope.allManagers[0].monthlyGoalsLog.forEach(function (game) {
 
+     var unixTime = $dateService.getUnixTime(game.datePlayed);
+     if (angular.isUndefined(goalsObject[unixTime])) {
+     goalsObject[unixTime] = {
+     goalsScored: game.goalsScored,
+     dateValue: game.datePlayed,
+     unixTime: unixTime
+     };
+     } else {
+     //console.log('goal already score on', game.datePlayed, ', adding', game.goalsScored);
+     goalsObject[unixTime].goalsScored += game.goalsScored;
+     }
+     });
+     */
 
-      /*//if (!duplicateDateInList(unixTime, $scope.chartConfig.xAxis.categories)) {
-       if (!duplicateDateInList(game.datePlayed, $scope.chartConfig.xAxis.categories)) {
-       //$scope.chartConfig.xAxis.categories.push(unixTime);
-       $scope.chartConfig.xAxis.categories.push(game.datePlayed);
-       } else {
+    /*var goalsArray = _.chain(goalsObject)
+     .map(function (val) {
+     return val;
+     })
+     .sortBy(function (g) {
+     return g.unixTime;
+     });
 
-       }*/
+     console.log('goalsArray:', goalsArray);
+     console.log('first value:', goalsArray.first().value());*/
 
-      //console.log('$scope.chartConfig.xAxis.categories', $scope.chartConfig.xAxis.categories);
+    /*$scope.chartConfig.series[0].data = _.map(goalsArray, function (totalGoalsOnDate, index) {
 
-      //console.log('======================');
-      //currentData.push(game.goalsScored);
+     return {
+     name: $dateService.chartDate(totalGoalsOnDate.unixTime),
+     y: totalGoalsOnDate.goalsScored,
+     x: totalGoalsOnDate.unixTime
+     };
 
-      //var evenTick = true;
+     });*/
 
-      /*push({
-       index: index,
-       //statusIndex: statusInt,
-       time: $dateService.goalDate(element.data.x),
-       name: managers[index].name,
-       //color: $highChartsSettings.colors[statusInt],
-       data: element.data.map(function (d, barIndex) {
-       if (!index && evenTick) tickPositions.push(d.x);
-       evenTick = !evenTick;
-       return {
-       x: d.x,
-       y: d.y,
-       time: $dateService.goalDate(d.x),
-       barIndex: barIndex
-       };
-       })
-       });*/
-
-    });
-
-    $scope.chartConfig.xAxis.categories.sort();
+    //$scope.chartConfig.xAxis.categories.sort();
+    //console.log('$scope.chartConfig.xAxis.categories', $scope.chartConfig.xAxis.categories);
+    console.log('$scope.chartConfig.series[0].data', $scope.chartConfig.series[0].data);
     console.log('$scope.chartConfig.xAxis.categories', $scope.chartConfig.xAxis.categories);
-
-  };
-
-  var duplicateDateInList = function (date, list) {
-
-    var duplicate = false;
-
-    list.some(function (element) {
-      if (date === element) {
-        duplicate = true;
-        return true;
-      }
-    });
-
-    console.log('returning', duplicate, 'for', date, 'in', list);
-
-    return duplicate;
+    //console.log('goalsObject', goalsObject);
 
   };
 

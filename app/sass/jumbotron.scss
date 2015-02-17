@@ -5,7 +5,7 @@
   position: relative;
   padding: 20px;
   background-color: $mainColour;
-  color: white;
+  color: $textColour;
   overflow: hidden;
 
   h1 {
@@ -38,7 +38,7 @@
     top: 0;
     right: 0;
     z-index: 0;
-    opacity: .5;
+    opacity: .15;
     width: 350px;
     height: 350px;
   }
@@ -66,9 +66,9 @@
     opacity: 1;
   }
 
-  .player-team {
+  h3.player-team {
     display: inline-block;
-    margin: 0;
+    margin: 10px 0;
   }
 
 }
@@ -84,16 +84,20 @@
 
 .manager-jumbotron {
   hr {
-    border-top-color: #2B897E;
-    border-bottom-color: #136158;
+    border-top-color: $secondaryColour;
+    border-bottom-color: $secondaryColour;
     height: 1px;
   }
   span, p {
     font-size: 12px;
+    &.player-info {
+      margin: 5px 0;
+      color: $textColour;
+    }
     .totals {
       font-size: 18px;
       font-weight: bold;
-      color: #ffffff;
+      color: $secondaryColour;
     }
   }
 }

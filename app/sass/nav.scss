@@ -6,35 +6,35 @@
     color: $secondaryColour;
     background-color: $mainColour;
     &:hover {
-      color: $mainColour;
+      color: $textColour;
       background-color: $secondaryColour;
     }
     &:active, &:visited {
-      color: $mainColour;
+      color: $textColour;
       background-color: $secondaryColour;
     }
   }
   .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
-    color: $mainColour;
+    color: $textColour;
     background-color: $secondaryColour;
   }
 }
 
 .navbar-default.sicklifes-nav {
   background-color: $mainColour;
-  color: white;
+  color: $textColour;
   .navbar-nav {
     > li {
       > a {
-        color: white;
+        color: $textColour;
         &:hover {
-          color: white;
+          color: $textColour;
           background-color: $secondaryColour;
         }
       }
       &.active {
         a {
-          color: white;
+          color: $textColour;
           background-color: $secondaryDarkColour;
         }
       }
