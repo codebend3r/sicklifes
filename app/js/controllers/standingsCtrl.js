@@ -243,8 +243,9 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
 
     $scope.chartConfig.xAxis.categories = [];
 
-    var startDateString = '08/15/2014';
-    var startDate = $dateService.getDate(startDateString);
+    var weekInMill = 604800000;
+    //var startDate = '09/01/2014';
+    var startDate = $dateService.getDate();
     var startDateInMilli = $dateService.getUnixTime(startDate);
     var nextWeekInMill = startDateInMilli;
 
@@ -253,12 +254,13 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
         //$scope.chartConfig.xAxis.categories.push(formattedWeek);
         $scope.chartConfig.xAxis.categories.push(startDateString);
       } else {
-        //nextWeekInMill = nextWeekInMill + oneDayInMill;
-        nextWeekInMill = nextWeekInMill + weekInMill;
+        nextWeekInMill += weekInMill;
+        console.log('nextWeekInMill', nextWeekInMill);
         var nextWeekDate = $dateService.getDate(nextWeekInMill);
         var nextWeekFormatted = $dateService.chartDate(nextWeekDate);
         //$scope.chartConfig.xAxis.categories.push(nextWeekInMill);
         $scope.chartConfig.xAxis.categories.push(nextWeekFormatted);
+        debugger;
       }
     }
 

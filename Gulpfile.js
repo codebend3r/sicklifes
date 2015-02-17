@@ -209,20 +209,20 @@ gulp.task('fonts', function () {
 
   if (gutil.env.build === 'prod') {
 
-    return gulp.src(config.app + '/bower_components/**/*.{woff,ttf}')
-      .pipe(gulp.dest(config.prod + '/bower_components/'))
+    return gulp.src(config.app + '/bower_components/**/*.{woff,ttf,svg,eot}')
+      .pipe(gulp.dest(config.prod + '/fonts/'))
       .pipe($.size());
 
   } else if (gutil.env.build === 'release') {
 
-    return gulp.src(config.app + '/bower_components/**/*.{woff,ttf}')
-      .pipe(gulp.dest(config.release + '/bower_components/'))
+    return gulp.src(config.app + '/bower_components/**/*.{woff,ttf,svg,eot}')
+      .pipe(gulp.dest(config.release + '/fonts/'))
       .pipe($.size());
 
   } else {
 
-    return gulp.src(config.app + '/bower_components/**/*.{woff,ttf}')
-      .pipe(gulp.dest(config.dev + '/bower_components/'))
+    return gulp.src(config.app + '/bower_components/**/*.{woff,ttf,svg,eot}')
+      .pipe(gulp.dest(config.dev + '/fonts/'))
       .pipe($.size());
 
   }
