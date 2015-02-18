@@ -48,14 +48,15 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         validLeagues,
         allPromises = [],
         ligaGamesRequest,
+        ligaLogs,
         eplGamesRequest,
+        eplLogs,
         seriGamesRequest,
+        seriLogs,
         chlgGamesRequest,
-        euroGamesRequest;
-
-      //console.log('manager', manager.ligaCount);
-      //console.log('manager', manager.eplCount);
-      //console.log('manager', manager.seriCount);
+        chlgLogs,
+        euroGamesRequest,
+        euroLogs;
 
       validLeagues = player.validLeagues || {};
 
@@ -65,18 +66,19 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id);
         // if player is not dropped then count on active roster
         ligaGamesRequest.then(function (result) {
-          var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this,
+          ligaLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this,
             {
               player: player,
               manager: manager || null
             }
           ));
           player.ligaGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
-          player.domesticLeagueName = $textManipulator.formattedLeagueName('liga');
+          //player.domesticLeagueName = $textManipulator.formattedLeagueName('liga');
           if (manager) {
-            if (player.status !== 'dropped') manager.ligaCount += 1;
-            manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-            manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+            //if (player.status !== 'dropped') manager.ligaCount += 1;
+            if (player.status !== 'dropped' && ($rootScope.allLeagueTeams.liga.indexOf(player.teamName) !== -1 || ligaLogs.length > 0)) manager.ligaCount += 1;
+            manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(ligaLogs);
+            manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(ligaLogs);
           }
         });
         allPromises.push(ligaGamesRequest.promise);
@@ -89,19 +91,19 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id);
         // if player is not dropped then count on active roster
         eplGamesRequest.then(function (result) {
-          var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this,
+          eplLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this,
             {
               player: player,
               manager: manager || null
             }
           ));
           player.eplGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
-          player.domesticLeagueName = $textManipulator.formattedLeagueName('epl');
+          //player.domesticLeagueName = $textManipulator.formattedLeagueName('epl');
           if (manager) {
-            if (player.status !== 'dropped' && $rootScope.allLeagueTeams.epl.indexOf(player.teamName) !== -1) manager.eplCount += 1;
-            manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-            manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
-            if (manager.managerName === 'Chester' && $rootScope.allLeagueTeams.epl.indexOf(player.teamName) !== -1) {
+            if (player.status !== 'dropped' && ($rootScope.allLeagueTeams.epl.indexOf(player.teamName) !== -1 || eplLogs.length > 0)) manager.eplCount += 1;
+            manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(eplLogs);
+            manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(eplLogs);
+            /*if (manager.managerName === 'Chester' && $rootScope.allLeagueTeams.epl.indexOf(player.teamName) !== -1) {
               console.log('===========================');
               console.log('EPL playerName:', player.playerName);
               console.log('EPL newInfo.length:', newInfo.length);
@@ -109,7 +111,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
               console.log('EPL $rootScope.allLeagueTeams:', $rootScope.allLeagueTeams.epl.indexOf(player.teamName));
               console.log('EPL manager.eplCount:', manager.eplCount);
               console.log('===========================');
-            }
+            }*/
           }
         });
         allPromises.push(eplGamesRequest.promise);
@@ -122,18 +124,19 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id);
         // if player is not dropped then count on active roster
         seriGamesRequest.then(function (result) {
-          var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this,
+          seriLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this,
             {
               player: player,
               manager: manager || null
             }
           ));
           player.seriGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
-          player.domesticLeagueName = $textManipulator.formattedLeagueName('seri');
+          //player.domesticLeagueName = $textManipulator.formattedLeagueName('seri');
           if (manager) {
-            if (player.status !== 'dropped') manager.seriCount += 1;
-            manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-            manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+            //if (player.status !== 'dropped') manager.seriCount += 1;
+            if (player.status !== 'dropped' && ($rootScope.allLeagueTeams.seri.indexOf(player.teamName) !== -1 || seriLogs.length > 0)) manager.seriCount += 1;
+            manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(seriLogs);
+            manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(seriLogs);
           }
         });
         allPromises.push(seriGamesRequest.promise);
@@ -144,7 +147,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
         chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id);
         chlgGamesRequest.then(function (result) {
-          var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this,
+          chlgLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this,
             {
               player: player,
               manager: manager || null
@@ -153,8 +156,8 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
           player.chlgGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
           player.tournamentLeagueName = $textManipulator.formattedLeagueName('chlg');
           if (manager) {
-            manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-            manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+            manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(chlgLogs);
+            manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(chlgLogs);
           }
         });
         allPromises.push(chlgGamesRequest.promise);
@@ -163,7 +166,7 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
 
         euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
         euroGamesRequest.then(function (result) {
-          var newInfo = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this,
+          euroLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this,
             {
               player: player,
               manager: manager || null
@@ -172,8 +175,8 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
           player.euroGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
           player.tournamentLeagueName = $textManipulator.formattedLeagueName('uefa');
           if (manager) {
-            manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
-            manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+            manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(euroLogs);
+            manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(euroLogs);
           }
         });
         allPromises.push(euroGamesRequest.promise);
@@ -183,7 +186,8 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       // logical definition for a wildcard player
       if ((validLeagues.inChlg || validLeagues.inEuro) && (!validLeagues.inLiga && !validLeagues.inEPL && !validLeagues.inSeri)) {
         // if player is not dropped then count on active roster
-        if (player.status !== 'dropped' && manager) {
+        //if (player.status !== 'dropped' && manager && (chlgLogs.length > 0 || euroLogs.length > 0)) {
+        if (player.status !== 'dropped') {
           manager.wildCardCount += 1;
         }
       }
@@ -212,6 +216,11 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
         profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
       // url for team logo
+      result.data.teams.forEach(function(team){
+        console.log('team:', team.full_name);
+      });
+      console.log('league slug', profileLeagueSlug);
+
       player.teamLogo = result.data.teams[selectedInt].sportsnet_logos.large;
 
       // url for player image
@@ -229,8 +238,14 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       // set latest leagueName
       player.leagueName = $textManipulator.properLeagueName(profileLeagueSlug);
 
-      // 
-      player.combinedLeagues = player.tournamentLeagueName ? profileLeagueSlug.toUpperCase() + '/' + player.tournamentLeagueName : profileLeagueSlug.toUpperCase()
+      // set latest domesticLeagueName
+      //player.domesticLeagueName = $textManipulator.properLeagueName(profileLeagueSlug);
+      player.domesticLeagueName = 'DRUNK';
+
+      console.log('player.domesticLeagueName', player.domesticLeagueName);
+
+      // combined league names
+      player.combinedLeagues = player.tournamentLeagueName ? profileLeagueSlug.toUpperCase() + '/' + player.tournamentLeagueName : profileLeagueSlug.toUpperCase();
 
       deferred.resolve(player);
       ///////////////////////////////////

@@ -13,6 +13,7 @@ var gulp = require('gulp'),
     prod: 'builds/prod',
     release: 'builds/release'
   },
+  port = 8880,
   gutil = require('gulp-util'),
   browserSync = require('browser-sync'),
   reload = browserSync.reload,
@@ -332,7 +333,7 @@ gulp.task('browser-sync', function () {
 
     browserSync({
       open: gutil.env.open === true,
-      port: 8888,
+      port: port,
       server: {
         baseDir: config.prod
       }
@@ -342,7 +343,7 @@ gulp.task('browser-sync', function () {
 
     browserSync({
       open: gutil.env.open === true,
-      port: 8888,
+      port: port,
       server: {
         baseDir: config.release
       }
@@ -352,7 +353,7 @@ gulp.task('browser-sync', function () {
 
     browserSync({
       open: gutil.env.open === true,
-      port: 8888,
+      port: port,
       server: {
         baseDir: config.dev
       }
