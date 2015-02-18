@@ -2,7 +2,7 @@
  * Updated by Bouse on 12/23/2014
  */
 
-sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils, $textManipulator, $arrayMappers) {
+sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils, $dateService, $fireBaseService, $textManipulator, $arrayMappers) {
 
   var updateDataUtils = {
 
@@ -58,6 +58,42 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
     },
 
     /**
+     * gets all leagues in teams
+     */
+    updateTeamsInLeague: function () {
+
+      console.log('UPDATING TEAMS IN LEAGUES');
+
+      var allTeams = $apiFactory.getAllTeams(),
+        allLeagues = {
+          _lastSyncedOn: $dateService.syncDate()
+        };
+
+      // returns a list of promise with the end point for each league
+      $apiFactory.listOfPromises(allTeams, function (result) {
+
+        result.forEach(function (leagueData, i) {
+
+          leagueData.data.forEach(function (teamData, j) {
+
+            if (j === 0) {
+              allLeagues[leagueData.leagueName] = [];
+            }
+
+            //console.log(leagueData.leagueName, ':', teamData.full_name);
+            allLeagues[leagueData.leagueName].push(teamData.full_name);
+
+          });
+
+        });
+
+        $fireBaseService.syncAllTeams(allLeagues);
+        console.log('allLeagues', allLeagues);
+
+      });
+    },
+
+    /**
      * gets data from all of the players in all valid leagues
      */
     updateAllManagerData: function (allManagers) {
@@ -87,7 +123,6 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, $objectUtils
           playerProfileRequest
             .then($arrayMappers.playerInfo.bind(this, player))
             .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }));
-          //playerProfileRequest.then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }));
 
         });
 

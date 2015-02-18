@@ -2,7 +2,7 @@
  * Updated by Bouse on 12/06/2014
  */
 
-sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $arrayLoopers, $dateService, $arrayFilter, $apiFactory, $date) {
+sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $arrayLoopers, $dateService, $arrayFilter, $apiFactory, $rootScope, $date) {
 
   var arrayMaper = {
 
@@ -98,15 +98,21 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
           player.eplGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
           player.domesticLeagueName = $textManipulator.formattedLeagueName('epl');
           if (manager) {
-            if (player.status !== 'dropped') manager.eplCount += 1;
+            if (player.status !== 'dropped' && $rootScope.allLeagueTeams.epl.indexOf(player.teamName) !== -1) manager.eplCount += 1;
             manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(newInfo);
             manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(newInfo);
+            if (manager.managerName === 'Chester' && $rootScope.allLeagueTeams.epl.indexOf(player.teamName) !== -1) {
+              console.log('===========================');
+              console.log('EPL playerName:', player.playerName);
+              console.log('EPL newInfo.length:', newInfo.length);
+              console.log('EPL current team:', player.teamName);
+              console.log('EPL $rootScope.allLeagueTeams:', $rootScope.allLeagueTeams.epl.indexOf(player.teamName));
+              console.log('EPL manager.eplCount:', manager.eplCount);
+              console.log('===========================');
+            }
           }
         });
         allPromises.push(eplGamesRequest.promise);
-        if (player.managerName === 'Chester') {
-          console.log('playerName', player.playerName);
-        }
 
       }
 
@@ -177,7 +183,6 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       // logical definition for a wildcard player
       if ((validLeagues.inChlg || validLeagues.inEuro) && (!validLeagues.inLiga && !validLeagues.inEPL && !validLeagues.inSeri)) {
         // if player is not dropped then count on active roster
-        debugger;
         if (player.status !== 'dropped' && manager) {
           manager.wildCardCount += 1;
         }
@@ -224,14 +229,8 @@ sicklifesFantasy.factory('$arrayMappers', function ($textManipulator, $q, $scori
       // set latest leagueName
       player.leagueName = $textManipulator.properLeagueName(profileLeagueSlug);
 
-      player.combinedLeagues = function () {
-        //console.log('playerName:', player.playerName);
-        if (player.playerName === 'HULK') {
-          //console.log('player', player);
-          //debugger;
-        }
-        return player.tournamentLeagueName ? profileLeagueSlug.toUpperCase() + '/' + player.tournamentLeagueName : profileLeagueSlug.toUpperCase()
-      };
+      // 
+      player.combinedLeagues = player.tournamentLeagueName ? profileLeagueSlug.toUpperCase() + '/' + player.tournamentLeagueName : profileLeagueSlug.toUpperCase()
 
       deferred.resolve(player);
       ///////////////////////////////////

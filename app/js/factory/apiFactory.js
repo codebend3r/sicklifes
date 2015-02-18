@@ -113,14 +113,14 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
         endPointURL: urlObj.url
       });
 
-      leagueRequest.promise.then(function (result) {
+      leagueRequest.then(function (result) {
 
         result.leagueURL = urlObj.url;
         result.leagueName = urlObj.leagueName;
 
       });
 
-      listOrPromises.push(leagueRequest.promise);
+      listOrPromises.push(leagueRequest);
 
     });
 

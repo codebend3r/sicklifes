@@ -46,7 +46,7 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
       var usersRef = ref.child('leagueData');
       localStorageService.set('leagueData', angular.copy(saveObject));
       usersRef.set(angular.copy(saveObject));
-      console.log('syncLeagueTeamData -- COMPLETE');
+      console.log('syncLeagueData -- COMPLETE');
 
     },
 
@@ -57,6 +57,16 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
       localStorageService.set('managersData', angular.copy(saveObject));
       usersRef.set(angular.copy(saveObject));
       console.log('syncLeagueTeamData -- COMPLETE');
+
+    },
+
+    syncAllTeams: function (saveObject) {
+
+      console.log('syncAllTeams -- START');
+      var usersRef = ref.child('allTeamsData');
+      localStorageService.set('allTeamsData', angular.copy(saveObject));
+      usersRef.set(angular.copy(saveObject));
+      console.log('syncAllTeams -- COMPLETE');
 
     },
 

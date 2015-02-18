@@ -2,7 +2,7 @@
  * Created by Bouse on 01/01/2015
  */
 
-sicklifesFantasy.controller('managersCtrl', function ($scope, $timeout, $updateDataUtils, $fireBaseService, $routeParams, $dateService, $managersService, $location) {
+sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeout, $updateDataUtils, $fireBaseService, $routeParams, $dateService, $managersService, $location) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -112,6 +112,12 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $timeout, $updateD
 
   };
 
+  $scope.populateTeamsInLeague = function() {
+
+    $updateDataUtils.updateTeamsInLeague();
+
+  };
+
   ////////////////////////////////////////
   ////////////// private /////////////////
   ////////////////////////////////////////
@@ -133,6 +139,8 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $timeout, $updateD
 
   };
 
+  var allTeamsInLeagues = null;
+
   /**
    * call when firebase data has loaded
    * defines $scope.allManagers
@@ -151,9 +159,12 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $timeout, $updateD
       data.managersData.joe
     ];
 
+    $rootScope.allLeagueTeams = data.allTeamsData;
+
     console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
+    console.log('syncDate allTeamsData', data.allTeamsData);
 
     $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
 
