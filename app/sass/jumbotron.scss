@@ -73,16 +73,15 @@
 
 }
 
-.profile-pic {
-  width: 100%;
-  height: auto;
-  border: 5px solid $secondaryColour;
-  @media (max-width: 700px) {
-    display: none;
-  }
-}
-
 .manager-jumbotron {
+  .profile-pic {
+    width: 100%;
+    height: auto;
+    border: 2px solid $secondaryColour;
+    @media (max-width: 700px) {
+      display: none;
+    }
+  }
   hr {
     border-top-color: $secondaryColour;
     border-bottom-color: $secondaryColour;

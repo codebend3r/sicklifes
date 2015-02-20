@@ -47,22 +47,22 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $timeout, $apiFacto
   $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
-    console.log('$scope.allLeagues:', $scope.allLeagues);
-    console.log('$scope.allLeagues[0].source:', $scope.allLeagues[0].source);
-    console.log('$scope.allLeagues[0].source[0]:', $scope.allLeagues[0].source[0]);
+    console.log('$scope.leagueLeadersData:', $scope.leagueLeadersData);
+    console.log('$scope.leagueLeadersData[0].source:', $scope.leagueLeadersData[0].source);
+    console.log('$scope.leagueLeadersData[0].source[0]:', $scope.leagueLeadersData[0].source[0]);
     console.log('////////////////////////////////////');
 
     var saveObject = {
       _syncedFrom: 'leaguesCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      LIGA: $scope.allLeagues[0].source,
-      EPL: $scope.allLeagues[1].source,
-      SERI: $scope.allLeagues[2].source,
-      CHLG: $scope.allLeagues[3].source,
-      UEFA: $scope.allLeagues[4].source
+      LIGA: $scope.leagueLeadersData[0].source,
+      EPL: $scope.leagueLeadersData[1].source,
+      SERI: $scope.leagueLeadersData[2].source,
+      CHLG: $scope.leagueLeadersData[3].source,
+      UEFA: $scope.leagueLeadersData[4].source
     };
 
-    $fireBaseService.syncLeagueData(saveObject);
+    $fireBaseService.syncLeagueLeadersData(saveObject);
 
 
   };
@@ -73,10 +73,10 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $timeout, $apiFacto
 
   var allLeaguesObj = {};
 
-  var onLeaguesUpdated = function (allLeagues) {
+  var onLeaguesUpdated = function (leagueLeadersData) {
 
-    $scope.allLeagues = allLeagues;
-    $scope.selectedLeague = $scope.allLeagues[0];
+    $scope.leagueLeadersData = leagueLeadersData;
+    $scope.selectedLeague = $scope.leagueLeadersData[0];
 
   };
 
@@ -115,7 +115,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $timeout, $apiFacto
       }
     ];
 
-    var allManagers = [
+    var managersData = [
       data.managersData.chester,
       data.managersData.frank,
       data.managersData.dan,
@@ -126,13 +126,18 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $timeout, $apiFacto
 
     $scope.selectedLeague = $scope.allLeagues[0];
 
-    var syncDate = $date.create(data.leagueData._lastSynedOn);
+    var syncDate = $date.create(data.leagueLeadersData._lastSynedOn);
 
-    console.log('syncDate allPlayersData:', data.allPlayersData._lastSyncedOn);
-    console.log('syncDate leagueData:', data.leagueData._lastSyncedOn);
-    console.log('syncDate managersData:', data.managersData._lastSyncedOn);
+    console.log('syncDate leagueData:', data.leagueLeadersData._lastSyncedOn);
 
-    $scope.updateLeaguesData = $updateDataUtils.updateLeaguesData.bind($scope, allManagers, onLeaguesUpdated);
+    $scope.updateLeaguesData = function() {
+
+      $updateDataUtils.updateLeagueLeadersData()
+        .then(function(){
+          console.log('updateLeagueLeadersData - COMPLETE');
+        });
+
+    };
 
     if (syncDate.isYesterday()) {
       $scope.updateData();

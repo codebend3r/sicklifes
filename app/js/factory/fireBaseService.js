@@ -36,47 +36,47 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
         console.log('The read failed: ' + errorObject.code);
       });
 
-      return defer;
+      return defer.promise;
 
     },
 
-    syncLeagueData: function (saveObject) {
+    syncLeagueLeadersData: function (saveObject) {
 
-      console.log('syncLeagueData -- START');
-      var usersRef = ref.child('leagueData');
-      localStorageService.set('leagueData', angular.copy(saveObject));
+      //console.log('syncLeagueLeadersData -- START');
+      var usersRef = ref.child('leagueLeadersData');
+      //localStorageService.set('leagueLeadersData', angular.copy(saveObject));
       usersRef.set(angular.copy(saveObject));
-      console.log('syncLeagueData -- COMPLETE');
+      //console.log('syncLeagueLeadersData -- COMPLETE');
 
     },
 
-    syncLeagueTeamData: function (saveObject) {
+    syncManagersData: function (saveObject) {
 
-      console.log('syncLeagueTeamData -- START');
+      //console.log('syncManagersData -- START');
       var usersRef = ref.child('managersData');
-      localStorageService.set('managersData', angular.copy(saveObject));
+      //localStorageService.set('managersData', angular.copy(saveObject));
       usersRef.set(angular.copy(saveObject));
-      console.log('syncLeagueTeamData -- COMPLETE');
+      //console.log('syncManagersData -- COMPLETE');
 
     },
 
-    syncAllTeams: function (saveObject) {
+    syncAllLeagueTeamsData: function (saveObject) {
 
-      console.log('syncAllTeams -- START');
-      var usersRef = ref.child('allTeamsData');
-      localStorageService.set('allTeamsData', angular.copy(saveObject));
+      //console.log('syncAllLeagueTeamsData -- START');
+      var usersRef = ref.child('allLeagueTeamsData');
+      //localStorageService.set('allLeagueTeamsData', angular.copy(saveObject));
       usersRef.set(angular.copy(saveObject));
-      console.log('syncAllTeams -- COMPLETE');
+      //console.log('syncAllLeagueTeamsData -- COMPLETE');
 
     },
 
-    syncAllPlayersList: function (saveObject) {
+    syncPlayerPoolData: function (saveObject) {
 
-      console.log('syncAllPlayersList -- START');
-      var usersRef = ref.child('allPlayersData');
-      localStorageService.set('allPlayersData', angular.copy(saveObject));
+      //console.log('syncPlayerPoolData -- START');
+      var usersRef = ref.child('playerPoolData');
+      //localStorageService.set('playerPoolData', angular.copy(saveObject));
       usersRef.set(angular.copy(saveObject));
-      console.log('syncAllPlayersList -- COMPLETE');
+      //console.log('syncPlayerPoolData -- COMPLETE');
 
     }
 

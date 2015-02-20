@@ -2,7 +2,7 @@
  * Updated by Bouse on 12/06/2014
  */
 
-sicklifesFantasy.factory('$objectUtils', function () {
+sicklifesFantasy.factory('$objectUtils', function ($dateService) {
 
   var objectUtils = {
 

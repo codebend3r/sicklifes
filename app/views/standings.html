@@ -16,7 +16,7 @@
     </div>
 
     <div class='table-body'>
-      <div class='row' ng-repeat='team in allManagers | orderBy:"totalPoints":true'>
+      <div class='row' ng-repeat='team in managersData | orderBy:"totalPoints":true'>
         <div class='col-md-4 col-xs-4 small-hpadding'><a ng-href='#/managers?manager={{team.managerName}}'>{{team.managerName}}</a></div>
         <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.domesticGoals}}</div>
         <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.clGoals}}</div>

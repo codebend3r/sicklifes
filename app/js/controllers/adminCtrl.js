@@ -103,24 +103,24 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
       allPlayers: $scope.allPlayers
     };
 
-    $fireBaseService.syncAllPlayersList(allPlayersObject);
+    $fireBaseService.syncPlayerPoolData(allPlayersObject);
 
     console.log('////////////////////////////////////');
-    console.log('$scope.allManagers', $scope.allManagers);
+    console.log('$scope.managersData', $scope.managersData);
     console.log('////////////////////////////////////');
 
     var managersObject = {
       _syncedFrom: 'adminCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      chester: $scope.allManagers[0],
-      frank: $scope.allManagers[1],
-      dan: $scope.allManagers[2],
-      justin: $scope.allManagers[3],
-      mike: $scope.allManagers[4],
-      joe: $scope.allManagers[5]
+      chester: $scope.managersData[0],
+      frank: $scope.managersData[1],
+      dan: $scope.managersData[2],
+      justin: $scope.managersData[3],
+      mike: $scope.managersData[4],
+      joe: $scope.managersData[5]
     };
 
-    $fireBaseService.syncLeagueTeamData(managersObject);
+    $fireBaseService.syncManagersData(managersObject);
 
   };
 
@@ -129,10 +129,10 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
    */
   $scope.resetToDefault = function() {
     
-    $scope.allManagers = $managersService.getAllPlayers();
+    $scope.managersData = $managersService.getAllPlayers();
     
     console.log('////////////////////////////////////');
-    console.log('$scope.allManagers', $scope.allManagers);
+    console.log('$scope.managersData', $scope.managersData);
     console.log('////////////////////////////////////');
     
   };
@@ -158,27 +158,27 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
   var chooseTeam = function () {
 
     if ($routeParams.manager) {
-      $scope.allManagers.forEach(function (manager) {
+      $scope.managersData.forEach(function (manager) {
         if (manager.managerName === $routeParams.manager) {
           $scope.selectedManager = manager;
         }
       });
     } else {
-      $scope.selectedManager = $scope.allManagers[0];
+      $scope.selectedManager = $scope.managersData[0];
     }
 
   };
 
   /**
    * call when firebase data has loaded
-   * defines $scope.allManagers
+   * defines $scope.managersData
    * @param data
    */
   var fireBaseLoaded = function (data) {
     
     $scope.allPlayers = data.allPlayersData.allPlayers;
 
-    $scope.allManagers = [
+    $scope.managersData = [
       data.managersData.chester,
       data.managersData.frank,
       data.managersData.dan,
@@ -189,7 +189,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
 
     $scope.updatePlayerPoolData = $updateDataUtils.updatePlayerPoolData.bind($scope, $scope.allPlayers);
 
-    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
+    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
 
     chooseTeam();
 

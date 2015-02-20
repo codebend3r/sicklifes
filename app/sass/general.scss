@@ -74,8 +74,15 @@ h3.manager-name {
 
 .profile-pic {
   border-radius: 50%;
-  width: 100%;
+  //width: 100%;
+  width: 100px;
+  border: 2px solid $secondaryColour;
   height: auto;
+}
+.modal-dialog {
+  .profile-pic {
+    width: 100px;
+  }
 }
 
 .green {

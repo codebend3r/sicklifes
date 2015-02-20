@@ -15,6 +15,7 @@ var sicklifesFantasy = angular.module('sicklifesFantasy', [
   'ngSanitize',
   'LocalStorageModule',
   //'UserApp',
+  'jsonFormatter',
   'firebase',
   'ui.bootstrap',
   'angular.filter',
@@ -27,3 +28,7 @@ var sicklifesFantasy = angular.module('sicklifesFantasy', [
 //});
 
 sicklifesFantasy.constant('$date', Date);
+
+angular.isUndefinedOrNull = function(val) {
+  return angular.isUndefined(val) || val === null
+}

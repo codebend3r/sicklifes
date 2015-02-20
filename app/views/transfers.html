@@ -5,8 +5,12 @@
   <h2>Transfers</h2>
   <h3>Transaction for: <b>{{ selectedManager.managerName }}</b></h3>
 
+  <!--<span>managersData:</span><json-formatter json="managersData" open="0"></json-formatter>-->
+  <!--<span>allPlayers:</span><json-formatter json="allPlayers" open="0"></json-formatter>-->
+  <span>allPlayers:</span><json-formatter json="selectedPlayers" open="0"></json-formatter>
+
   <div class='well'>
-    <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in allManagers' ng-change='changeManager(selectedManager)'></select>
+    <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managersData' ng-change='changeManager(selectedManager)'></select>
   </div>
 
   <div ng-if='admin' class='well'>
@@ -43,7 +47,7 @@
     </div>
   </div>
 
-  <custom-table ng-if='!transactionPlayerAdded' table-body-template='all-players' player-search='Milan' add-player='addPlayer(player)' drop-player='dropPlayer(player)' list='allPlayers' table-name='All Players' table-header='tableHeader'></custom-table>
+  <custom-table ng-if='!transactionPlayerAdded' table-body-template='all-players' add-player='addPlayer(player)' drop-player='dropPlayer(player)' list='allPlayers' table-name='All Players' table-header='tableHeader'></custom-table>
   <custom-table ng-if='transactionPlayerAdded' table-body-template='manager-players' drop-player='dropPlayer(player)' list='selectedPlayers' table-name='Manager Players' table-header='managersTableHeader'></custom-table>
 
 </div>

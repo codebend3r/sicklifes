@@ -4,12 +4,13 @@
 
   <h2>Managers</h2>
 
-  <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in allManagers' ng-change='changeManager(selectedManager)'></select>
+  <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managersData' ng-change='changeManager(selectedManager)'></select>
 
   <div ng-if='admin' class='well'>
     <button type='button' class='btn btn-danger' ng-click='updateAllManagerData()'>Update All Managers Data</button>
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
     <button type='button' class='btn btn-danger' ng-click='populateTeamsInLeague()'>Populate Teams in League</button>
+    <button type='button' class='btn btn-danger' ng-click='updateEverything()'>Update Everything</button>
   </div>
   
   <manager-jumbotron manager='selectedManager'></manager-jumbotron>

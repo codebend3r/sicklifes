@@ -98,7 +98,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
 
         ]
         //data: []
-      },
+      }
       /*{
         name: 'Frank',
         data: [
@@ -220,11 +220,11 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
 
   var populateChart = function () {
 
-    //console.log('$scope.allManagers', $scope.allManagers);
+    //console.log('$scope.managersData', $scope.managersData);
 
     //$scope.chartConfig.series = data.map(mapGoalDates.bind($scope, $scope.sparkline.options.xAxis.tickPositions));
 
-    /*$scope.allManagers.forEach(function (manager) {
+    /*$scope.managersData.forEach(function (manager) {
 
      //console.log('managerName', manager.managerName);
 
@@ -266,7 +266,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
 
     /*var goalsObject = {};
 
-     $scope.allManagers[0].monthlyGoalsLog.forEach(function (game) {
+     $scope.managersData[0].monthlyGoalsLog.forEach(function (game) {
 
      var unixTime = $dateService.getUnixTime(game.datePlayed);
      if (angular.isUndefined(goalsObject[unixTime])) {
@@ -325,34 +325,34 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
   $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
-    console.log('$scope.allManagers', $scope.allManagers);
+    console.log('$scope.managersData', $scope.managersData);
     console.log('////////////////////////////////////');
 
     var saveObject = {
       _syncedFrom: 'standingsCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      chester: $scope.allManagers[0],
-      frank: $scope.allManagers[1],
-      dan: $scope.allManagers[2],
-      justin: $scope.allManagers[3],
-      mike: $scope.allManagers[4],
-      joe: $scope.allManagers[5]
+      chester: $scope.managersData[0],
+      frank: $scope.managersData[1],
+      dan: $scope.managersData[2],
+      justin: $scope.managersData[3],
+      mike: $scope.managersData[4],
+      joe: $scope.managersData[5]
     };
 
-    $fireBaseService.syncLeagueTeamData(saveObject);
+    $fireBaseService.syncManagersData(saveObject);
 
   };
 
   /**
    * call when firebase data has loaded
-   * defines $scope.allManagers
+   * defines $scope.managersData
    * @param data
    */
   var fireBaseLoaded = function (data) {
 
     console.log('fireBaseLoaded -- standingsCtrl');
 
-    $scope.allManagers = [
+    $scope.managersData = [
       data.managersData.chester,
       data.managersData.frank,
       data.managersData.dan,
@@ -365,9 +365,9 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
     console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData', data.managersData._lastSyncedOn);
 
-    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
+    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
 
-    populateChart();
+    //populateChart();
 
     $scope.loading = false;
 

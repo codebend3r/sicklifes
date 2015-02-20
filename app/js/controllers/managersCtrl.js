@@ -2,7 +2,7 @@
  * Created by Bouse on 01/01/2015
  */
 
-sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeout, $updateDataUtils, $fireBaseService, $routeParams, $dateService, $managersService, $location) {
+sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeout, $updateDataUtils, $fireBaseService, $routeParams, $dateService, $q, $managersService, localStorageService, $location) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -79,6 +79,11 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeo
 
   /**
    *
+   */
+  $scope.updateEverything = $updateDataUtils.updateEverything;
+
+  /**
+   *
    * @param selectedManager
    */
   $scope.changeManager = function (selectedManager) {
@@ -94,25 +99,24 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeo
   $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
-    console.log('$scope.allManagers', $scope.allManagers);
+    console.log('$rootScope.managersData', $rootScope.managersData);
     console.log('////////////////////////////////////');
 
     var saveObject = {
-      _syncedFrom: 'managersCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      chester: $scope.allManagers[0],
-      frank: $scope.allManagers[1],
-      dan: $scope.allManagers[2],
-      justin: $scope.allManagers[3],
-      mike: $scope.allManagers[4],
-      joe: $scope.allManagers[5]
+      chester: $rootScope.managersData[0],
+      frank: $rootScope.managersData[1],
+      dan: $rootScope.managersData[2],
+      justin: $rootScope.managersData[3],
+      mike: $rootScope.managersData[4],
+      joe: $rootScope.managersData[5]
     };
 
-    $fireBaseService.syncLeagueTeamData(saveObject);
+    $fireBaseService.syncManagersData(saveObject);
 
   };
 
-  $scope.populateTeamsInLeague = function() {
+  $scope.populateTeamsInLeague = function () {
 
     $updateDataUtils.updateTeamsInLeague();
 
@@ -123,18 +127,18 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeo
   ////////////////////////////////////////
 
   /**
-   * defines $scope.selectedTeam
+   * defines $scope.selectedManager
    */
   var chooseTeam = function () {
 
     if ($routeParams.manager) {
-      $scope.allManagers.forEach(function (manager) {
+      _.each($rootScope.managersData, function (manager) {
         if (manager.managerName === $routeParams.manager) {
           $scope.selectedManager = manager;
         }
       });
     } else {
-      $scope.selectedManager = $scope.allManagers[0];
+      $scope.selectedManager = $rootScope.managersData[0];
     }
 
   };
@@ -142,37 +146,67 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeo
   var allTeamsInLeagues = null;
 
   /**
-   * call when firebase data has loaded
-   * defines $scope.allManagers
+   * call when localstorage or firebase data has loaded
+   * defines $rootScope.managersData
    * @param data
    */
-  var fireBaseLoaded = function (data) {
+  var dataLoaded = function (data) {
 
-    console.log('fireBaseLoaded');
+    console.log('managersCtrl - dataLoaded', data);
 
-    $scope.allManagers = [
-      data.managersData.chester,
-      data.managersData.frank,
-      data.managersData.dan,
-      data.managersData.justin,
-      data.managersData.mike,
-      data.managersData.joe
-    ];
+    if (angular.isUndefined($rootScope.managersData)) {
+      $rootScope.managersData = [
+        data.managersData.chester,
+        data.managersData.frank,
+        data.managersData.dan,
+        data.managersData.justin,
+        data.managersData.mike,
+        data.managersData.joe
+      ];
+    }
 
-    $rootScope.allLeagueTeams = data.allTeamsData;
+    if (angular.isUndefined($rootScope.playerPoolData)) {
+      $rootScope.playerPoolData = data.playerPoolData;
+    }
 
-    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
-    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
-    console.log('syncDate managersData', data.managersData._lastSyncedOn);
-    console.log('syncDate allTeamsData', data.allTeamsData);
+    if (angular.isUndefined($rootScope.allLeagueTeamsData)) {
+      $rootScope.allLeagueTeamsData = data.allLeagueTeamsData;
+    }
 
-    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
+    //console.log('syncDate playerPoolData', data.playerPoolData._lastSyncedOn);
+    //console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
+    //console.log('syncDate managersData', data.managersData._lastSyncedOn);
+    //console.log('syncDate allTeamsData', data.allTeamsData._lastSyncedOn);
+
+    console.log('$rootScope.managersData', $rootScope.managersData);
+    console.log('$rootScope.playerPoolData', $rootScope.playerPoolData);
+    console.log('$rootScope.allLeagueTeamsData', $rootScope.allLeagueTeamsData);
+
+    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
     chooseTeam();
 
-    console.log('$scope.allManagers', $scope.allManagers);
-
     $scope.loading = false;
+
+  };
+
+  /**
+   * retrieve data from $rootScope
+   */
+  var getFromRootScope = function () {
+
+    var defer = $q.defer();
+    console.log('managersCtrl - getFromRootScope');
+    if (angular.isDefined($rootScope.managersData) && angular.isDefined($rootScope.playerPoolData) && angular.isDefined($rootScope.allLeagueTeamsData)) {
+      defer.resolve({
+        managersData: $rootScope.managersData,
+        playerPoolData: $rootScope.playerPoolData,
+        allLeagueTeamsData: $rootScope.allLeagueTeamsData
+      });
+    } else {
+      defer.reject();
+    }
+    return defer.promise;
 
   };
 
@@ -181,10 +215,38 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeo
    */
   var getFromLocalStorage = function () {
 
-    console.log('getFromLocalStorage');
-    $scope.loading = false;
-    var localManagers = localStorageService.get('leagueTeamData');
-    console.log('localManagers', localManagers);
+    var defer = $q.defer();
+    console.log('managersCtrl - getFromLocalStorage');
+    if (angular.isDefined(localStorageService.get('managersData')) && angular.isDefined(localStorageService.get('playerPoolData')) && angular.isDefined(localStorageService.get('allLeagueTeamsData'))) {
+      defer.resolve({
+        managersData: localStorageService.get('managersData'),
+        playerPoolData: localStorageService.get('playerPoolData'),
+        allLeagueTeamsData: localStorageService.get('allLeagueTeamsData')
+      });
+    } else {
+      defer.reject();
+    }
+    return defer.promise;
+
+  };
+
+  /**
+   * retrieve data from firebase
+   */
+  var getFromFireBase = function () {
+
+    var defer = $q.defer();
+    console.log('managersCtrl - getFromFireBase');
+
+    $fireBaseService.initialize($scope);
+    var firePromise = $fireBaseService.getFireBaseData();
+    firePromise.then(function (result) {
+      defer.resolve(result);
+    }, function () {
+      defer.reject();
+    });
+
+    return defer.promise;
 
   };
 
@@ -206,13 +268,40 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeo
   var init = function () {
 
     console.log('managersCtrl - init');
-    $fireBaseService.initialize($scope);
-    var firePromise = $fireBaseService.getFireBaseData();
-    firePromise.promise.then(fireBaseLoaded, getFromLocalStorage);
+
+    var dataLoad = false;
+
+    getFromRootScope()
+      .then(function (result) {
+        console.log('1. $rootScope success');
+        dataLoaded(result);
+        dataLoad = true;
+      }, function () {
+        console.log('1. $rootScope fail - get from localstorage');
+        return getFromLocalStorage();
+      })
+      .then(function (result) {
+        if (!dataLoad) {
+          console.log('2. localstorage success');
+          dataLoaded(result);
+          dataLoad = true;
+        }
+      }, function () {
+        console.log('2. localstorage fail - get from firebase');
+        return getFromFireBase();
+      })
+      .then(function (result) {
+        if (!dataLoad) {
+          //console.log('result', result);
+          console.log('3. if no localstorage - firebase loaded');
+          dataLoaded(result.data);
+          dataLoad = true;
+        }
+      })
 
   };
 
-  $timeout(init, 250);
+  init();
 
 });
 

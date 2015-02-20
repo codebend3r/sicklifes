@@ -2,7 +2,7 @@
  * Created by Bouse on 10/2/2014
  */
 
-sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, $objectUtils, localStorageService, $managersService, $apiFactory, $scoringLogic) {
+sicklifesFantasy.factory('$arrayLoopers', function ($rootScope, $textManipulator, $objectUtils, localStorageService, $managersService, $apiFactory, $scoringLogic) {
 
   var arrayLoopers = {
 
@@ -16,8 +16,8 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, $objectUti
 
       arrayLoopers.resetScoreCount(manager, players);
 
-      players = objectUtils.playerResetGoalPoints(players)
-      manager = objectUtils.managerResetGoalPoints(manager)
+      players = objectUtils.playerResetGoalPoints(players);
+      manager = objectUtils.managerResetGoalPoints(manager);
 
       var deferredList = deferredList || [];
 
@@ -85,15 +85,16 @@ sicklifesFantasy.factory('$arrayLoopers', function ($textManipulator, $objectUti
     },
 
     /**
-     * finds owner by id
+     * loops through all managers roster and finds owner by player id
      */
-    getOwnerByID: function (allManagers, id) {
+    getOwnerByID: function (id) {
 
       var owner = 'Free Agent';
 
-      allManagers.some(function (manager) {
-        manager.players.some(function (p) {
-          if (p.id === id){
+      _.some($rootScope.managersData, function (manager) {
+        _.some(manager.players, function (p) {
+          if (p.id === id) {
+            //console.log('found owned player', p);
             owner = manager.managerName;
             return true;
           }

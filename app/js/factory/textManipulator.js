@@ -71,7 +71,17 @@ sicklifesFantasy.factory('$textManipulator', function () {
     },
 
     /**
-     *
+     * unified string formatter for team names
+     * @returns {string}
+     */
+    teamNameFormatted: function(teamStr) {
+      return angular.isDefined(teamStr) ? textManipulator.stripVowelAccent(teamStr).toUpperCase() : '';
+    },
+
+
+    /**
+     * unified string formatter for players first and last name
+     * @returns {string}
      */
     formattedFullName: function (firstName, lastName) {
       return textManipulator.stripVowelAccent((firstName !== null && firstName !== undefined ? firstName + ' ' : '') + lastName.toUpperCase());

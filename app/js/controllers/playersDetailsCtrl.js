@@ -65,21 +65,21 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
   var saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
-    console.log('allManagers', allManagers);
+    console.log('managersData', managersData);
     console.log('////////////////////////////////////');
 
     var saveObject = {
       _syncedFrom: 'playerDetailsCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      chester: allManagers.chester,
-      frank: allManagers.frank,
-      dan: allManagers.dan,
-      justin: allManagers.justin,
-      mike: allManagers.mike,
-      joe: allManagers.joe
+      chester: managersData.chester,
+      frank: managersData.frank,
+      dan: managersData.dan,
+      justin: managersData.justin,
+      mike: managersData.mike,
+      joe: managersData.joe
     };
 
-    $fireBaseService.syncLeagueTeamData(saveObject);
+    $fireBaseService.syncManagersData(saveObject);
 
   };
 
@@ -87,11 +87,11 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
    *
    * @type {{}}
    */
-  var allManagers = {};
+  var managersData = {};
 
   /**
    * call when firebase data has loaded
-   * defines $scope.allManagers
+   * defines $scope.managersData
    * @param data
    */
   var fireBaseLoaded = function (data) {
@@ -102,7 +102,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
 
     $scope.allPlayers = data.allPlayersData.allPlayers;
 
-    allManagers = {
+    managersData = {
       chester: data.managersData.chester,
       frank: data.managersData.frank,
       dan: data.managersData.dan,
@@ -136,22 +136,16 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
       }
     });
 
-    var manager = allManagers[$scope.player.managerName] || null;
+    var manager = managersData[$scope.player.managerName] || null;
 
     // results goal totals to zero
     $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
 
     $apiFactory.getPlayerProfile('soccer', $scope.player.id)
       .then($arrayMappers.playerInfo.bind(this, $scope.player))
-      .then(function (data) {
-        console.log('4. player profile step');
-        $scope.player.teamName = data.teamName;
-        $scope.player.leagueName = data.leagueName;
-        $scope.player.domesticLeagueName = data.leagueName;
-      })
       .then($arrayMappers.playerGamesLog.bind(this, { player: $scope.player, manager: manager }))
       .then(function () {
-        console.log('6. player data ready to be saved');
+        //console.log('6. player data ready to be saved');
         saveToFireBase()
       });
 

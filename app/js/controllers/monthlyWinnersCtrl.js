@@ -88,7 +88,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $timeout, $m
 
   $scope.selectedMonth = $scope.allMonths[0];
 
-  $scope.allManagers = [];
+  $scope.managersData = [];
 
   /**
    * {ng-click} - when manager option changes
@@ -116,21 +116,21 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $timeout, $m
   $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
-    console.log('$scope.allManagers', $scope.allManagers);
+    console.log('$scope.managersData', $scope.managersData);
     console.log('////////////////////////////////////');
 
     var saveObject = {
       _syncedFrom: 'monthlyWinnersCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      chester: $scope.allManagers[0],
-      frank: $scope.allManagers[1],
-      dan: $scope.allManagers[2],
-      justin: $scope.allManagers[3],
-      mike: $scope.allManagers[4],
-      joe: $scope.allManagers[5]
+      chester: $scope.managersData[0],
+      frank: $scope.managersData[1],
+      dan: $scope.managersData[2],
+      justin: $scope.managersData[3],
+      mike: $scope.managersData[4],
+      joe: $scope.managersData[5]
     };
 
-    $fireBaseService.syncLeagueTeamData(saveObject);
+    $fireBaseService.syncManagersData(saveObject);
 
   };
 
@@ -143,7 +143,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $timeout, $m
    */
   var updateFilter = function () {
 
-    $scope.allManagers.forEach(function (manager) {
+    $scope.managersData.forEach(function (manager) {
 
       manager.players.forEach(function (player) {
 
@@ -158,7 +158,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $timeout, $m
 
   /**
    * call when firebase data has loaded
-   * defines $scope.allManagers
+   * defines $scope.managersData
    * @param data
    */
   var fireBaseLoaded = function (data) {
@@ -167,7 +167,7 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $timeout, $m
 
     $scope.loading = false;
 
-    $scope.allManagers = [
+    $scope.managersData = [
       data.managersData.chester,
       data.managersData.frank,
       data.managersData.dan,
@@ -176,9 +176,9 @@ sicklifesFantasy.controller('monthlyWinnersCtrl', function ($scope, $timeout, $m
       data.managersData.joe
     ];
 
-    $scope.manager = $scope.allManagers[0];
+    $scope.manager = $scope.managersData[0];
 
-    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.allManagers);
+    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
 
     updateFilter();
 

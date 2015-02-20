@@ -1,7 +1,7 @@
 <div ng-if='list.length > 0' class='well'>
-  <h3 class='inline'>{{tableName}}</h3>
-  <input class='form-control' name='input' ng-model='playerSearch' ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" placeholder='SEARCH FOR ANY PLAYER'>
-  <!--<input class='form-control' name='input' ng-model='playerSearch' placeholder='SEARCH FOR ANY PLAYER'>-->
+  <h3 class='inline'>All Players</h3>
+  <input class='form-control' name='input' ng-model='playerSearch.playerQuery' ng-model-options="{ debounce: 1000 }" placeholder='search for player by name'>
+  <input class='form-control' name='input' ng-model='playerSearch.teamQuery' ng-model-options="{ debounce: 1000 }" placeholder='search for player by team'>
 </div>
 
 <div class='fantasy-table' ng-if='list.length > 0'>
@@ -11,8 +11,8 @@
   </div>
 
   <div class='table-body'>
-    <div class='row' ng-repeat='player in list | unique: "id" | orderBy: "+playerName" | filter: playerSearch | limitTo: 50'>
-      <div class='col-md-1 col-sm-2 col-xs-2'>
+    <div class='row' ng-repeat='player in list | unique: "id" | filter: { playerName: playerSearch.playerQuery, teamName: playerSearch.teamQuery } | orderBy: "+playerName" | limitTo: 50'>
+      <div class='col-md-1 col-sm-2 col-xs-2 small-text'>
         {{player.id}}
       </div>
       <div class='col-md-3 col-sm-4 col-xs-4 player-column'>

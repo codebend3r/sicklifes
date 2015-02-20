@@ -68,7 +68,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
    */
   apiFactory.getPlayerProfile = function (league, id) {
 
-    league === 'soccer' ? console.log('1. getPlayerProfile') : console.log('3. getPlayerProfile');
+    //league === 'soccer' ? console.log('1. getPlayerProfile') : console.log('3. getPlayerProfile');
 
     if (typeof league === 'undefined') league = 'soccer';
 
@@ -173,7 +173,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
         endPointURL: url
       });
 
-      leagueRequest.promise.then(function (result) {
+      leagueRequest.then(function (result) {
 
         result.leagueURL = url;
         result.leagueName = allLeagues[index];
@@ -181,7 +181,7 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
 
       });
 
-      listOrPromises.push(leagueRequest.promise);
+      listOrPromises.push(leagueRequest);
 
     });
 

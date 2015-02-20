@@ -2,7 +2,7 @@
  * Updated by Bouse on 12/06/2014
  */
 
-sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $dateService, $routeParams) {
+sicklifesFantasy.controller('transfersCtrl', function ($scope, $rootScope, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $dateService, $routeParams) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -91,22 +91,39 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
   $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
-    console.log('$scope.allPlayers', $scope.allPlayers, '|', $scope.allPlayers.length);
+    console.log('$scope.allPlayers', $rootScope.allPlayers, '|', $rootScope.allPlayers.length);
     console.log('////////////////////////////////////');
 
     var allPlayersObject = {
-      _syncedFrom: 'transfersCtrl',
       _lastSyncedOn: $dateService.syncDate(),
-      allPlayers: $scope.allPlayers
+      allPlayers: $rootScope.allPlayers
     };
 
-    $fireBaseService.syncAllPlayersList(allPlayersObject);
+    $fireBaseService.syncPlayerPoolData(allPlayersObject);
+
+    ////////////////////////////////
+
+    var saveObject = {
+      _lastSyncedOn: $dateService.syncDate(),
+      chester: $rootScope.managersData[0],
+      frank: $rootScope.managersData[1],
+      dan: $rootScope.managersData[2],
+      justin: $rootScope.managersData[3],
+      mike: $rootScope.managersData[4],
+      joe: $rootScope.managersData[5]
+    };
+
+    $fireBaseService.syncManagersData(saveObject);
 
   };
 
-  $scope.allPlayers = [];
+  $rootScope.allPlayers = [];
 
-  $scope.updatePlayerPoolData = $updateDataUtils.updatePlayerPoolData.bind($scope, $scope.allPlayers);
+  /**
+   *
+   * @type {null}
+   */
+  $scope.updatePlayerPoolData = null;
 
   /**
    *
@@ -193,10 +210,11 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
     $scope.selectedManager.players.push($objectUtils.cleanPlayer($scope.addedPlayerObject));
 
     // drop
-    $scope.selectedManager.players.forEach(function (eachPlayer) {
+    _.some($scope.selectedManager.players, function (eachPlayer) {
       if (eachPlayer.id === $scope.droppedPlayerObject.id) {
         eachPlayer.status = 'dropped';
         eachPlayer.dateOfTransaction = $dateService.transactionDate();
+        return true;
       }
     });
 
@@ -247,7 +265,7 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
 
   $scope.resetAllPlayers = function () {
 
-    $scope.allManagers.forEach(function (manager) {
+    $rootScope.managersData.forEach(function (manager) {
 
       manager.players.forEach(function (eachPlayer) {
 
@@ -255,12 +273,8 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
 
     });
 
-    console.log('>> $scope.allManagers', $scope.allManagers);
+    console.log('>> $rootScope.managersData', $rootScope.managersData);
 
-  };
-
-  var onAllPlayersLoaded = function (allPlayers) {
-    $scope.allPlayers = allPlayers;
   };
 
   /**
@@ -270,9 +284,9 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
 
     console.log('fireBaseLoaded -- transfersCtrl');
 
-    $scope.allPlayers = data.allPlayersData.allPlayers;
+    $rootScope.allPlayers = data.playerPoolData.allPlayers;
 
-    $scope.allManagers = [
+    $rootScope.managersData = [
       data.managersData.chester,
       data.managersData.frank,
       data.managersData.dan,
@@ -281,16 +295,45 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $timeout, $fireBa
       data.managersData.joe
     ];
 
-    console.log('syncDate allPlayersData:', data.allPlayersData._lastSyncedOn);
+    console.log('syncDate playerPoolData:', data.playerPoolData._lastSyncedOn);
     console.log('syncDate leagueData:', data.leagueData._lastSyncedOn);
     console.log('syncDate managersData:', data.managersData._lastSyncedOn);
 
-    $scope.updatePlayerPoolData = $updateDataUtils.updatePlayerPoolData.bind($scope, $scope.allManagers, $scope.allPlayers, onAllPlayersLoaded);
+    //$scope.updatePlayerPoolData = $updateDataUtils.updatePlayerPoolData.bind($scope, $rootScope.managersData, $rootScope.allPlayers, onAllPlayersLoaded);
+    $scope.updatePlayerPoolData = function() {
 
-    $scope.selectedManager = $scope.allManagers[0];
+      $updateDataUtils.updatePlayerPoolData()
+        .then(function (result) {
+          console.log('============================');
+          console.log('player pool data updated', result);
+          console.log('============================');
+        });
+
+    };
+
+    //$scope.selectedManager = $rootScope.managersData[0];
+    chooseTeam();
+
     $scope.selectedPlayers = $scope.selectedManager.players;
 
     $scope.loading = false;
+
+  };
+
+  /**
+   * defines $scope.selectedManager
+   */
+  var chooseTeam = function () {
+
+    if ($routeParams.manager) {
+      $rootScope.managersData.forEach(function (manager) {
+        if (manager.managerName === $routeParams.manager) {
+          $scope.selectedManager = manager;
+        }
+      });
+    } else {
+      $scope.selectedManager = $rootScope.managersData[0];
+    }
 
   };
 
