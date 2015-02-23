@@ -152,7 +152,7 @@ sicklifesFantasy.controller('leaguesCtrl', function ($scope, $timeout, $apiFacto
     console.log('leaguesCtrl - init');
     $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
-    firePromise.promise.then(fireBaseLoaded);
+    firePromise.then(fireBaseLoaded);
 
   };
 

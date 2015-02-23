@@ -2,7 +2,7 @@
  * Updated by Bouse on 12/23/2014
  */
 
-sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, localStorageService, $objectUtils, $q, $dateService, $fireBaseService, $textManipulator, $arrayMappers, $rootScope) {
+sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, localStorageService, $objectUtils, $q, $managersService, $dateService, $fireBaseService, $textManipulator, $arrayMappers, $rootScope) {
 
   var updateDataUtils = {
 
@@ -113,6 +113,9 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, localStorage
       var allLeaguePromises = [],
         defer = $q.defer();
 
+      $rootScope.managersData = $rootScope.managersData || $managersService;
+      console.log('$rootScope.managersData', $rootScope.managersData);
+
       _.each($rootScope.managersData, function (manager) {
 
         // reset goal counts
@@ -194,139 +197,146 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, localStorage
      */
     updateEverything: function () {
 
-      console.log('>> managersData', angular.isUndefinedOrNull(localStorageService.get('managersData')));
-      console.log('>> leagueLeadersData', angular.isUndefinedOrNull(localStorageService.get('leagueLeadersData')));
-      console.log('>> playerPoolData', angular.isUndefinedOrNull(localStorageService.get('playerPoolData')));
-      console.log('>> allLeagueTeamsData', angular.isUndefinedOrNull(localStorageService.get('allLeagueTeamsData')));
-
-      //console.log('>> isUndefined', angular.isUndefined(localStorageService.get('leagueLeadersData')));
-      //console.log('>> isDefined', angular.isDefined(localStorageService.get('leagueLeadersData')));
-      //console.log('>> isUndefinedOrNull', angular.isUndefinedOrNull(localStorageService.get('leagueLeadersData')));
-
-      //localStorageService.set('managersData', result.managersData);
-      //$fireBaseService.syncManagersData(localStorageService.get('managersData'));
-
-      if (angular.isUndefinedOrNull(localStorageService.get('managersData'))) {
-
-        console.log('managersData - no localstorage found');
-
-        updateDataUtils.updateAllManagerData()
-          .then(function (result) {
-            result._lastSyncedOn = $dateService.syncDate();
-            console.log('managersData - data fetched');
-            localStorageService.set('leagueLeadersData', result);
-            $fireBaseService.syncLeagueLeadersData(result);
-
-          });
-      } else {
-
-        console.log('managersData - exists in localstorage');
-        var managerObject = localStorageService.get('managersData');
-        managerObject._lastSyncedOn = $dateService.syncDate();
-        $fireBaseService.syncManagersData(managerObject);
-
-      }
+      console.log('is managersData undefined:', angular.isUndefinedOrNull(localStorageService.get('managersData')));
+      console.log('is leagueLeadersData undefined:', angular.isUndefinedOrNull(localStorageService.get('leagueLeadersData')));
+      console.log('is playerPoolData undefined:', angular.isUndefinedOrNull(localStorageService.get('playerPoolData')));
+      console.log('is allLeagueTeamsData undefined:', angular.isUndefinedOrNull(localStorageService.get('allLeagueTeamsData')));
 
       ///////////////////////////////////////
 
-      if (angular.isUndefinedOrNull(localStorageService.get('leagueLeadersData'))) {
+      $fireBaseService.initialize(updateDataUtils);
+      var firePromise = $fireBaseService.getFireBaseData();
+      firePromise.then(function (result) {
+        _.each(result, function (resultObj, key) {
+          console.log(resultObj, key);
+          localStorageService.set(key, resultObj);
+        });
+      });
 
-        console.log('leagueLeadersData - no localstorage found');
+      /*if (angular.isUndefinedOrNull(localStorageService.get('managersData'))) {
 
-        updateDataUtils.updateLeagueLeadersData()
-          .then(function (result) {
+       console.log('managersData - no localstorage found');
 
-            console.log('leagueLeadersData - data fetched');
+       updateDataUtils.updateAllManagerData()
+       .then(function (result) {
+       //result._lastSyncedOn = $dateService.syncDate();
+       console.log('managersData - data fetched', result);
+       debugger;
+       //localStorageService.set('managersData', result);
+       //$fireBaseService.syncLeagueLeadersData(result);
 
-            var saveObject = {
-              _lastSyncedOn: $dateService.syncDate(),
-              liga: result[0].source,
-              epl: result[1].source,
-              seri: result[2].source,
-              chlg: result[3].source,
-              uefa: result[4].source
-            };
+       });
+       } else {
 
-            localStorageService.set('leagueLeadersData', saveObject);
-            $fireBaseService.syncLeagueLeadersData(saveObject);
+       console.log('managersData - exists in localstorage');
+       var managerObject = localStorageService.get('managersData');
+       managerObject._lastSyncedOn = $dateService.syncDate();
+       //$fireBaseService.syncManagersData(managerObject);
 
-          });
-      } else {
-
-        console.log('leagueLeadersData - exists in localstorage');
-
-        var leagueLeadersObject = localStorageService.get('leagueLeadersData'),
-          saveObject = {
-            _lastSyncedOn: $dateService.syncDate(),
-            liga: leagueLeadersObject.liga,
-            epl: leagueLeadersObject.epl,
-            seri: leagueLeadersObject.seri,
-            chlg: leagueLeadersObject.chlg,
-            uefa: leagueLeadersObject.uefa
-          };
-
-        localStorageService.set('leagueLeadersData', saveObject);
-        $fireBaseService.syncLeagueLeadersData(saveObject);
-
-      }
+       }*/
 
       ///////////////////////////////////////
 
-      // player pool
-      if (angular.isUndefinedOrNull(localStorageService.get('playerPoolData'))) {
-        updateDataUtils.updatePlayerPoolData()
-          .then(function (result) {
+      /*if (angular.isUndefinedOrNull(localStorageService.get('leagueLeadersData'))) {
 
-            console.log('updatePlayerPoolData LOADED');
+       console.log('leagueLeadersData - no localstorage found');
 
-            var allPlayersObject = {
-              _lastSyncedOn: $dateService.syncDate(),
-              allPlayers: result
-            };
+       updateDataUtils.updateLeagueLeadersData()
+       .then(function (result) {
 
-            localStorageService.set('playerPoolData', allPlayersObject);
-            $fireBaseService.syncPlayerPoolData(allPlayersObject);
+       console.log('leagueLeadersData - data fetched');
 
-          });
-      } else {
+       var saveObject = {
+       _lastSyncedOn: $dateService.syncDate(),
+       liga: result[0].source,
+       epl: result[1].source,
+       seri: result[2].source,
+       chlg: result[3].source,
+       uefa: result[4].source
+       };
 
-        console.log('playerPoolData exists in localstorage');
+       localStorageService.set('leagueLeadersData', saveObject);
+       $fireBaseService.syncLeagueLeadersData(saveObject);
 
-        var allPlayersObject = {
-          _lastSyncedOn: $dateService.syncDate(),
-          allPlayers: localStorageService.get('playerPoolData')
-        };
+       });
+       } else {
 
-        //console.log('allPlayersObject', allPlayersObject);
-        localStorageService.set('playerPoolData', allPlayersObject);
-        $fireBaseService.syncPlayerPoolData(allPlayersObject);
+       console.log('leagueLeadersData - exists in localstorage');
 
-      }
+       var leagueLeadersObject = localStorageService.get('leagueLeadersData'),
+       saveObject = {
+       _lastSyncedOn: $dateService.syncDate(),
+       liga: leagueLeadersObject.liga,
+       epl: leagueLeadersObject.epl,
+       seri: leagueLeadersObject.seri,
+       chlg: leagueLeadersObject.chlg,
+       uefa: leagueLeadersObject.uefa
+       };
 
-      ///////////////////////////////////////
+       localStorageService.set('leagueLeadersData', saveObject);
+       $fireBaseService.syncLeagueLeadersData(saveObject);
 
-      if (angular.isUndefinedOrNull(localStorageService.get('allLeagueTeamsData'))) {
+       }
 
-        console.log('allLeagueTeamsData - no localstorage found');
+       ///////////////////////////////////////
 
-        updateDataUtils.updateTeamsInLeague()
-          .then(function (result) {
+       // player pool
+       if (angular.isUndefinedOrNull(localStorageService.get('playerPoolData'))) {
+       updateDataUtils.updatePlayerPoolData()
+       .then(function (result) {
 
-            console.log('allLeagueTeamsData - data fetched', result);
-            localStorageService.set('allLeagueTeamsData', saveObject);
-            $fireBaseService.syncAllLeagueTeamsData(result)
+       console.log('updatePlayerPoolData LOADED');
+       debugger;
 
-          });
+       var allPlayersObject = {
+       _lastSyncedOn: $dateService.syncDate(),
+       allPlayers: result
+       };
 
-      } else {
+       localStorageService.set('playerPoolData', allPlayersObject);
+       $fireBaseService.syncPlayerPoolData(allPlayersObject);
 
-        console.log('allLeagueTeamsData - exists in localstorage');
-        var result = localStorageService.get('allLeagueTeamsData');
-        result._lastSyncedOn = $dateService.syncDate();
-        localStorageService.set('allLeagueTeamsData', result);
-        $fireBaseService.syncAllLeagueTeamsData(result);
+       });
+       } else {
 
-      }
+       console.log('playerPoolData exists in localstorage');
+
+       var allPlayersObject = {
+       _lastSyncedOn: $dateService.syncDate(),
+       allPlayers: localStorageService.get('playerPoolData')
+       };
+
+       //console.log('allPlayersObject', allPlayersObject);
+       localStorageService.set('playerPoolData', allPlayersObject);
+       $fireBaseService.syncPlayerPoolData(allPlayersObject);
+
+       }
+
+       ///////////////////////////////////////
+
+       if (angular.isUndefinedOrNull(localStorageService.get('allLeagueTeamsData'))) {
+
+       console.log('allLeagueTeamsData - no localstorage found');
+
+       updateDataUtils.updateTeamsInLeague()
+       .then(function (result) {
+
+       console.log('allLeagueTeamsData - data fetched', result);
+       localStorageService.set('allLeagueTeamsData', saveObject);
+       $fireBaseService.syncAllLeagueTeamsData(result)
+
+       });
+
+       } else {
+
+       console.log('allLeagueTeamsData - exists in localstorage');
+       var result = localStorageService.get('allLeagueTeamsData');
+       result._lastSyncedOn = $dateService.syncDate();
+       localStorageService.set('allLeagueTeamsData', result);
+       $fireBaseService.syncAllLeagueTeamsData(result);
+
+       }
+       */
 
     }
 

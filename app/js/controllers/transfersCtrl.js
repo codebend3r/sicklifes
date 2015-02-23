@@ -2,7 +2,7 @@
  * Updated by Bouse on 12/06/2014
  */
 
-sicklifesFantasy.controller('transfersCtrl', function ($scope, $rootScope, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $dateService, $routeParams) {
+sicklifesFantasy.controller('transfersCtrl', function ($scope, $rootScope, $q, localStorageService, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $dateService, $routeParams) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -278,9 +278,48 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $rootScope, $time
   };
 
   /**
+   * call from when $rootScope, localstorage, or firebase data is loaded
+   * @param data - data passed from promise
+   */
+  var dataLoaded = function (data) {
+
+    console.log('transfersCtrl - dataLoaded', data);
+
+    if (angular.isUndefined($rootScope.managersData)) {
+      $rootScope.managersData = [
+        data.managersData.chester,
+        data.managersData.frank,
+        data.managersData.dan,
+        data.managersData.justin,
+        data.managersData.mike,
+        data.managersData.joe
+      ];
+    }
+
+    if (angular.isUndefined($rootScope.playerPoolData)) {
+      $rootScope.playerPoolData = data.playerPoolData;
+    }
+
+    if (angular.isUndefined($rootScope.allLeagueTeamsData)) {
+      $rootScope.allLeagueTeamsData = data.allLeagueTeamsData;
+    }
+
+    console.log('$rootScope.managersData', $rootScope.managersData);
+    console.log('$rootScope.playerPoolData', $rootScope.playerPoolData);
+    console.log('$rootScope.allLeagueTeamsData', $rootScope.allLeagueTeamsData);
+
+    $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
+
+    chooseTeam();
+
+    $scope.loading = false;
+
+  };
+
+  /**
    * callback data when firebase is loaded
    */
-  var fireBaseLoaded = function (data) {
+  /*var fireBaseLoaded = function (data) {
 
     console.log('fireBaseLoaded -- transfersCtrl');
 
@@ -311,14 +350,11 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $rootScope, $time
 
     };
 
-    //$scope.selectedManager = $rootScope.managersData[0];
     chooseTeam();
-
-    $scope.selectedPlayers = $scope.selectedManager.players;
 
     $scope.loading = false;
 
-  };
+  };*/
 
   /**
    * defines $scope.selectedManager
@@ -334,21 +370,122 @@ sicklifesFantasy.controller('transfersCtrl', function ($scope, $rootScope, $time
     } else {
       $scope.selectedManager = $rootScope.managersData[0];
     }
+    $scope.selectedPlayers = $scope.selectedManager.players;
 
   };
 
   /**
-   * init controller
+   * retrieve data from $rootScope
    */
-  var init = function () {
+  var getFromRootScope = function () {
 
-    $fireBaseService.initialize($scope);
-    var firePromise = $fireBaseService.getFireBaseData();
-    firePromise.promise.then(fireBaseLoaded);
-
+    var defer = $q.defer();
+    console.log('managersCtrl - getFromRootScope');
+    if (angular.isDefined($rootScope.managersData) && angular.isDefined($rootScope.playerPoolData) && angular.isDefined($rootScope.allLeagueTeamsData)) {
+      defer.resolve({
+        managersData: $rootScope.managersData,
+        playerPoolData: $rootScope.playerPoolData,
+        allLeagueTeamsData: $rootScope.allLeagueTeamsData
+      });
+    } else {
+      defer.reject();
+    }
+    return defer.promise;
 
   };
 
-  $timeout(init, 250);
+  /**
+   * retrieve data from local storage
+   */
+  var getFromLocalStorage = function () {
+
+    var defer = $q.defer();
+    console.log('managersCtrl - getFromLocalStorage');
+    if (angular.isDefined(localStorageService.get('managersData')) && angular.isDefined(localStorageService.get('playerPoolData')) && angular.isDefined(localStorageService.get('allLeagueTeamsData'))) {
+      defer.resolve({
+        managersData: localStorageService.get('managersData'),
+        playerPoolData: localStorageService.get('playerPoolData'),
+        allLeagueTeamsData: localStorageService.get('allLeagueTeamsData')
+      });
+    } else {
+      defer.reject();
+    }
+    return defer.promise;
+
+  };
+
+  /**
+   * retrieve data from firebase
+   */
+  var getFromFireBase = function () {
+
+    var defer = $q.defer();
+    console.log('managersCtrl - getFromFireBase');
+
+    $fireBaseService.initialize($scope);
+    var firePromise = $fireBaseService.getFireBaseData();
+    firePromise.then(function (result) {
+      defer.resolve(result);
+    }, function () {
+      defer.reject();
+    });
+
+    return defer.promise;
+
+  };
+
+
+  /**
+   * all requests complete
+   */
+  var allRequestComplete = function () {
+
+    console.log('allRequestComplete');
+    $scope.loading = false;
+    chooseTeam();
+
+  };
+
+  /**
+   * init function
+   */
+  var init = function () {
+
+    console.log('managersCtrl - init');
+
+    var dataLoad = false;
+
+    $updateDataUtils.updateEverything();
+
+    /*getFromRootScope()
+      .then(function (result) {
+        console.log('1. $rootScope success');
+        dataLoaded(result);
+        dataLoad = true;
+      }, function () {
+        console.log('1. $rootScope fail - get from localstorage');
+        return getFromLocalStorage();
+      })
+      .then(function (result) {
+        if (!dataLoad) {
+          console.log('2. localstorage success');
+          dataLoaded(result);
+          dataLoad = true;
+        }
+      }, function () {
+        console.log('2. localstorage fail - get from firebase');
+        return getFromFireBase();
+      })
+      .then(function (result) {
+        if (!dataLoad) {
+          console.log('3. if no localstorage - firebase loaded');
+          dataLoaded(result);
+          dataLoad = true;
+        }
+      })*/
+
+  };
+
+  init();
 
 });

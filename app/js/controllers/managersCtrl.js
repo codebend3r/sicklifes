@@ -143,12 +143,9 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeo
 
   };
 
-  var allTeamsInLeagues = null;
-
   /**
-   * call when localstorage or firebase data has loaded
-   * defines $rootScope.managersData
-   * @param data
+   * call from when $rootScope, localstorage, or firebase data is loaded
+   * @param data - data passed from promise
    */
   var dataLoaded = function (data) {
 
