@@ -3,7 +3,7 @@
  */
 
 
-sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStorageService) {
+sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStorageService, $rootScope) {
 
   var ref,
     sync,
@@ -14,16 +14,16 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
     list: null,
 
     initialize: function (scope) {
-      
+
       ref = new Firebase('https://glaring-fire-9383.firebaseio.com/');
       sync = $firebase(ref);
 
       // create a synchronized array for use in our HTML code
       //var syncArray = sync.$asArray();
       syncObject = sync.$asObject();
-      
+
       syncObject.$bindTo(scope, 'syncedObject');
-      
+
     },
 
     getFireBaseData: function () {
@@ -54,7 +54,8 @@ sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStora
 
       //console.log('syncManagersData -- START');
       var usersRef = ref.child('managersData');
-      //localStorageService.set('managersData', angular.copy(saveObject));
+      localStorageService.set('managersData', angular.copy(saveObject));
+      $rootScope.managersData = angular.copy(saveObject);
       usersRef.set(angular.copy(saveObject));
       //console.log('syncManagersData -- COMPLETE');
 
