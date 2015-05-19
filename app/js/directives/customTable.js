@@ -1,5 +1,5 @@
 /**
- * Updated by Bouse on 12/06/2014
+ * Updated by Bouse Williams on 12/06/2014
  */
 
 sicklifesFantasy.directive('customTable', function () {
