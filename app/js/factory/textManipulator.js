@@ -139,7 +139,7 @@ sicklifesFantasy.factory('$textManipulator', function () {
       epl: './images/leagues/epl.png',
       seri: './images/leagues/seri.png',
       chlg: './images/leagues/chlg.png',
-      euro: './images/leagues/europa.png'
+      uefa: './images/leagues/europa.png'
 
     },
 

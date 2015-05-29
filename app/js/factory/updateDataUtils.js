@@ -67,40 +67,36 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, localStorage
     /**
      * gets all leagues in teams
      */
-    updateTeamsInLeague: function () {
+    updateLeagueTables: function () {
 
-      console.log('UPDATING -- updateTeamsInLeague');
+      console.log('UPDATING -- updateLeagueTables');
 
-      var allTeams = $apiFactory.getAllTeams(),
+      var leagueTables = $apiFactory.getLeagueTables(),
         defer = $q.defer(),
+        leagueTablesData = [],
         allLeagues = {
           _lastSyncedOn: $dateService.syncDate()
         };
 
       // returns a list of promise with the end point for each league
-      $apiFactory.listOfPromises(allTeams, function (result) {
+      $apiFactory.listOfPromises(leagueTables, function (promiseData) {
 
-        result.forEach(function (leagueData, i) {
+        leagueTablesData = _.map(promiseData, function(result){
 
-          leagueData.data.forEach(function (teamData, j) {
-
-            if (j === 0) {
-              allLeagues[leagueData.leagueName] = [];
-            }
-
-            //console.log(leagueData.leagueName, ':', teamData.full_name);
-            allLeagues[leagueData.leagueName].push(teamData.full_name);
-
-          });
+          return {
+            data: _.map(result.data, $arrayMappers.tableMap)
+          };
 
         });
 
-        $fireBaseService.syncAllLeagueTeamsData(allLeagues);
-        defer.resolve(result);
+        //$fireBaseService.syncAllLeagueTeamsData(allLeagues);
+        defer.resolve(leagueTablesData);
 
       });
 
+      //return leagueTablesData;
       return defer.promise;
+
     },
 
     /**
@@ -227,7 +223,6 @@ sicklifesFantasy.factory('$updateDataUtils', function ($apiFactory, localStorage
           .then(function (result) {
             //result._lastSyncedOn = $dateService.syncDate();
             console.log('managersData - data fetched', result);
-            debugger;
             //localStorageService.set('managersData', result);
             //$fireBaseService.syncLeagueLeadersData(result);
 

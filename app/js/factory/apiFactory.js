@@ -79,9 +79,46 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
   };
 
   /**
-   * TODO
+   * getting league tables
+   */
+  apiFactory.getLeagueTables = function () {
+
+    var leagues = [
+      'http://api.thescore.com/liga/standings',
+      'http://api.thescore.com/epl/standings',
+      'http://api.thescore.com/seri/standings',
+      'http://api.thescore.com/chlg/standings',
+      'http://api.thescore.com/uefa/standings'
+    ],
+    listOrPromises = [];
+
+    leagues.forEach(function (url) {
+
+      var leagueRequest = apiFactory.getData({
+        endPointURL: url
+      });
+
+      leagueRequest.then(function (result) {
+
+        result.data.leagueURL = url;
+
+      });
+
+      listOrPromises.push(leagueRequest);
+
+
+    });
+
+    return listOrPromises;
+
+  };
+
+  /**
+   * getting teamms in all the leagues
    */
   apiFactory.getAllTeams = function () {
+
+    console.log('getting teamms in all the leagues');
 
     var allLeaguesURL = [
         {
@@ -156,6 +193,8 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
    */
   apiFactory.getAllGoalLeaders = function () {
 
+    console.log('getting goal leaders in each league');
+
     var allLeaguesURL = [
         'http://api.thescore.com/liga/leaders?categories=goals',
         'http://api.thescore.com/epl/leaders?categories=goals',
@@ -168,6 +207,8 @@ sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService
       listOfResults = [];
 
     allLeaguesURL.forEach(function (url, index) {
+
+      console.log('url:', url);
 
       var leagueRequest = apiFactory.getData({
         endPointURL: url
