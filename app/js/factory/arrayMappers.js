@@ -38,13 +38,10 @@ sicklifesFantasy.factory('$arrayMappers', function($textManipulator, $q, $scorin
      */
     tableMap: function(teamData, index) {
 
-      console.log('teamData', teamData);
-
       var teamInTable = {
         index: index,
         id: teamData.id,
         logo: teamData.team.logos.small,
-        //logo: 'http://thescore-api-artifacts.s3.amazonaws.com/soccer/team/37/small_sportsnet_logo.png',
         wins: teamData.wins,
         losses: teamData.losses,
         ties: teamData.ties,
@@ -52,9 +49,6 @@ sicklifesFantasy.factory('$arrayMappers', function($textManipulator, $q, $scorin
         teamName: $textManipulator.teamNameFormatted(teamData.team.full_name),
         points: teamData.points
       };
-
-      //console.log('teamInTable', teamInTable);
-      //console.log('-------------');
 
       return teamInTable;
 

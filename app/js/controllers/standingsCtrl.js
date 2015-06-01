@@ -9,9 +9,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
   /////////////// public /////////////////
   ////////////////////////////////////////
 
-  var oneDayInMill = 86400000;
-  var weekInMill = 604800000;
-
   /**
    * TODO
    */
@@ -220,6 +217,9 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
 
   var populateChart = function () {
 
+    var oneDayInMill = 86400000;
+    var weekInMill = 604800000;
+
     //console.log('$scope.managersData', $scope.managersData);
 
     //$scope.chartConfig.series = data.map(mapGoalDates.bind($scope, $scope.sparkline.options.xAxis.tickPositions));
@@ -243,7 +243,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
 
     $scope.chartConfig.xAxis.categories = [];
 
-    var weekInMill = 604800000;
     //var startDate = '09/01/2014';
     var startDate = $dateService.getDate();
     var startDateInMilli = $dateService.getUnixTime(startDate);
@@ -349,7 +348,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
    */
   var fireBaseLoaded = function (data) {
 
-    console.log('fireBaseLoaded -- standingsCtrl');
+    console.log('fireBaseLoaded -- standingsCtrl', data);
 
     $scope.managersData = [
       data.managersData.chester,
@@ -360,9 +359,9 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
       data.managersData.joe
     ];
 
-    console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
-    console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
-    console.log('syncDate managersData', data.managersData._lastSyncedOn);
+    //console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
+    //console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
+    //console.log('syncDate managersData', data.managersData._lastSyncedOn);
 
     $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
 
@@ -379,7 +378,7 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
 
     $fireBaseService.initialize($scope);
     var firePromise = $fireBaseService.getFireBaseData();
-    firePromise.promise.then(fireBaseLoaded);
+    firePromise.then(fireBaseLoaded);
 
   };
 
