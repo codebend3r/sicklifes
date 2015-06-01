@@ -7,7 +7,7 @@ sicklifesFantasy.factory('$dateService', function ($date) {
   return {
 
     getDate: function(date) {
-      return $date.create(date)
+      return $date.create(date);
     },
 
     syncDate: function () {
@@ -36,9 +36,9 @@ sicklifesFantasy.factory('$dateService', function ($date) {
     },
 
     goalLogDate: function (gameDate) {
-      return $date.create(gameDate).format('{yyyy}/{MM}/{dd}')
+      return $date.create(gameDate).format('{yyyy}/{MM}/{dd}');
     }
 
-  }
+  };
 
 });

@@ -31,6 +31,6 @@ sicklifesFantasy.factory('$scoringLogic', function () {
       //TODO
     }
 
-  }
+  };
 
 });

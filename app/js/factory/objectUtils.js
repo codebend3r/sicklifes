@@ -30,7 +30,7 @@ sicklifesFantasy.factory('$objectUtils', function ($dateService) {
 
       p.goals = 0;
       p.points = 0;
-      p.domesticGoals = 0;      
+      p.domesticGoals = 0;
       p.clGoals = 0;
       p.eGoals = 0;
       return p;
@@ -46,7 +46,7 @@ sicklifesFantasy.factory('$objectUtils', function ($dateService) {
       m.eGoals = 0;
       return m;
 
-    },      
+    },
 
     /**
     * resets goal and points count for a player

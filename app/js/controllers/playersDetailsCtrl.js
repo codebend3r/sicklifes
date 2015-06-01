@@ -146,7 +146,7 @@ sicklifesFantasy.controller('playersDetailsCtrl', function ($scope, $timeout, $a
       .then($arrayMappers.playerGamesLog.bind(this, { player: $scope.player, manager: manager }))
       .then(function () {
         //console.log('6. player data ready to be saved');
-        saveToFireBase()
+        saveToFireBase();
       });
 
   };

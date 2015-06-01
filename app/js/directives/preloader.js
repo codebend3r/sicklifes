@@ -11,6 +11,6 @@ sicklifesFantasy.directive('preloader', function () {
     scope: {
       loading: '='
     }
-  }
+  };
 
 });

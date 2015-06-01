@@ -12,7 +12,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
 
   /**
    * TODO
-   */  
+   */
   $scope.managersTableHeader = [
     {
       columnClass: 'col-md-3 col-sm-3 col-xs-4',
@@ -63,7 +63,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
       orderCriteria: 'points()'
     }
   ];
-  
+
   $scope.allPlayersTableHeader = [
     {
       columnClass: 'col-md-1 col-sm-2 col-xs-2',
@@ -87,7 +87,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
     }
   ];
 
-  
+
   /**
    * save data to firebase
    */
@@ -128,13 +128,13 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
    *
    */
   $scope.resetToDefault = function() {
-    
+
     $scope.managersData = $managersService.getAllPlayers();
-    
+
     console.log('////////////////////////////////////');
     console.log('$scope.managersData', $scope.managersData);
     console.log('////////////////////////////////////');
-    
+
   };
 
   $scope.allPlayers = [];
@@ -175,7 +175,7 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
    * @param data
    */
   var fireBaseLoaded = function (data) {
-    
+
     $scope.allPlayers = data.allPlayersData.allPlayers;
 
     $scope.managersData = [
@@ -225,7 +225,3 @@ sicklifesFantasy.controller('adminCtrl', function ($scope, $timeout, $fireBaseSe
   $timeout(init, 250);
 
 });
-
-
-
-

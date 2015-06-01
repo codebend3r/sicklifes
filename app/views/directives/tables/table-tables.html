@@ -6,11 +6,12 @@
 
   <div class='table-body'>
     <div class='row' ng-repeat='team in list'>
-      <div class='col-md-1 col-sm-1 col-xs-2 small-hpadding'>{{team.rank}}</div>
-      <div class='col-md-4 col-sm-5 col-xs-8 small-hpadding'><a ng-href='#/player-details/{{scorer.id}}'>{{team.teamName}}</a></div>
-      <div class='col-md-2 col-sm-4 hidden-xs small-hpadding bold small-text'>{{team.teamName}}</div>
-      <div class='col-md-3 hidden-sm hidden-xs small-hpadding bold small-text' ng-class='{"free-agent": scorer.managerName === "Free Agent"}'></div>
-      <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{team.points}}</div>
+      <div class='col-md-1 col-sm-1 col-xs-2 small-hpadding text-center big-text'>{{team.rank}}</div>
+      <div class='col-md-3 col-sm-4 col-xs-6  small-hpadding bold'><img width="50" height="50" ng-src="{{team.logo}}" /> {{team.teamName}}</div>
+      <div class='col-md-2 col-sm-2 hidden-xs text-center small-hpadding'>{{team.wins}}</div>
+      <div class='col-md-2 col-sm-2 hidden-xs text-center small-hpadding'>{{team.losses}}</div>
+      <div class='col-md-2 col-sm-2 hidden-xs text-center small-hpadding'>{{team.ties}}</div>
+      <div class='col-md-2 col-sm-2 col-xs-4 text-center small-hpadding bold'>{{team.points}}</div>
     </div>
   </div>
 

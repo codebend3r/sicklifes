@@ -2,7 +2,7 @@
  * Created by Bouse on 01/01/2015
  */
 
-sicklifesFantasy.controller('leaguesCtrl', function($scope, $timeout, $apiFactory, $date, $managersService, $location, $routeParams, $updateDataUtils, $arrayMappers, $dateService, $textManipulator, $fireBaseService) {
+sicklifesFantasy.controller('leaguesCtrl', function ($scope, $timeout, $apiFactory, $date, $managersService, $location, $routeParams, $updateDataUtils, $arrayMappers, $dateService, $textManipulator, $fireBaseService) {
 
   ////////////////////////////////////////
   /////////////// public /////////////////
@@ -12,30 +12,49 @@ sicklifesFantasy.controller('leaguesCtrl', function($scope, $timeout, $apiFactor
 
   $scope.admin = $routeParams.admin;
 
-  $scope.tableHeader = [{
-    columnClass: 'col-md-1 col-sm-1 col-xs-2 small-hpadding',
-    text: 'Rank'
-  }, {
-    columnClass: 'col-md-4 col-sm-5 col-xs-8 small-hpadding',
-    text: 'Player'
-  }, {
-    columnClass: 'col-md-2 col-sm-4 hidden-xs small-hpadding',
-    text: 'Team'
-  }, {
-    columnClass: 'col-md-3 hidden-sm hidden-xs small-hpadding',
-    text: 'Owned By'
-  }, {
-    columnClass: 'col-md-2 col-sm-2 col-xs-2 text-center small-hpadding',
-    text: 'G'
-  }];
+  $scope.tableHeader = [
+    {
+      columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center small-hpadding',
+      text: 'Rank'
+    },
+    {
+      columnClass: 'col-md-3 col-sm-4 col-xs-6 small-hpadding',
+      text: 'Team'
+    },
+    {
+      columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
+      text: 'W'
+    },
+    {
+      columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
+      text: 'L'
+    },
+    {
+      columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
+      text: 'T'
+    },
+    {
+      columnClass: 'col-md-2 col-sm-4 col-xs-4 text-center small-hpadding',
+      text: 'Points'
+    }
+  ];
+
+  /*
+   <div class='col-md-1 col-sm-1 col-xs-2 small-hpadding'>{{team.rank}}</div>
+   <div class='col-md-2 col-sm-4 hidden-xs small-hpadding bold small-text'>{{team.teamName}}</div>
+   <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{team.wins}}</div>
+   <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{team.loss}}</div>
+   <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{team.ties}}</div>
+   <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding bold'>{{team.points}}</div>
+   */
 
   $scope.allRequest = [];
 
-  $scope.changeLeague = function(league) {
+  $scope.changeLeague = function (league) {
     //
   };
 
-  $scope.saveToFireBase = function() {
+  $scope.saveToFireBase = function () {
 
     console.log('////////////////////////////////////');
     console.log('$scope.leagueLeadersData:', $scope.leagueLeadersData);
@@ -64,14 +83,14 @@ sicklifesFantasy.controller('leaguesCtrl', function($scope, $timeout, $apiFactor
 
   var allLeaguesObj = {};
 
-  var onLeaguesUpdated = function(leagueLeadersData) {
+  var onLeaguesUpdated = function (leagueLeadersData) {
 
     $scope.leagueLeadersData = leagueLeadersData;
     $scope.selectedLeague = $scope.leagueLeadersData[0];
 
   };
 
-  var fireBaseLoaded = function(data) {
+  var fireBaseLoaded = function (data) {
 
     console.log('///////////////////');
     console.log('fireBaseLoaded() --> data:', data);
@@ -127,7 +146,7 @@ sicklifesFantasy.controller('leaguesCtrl', function($scope, $timeout, $apiFactor
 
   };
 
-  var httpDataLoaded = function(result) {
+  var httpDataLoaded = function (result) {
 
     console.log('updateLeagueLeadersData - COMPLETE');
 
@@ -158,15 +177,13 @@ sicklifesFantasy.controller('leaguesCtrl', function($scope, $timeout, $apiFactor
       img: $textManipulator.leagueImages.euro
     }];
 
-    console.log('$scope.allLeagues', $scope.allLeagues);
-
     $scope.selectedLeague = $scope.allLeagues[0];
 
     $scope.loading = false;
 
   };
 
-  var updateLeaguesData = function() {
+  var updateLeaguesData = function () {
 
     $updateDataUtils.updateLeagueTables()
       .then(httpDataLoaded);
@@ -174,7 +191,7 @@ sicklifesFantasy.controller('leaguesCtrl', function($scope, $timeout, $apiFactor
   };
 
 
-  var init = function() {
+  var init = function () {
 
     console.log('leaguesCtrl - init');
 

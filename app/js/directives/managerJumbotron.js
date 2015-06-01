@@ -12,6 +12,6 @@ sicklifesFantasy.directive('managerJumbotron', function () {
       manager: '=',
       selectedMonth: '='
     }
-  }
+  };
 
 });

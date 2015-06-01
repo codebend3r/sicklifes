@@ -25,9 +25,8 @@ sicklifesFantasy.directive('customTable', function () {
         playerQuery: '',
         teamQuery: ''
       };
-      
+
     }
-  }
+  };
 
 });
-

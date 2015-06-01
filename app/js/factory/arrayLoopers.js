@@ -110,5 +110,3 @@ sicklifesFantasy.factory('$arrayLoopers', function ($rootScope, $textManipulator
   return arrayLoopers;
 
 });
-
-

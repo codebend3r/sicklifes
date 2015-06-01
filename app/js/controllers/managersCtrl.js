@@ -294,12 +294,10 @@ sicklifesFantasy.controller('managersCtrl', function ($scope, $rootScope, $timeo
           dataLoaded(result.data);
           dataLoad = true;
         }
-      })
+      });
 
   };
 
   init();
 
 });
-
-

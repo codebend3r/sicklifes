@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Created by Bouse on 6/1/2014
  */
 
 if (!String.prototype.contains) {
@@ -7,6 +7,10 @@ if (!String.prototype.contains) {
     return String.prototype.indexOf.apply(this, arguments) !== -1;
   };
 }
+
+angular.isUndefinedOrNull = function(val) {
+  return angular.isUndefined(val) || val === null;
+};
 
 var sicklifesFantasy = angular.module('sicklifesFantasy', [
 
@@ -28,7 +32,3 @@ var sicklifesFantasy = angular.module('sicklifesFantasy', [
 //});
 
 sicklifesFantasy.constant('$date', Date);
-
-angular.isUndefinedOrNull = function(val) {
-  return angular.isUndefined(val) || val === null
-}

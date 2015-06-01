@@ -260,7 +260,6 @@ sicklifesFantasy.controller('standingsCtrl', function ($scope, $timeout, $apiFac
         var nextWeekFormatted = $dateService.chartDate(nextWeekDate);
         //$scope.chartConfig.xAxis.categories.push(nextWeekInMill);
         $scope.chartConfig.xAxis.categories.push(nextWeekFormatted);
-        debugger;
       }
     }
 

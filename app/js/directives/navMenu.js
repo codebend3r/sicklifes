@@ -50,6 +50,6 @@ sicklifesFantasy.directive('navMenu', function ($location) {
       ];
 
     }
-  }
+  };
 
 });

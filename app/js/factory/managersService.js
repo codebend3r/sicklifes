@@ -1065,15 +1065,15 @@ sicklifesFantasy.factory('$managersService', function ($fireBaseService) {
      * TODO
      */
     getAllPlayers: function () {
-      
+
       //$fireBaseService.initialize(allManagers);
       var firePromise = $fireBaseService.getFireBaseData();
       firePromise.promise.then(function(data){
-        
+
         return data;
-        
+
       }, function() {
-        
+
         return [
           allManagers.chester,
           allManagers.frank,
@@ -1082,11 +1082,11 @@ sicklifesFantasy.factory('$managersService', function ($fireBaseService) {
           allManagers.mike,
           allManagers.joe
         ];
-        
+
       });
-      
+
       return firePromise;
-    
+
     }
 
   };
