@@ -72,7 +72,9 @@ angular.module('sicklifes')
 
       //league === 'soccer' ? console.log('1. getPlayerProfile') : console.log('3. getPlayerProfile');
 
-      if (typeof league === 'undefined') league = 'soccer';
+      if (angular.isUndefinedOrNull(league) || league === '') {
+        league = 'soccer';
+      }
 
       return apiFactory.getData({
         endPointURL: $textManipulator.getPlayerProfileURL(league, id)

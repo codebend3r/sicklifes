@@ -106,13 +106,12 @@ angular.module('sicklifes')
        */
       updateAllManagerData: function () {
 
-        console.log('UPDATING -- updateAllManagerData');
+        console.log('$updateDataUtils --> updateAllManagerData');
 
         var allLeaguePromises = [],
           defer = $q.defer();
 
         $rootScope.managersData = $rootScope.managersData || $managersService;
-        console.log('$rootScope.managersData', $rootScope.managersData);
 
         _.each($rootScope.managersData, function (manager) {
 

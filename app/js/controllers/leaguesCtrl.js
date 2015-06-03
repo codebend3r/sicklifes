@@ -123,15 +123,6 @@
           }
         ];
 
-        //var managersData = [
-        //  data.managersData.chester,
-        //  data.managersData.frank,
-        //  data.managersData.dan,
-        //  data.managersData.justin,
-        //  data.managersData.mike,
-        //  data.managersData.joe
-        //];
-
         $scope.selectedLeague = $scope.allLeagues[0];
 
         var syncDate = $date.create(data.leagueTables._lastSynedOn);
@@ -246,7 +237,7 @@
         console.log('leaguesCtrl - init');
 
         if (angular.isDefined($rootScope.leagueTables)) {
-          
+
           loadFromLocal($rootScope.leagueTables);
 
         } else if (angular.isDefined($localStorage.leagueTables)) {

@@ -70,7 +70,6 @@ angular.module('sicklifes')
           playerLeagueProfileRequest,
           profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
-        console.log(player.playerName, ':', result.data.teams[0].full_name);
         if (result.data.teams[0]) {
           // url for team logo
           player.teamLogo = result.data.teams[0].sportsnet_logos.large;
@@ -89,6 +88,8 @@ angular.module('sicklifes')
 
         // set latest leagueName
         player.leagueName = $textManipulator.properLeagueName(profileLeagueSlug);
+
+        //console.log(player.playerName, ':', player.teamName, ':', player.managerName, ':', player.leagueName);
 
         // set latest domesticLeagueName
         //player.domesticLeagueName = $textManipulator.properLeagueName(profileLeagueSlug);
