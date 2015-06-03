@@ -2,31 +2,33 @@
  * Updated by Bouse Williams on 12/06/2014
  */
 
-sicklifesFantasy.directive('customTable', function () {
+angular.module('sicklifes')
 
-  return {
-    restrict: 'E',
-    replace: false,
-    templateUrl: function ($element, $attrs) {
-      return 'views/directives/tables/table-' + $attrs.tableBodyTemplate + '.html';
-    },
-    scope: {
-      list: '=',
-      tableHeader: '=',
-      addPlayer: '&',
-      dropPlayer: '&',
-      tableName: '@',
-      //playerSearch: '@',
-      leagueImg: '='
-    },
-    controller: function ($scope) {
+  .directive('customTable', function () {
 
-      $scope.playerSearch = {
-        playerQuery: '',
-        teamQuery: ''
-      };
+    return {
+      restrict: 'E',
+      replace: false,
+      templateUrl: function ($element, $attrs) {
+        return 'views/directives/tables/table-' + $attrs.tableBodyTemplate + '.html';
+      },
+      scope: {
+        list: '=',
+        tableHeader: '=',
+        addPlayer: '&',
+        dropPlayer: '&',
+        tableName: '@',
+        //playerSearch: '@',
+        leagueImg: '='
+      },
+      controller: function ($scope) {
 
-    }
-  };
+        $scope.playerSearch = {
+          playerQuery: '',
+          teamQuery: ''
+        };
 
-});
+      }
+    };
+
+  });

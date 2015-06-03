@@ -2,243 +2,245 @@
  * Created by Bouse on 10/24/2014
  */
 
-sicklifesFantasy.factory('$apiFactory', function ($http, $q, localStorageService, $date, $textManipulator) {
+angular.module('sicklifes')
 
-  var apiFactory = {};
+  .factory('$apiFactory', function ($http, $q, $localStorage, $date, $textManipulator) {
 
-  /**
-   * TODO
-   */
-  apiFactory.getData = function (endPoint) {
+    var apiFactory = {};
 
-    var defer = $q.defer(),
-      httpObject = {
-        method: endPoint.method || 'GET',
-        url: endPoint.endPointURL
-      };
+    /**
+     * TODO
+     */
+    apiFactory.getData = function (endPoint) {
 
-    $http(httpObject).then(function (result) {
+      var defer = $q.defer(),
+        httpObject = {
+          method: endPoint.method || 'GET',
+          url: endPoint.endPointURL
+        };
 
-      defer.resolve(result);
-      if (angular.isDefined(endPoint.qCallBack)) endPoint.qCallBack(result);
+      $http(httpObject).then(function (result) {
 
-    });
-
-    return defer.promise;
-
-  };
-
-  /**
-   * TODO
-   */
-  apiFactory.getFromLocalStorage = function (cbObj) {
-
-    console.log('get from localStorage');
-
-    var currentDate = $date.create(),
-      lDate = localStorageService.get('lastCheckDate');
-
-    cbObj.allLeagues = localStorageService.get('allLeagues');
-    cbObj.liga = localStorageService.get('liga');
-    cbObj.epl = localStorageService.get('epl');
-    cbObj.seri = localStorageService.get('seri');
-    cbObj.chlg = localStorageService.get('chlg');
-    cbObj.uefa = localStorageService.get('uefa');
-    cbObj.cb();
-
-    return [];
-
-  };
-
-  /**
-   * gets players game log and goal per game details
-   */
-  apiFactory.getPlayerGameDetails = function (league, id) {
-
-    var request = apiFactory.getData({
-      endPointURL: $textManipulator.getPlayerPlayerRecordURL(league, id)
-    });
-
-    return request;
-
-  };
-
-  /**
-   * gets player's league related data
-   */
-  apiFactory.getPlayerProfile = function (league, id) {
-
-    //league === 'soccer' ? console.log('1. getPlayerProfile') : console.log('3. getPlayerProfile');
-
-    if (typeof league === 'undefined') league = 'soccer';
-
-    return apiFactory.getData({
-      endPointURL: $textManipulator.getPlayerProfileURL(league, id)
-    });
-
-  };
-
-  /**
-   * getting league tables
-   */
-  apiFactory.getLeagueTables = function () {
-
-    var leagues = [
-      'http://api.thescore.com/liga/standings',
-      'http://api.thescore.com/epl/standings',
-      'http://api.thescore.com/seri/standings',
-      'http://api.thescore.com/chlg/standings',
-      'http://api.thescore.com/uefa/standings'
-    ],
-    listOrPromises = [];
-
-    leagues.forEach(function (url) {
-
-      var leagueRequest = apiFactory.getData({
-        endPointURL: url
-      });
-
-      leagueRequest.then(function (result) {
-
-        result.data.leagueURL = url;
+        defer.resolve(result);
+        if (angular.isDefined(endPoint.qCallBack)) endPoint.qCallBack(result);
 
       });
 
-      listOrPromises.push(leagueRequest);
+      return defer.promise;
 
+    };
 
-    });
+    /**
+     * TODO
+     */
+    apiFactory.getFromLocalStorage = function (cbObj) {
 
-    return listOrPromises;
+      console.log('get from localStorage');
 
-  };
+      var currentDate = $date.create(),
+        lDate = $localStorage.get('lastCheckDate');
 
-  /**
-   * getting teamms in all the leagues
-   */
-  apiFactory.getAllTeams = function () {
+      cbObj.allLeagues = $localStorage.get('allLeagues');
+      cbObj.liga = $localStorage.get('liga');
+      cbObj.epl = $localStorage.get('epl');
+      cbObj.seri = $localStorage.get('seri');
+      cbObj.chlg = $localStorage.get('chlg');
+      cbObj.uefa = $localStorage.get('uefa');
+      cbObj.cb();
 
-    console.log('getting teamms in all the leagues');
+      return [];
 
-    var allLeaguesURL = [
-        {
-          url: 'http://origin-api.thescore.com/liga/teams/',
-          leagueName: 'liga'
-        },
-        {
-          url: 'http://origin-api.thescore.com/epl/teams/',
-          leagueName: 'epl'
-        },
-        {
-          url: 'http://origin-api.thescore.com/seri/teams/',
-          leagueName: 'seri'
-        },
-        {
-          url: 'http://origin-api.thescore.com/chlg/teams/',
-          leagueName: 'chlg'
-        },
-        {
-          url: 'http://origin-api.thescore.com/uefa/teams/',
-          leagueName: 'uefa'
-        }
-      ],
-      listOrPromises = [];
+    };
 
-    allLeaguesURL.forEach(function (urlObj) {
+    /**
+     * gets players game log and goal per game details
+     */
+    apiFactory.getPlayerGameDetails = function (league, id) {
 
-      var leagueRequest = apiFactory.getData({
-        endPointURL: urlObj.url
+      var request = apiFactory.getData({
+        endPointURL: $textManipulator.getPlayerPlayerRecordURL(league, id)
       });
 
-      leagueRequest.then(function (result) {
+      return request;
 
-        result.leagueURL = urlObj.url;
-        result.leagueName = urlObj.leagueName;
+    };
 
+    /**
+     * gets player's league related data
+     */
+    apiFactory.getPlayerProfile = function (league, id) {
+
+      //league === 'soccer' ? console.log('1. getPlayerProfile') : console.log('3. getPlayerProfile');
+
+      if (typeof league === 'undefined') league = 'soccer';
+
+      return apiFactory.getData({
+        endPointURL: $textManipulator.getPlayerProfileURL(league, id)
       });
 
-      listOrPromises.push(leagueRequest);
+    };
 
-    });
+    /**
+     * getting league tables
+     */
+    apiFactory.getLeagueTables = function () {
 
-    return listOrPromises;
+      var leagues = [
+          'http://api.thescore.com/liga/standings',
+          'http://api.thescore.com/epl/standings',
+          'http://api.thescore.com/seri/standings',
+          'http://api.thescore.com/chlg/standings',
+          'http://api.thescore.com/uefa/standings'
+        ],
+        listOrPromises = [];
 
-  };
+      leagues.forEach(function (url) {
 
-  /**
-   * TODO
-   */
-  apiFactory.getRoster = function (result) {
+        var leagueRequest = apiFactory.getData({
+          endPointURL: url
+        });
 
-    var listOrPromises = [];
+        leagueRequest.then(function (result) {
 
-    result.data.forEach(function (leagueData) {
+          result.data.leagueURL = url;
 
-      var rosterRequest = apiFactory.getData({
-        endPointURL: url + leagueData.id + '/players/'
-      });
+        });
 
-      rosterRequest.promise.then(function () {
+        listOrPromises.push(leagueRequest);
 
-        listOrPromises.push(rosterRequest.promise);
-
-      });
-
-    });
-
-  };
-
-  /**
-   * TODO
-   */
-  apiFactory.getAllGoalLeaders = function () {
-
-    console.log('getting goal leaders in each league');
-
-    var allLeaguesURL = [
-        'http://api.thescore.com/liga/leaders?categories=goals',
-        'http://api.thescore.com/epl/leaders?categories=goals',
-        'http://api.thescore.com/seri/leaders?categories=goals',
-        'http://api.thescore.com/chlg/leaders?categories=goals',
-        'http://api.thescore.com/uefa/leaders?categories=goals'
-      ],
-      allLeagues = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
-      listOrPromises = [],
-      listOfResults = [];
-
-    allLeaguesURL.forEach(function (url, index) {
-
-      console.log('url:', url);
-
-      var leagueRequest = apiFactory.getData({
-        endPointURL: url
-      });
-
-      leagueRequest.then(function (result) {
-
-        result.leagueURL = url;
-        result.leagueName = allLeagues[index];
-        listOfResults.push(result);
 
       });
 
-      listOrPromises.push(leagueRequest);
+      return listOrPromises;
 
-    });
+    };
 
-    return listOrPromises;
+    /**
+     * getting teamms in all the leagues
+     */
+    apiFactory.getAllTeams = function () {
 
-  };
+      console.log('getting teamms in all the leagues');
 
-  /**
-   * waits for an array of promises to resolve
-   */
-  apiFactory.listOfPromises = function (list, callbackFunc) {
+      var allLeaguesURL = [
+          {
+            url: 'http://origin-api.thescore.com/liga/teams/',
+            leagueName: 'liga'
+          },
+          {
+            url: 'http://origin-api.thescore.com/epl/teams/',
+            leagueName: 'epl'
+          },
+          {
+            url: 'http://origin-api.thescore.com/seri/teams/',
+            leagueName: 'seri'
+          },
+          {
+            url: 'http://origin-api.thescore.com/chlg/teams/',
+            leagueName: 'chlg'
+          },
+          {
+            url: 'http://origin-api.thescore.com/uefa/teams/',
+            leagueName: 'uefa'
+          }
+        ],
+        listOrPromises = [];
 
-    $q.all(list).then(callbackFunc);
+      allLeaguesURL.forEach(function (urlObj) {
 
-  };
+        var leagueRequest = apiFactory.getData({
+          endPointURL: urlObj.url
+        });
 
-  return apiFactory;
+        leagueRequest.then(function (result) {
 
-});
+          result.leagueURL = urlObj.url;
+          result.leagueName = urlObj.leagueName;
+
+        });
+
+        listOrPromises.push(leagueRequest);
+
+      });
+
+      return listOrPromises;
+
+    };
+
+    /**
+     * TODO
+     */
+    apiFactory.getRoster = function (result) {
+
+      var listOrPromises = [];
+
+      result.data.forEach(function (leagueData) {
+
+        var rosterRequest = apiFactory.getData({
+          endPointURL: url + leagueData.id + '/players/'
+        });
+
+        rosterRequest.promise.then(function () {
+
+          listOrPromises.push(rosterRequest.promise);
+
+        });
+
+      });
+
+    };
+
+    /**
+     * TODO
+     */
+    apiFactory.getAllGoalLeaders = function () {
+
+      console.log('getting goal leaders in each league');
+
+      var allLeaguesURL = [
+          'http://api.thescore.com/liga/leaders?categories=goals',
+          'http://api.thescore.com/epl/leaders?categories=goals',
+          'http://api.thescore.com/seri/leaders?categories=goals',
+          'http://api.thescore.com/chlg/leaders?categories=goals',
+          'http://api.thescore.com/uefa/leaders?categories=goals'
+        ],
+        allLeagues = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
+        listOrPromises = [],
+        listOfResults = [];
+
+      allLeaguesURL.forEach(function (url, index) {
+
+        console.log('url:', url);
+
+        var leagueRequest = apiFactory.getData({
+          endPointURL: url
+        });
+
+        leagueRequest.then(function (result) {
+
+          result.leagueURL = url;
+          result.leagueName = allLeagues[index];
+          listOfResults.push(result);
+
+        });
+
+        listOrPromises.push(leagueRequest);
+
+      });
+
+      return listOrPromises;
+
+    };
+
+    /**
+     * waits for an array of promises to resolve
+     */
+    apiFactory.listOfPromises = function (list, callbackFunc) {
+
+      $q.all(list).then(callbackFunc);
+
+    };
+
+    return apiFactory;
+
+  });

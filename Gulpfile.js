@@ -151,7 +151,7 @@
 
      gulp.src([config.app + '/views/**/*.html'])
        .pipe(templateCache('./', {
-         module: 'sicklifesFantasy',
+         module: 'sicklifes',
          standalone: false,
          root: './views/'
        }))

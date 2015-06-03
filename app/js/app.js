@@ -8,16 +8,16 @@ if (!String.prototype.contains) {
   };
 }
 
-angular.isUndefinedOrNull = function(val) {
+angular.isUndefinedOrNull = function (val) {
   return angular.isUndefined(val) || val === null;
 };
 
-var sicklifesFantasy = angular.module('sicklifesFantasy', [
+angular.module('sicklifes', [
 
   'ngRoute',
   'ngResource',
   'ngSanitize',
-  'LocalStorageModule',
+  'ngStorage',
   //'UserApp',
   'jsonFormatter',
   'firebase',
@@ -27,8 +27,9 @@ var sicklifesFantasy = angular.module('sicklifesFantasy', [
 
 ]);
 
-//sicklifesFantasy.run(function(user) {
-  //user.init({ appId: '5482b3c1ebdc7' });
+//angular.module('sicklifes').run(function(user) {
+//user.init({ appId: '5482b3c1ebdc7' });
 //});
 
-sicklifesFantasy.constant('$date', Date);
+angular.module('sicklifes')
+  .constant('$date', Date);

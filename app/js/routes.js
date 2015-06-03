@@ -2,63 +2,65 @@
  * Created by crivas on 9/12/2014.
  */
 
-sicklifesFantasy.config(function ($routeProvider) {
+angular.module('sicklifes')
 
-  $routeProvider.when('/', {
+  .config(function ($routeProvider) {
 
-    redirectTo: '/leagues/',
-    templateUrl: 'views/leagues.html',
-    controller: 'leaguesCtrl'
+    $routeProvider.when('/', {
 
-  })/*.when('/login/', {
+      redirectTo: '/leagues/',
+      templateUrl: 'views/leagues.html',
+      controller: 'leaguesCtrl'
 
-    templateUrl: 'views/login.html',
-    login: true
+    })/*.when('/login/', {
 
-  }).when('/signup/', {
+     templateUrl: 'views/login.html',
+     login: true
 
-    templateUrl: 'views/signup.html',
-    public: true
+     }).when('/signup/', {
 
-  })*/.when('/leagues/', {
+     templateUrl: 'views/signup.html',
+     public: true
 
-    templateUrl: 'views/leagues.html',
-    controller: 'leaguesCtrl'
+     })*/.when('/leagues/', {
 
-  }).when('/managers/', {
+        templateUrl: 'views/leagues.html',
+        controller: 'leaguesCtrl'
 
-    templateUrl: 'views/managers.html',
-    controller: 'managersCtrl'
+      }).when('/managers/', {
 
-  }).when('/player-details/:playerID', {
+        templateUrl: 'views/managers.html',
+        controller: 'managersCtrl'
 
-    templateUrl: 'views/player-details.html',
-    controller: 'playersDetailsCtrl'
+      }).when('/player-details/:playerID', {
 
-  }).when('/standings/', {
+        templateUrl: 'views/player-details.html',
+        controller: 'playersDetailsCtrl'
 
-    templateUrl: 'views/standings.html',
-    controller: 'standingsCtrl'
+      }).when('/standings/', {
 
-  }).when('/monthlywinners/', {
+        templateUrl: 'views/standings.html',
+        controller: 'standingsCtrl'
 
-    templateUrl: 'views/monthly-winners.html',
-    controller: 'monthlyWinnersCtrl'
+      }).when('/monthlywinners/', {
 
-  }).when('/admin/', {
+        templateUrl: 'views/monthly-winners.html',
+        controller: 'monthlyWinnersCtrl'
 
-    templateUrl: 'views/admin.html',
-    controller: 'adminCtrl'
+      }).when('/admin/', {
 
-  }).when('/transfers/', {
+        templateUrl: 'views/admin.html',
+        controller: 'adminCtrl'
 
-    templateUrl: 'views/transfers.html',
-    controller: 'transfersCtrl'
+      }).when('/transfers/', {
 
-  }).otherwise({
+        templateUrl: 'views/transfers.html',
+        controller: 'transfersCtrl'
 
-    redirectTo: '/leagues/'
+      }).otherwise({
+
+        redirectTo: '/leagues/'
+
+      });
 
   });
-
-});

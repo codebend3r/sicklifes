@@ -2,43 +2,45 @@
  * Created by Bouse on 01/19/2014
  */
 
-sicklifesFantasy.factory('$dateService', function ($date) {
+angular.module('sicklifes')
 
-  return {
+  .factory('$dateService', function ($date) {
 
-    getDate: function(date) {
-      return $date.create(date);
-    },
+    return {
 
-    syncDate: function () {
-      return $date.create().format('{yyyy}/{MM}/{dd} {12hr}:{mm}:{ss}{tt}');
-    },
+      getDate: function (date) {
+        return $date.create(date);
+      },
 
-    chartDate: function (date) {
-      return $date.create(date).format('{MM}/{dd}/{yyyy}');
-    },
+      syncDate: function () {
+        return $date.create().format('{yyyy}/{MM}/{dd} {12hr}:{mm}:{ss}{tt}');
+      },
 
-    goalDate: function () {
-      return $date.create().format('{yyyy}/{MM}/{dd}');
-    },
+      chartDate: function (date) {
+        return $date.create(date).format('{MM}/{dd}/{yyyy}');
+      },
 
-    getUnixTime: function (date) {
-      date = date || '';
-      return $date.create(date).getTime();
-    },
-
-    transactionDate: function (date) {
-      if (date) {
-        return date;
-      } else {
+      goalDate: function () {
         return $date.create().format('{yyyy}/{MM}/{dd}');
+      },
+
+      getUnixTime: function (date) {
+        date = date || '';
+        return $date.create(date).getTime();
+      },
+
+      transactionDate: function (date) {
+        if (date) {
+          return date;
+        } else {
+          return $date.create().format('{yyyy}/{MM}/{dd}');
+        }
+      },
+
+      goalLogDate: function (gameDate) {
+        return $date.create(gameDate).format('{yyyy}/{MM}/{dd}');
       }
-    },
 
-    goalLogDate: function (gameDate) {
-      return $date.create(gameDate).format('{yyyy}/{MM}/{dd}');
-    }
+    };
 
-  };
-
-});
+  });

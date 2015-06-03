@@ -3,86 +3,63 @@
  */
 
 
-sicklifesFantasy.factory('$fireBaseService', function ($q, $firebase, localStorageService, $rootScope) {
+angular.module('sicklifes')
 
-  var ref,
-    sync,
-    syncObject;
+  .factory('$fireBaseService', function ($q, $firebase, $rootScope, $localStorage) {
 
-  var fireBaseObj = {
+    var ref,
+      sync,
+      syncObject;
 
-    list: null,
+    var fireBaseObj = {
 
-    initialize: function (scope) {
+      list: null,
 
-      ref = new Firebase('https://glaring-fire-9383.firebaseio.com/');
-      sync = $firebase(ref);
+      initialize: function (scope) {
 
-      // create a synchronized array for use in our HTML code
-      //var syncArray = sync.$asArray();
-      syncObject = sync.$asObject();
+        ref = new Firebase('https://glaring-fire-9383.firebaseio.com/');
+        sync = $firebase(ref);
 
-      syncObject.$bindTo(scope, 'syncedObject');
+        // create a synchronized array for use in our HTML code
+        //var syncArray = sync.$asArray();
+        syncObject = sync.$asObject();
 
-    },
+        syncObject.$bindTo(scope, 'syncedObject');
 
-    getFireBaseData: function () {
+      },
 
-      var defer = $q.defer();
+      getFireBaseData: function () {
 
-      ref.on('value', function (snapshot) {
-        defer.resolve(snapshot.val());
-      }, function (errorObject) {
-        console.log('The read failed: ' + errorObject.code);
-      });
+        var defer = $q.defer();
 
-      return defer.promise;
+        ref.on('value', function (snapshot) {
+          defer.resolve(snapshot.val());
+        }, function (errorObject) {
+          console.log('The read failed: ' + errorObject.code);
+        });
 
-    },
+        return defer.promise;
 
-    syncLeagueLeadersData: function (saveObject) {
+      },
 
-      //console.log('syncLeagueLeadersData -- START');
-      var usersRef = ref.child('leagueLeadersData');
-      //localStorageService.set('leagueLeadersData', angular.copy(saveObject));
-      usersRef.set(angular.copy(saveObject));
-      //console.log('syncLeagueLeadersData -- COMPLETE');
+      saveToFireBase: function (saveObject, key) {
 
-    },
+        console.log('syncLeagueLeadersData -- START');
+        var usersRef = ref.child(key);
 
-    syncManagersData: function (saveObject) {
+        // save to local storage
+        $localStorage[key] = angular.copy(saveObject);
 
-      //console.log('syncManagersData -- START');
-      var usersRef = ref.child('managersData');
-      localStorageService.set('managersData', angular.copy(saveObject));
-      $rootScope.managersData = angular.copy(saveObject);
-      usersRef.set(angular.copy(saveObject));
-      //console.log('syncManagersData -- COMPLETE');
+        // save to $rootScope
+        $rootScope[key] = angular.copy(saveObject);
 
-    },
+        usersRef.set(angular.copy(saveObject));
+        console.log('syncLeagueLeadersData -- COMPLETE');
 
-    syncAllLeagueTeamsData: function (saveObject) {
+      }
 
-      //console.log('syncAllLeagueTeamsData -- START');
-      var usersRef = ref.child('allLeagueTeamsData');
-      //localStorageService.set('allLeagueTeamsData', angular.copy(saveObject));
-      usersRef.set(angular.copy(saveObject));
-      //console.log('syncAllLeagueTeamsData -- COMPLETE');
+    };
 
-    },
+    return fireBaseObj;
 
-    syncPlayerPoolData: function (saveObject) {
-
-      //console.log('syncPlayerPoolData -- START');
-      var usersRef = ref.child('playerPoolData');
-      //localStorageService.set('playerPoolData', angular.copy(saveObject));
-      usersRef.set(angular.copy(saveObject));
-      //console.log('syncPlayerPoolData -- COMPLETE');
-
-    }
-
-  };
-
-  return fireBaseObj;
-
-});
+  });

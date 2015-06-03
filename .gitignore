@@ -1,9 +1,9 @@
 *.log
 *.iml
 .idea
-node_modules
+node_modules/
 bower_components
-builds
+builds/
 *.log
 .tmp
 app/js/templates/
