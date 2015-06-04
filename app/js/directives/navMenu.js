@@ -1,6 +1,4 @@
-/**
- * Updated by Bouse on 12/06/2014
- */
+(function () {})();
 
 angular.module('sicklifes')
 

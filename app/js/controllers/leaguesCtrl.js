@@ -14,34 +14,32 @@
 
       $scope.admin = $routeParams.admin;
 
-      $scope.tableHeader = [{
-        columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center small-hpadding',
-        text: 'Rank'
-      }, {
-        columnClass: 'col-md-3 col-sm-4 col-xs-6 small-hpadding',
-        text: 'Team'
-      }, {
-        columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
-        text: 'W'
-      }, {
-        columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
-        text: 'L'
-      }, {
-        columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
-        text: 'T'
-      }, {
-        columnClass: 'col-md-2 col-sm-4 col-xs-4 text-center small-hpadding',
-        text: 'Points'
-      }];
-
-      /*
-       <div class='col-md-1 col-sm-1 col-xs-2 small-hpadding'>{{team.rank}}</div>
-       <div class='col-md-2 col-sm-4 hidden-xs small-hpadding bold small-text'>{{team.teamName}}</div>
-       <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{team.wins}}</div>
-       <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{team.loss}}</div>
-       <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding'>{{team.ties}}</div>
-       <div class='col-md-2 col-sm-2 col-xs-2 text-center small-hpadding bold'>{{team.points}}</div>
-       */
+      $scope.tableHeader = [
+        {
+          columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center small-hpadding',
+          text: 'Rank'
+        },
+        {
+          columnClass: 'col-md-3 col-sm-4 col-xs-6 small-hpadding',
+          text: 'Team'
+        },
+        {
+          columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
+          text: 'W'
+        },
+        {
+          columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
+          text: 'L'
+        },
+        {
+          columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
+          text: 'T'
+        },
+        {
+          columnClass: 'col-md-2 col-sm-4 col-xs-4 text-center small-hpadding',
+          text: 'Points'
+        }
+      ];
 
       $scope.allRequest = [];
 
@@ -139,7 +137,7 @@
 
       };
 
-      var loadFromLocal = function(data) {
+      var loadFromLocal = function (data) {
 
         console.log('LOCAL -- > data', data);
 

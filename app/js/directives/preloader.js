@@ -1,6 +1,4 @@
-/**
- * Created by Bouse on 9/18/2014.
- */
+(function () {})();
 
 angular.module('sicklifes')
 
