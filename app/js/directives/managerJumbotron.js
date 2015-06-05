@@ -1,17 +1,19 @@
-(function () {})();
+(function () {
 
-angular.module('sicklifes')
+  angular.module('sicklifes')
 
-  .directive('managerJumbotron', function () {
+    .directive('managerJumbotron', function () {
 
-    return {
-      restrict: 'E',
-      replace: false,
-      templateUrl: 'views/directives/manager-jumbotron.html',
-      scope: {
-        manager: '=',
-        selectedMonth: '='
-      }
-    };
+      return {
+        restrict: 'E',
+        replace: false,
+        templateUrl: 'views/directives/manager-jumbotron.html',
+        scope: {
+          manager: '=',
+          selectedMonth: '='
+        }
+      };
 
-  });
+    });
+
+})();

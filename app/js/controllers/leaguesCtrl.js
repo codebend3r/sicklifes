@@ -6,6 +6,8 @@
 
     .controller('leaguesCtrl', function ($scope, $timeout, $apiFactory, $date, $localStorage, $managersService, $location, $routeParams, $updateDataUtils, $arrayMappers, $dateService, $rootScope, $textManipulator, $fireBaseService) {
 
+      var dataKeyName = 'leagueTables';
+
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
@@ -51,8 +53,6 @@
 
         console.log('////////////////////////////////////');
         console.log('$scope.allLeagues:', $scope.allLeagues);
-        console.log('$scope.allLeagues[0].source:', $scope.allLeagues[0].source);
-        console.log('$scope.allLeagues[0].source[0]:', $scope.allLeagues[0].source[0]);
         console.log('////////////////////////////////////');
 
         var saveObject = {
@@ -65,7 +65,7 @@
           UEFA: $scope.allLeagues[4].source
         };
 
-        $fireBaseService.saveToFireBase(saveObject, 'leagueTables');
+        $fireBaseService.saveToFireBase(saveObject, dataKeyName);
 
       };
 
@@ -73,19 +73,10 @@
       ////////////// private /////////////////
       ////////////////////////////////////////
 
-      var allLeaguesObj = {};
-
-      var onLeaguesUpdated = function (leagueLeadersData) {
-
-        $scope.leagueLeadersData = leagueLeadersData;
-        $scope.selectedLeague = $scope.leagueLeadersData[0];
-
-      };
-
       var fireBaseLoaded = function (data) {
 
         console.log('///////////////////');
-        console.log('FB --> data.leagueTables:', data.leagueTables);
+        console.log('FB --> data.leagueTables:', data[dataKeyName]);
         console.log('///////////////////');
 
         $scope.allLeagues = [
@@ -129,7 +120,6 @@
 
         if (syncDate.isYesterday()) {
           console.log('is past yesterday');
-          //$scope.updateData();
           updateLeaguesData();
         } else {
           $scope.loading = false;
@@ -223,6 +213,9 @@
 
       };
 
+      /**
+       * get data through HTTP request
+       */
       var updateLeaguesData = function () {
 
         $updateDataUtils.updateLeagueTables()
@@ -230,17 +223,20 @@
 
       };
 
+      /**
+       * init
+       */
       var init = function () {
 
         console.log('leaguesCtrl - init');
 
-        if (angular.isDefined($rootScope.leagueTables)) {
+        if (angular.isDefined($rootScope[dataKeyName])) {
 
-          loadFromLocal($rootScope.leagueTables);
+          loadFromLocal($rootScope[dataKeyName]);
 
-        } else if (angular.isDefined($localStorage.leagueTables)) {
+        } else if (angular.isDefined($localStorage[dataKeyName])) {
 
-          loadFromLocal($localStorage.leagueTables);
+          loadFromLocal($localStorage[dataKeyName]);
 
         } else {
 

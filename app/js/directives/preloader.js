@@ -1,16 +1,18 @@
-(function () {})();
+(function () {
 
-angular.module('sicklifes')
+  angular.module('sicklifes')
 
-  .directive('preloader', function () {
+    .directive('preloader', function () {
 
-    return {
-      restrict: 'E',
-      replace: false,
-      templateUrl: 'views/directives/preloader.html',
-      scope: {
-        loading: '='
-      }
-    };
+      return {
+        restrict: 'E',
+        replace: false,
+        templateUrl: 'views/directives/preloader.html',
+        scope: {
+          loading: '='
+        }
+      };
 
-  });
+    });
+
+})();

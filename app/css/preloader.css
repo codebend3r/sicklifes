@@ -6,8 +6,7 @@
   width: 100%;
   height: 100%;
   padding: 50px 5px;
-  background-color: #ffffff;
-}
+  background-color: #ffffff; }
 
 .equalizer-bars {
   position: absolute;
@@ -18,8 +17,7 @@
   width: 50px;
   height: 30px;
   text-align: center;
-  font-size: 10px;
-}
+  font-size: 10px; }
 
 .equalizer-bars > div {
   background-color: #333;
@@ -27,45 +25,36 @@
   width: 6px;
   display: inline-block;
   -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
-  animation: stretchdelay 1.2s infinite ease-in-out;
-}
+  animation: stretchdelay 1.2s infinite ease-in-out; }
 
 .equalizer-bars .rect2 {
   -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
+  animation-delay: -1.1s; }
 
 .equalizer-bars .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
-}
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s; }
 
 .equalizer-bars .rect4 {
   -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
+  animation-delay: -0.9s; }
 
 .equalizer-bars .rect5 {
   -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
-}
+  animation-delay: -0.8s; }
 
 @-webkit-keyframes stretchdelay {
   0%, 40%, 100% {
-    -webkit-transform: scaleY(0.4);
-  }
+    -webkit-transform: scaleY(0.4); }
+
   20% {
-    -webkit-transform: scaleY(1);
-  }
-}
+    -webkit-transform: scaleY(1); } }
 
 @keyframes stretchdelay {
   0%, 40%, 100% {
     transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }
+    -webkit-transform: scaleY(0.4); }
+
   20% {
     transform: scaleY(1);
-    -webkit-transform: scaleY(1);
-  }
-}
+    -webkit-transform: scaleY(1); } }
