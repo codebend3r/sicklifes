@@ -4,7 +4,7 @@
 
 angular.module('sicklifes')
 
-  .factory('$updateDataUtils', function ($apiFactory, $objectUtils, $q, $managersService, $dateService, $fireBaseService, $textManipulator, $arrayMappers, $rootScope) {
+  .factory('$updateDataUtils', function ($apiFactory, $objectUtils, $q, $managersService, $momentService, $fireBaseService, $textManipulator, $arrayMappers, $rootScope) {
 
     var updateDataUtils = {
 
@@ -77,7 +77,7 @@ angular.module('sicklifes')
           defer = $q.defer(),
           leagueTablesData = [],
           allLeagues = {
-            _lastSyncedOn: $dateService.syncDate()
+            _lastSyncedOn: $momentService.syncDate()
           };
 
         // returns a list of promise with the end point for each league
@@ -222,7 +222,7 @@ angular.module('sicklifes')
 
           updateDataUtils.updateAllManagerData()
             .then(function (result) {
-              //result._lastSyncedOn = $dateService.syncDate();
+              //result._lastSyncedOn = $momentService.syncDate();
               console.log('managersData - data fetched', result);
               //$localStorage.set('managersData', result);
               //$fireBaseService.syncLeagueLeadersData(result);
@@ -232,7 +232,7 @@ angular.module('sicklifes')
 
           console.log('managersData - exists in localstorage');
           var managerObject = $localStorage.get('managersData');
-          managerObject._lastSyncedOn = $dateService.syncDate();
+          managerObject._lastSyncedOn = $momentService.syncDate();
           $fireBaseService.syncManagersData(managerObject);
 
         }
@@ -249,7 +249,7 @@ angular.module('sicklifes')
          console.log('leagueLeadersData - data fetched');
 
          var saveObject = {
-         _lastSyncedOn: $dateService.syncDate(),
+         _lastSyncedOn: $momentService.syncDate(),
          liga: result[0].source,
          epl: result[1].source,
          seri: result[2].source,
@@ -267,7 +267,7 @@ angular.module('sicklifes')
 
          var leagueLeadersObject = $localStorage.get('leagueLeadersData'),
          saveObject = {
-         _lastSyncedOn: $dateService.syncDate(),
+         _lastSyncedOn: $momentService.syncDate(),
          liga: leagueLeadersObject.liga,
          epl: leagueLeadersObject.epl,
          seri: leagueLeadersObject.seri,
@@ -291,7 +291,7 @@ angular.module('sicklifes')
          debugger;
 
          var allPlayersObject = {
-         _lastSyncedOn: $dateService.syncDate(),
+         _lastSyncedOn: $momentService.syncDate(),
          allPlayers: result
          };
 
@@ -304,7 +304,7 @@ angular.module('sicklifes')
          console.log('playerPoolData exists in localstorage');
 
          var allPlayersObject = {
-         _lastSyncedOn: $dateService.syncDate(),
+         _lastSyncedOn: $momentService.syncDate(),
          allPlayers: $localStorage.get('playerPoolData')
          };
 
@@ -333,7 +333,7 @@ angular.module('sicklifes')
 
          console.log('allLeagueTeamsData - exists in localstorage');
          var result = $localStorage.get('allLeagueTeamsData');
-         result._lastSyncedOn = $dateService.syncDate();
+         result._lastSyncedOn = $momentService.syncDate();
          $localStorage.set('allLeagueTeamsData', result);
          $fireBaseService.syncAllLeagueTeamsData(result);
 

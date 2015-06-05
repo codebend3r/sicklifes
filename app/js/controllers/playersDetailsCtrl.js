@@ -2,7 +2,7 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $timeout, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $date, $dateService, $fireBaseService) {
+    .controller('playersDetailsCtrl', function ($scope, $timeout, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $moment, $dateService, $fireBaseService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -133,7 +133,7 @@
           joe: firebaseData.managersData.joe
         };
 
-        var syncDate = $date.create(firebaseData[dataKeyName]._lastSynedOn);
+        var syncDate = $moment.create(firebaseData[dataKeyName]._lastSynedOn);
 
         console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
 

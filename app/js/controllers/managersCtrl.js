@@ -2,7 +2,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $timeout, $updateDataUtils, $fireBaseService, $date, $localStorage, $routeParams, $dateService, $q, $managersService, $location) {
+    .controller('managersCtrl', function ($scope, $rootScope, $timeout, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $routeParams, $q, $managersService, $location) {
 
       var dataKeyName = 'managersData';
 
@@ -105,7 +105,7 @@
         console.log('////////////////////////////////////');
 
         var saveObject = {
-          _lastSyncedOn: $dateService.syncDate(),
+          _lastSyncedOn: $momentService.syncDate(),
           chester: $rootScope.managersData[0],
           frank: $rootScope.managersData[1],
           dan: $rootScope.managersData[2],
@@ -118,6 +118,9 @@
 
       };
 
+      /**
+       *
+       */
       $scope.populateTeamsInLeague = function () {
 
         //$updateDataUtils.updateTeamsInLeague();
@@ -159,17 +162,16 @@
 
       /**
        *
-       * @param syncDate
        */
       var checkYesterday = function (syncDate) {
 
-        if (syncDate.isYesterday()) {
+        if ($momentService.isPastYesterday(syncDate)) {
           console.log('IS YESTERDAY');
-          getHttpData();
+          //getHttpData();
           return true;
         } else {
           console.log('NOT YESTERDAY YET');
-          $scope.loading = false;
+          //$scope.loading = false;
           return false;
         }
 
@@ -220,11 +222,9 @@
 
         chooseTeam();
 
-        var syncDate = $date.create($rootScope.managersData._lastSynedOn);
-
         console.log('syncDate:', $rootScope.managersData._lastSyncedOn);
 
-        checkYesterday(syncDate);
+        checkYesterday($rootScope.managersData._lastSynedOn);
 
 
       };
@@ -253,11 +253,9 @@
 
         chooseTeam();
 
-        var syncDate = $date.create(firebaseData[dataKeyName]._lastSynedOn);
-
         console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
 
-        checkYesterday(syncDate);
+        checkYesterday(firebaseData[dataKeyName]._lastSyncedOn);
 
       };
 

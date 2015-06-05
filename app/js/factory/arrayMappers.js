@@ -2,7 +2,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $arrayLoopers, $dateService, $arrayFilter, $apiFactory, $rootScope, $date) {
+    .factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $arrayLoopers, $momentService, $arrayFilter, $apiFactory, $rootScope, $moment) {
 
       var arrayMaper = {
 
@@ -329,8 +329,8 @@
             goalsScored: game.goals || 0,
             leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
             leagueSlug: game.box_score.event.league.slug,
-            datePlayed: $dateService.goalLogDate(game.box_score.event.game_date),
-            rawDatePlayed: $date.create(game.box_score.event.game_date),
+            datePlayed: $momentService.goalLogDate(game.box_score.event.game_date),
+            rawDatePlayed: $moment.create(game.box_score.event.game_date),
             originalDate: game.box_score.event.game_date,
             playerName: $textManipulator.stripVowelAccent(dataObj.player.playerName),
             managerName: dataObj.player.managerName || 'N/A',
@@ -392,8 +392,8 @@
             vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
             goalsScored: game.goals || 0,
             leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
-            datePlayed: $dateService.goalLogDate(game.box_score.event.game_date),
-            rawDatePlayed: $date.create(game.box_score.event.game_date),
+            datePlayed: $momentService.goalLogDate(game.box_score.event.game_date),
+            rawDatePlayed: $moment.create(game.box_score.event.game_date),
             originalDate: game.box_score.event.game_date,
             result: $textManipulator.result.call(gameMapsObj, game),
             finalScore: $textManipulator.finalScore.call(gameMapsObj, game)

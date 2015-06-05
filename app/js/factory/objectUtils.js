@@ -4,7 +4,7 @@
 
 angular.module('sicklifes')
 
-  .factory('$objectUtils', function ($dateService) {
+  .factory('$objectUtils', function ($momentService) {
 
     var objectUtils = {
 
@@ -55,7 +55,7 @@ angular.module('sicklifes')
        */
       cleanPlayer: function (p) {
 
-        p.dateOfTransaction = $dateService.transactionDate();
+        p.dateOfTransaction = $momentService.transactionDate();
         p.goals = 0;
         p.points = 0;
         p.domesticGoals = 0;

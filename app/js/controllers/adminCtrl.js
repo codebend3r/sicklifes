@@ -5,7 +5,7 @@
 
 angular.module('sicklifes')
 
-  .controller('adminCtrl', function ($scope, $timeout, $fireBaseService, $routeParams, $apiFactory, $updateDataUtils, $dateService, $managersService) {
+  .controller('adminCtrl', function ($scope, $timeout, $fireBaseService, $routeParams, $apiFactory, $updateDataUtils, $momentService, $managersService) {
 
     /**
      * TODO
@@ -101,7 +101,7 @@ angular.module('sicklifes')
 
       var allPlayersObject = {
         _syncedFrom: 'adminCtrl',
-        _lastSyncedOn: $dateService.syncDate(),
+        _lastSyncedOn: $momentService.syncDate(),
         allPlayers: $scope.allPlayers
       };
 
@@ -113,7 +113,7 @@ angular.module('sicklifes')
 
       var managersObject = {
         _syncedFrom: 'adminCtrl',
-        _lastSyncedOn: $dateService.syncDate(),
+        _lastSyncedOn: $momentService.syncDate(),
         chester: $scope.managersData[0],
         frank: $scope.managersData[1],
         dan: $scope.managersData[2],

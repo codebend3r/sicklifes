@@ -4,7 +4,7 @@
 
 angular.module('sicklifes')
 
-  .factory('$apiFactory', function ($http, $q, $localStorage, $date, $textManipulator) {
+  .factory('$apiFactory', function ($http, $q, $localStorage, $moment, $textManipulator) {
 
     var apiFactory = {};
 
@@ -37,7 +37,7 @@ angular.module('sicklifes')
 
       console.log('get from localStorage');
 
-      var currentDate = $date.create(),
+      var currentDate = $moment.create(),
         lDate = $localStorage.get('lastCheckDate');
 
       cbObj.allLeagues = $localStorage.get('allLeagues');

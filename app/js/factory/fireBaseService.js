@@ -44,7 +44,7 @@ angular.module('sicklifes')
 
       saveToFireBase: function (saveObject, key) {
 
-        console.log('syncLeagueLeadersData -- START');
+        console.log('saveToFireBase -- START');
         var usersRef = ref.child(key);
 
         // save to local storage
@@ -54,7 +54,7 @@ angular.module('sicklifes')
         $rootScope[key] = angular.copy(saveObject);
 
         usersRef.set(angular.copy(saveObject));
-        console.log('syncLeagueLeadersData -- COMPLETE');
+        console.log('saveToFireBase -- COMPLETE');
 
       }
 

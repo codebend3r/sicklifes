@@ -8,8 +8,8 @@
   <select class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague(selectedLeague)'></select>
 
   <div ng-if='admin' class='well'>
-    <button type='button' class='btn btn-danger' ng-click='updateLeaguesData()'>Update League Data</button>
-    <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
+    <button type='button' class='btn btn-danger' ng-disabled="!fireBaseReady" ng-click='updateLeaguesData()'>Update League Data</button>
+    <button type='button' class='btn btn-danger' ng-disabled="!fireBaseReady" ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
   <div class='well overflow-show'>
