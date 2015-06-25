@@ -161,24 +161,25 @@
       };
 
       /**
-       *
+       * is it past yesterday
+       * @param syncDate
        */
       var checkYesterday = function (syncDate) {
 
         if ($momentService.isPastYesterday(syncDate)) {
           console.log('IS YESTERDAY');
-          //getHttpData();
+          getHttpData();
           return true;
         } else {
           console.log('NOT YESTERDAY YET');
-          //$scope.loading = false;
+          $scope.loading = false;
           return false;
         }
 
       };
 
       /**
-       *
+       * callback for when http data is loaded
        * @param result
        */
       var httpDataLoaded = function (result) {
@@ -236,7 +237,7 @@
       var fireBaseLoaded = function (firebaseData) {
 
         console.log('///////////////////');
-        console.log('FB --> data.managersData:', data[dataKeyName]);
+        console.log('FB --> firebaseData.managersData:', firebaseData[dataKeyName]);
         console.log('///////////////////');
 
         populateManagersData(firebaseData.managersData);
