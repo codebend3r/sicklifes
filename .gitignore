@@ -3,7 +3,6 @@
 .idea
 node_modules
 builds/
-*.log
 .tmp
 app/bower_component/
 app/js/templates/
