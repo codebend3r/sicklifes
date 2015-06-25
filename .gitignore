@@ -4,6 +4,6 @@
 node_modules
 builds/
 .tmp
-app/bower_component/
+bower_components
 app/js/templates/
-app/css/
+css
