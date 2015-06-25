@@ -1,6 +1,11 @@
 language: node_js
 node_js:
-  - '0.10.33'
+  - '0.10'
+sudo: true
+cache:
+  directories:
+    - node_modules
+    - app/bower_components
 before_script:
   - 'npm install -g bower gulp'
   - 'npm install' # install npm packages
