@@ -1,3 +1,10 @@
 language: node_js
 node_js:
-  - "0.12"
+  - '0.10.33'
+before_script:
+  - 'npm install -g bower gulp'
+  - 'npm install' # install npm packages
+  - 'bower install' # install bower packages
+
+after_script:
+  - 'grunt' # or other command for build, run tests, etc
