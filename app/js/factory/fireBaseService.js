@@ -45,15 +45,20 @@ angular.module('sicklifes')
       saveToFireBase: function (saveObject, key) {
 
         console.log('saveToFireBase -- START');
+
+        var cleanedData = angular.copy(saveObject);
+
         var usersRef = ref.child(key);
 
         // save to local storage
-        $localStorage[key] = angular.copy(saveObject);
+        $localStorage[key] = cleanedData;
 
         // save to $rootScope
-        $rootScope[key] = angular.copy(saveObject);
+        $rootScope[key] = cleanedData
 
-        usersRef.set(angular.copy(saveObject));
+        console.log('cleanedData', cleanedData);
+
+        usersRef.set(cleanedData);
         console.log('saveToFireBase -- COMPLETE');
 
       }

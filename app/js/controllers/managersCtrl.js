@@ -155,16 +155,18 @@
 
         console.log('GET FROM HTTP');
 
-        //$updateDataUtils.updateLeagueTables()
-        //.then(httpDataLoaded);
+        $updateDataUtils.updateLeagueTables()
+          .then(httpDataLoaded);
 
       };
 
       /**
        * is it past yesterday
-       * @param syncDate
+       * @param syncDate {string}
        */
       var checkYesterday = function (syncDate) {
+
+        console.log('syncDate:', syncDate);
 
         if ($momentService.isPastYesterday(syncDate)) {
           console.log('IS YESTERDAY');
@@ -180,7 +182,7 @@
 
       /**
        * callback for when http data is loaded
-       * @param result
+       * @param result {object}
        */
       var httpDataLoaded = function (result) {
 
@@ -189,6 +191,8 @@
         console.log('///////////////////');
 
         $scope.loading = false;
+
+        chooseTeam();
 
       };
 
@@ -207,7 +211,7 @@
           data.joe
         ];
 
-        $rootScope.managersData = data;
+        $rootScope.managersData = $scope.managersData;
 
       };
 
@@ -216,16 +220,17 @@
        */
       var loadFromLocal = function () {
 
+
+        $rootScope.managersData = $localStorage.managersData;
+
         console.log('///////////////////');
         console.log('$localStorage.managersData', $localStorage.managersData);
         console.log('$rootScope.managersData', $rootScope.managersData);
         console.log('///////////////////');
 
+        checkYesterday($rootScope.managersData._lastSyncedOn);
+
         chooseTeam();
-
-        console.log('syncDate:', $rootScope.managersData._lastSyncedOn);
-
-        checkYesterday($rootScope.managersData._lastSynedOn);
 
 
       };
@@ -252,11 +257,11 @@
 
         $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
-        chooseTeam();
-
         console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
 
         checkYesterday(firebaseData[dataKeyName]._lastSyncedOn);
+
+        chooseTeam();
 
       };
 

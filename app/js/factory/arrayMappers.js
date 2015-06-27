@@ -330,7 +330,7 @@
             leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
             leagueSlug: game.box_score.event.league.slug,
             datePlayed: $momentService.goalLogDate(game.box_score.event.game_date),
-            rawDatePlayed: $moment.create(game.box_score.event.game_date),
+            //rawDatePlayed: $moment(game.box_score.event.game_date),
             originalDate: game.box_score.event.game_date,
             playerName: $textManipulator.stripVowelAccent(dataObj.player.playerName),
             managerName: dataObj.player.managerName || 'N/A',
@@ -393,7 +393,7 @@
             goalsScored: game.goals || 0,
             leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
             datePlayed: $momentService.goalLogDate(game.box_score.event.game_date),
-            rawDatePlayed: $moment.create(game.box_score.event.game_date),
+            //rawDatePlayed: $moment(game.box_score.event.game_date),
             originalDate: game.box_score.event.game_date,
             result: $textManipulator.result.call(gameMapsObj, game),
             finalScore: $textManipulator.finalScore.call(gameMapsObj, game)

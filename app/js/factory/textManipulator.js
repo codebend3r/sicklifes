@@ -251,7 +251,7 @@ angular.module('sicklifes')
         var leagueString = '';
         result.data.teams.some(function (team, i) {
           team.leagues.some(function (league, j) {
-            console.log('slug:', league.slug);
+            //console.log('slug:', league.slug);
             if (textManipulator.acceptedLeague(league.slug)) {
               leagueString = league.slug;
               return true;

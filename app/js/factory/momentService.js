@@ -11,15 +11,15 @@
         },
 
         syncDate: function () {
-          return $moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
+          return $moment().format('M/D/YYYY h:mm:ss a');
         },
 
         chartDate: function (date) {
-          return $moment(date).format('dddd, MMMM Do YYYY, h:mm:ss a');
+          return $moment(date).format('M/D/YYYY h:mm:ss a');
         },
 
         goalDate: function () {
-          return $moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
+          return $moment().format('M/D/YYYY h:mm:ss a');
         },
 
         getUnixTime: function (date) {
@@ -31,12 +31,12 @@
           if (date) {
             return date;
           } else {
-            return $moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
+            return $moment().format('M/D/YYYY h:mm:ss a');
           }
         },
 
         goalLogDate: function (gameDate) {
-          return $moment(gameDate).format('dddd, MMMM Do YYYY, h:mm:ss a');
+          return $moment(gameDate).format('M/D/YYYY h:mm:ss a');
         },
 
         /**
@@ -46,10 +46,11 @@
          */
         isPastYesterday: function (syncDate) {
 
-          var thenMoment = $moment(syncDate);
-          var diff = $moment().diff(thenMoment, 'hours');
+          var thenMoment = $moment(new Date(syncDate.split(' ')[0]));
+          var nowMoment = $moment();          
+          var diff = nowMoment.diff(thenMoment, 'hours');
 
-          console.log('sync time difference in hours:', diff, thenMoment.fromNow());
+          console.log('sync time difference in hours:', diff, '-->', thenMoment.fromNow());
 
           return diff > 22;
 

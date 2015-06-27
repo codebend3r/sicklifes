@@ -13,7 +13,7 @@ angular.module('sicklifes')
        * @returns {boolean}
        */
       filterAfterDate: function (game) {
-        var gameDate = $moment.create(game.box_score.event.game_date);
+        var gameDate = $moment(game.box_score.event.game_date);
         //console.log('gameDate', gameDate);
         return gameDate.isAfter('August 1 2014');
         //return false;
@@ -24,7 +24,7 @@ angular.module('sicklifes')
        * @returns {boolean}
        */
       filterValidDate: function (player, game) {
-        var gameDate = $moment.create(game.box_score.event.game_date);
+        var gameDate = $moment(game.box_score.event.game_date);
         if (player.status === 'added') {
           return gameDate.isAfter(player.dateOfTransaction);
         } else if (player.status === 'dropped') {
@@ -40,7 +40,7 @@ angular.module('sicklifes')
        */
       filterOnValidGoals: function (player, game) {
         if (game.goals) {
-          var gameDate = $moment.create(game.box_score.event.game_date);
+          var gameDate = $moment(game.box_score.event.game_date);
           if (player.status === 'added') {
             return gameDate.isAfter(player.dateOfTransaction);
           } else if (player.status === 'dropped') {
