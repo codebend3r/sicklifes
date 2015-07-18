@@ -149,13 +149,13 @@
    // TEMPLATE
    gulp.task('template', function () {
 
-     gulp.src([config.app + '/views/**/*.html'])
+     return gulp.src([config.app + '/views/**/*.html'])
        .pipe(templateCache('./', {
          module: 'sicklifes',
          standalone: false,
          root: './views/'
        }))
-       .pipe(gulp.dest(config.app + '/js/templates/templatescache.js'))
+       .pipe(gulp.dest(config.app + '/js/templates/templateCache.js'))
        .pipe($.size());
 
    });
@@ -261,7 +261,7 @@
 
    // Clean
    gulp.task('clean-templatecache', function () {
-     return gulp.src([config.app + '/js/templates/templatescache.js'], {read: false}).pipe($.clean({force: true}))
+     return gulp.src([config.app + '/js/templates/templateCache.js'], {read: false}).pipe($.clean({force: true}))
        .pipe($.size());
    });
 
