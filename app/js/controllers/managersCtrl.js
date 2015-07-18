@@ -220,7 +220,6 @@
        */
       var loadFromLocal = function () {
 
-
         $rootScope.managersData = $localStorage.managersData;
 
         console.log('///////////////////');
@@ -231,7 +230,6 @@
         checkYesterday($rootScope.managersData._lastSyncedOn);
 
         chooseTeam();
-
 
       };
 

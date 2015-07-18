@@ -159,7 +159,7 @@
 
         console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
 
-        checkYesterday(firebaseData.leagueTables._lastSynedOn);
+        checkYesterday(firebaseData[dataKeyName]._lastSyncedOn);
 
       };
 
@@ -210,7 +210,7 @@
 
         console.log('syncDate:', localData._lastSyncedOn);
 
-        checkYesterday(localData._lastSynedOn);
+        checkYesterday(localData._lastSyncedOn);
 
         // no matter if it's yesterday or not, start firebase so we can save later
         startFireBase(function () {
