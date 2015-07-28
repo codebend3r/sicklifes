@@ -110,6 +110,12 @@ h3.manager-name {
   clear: both;
   border: 1px solid $mainColour;
 
+  &.big {
+    div, p, a {
+      font-size: 18px;
+    }
+  }
+
   .header {
     font-weight: bold;
     font-size: 14px;

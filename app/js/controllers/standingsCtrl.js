@@ -5,7 +5,7 @@
 
 angular.module('sicklifes')
 
-  .controller('standingsCtrl', function ($scope, $timeout, $apiFactory, $routeParams, $fireBaseService, $updateDataUtils, $objectUtils, $dateService, $managersService, $location) {
+  .controller('standingsCtrl', function ($scope, $timeout, $apiFactory, $routeParams, $fireBaseService, $updateDataUtils, $objectUtils, $momentService, $managersService, $location) {
 
     ////////////////////////////////////////
     /////////////// public /////////////////

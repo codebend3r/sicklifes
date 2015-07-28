@@ -96,15 +96,24 @@
 
       var dataKeyName = 'leagueTables';
 
+      /**
+       * check to see if date is yesterday
+       */
       var checkYesterday = function (syncDate) {
 
         if ($momentService.isPastYesterday(syncDate)) {
-          console.log('IS YESTERDAY');
-          //getHttpData();
+          console.log('checkYesterday() --> IS YESTERDAY');
+          $scope.updateLeaguesData();
           return true;
         } else {
-          console.log('NOT YESTERDAY YET');
+          console.log('checkYesterday() --> NOT YESTERDAY YET');
           $scope.loading = false;
+          // no matter if it's yesterday or not, start firebase so we can save later
+          startFireBase(function () {
+            console.log('checkYesterday() --> FIREBASE READY');
+            $scope.fireBaseReady = true;
+            $scope.saveToFireBase();
+          });
           return false;
         }
 
@@ -212,12 +221,6 @@
 
         checkYesterday(localData._lastSyncedOn);
 
-        // no matter if it's yesterday or not, start firebase so we can save later
-        startFireBase(function () {
-          console.log('FIREBASE READY');
-          $scope.fireBaseReady = true;
-        });
-
       };
 
       /**
@@ -269,8 +272,9 @@
 
         // after http request start firebase so we can save later
         startFireBase(function () {
-          console.log('FIREBASE READY');
+          console.log('HTTP --> FIREBASE READY');
           $scope.fireBaseReady = true;
+          $scope.saveToFireBase();
         });
 
       };

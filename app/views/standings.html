@@ -9,7 +9,7 @@
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
-  <div class='fantasy-table'>
+  <div class='fantasy-table big'>
 
     <div class='header'>
       <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable' ng-title='{{header.hoverTitle}}'>{{header.text}}</a></div>
@@ -30,5 +30,3 @@
   <highchart id="chart1" config="chartConfig"></highchart>
 
 </div>
-
-

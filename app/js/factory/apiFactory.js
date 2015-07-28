@@ -87,12 +87,19 @@ angular.module('sicklifes')
      */
     apiFactory.getLeagueTables = function () {
 
+      // var leagues = [
+      //     'http://api.thescore.com/liga/standings/1643', // 2015-2016
+      //     'http://api.thescore.com/epl/standings/1586', // 2015-2016
+      //     'http://api.thescore.com/seri/standings/1288', // 2014-2015
+      //     'http://api.thescore.com/chlg/standings/1319', // 2014-2015
+      //     'http://api.thescore.com/uefa/standings/1353' // 2014-2015
+      //   ],
       var leagues = [
-          'http://api.thescore.com/liga/standings',
-          'http://api.thescore.com/epl/standings',
-          'http://api.thescore.com/seri/standings',
-          'http://api.thescore.com/chlg/standings',
-          'http://api.thescore.com/uefa/standings'
+          'http://api.thescore.com/liga/standings/',
+          'http://api.thescore.com/epl/standings/',
+          'http://api.thescore.com/seri/standings/',
+          'http://api.thescore.com/chlg/standings/',
+          'http://api.thescore.com/uefa/standings/'
         ],
         listOrPromises = [];
 

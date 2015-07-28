@@ -2,7 +2,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$momentService', function ($moment) {
+    .factory('$momentService', function ($moment, $log) {
 
       return {
 
@@ -48,10 +48,10 @@
 
           console.log('syncDate', syncDate);
           var thenMoment = $moment(new Date(syncDate.split(' ')[0]));
-          var nowMoment = $moment();          
+          var nowMoment = $moment();
           var diff = nowMoment.diff(thenMoment, 'hours');
 
-          console.log('sync time difference in hours:', diff, '-->', thenMoment.fromNow());
+          //$log.log('sync time difference in hours:', diff, '-->', thenMoment.fromNow());
 
           return diff > 22;
 
