@@ -79,7 +79,7 @@
              $.rev()
            ],
            js: [
-             $.ngmin(),
+             $.ngAnnotate(),
              $.uglify(),
              $.rev()
            ]
