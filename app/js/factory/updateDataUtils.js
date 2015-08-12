@@ -11,13 +11,11 @@ angular.module('sicklifes')
       /**
        * gets data from all of the players in all valid leagues
        */
-      updatePlayerPoolData: function () {
+      updatePlayerPoolData: function (callback) {
 
-        //console.log('UPDATING PLAYER POOL...');
         console.log('UPDATING -- updatePlayerPoolData');
 
-        var defer = $q.defer(),
-          allTeams = $apiFactory.getAllTeams(),
+        var allTeams = $apiFactory.getAllTeams(),
           allTeamsPromise = [],
           allPlayers = [];
 
@@ -28,7 +26,8 @@ angular.module('sicklifes')
 
             _.each(leagueData.data, function (teamData) {
 
-              console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
+              console.log('LEAGUE:', leagueData.leagueName);
+              //console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
 
               // returns a promise with the end point for each team
               var rosterRequest = $apiFactory.getData({
@@ -41,7 +40,7 @@ angular.module('sicklifes')
               rosterRequest.then(function (playerData) {
 
                 _.each(playerData.data, function (eachPlayer) {
-                  console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
+                  // console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
                 });
 
                 // each player on each team
@@ -52,17 +51,17 @@ angular.module('sicklifes')
 
             });
 
-            $apiFactory.listOfPromises(allTeamsPromise, function (data) {
-              defer.resolve(allPlayers);
-              console.log('updatePlayerPoolData - ALL COMPLETE', data);
-            });
+          });
 
+          console.log('allTeamsPromise', allTeamsPromise.length);
+
+          $q.all(allTeamsPromise).then(function (data) {
+            console.log('updatePlayerPoolData - listOfPromises - COMPLETE', data.length);
+            callback(allPlayers);
           });
 
 
         });
-
-        return defer.promise;
 
       },
 

@@ -11,15 +11,15 @@
         },
 
         syncDate: function () {
-          return $moment().format('M/D/YYYY h:mm:ss a');
+          return $moment().format('M/D/YYYY');
         },
 
         chartDate: function (date) {
-          return $moment(date).format('M/D/YYYY h:mm:ss a');
+          return $moment(date).format('M/D/YYYY');
         },
 
         goalDate: function () {
-          return $moment().format('M/D/YYYY h:mm:ss a');
+          return $moment().format('M/D/YYYY');
         },
 
         getUnixTime: function (date) {
@@ -31,12 +31,12 @@
           if (date) {
             return date;
           } else {
-            return $moment().format('M/D/YYYY h:mm:ss a');
+            return $moment().format('M/D/YYYY');
           }
         },
 
         goalLogDate: function (gameDate) {
-          return $moment(gameDate).format('M/D/YYYY h:mm:ss a');
+          return $moment(gameDate).format('M/D/YYYY');
         },
 
         /**

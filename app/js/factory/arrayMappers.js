@@ -143,8 +143,8 @@
 
           validLeagues = player.validLeagues || {};
 
-          //console.log('====================================');
-          //console.log('playerName: ', player.playerName);
+          console.log('====================================');
+          console.log('player: ', player);
 
           /*result.data.teams.forEach(function(team){
            console.log('teamName:', team.full_name);
@@ -166,7 +166,7 @@
               player.ligaGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
               //console.log(player.playerName, 'ligaLogs.length', ligaLogs.length);
               //player.domesticLeagueName = $textManipulator.formattedLeagueName('liga');
-              if (manager) {
+              if (!angular.isUndefinedOrNull(manager)) {
                 //if (player.status !== 'dropped') manager.ligaCount += 1;
                 if (player.status !== 'dropped' && ($rootScope.allLeagueTeamsData.liga.indexOf(player.teamName) !== -1 || ligaLogs.length > 0)) {
                   manager.ligaCount += 1;
@@ -192,7 +192,7 @@
               player.eplGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
               //console.log(player.playerName, 'eplLogs.length', eplLogs.length);
               //player.domesticLeagueName = $textManipulator.formattedLeagueName('epl');
-              if (manager) {
+              if (!angular.isUndefinedOrNull(manager)) {
                 if (player.status !== 'dropped' && ($rootScope.allLeagueTeamsData.epl.indexOf(player.teamName) !== -1 || eplLogs.length > 0)) {
                   manager.eplCount += 1;
                   player.leagueSlugs += player.leagueSlugs.length === 0 ? 'EPL' : '/EPL';
@@ -217,7 +217,7 @@
               player.seriGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
               //console.log(player.playerName, 'seriLogs.length', seriLogs.length);
               //player.domesticLeagueName = $textManipulator.formattedLeagueName('seri');
-              if (manager) {
+              if (!angular.isUndefinedOrNull(manager)) {
                 //if (player.status !== 'dropped') manager.seriCount += 1;
                 if (player.status !== 'dropped' && ($rootScope.allLeagueTeamsData.seri.indexOf(player.teamName) !== -1 || seriLogs.length > 0)) {
                   manager.seriCount += 1;
@@ -241,10 +241,12 @@
               }));
               player.chlgGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
               //console.log(player.playerName, 'chlgLogs.length', chlgLogs.length);
-              if (chlgLogs.length > 0 || $rootScope.allLeagueTeamsData.chlg.indexOf(player.teamName) !== -1) {
-                //console.log('** IN CHLG');
-                manager.chlgCount += 1;
-                player.tournamentLeagueName = $textManipulator.formattedLeagueName('chlg');
+              if (!angular.isUndefinedOrNull(manager)) {
+                if (chlgLogs.length > 0 || $rootScope.allLeagueTeamsData.chlg.indexOf(player.teamName) !== -1) {
+                  //console.log('** IN CHLG');
+                  manager.chlgCount += 1;
+                  player.tournamentLeagueName = $textManipulator.formattedLeagueName('chlg');
+                }
               }
               if (manager) {
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(chlgLogs);
@@ -265,10 +267,12 @@
               }));
               player.euroGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
               //console.log(player.playerName, 'euroLogs.length', euroLogs.length);
-              if (euroLogs.length > 0 || $rootScope.allLeagueTeamsData.uefa.indexOf(player.teamName) !== -1) {
-                //console.log('** IN EURO');
-                manager.euroCount += 1;
-                player.tournamentLeagueName = $textManipulator.formattedLeagueName('uefa');
+              if (!angular.isUndefinedOrNull(manager)) {
+                if (euroLogs.length > 0 || $rootScope.allLeagueTeamsData.uefa.indexOf(player.teamName) !== -1) {
+                  //console.log('** IN EURO');
+                  manager.euroCount += 1;
+                  player.tournamentLeagueName = $textManipulator.formattedLeagueName('uefa');
+                }
               }
               if (manager) {
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(euroLogs);

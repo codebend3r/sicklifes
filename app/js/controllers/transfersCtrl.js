@@ -4,11 +4,13 @@
 
 angular.module('sicklifes')
 
-  .controller('transfersCtrl', function ($scope, $rootScope, $q, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $dateService, $routeParams) {
+  .controller('transfersCtrl', function ($scope, $rootScope, $q, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $momentService, $localStorage, $routeParams) {
 
     ////////////////////////////////////////
     /////////////// public /////////////////
     ////////////////////////////////////////
+
+    var dataKeyName = 'playerPoolData';
 
     /**
      * TODO
@@ -88,34 +90,29 @@ angular.module('sicklifes')
     ];
 
     /**
-     * save data to firebase
+     * sets data in the initialized firebase service
      */
     $scope.saveToFireBase = function () {
 
-      console.log('////////////////////////////////////');
-      console.log('$scope.allPlayers', $rootScope.allPlayers, '|', $rootScope.allPlayers.length);
-      console.log('////////////////////////////////////');
+      if ($scope.fireBaseReady) {
 
-      var allPlayersObject = {
-        _lastSyncedOn: $dateService.syncDate(),
-        allPlayers: $rootScope.allPlayers
-      };
+        console.log('////////////////////////////////////');
+        console.log('$rootScope.allPlayers:', $rootScope.allPlayers);
+        console.log('////////////////////////////////////');
 
-      $fireBaseService.syncPlayerPoolData(allPlayersObject);
+        var saveObject = {
+          _syncedFrom: 'transfersCtrl',
+          _lastSyncedOn: $momentService.syncDate(),
+          allPlayers: $rootScope.allPlayers
+        };
 
-      ////////////////////////////////
+        $fireBaseService.saveToFireBase(saveObject, dataKeyName);
 
-      var saveObject = {
-        _lastSyncedOn: $dateService.syncDate(),
-        chester: $rootScope.managersData[0],
-        frank: $rootScope.managersData[1],
-        dan: $rootScope.managersData[2],
-        justin: $rootScope.managersData[3],
-        mike: $rootScope.managersData[4],
-        joe: $rootScope.managersData[5]
-      };
+      } else {
 
-      $fireBaseService.syncManagersData(saveObject);
+        startFireBase();
+
+      }
 
     };
 
@@ -377,62 +374,36 @@ angular.module('sicklifes')
     };
 
     /**
-     * retrieve data from $rootScope
+     * read data from local storage
+     * @param localData
      */
-    var getFromRootScope = function () {
+    var loadFromLocal = function (localData) {
 
-      var defer = $q.defer();
-      console.log('managersCtrl - getFromRootScope');
-      if (angular.isDefined($rootScope.managersData) && angular.isDefined($rootScope.playerPoolData) && angular.isDefined($rootScope.allLeagueTeamsData)) {
-        defer.resolve({
-          managersData: $rootScope.managersData,
-          playerPoolData: $rootScope.playerPoolData,
-          allLeagueTeamsData: $rootScope.allLeagueTeamsData
-        });
-      } else {
-        defer.reject();
-      }
-      return defer.promise;
+      console.log('///////////////////');
+      console.log('LOCAL --> localData:', localData);
+      console.log('///////////////////');
+
+      $scope.loading = false;
+
+      $rootScope.allPlayers = localData.allPlayers;
 
     };
 
     /**
-     * retrieve data from local storage
+     * starts the process of getting data from firebase
+     * @param callback
      */
-    var getFromLocalStorage = function () {
+    var startFireBase = function (callback) {
 
-      var defer = $q.defer();
-      console.log('managersCtrl - getFromLocalStorage');
-      if (angular.isDefined($localStorage.get('managersData')) && angular.isDefined($localStorage.get('playerPoolData')) && angular.isDefined($localStorage.get('allLeagueTeamsData'))) {
-        defer.resolve({
-          managersData: $localStorage.get('managersData'),
-          playerPoolData: $localStorage.get('playerPoolData'),
-          allLeagueTeamsData: $localStorage.get('allLeagueTeamsData')
-        });
+      console.log('--  firebase started --');
+      if ($scope.fireBaseReady) {
+        console.log('firebase previously loaded');
+        callback();
       } else {
-        defer.reject();
+        $fireBaseService.initialize($scope);
+        var firePromise = $fireBaseService.getFireBaseData();
+        firePromise.then(callback);
       }
-      return defer.promise;
-
-    };
-
-    /**
-     * retrieve data from firebase
-     */
-    var getFromFireBase = function () {
-
-      var defer = $q.defer();
-      console.log('managersCtrl - getFromFireBase');
-
-      $fireBaseService.initialize($scope);
-      var firePromise = $fireBaseService.getFireBaseData();
-      firePromise.then(function (result) {
-        defer.resolve(result);
-      }, function () {
-        defer.reject();
-      });
-
-      return defer.promise;
 
     };
 
@@ -442,9 +413,23 @@ angular.module('sicklifes')
      */
     var allRequestComplete = function () {
 
-      console.log('allRequestComplete');
+      console.log('transfersCtrl - allRequestComplete');
       $scope.loading = false;
       chooseTeam();
+
+    };
+
+    /**
+     * http request all player pool
+     */
+    $scope.updatePlayerPoolData = function () {
+
+      $updateDataUtils.updatePlayerPoolData(function (result) {
+        console.log('============================');
+        console.log('player pool data updated', result);
+        $rootScope.allPlayers = result;
+        console.log('============================');
+      });
 
     };
 
@@ -453,38 +438,30 @@ angular.module('sicklifes')
      */
     var init = function () {
 
-      console.log('managersCtrl - init');
+      console.log('transfersCtrl - init');
 
-      var dataLoad = false;
+      if (angular.isDefined($rootScope[dataKeyName])) {
 
-      $updateDataUtils.updateEverything();
+        console.log('load from $rootScope');
+        loadFromLocal($rootScope[dataKeyName]);
 
-      /*getFromRootScope()
-       .then(function (result) {
-       console.log('1. $rootScope success');
-       dataLoaded(result);
-       dataLoad = true;
-       }, function () {
-       console.log('1. $rootScope fail - get from localstorage');
-       return getFromLocalStorage();
-       })
-       .then(function (result) {
-       if (!dataLoad) {
-       console.log('2. localstorage success');
-       dataLoaded(result);
-       dataLoad = true;
-       }
-       }, function () {
-       console.log('2. localstorage fail - get from firebase');
-       return getFromFireBase();
-       })
-       .then(function (result) {
-       if (!dataLoad) {
-       console.log('3. if no localstorage - firebase loaded');
-       dataLoaded(result);
-       dataLoad = true;
-       }
-       })*/
+      } else if (angular.isDefined($localStorage[dataKeyName])) {
+
+        console.log('load from local storage');
+        loadFromLocal($localStorage[dataKeyName]);
+
+      } else {
+
+        console.log('load from firebase');
+
+        startFireBase(function (firebaseData) {
+          console.log('HTTP --> FIREBASE READY');
+          $scope.fireBaseReady = true;
+          $scope.loading = false;
+          //$scope.saveToFireBase();
+        });
+
+      }
 
     };
 

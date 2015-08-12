@@ -9,13 +9,19 @@ angular.module('sicklifes')
     var arrayFilters = {
 
       /**
+       * the date the league starts capturing data
+       * @returns {string}
+       */
+      leagueStartDate: 'August 1 2015',
+
+      /**
        * filters out any games after aug 1
        * @returns {boolean}
        */
       filterAfterDate: function (game) {
         var gameDate = $moment(game.box_score.event.game_date);
         //console.log('gameDate', gameDate);
-        return gameDate.isAfter('August 1 2014');
+        return gameDate.isAfter(this.leagueStartDate);
         //return false;
       },
 
@@ -30,7 +36,7 @@ angular.module('sicklifes')
         } else if (player.status === 'dropped') {
           return gameDate.isBefore(player.dateOfTransaction);
         } else {
-          return gameDate.isAfter('August 1 2014');
+          return gameDate.isAfter(this.leagueStartDate);
         }
       },
 

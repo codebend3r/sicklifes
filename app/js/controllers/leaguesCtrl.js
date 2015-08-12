@@ -173,7 +173,7 @@
       };
 
       /**
-       *
+       * read data from local storage
        * @param localData
        */
       var loadFromLocal = function (localData) {

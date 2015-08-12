@@ -12,121 +12,13 @@ angular.module('sicklifes')
     ////////////////////////////////////////
 
     /**
-     * TODO
+     * whether data is still loading
      */
     $scope.loading = true;
 
-    $scope.chartConfig = {
-      chart: {
-        type: 'line'
-      },
-      title: {
-        text: null
-      },
-      subtitle: {
-        text: null
-      },
-      xAxis: {
-        borderWidth: 0,
-        gridLineWidth: 0,
-        categories: [],
-        tickPixelInterval: 1000,
-        //categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        //tickInterval: 10,
-        tickInterval: null,
-        //tickPositions: [],
-        /*labels: {
-         enabled: true,
-         step: 10,
-         formatter: function () {
-         debugger;
-         return $dateService.goalDate(this.value);
-         }
-         },*/
-        title: {
-          text: null
-        }
-      },
-      yAxis: {
-        title: {
-          text: 'Total Goals'
-        }
-      },
-      plotOptions: {
-        line: {
-          dataLabels: {
-            enabled: true
-          },
-          enableMouseTracking: false
-        }
-      },
-      series: [
-        {
-          name: 'Chester',
-          data: [
-            {
-              x: '10/29/14',
-              y: Math.round(Math.random() * 10),
-              time: '10/29/14'
-            },
-            {
-              x: '11/05/14',
-              y: Math.round(Math.random() * 10),
-              time: '11/05/14'
-            },
-            {
-              x: '11/16/14',
-              y: Math.round(Math.random() * 10),
-              time: '11/16/14'
-            },
-            {
-              x: '11/21/14',
-              y: Math.round(Math.random() * 10),
-              time: '11/21/14'
-            },
-            {
-              x: '11/28/14',
-              y: Math.round(Math.random() * 10),
-              time: '11/28/14'
-            },
-            {
-              x: '12/02/14',
-              y: Math.round(Math.random() * 10),
-              time: '12/02/14'
-            }
-
-          ]
-          //data: []
-        }
-        /*{
-         name: 'Frank',
-         data: [
-         {
-         x: 1408939200000 + (oneDayInMill * 5),
-         y: Math.round(Math.random() * 10),
-         time: '11/29/14'
-         },
-         {
-         x: 1408939200000 + (oneDayInMill * 15),
-         y: Math.round(Math.random() * 10),
-         time: '11/29/14'
-         },
-         {
-         x: 1408939200000 + (oneDayInMill * 20),
-         y: Math.round(Math.random() * 10),
-         time: '11/29/14'
-         },
-         {
-         x: 1408939200000 + (oneDayInMill * 25),
-         y: Math.round(Math.random() * 10),
-         time: '11/29/14'
-         }
-         ]
-         //data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-         }*/
-      ]
-    };
-
+    /**
+     * url param - whether admin is true
+     */
     $scope.admin = $routeParams.admin;
 
     /**
@@ -160,52 +52,6 @@ angular.module('sicklifes')
       }
     ];
 
-    var mapGoalDates = function (tickPositions, element, index) {
-
-      var managers = [
-        {
-          name: 'Joe'
-        },
-        {
-          name: 'Chester'
-        },
-        {
-          name: 'Frank'
-        },
-        {
-          name: 'Dan'
-        },
-        {
-          name: 'Justin'
-        },
-        {
-          name: 'Mike'
-        }
-      ];
-
-      var evenTick = true;
-
-      return {
-        index: index,
-        //statusIndex: statusInt,
-        time: $dateService.goalDate(element.data.x),
-        name: managers[index].name,
-        //color: $highChartsSettings.colors[statusInt],
-        data: element.data.map(function (d, barIndex) {
-          if (!index && evenTick) tickPositions.push(d.x);
-          evenTick = !evenTick;
-          return {
-            x: d.x,
-            y: d.y,
-            time: $dateService.goalDate(d.x),
-            barIndex: barIndex
-          };
-        })
-      };
-
-    };
-
-
     /**
      * consolidated list of all owned players by a manager
      */
@@ -216,100 +62,6 @@ angular.module('sicklifes')
     ////////////////////////////////////////
     ////////////// private /////////////////
     ////////////////////////////////////////
-
-    var populateChart = function () {
-
-      var oneDayInMill = 86400000;
-      var weekInMill = 604800000;
-
-      //console.log('$scope.managersData', $scope.managersData);
-
-      //$scope.chartConfig.series = data.map(mapGoalDates.bind($scope, $scope.sparkline.options.xAxis.tickPositions));
-
-      /*$scope.managersData.forEach(function (manager) {
-
-       //console.log('managerName', manager.managerName);
-
-       var currentData = [];
-
-       var dateInLoop;
-
-       */
-      /*var dataObj = {
-       name: manager.managerName,
-       data: currentData
-       };*/
-      /*
-
-       });*/
-
-      $scope.chartConfig.xAxis.categories = [];
-
-      //var startDate = '09/01/2014';
-      var startDate = $dateService.getDate();
-      var startDateInMilli = $dateService.getUnixTime(startDate);
-      var nextWeekInMill = startDateInMilli;
-
-      for (var i = 0; i < 10; i++) {
-        if (!i) {
-          //$scope.chartConfig.xAxis.categories.push(formattedWeek);
-          $scope.chartConfig.xAxis.categories.push(startDateString);
-        } else {
-          nextWeekInMill += weekInMill;
-          console.log('nextWeekInMill', nextWeekInMill);
-          var nextWeekDate = $dateService.getDate(nextWeekInMill);
-          var nextWeekFormatted = $dateService.chartDate(nextWeekDate);
-          //$scope.chartConfig.xAxis.categories.push(nextWeekInMill);
-          $scope.chartConfig.xAxis.categories.push(nextWeekFormatted);
-        }
-      }
-
-      /*var goalsObject = {};
-
-       $scope.managersData[0].monthlyGoalsLog.forEach(function (game) {
-
-       var unixTime = $dateService.getUnixTime(game.datePlayed);
-       if (angular.isUndefined(goalsObject[unixTime])) {
-       goalsObject[unixTime] = {
-       goalsScored: game.goalsScored,
-       dateValue: game.datePlayed,
-       unixTime: unixTime
-       };
-       } else {
-       //console.log('goal already score on', game.datePlayed, ', adding', game.goalsScored);
-       goalsObject[unixTime].goalsScored += game.goalsScored;
-       }
-       });
-       */
-
-      /*var goalsArray = _.chain(goalsObject)
-       .map(function (val) {
-       return val;
-       })
-       .sortBy(function (g) {
-       return g.unixTime;
-       });
-
-       console.log('goalsArray:', goalsArray);
-       console.log('first value:', goalsArray.first().value());*/
-
-      /*$scope.chartConfig.series[0].data = _.map(goalsArray, function (totalGoalsOnDate, index) {
-
-       return {
-       name: $dateService.chartDate(totalGoalsOnDate.unixTime),
-       y: totalGoalsOnDate.goalsScored,
-       x: totalGoalsOnDate.unixTime
-       };
-
-       });*/
-
-      //$scope.chartConfig.xAxis.categories.sort();
-      //console.log('$scope.chartConfig.xAxis.categories', $scope.chartConfig.xAxis.categories);
-      console.log('$scope.chartConfig.series[0].data', $scope.chartConfig.series[0].data);
-      console.log('$scope.chartConfig.xAxis.categories', $scope.chartConfig.xAxis.categories);
-      //console.log('goalsObject', goalsObject);
-
-    };
 
     /**
      * TODO
@@ -366,8 +118,6 @@ angular.module('sicklifes')
       //console.log('syncDate managersData', data.managersData._lastSyncedOn);
 
       $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
-
-      //populateChart();
 
       $scope.loading = false;
 

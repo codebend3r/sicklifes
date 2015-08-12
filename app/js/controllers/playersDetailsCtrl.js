@@ -2,7 +2,7 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $timeout, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $moment, $dateService, $fireBaseService) {
+    .controller('playersDetailsCtrl', function ($scope, $timeout, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $momentService, $fireBaseService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -56,7 +56,7 @@
        */
       $scope.leagueImages = $textManipulator.leagueImages;
 
-      $scope.getAllGameLogs = function() {
+      $scope.getAllGameLogs = function () {
 
         console.log('get all game logs');
 
@@ -66,9 +66,9 @@
       ////////////// private /////////////////
       ////////////////////////////////////////
 
-      var checkYesterday = function(syncDate) {
+      var checkYesterday = function (syncDate) {
 
-        if (syncDate.isYesterday()) {
+        if ($momentService.isPastYesterday(syncDate)) {
           console.log('IS YESTERDAY');
           //getHttpData();
           return true;
@@ -119,9 +119,10 @@
 
         console.log('fireBaseLoaded -- playersDetailsCtrl');
 
-        $scope.allPlayers = firebaseData[dataKeyName].allPlayers;
+        var playerPoolData = firebaseData[dataKeyName];
+        $scope.allPlayers = playerPoolData.allPlayers;
 
-        console.log('$scope.allPlayers:', $scope.allPlayers);
+        // console.log('$scope.allPlayers:', $scope.allPlayers);
         console.log('$scope.allPlayers.length:', $scope.allPlayers.length);
 
         managersData = {
@@ -133,13 +134,13 @@
           joe: firebaseData.managersData.joe
         };
 
-        var syncDate = $moment.create(firebaseData[dataKeyName]._lastSynedOn);
+        //////////////////
 
-        console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
+        console.log('syncDate:', playerPoolData._lastSyncedOn);
 
-        checkYesterday(syncDate);
+        // checkYesterday(syncDate);
 
-        //findPlayerByID();
+        findPlayerByID();
 
       };
 
@@ -172,8 +173,9 @@
           .then($arrayMappers.playerInfo.bind(this, $scope.player))
           .then($arrayMappers.playerGamesLog.bind(this, { player: $scope.player, manager: manager }))
           .then(function () {
-            //console.log('6. player data ready to be saved');
-            saveToFireBase();
+            console.log('player data is loaded');
+            $scope.loading = false;
+            //saveToFireBase();
           });
 
       };
@@ -200,5 +202,3 @@
     });
 
 })();
-
-
