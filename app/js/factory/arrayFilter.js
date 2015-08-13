@@ -4,7 +4,7 @@
 
 angular.module('sicklifes')
 
-  .factory('$arrayFilter', function ($moment, $scoringLogic) {
+  .factory('$arrayFilter', function ($momentService, $scoringLogic) {
 
     var arrayFilters = {};
 
@@ -19,7 +19,7 @@ angular.module('sicklifes')
      * @returns {boolean}
      */
     arrayFilters.filterAfterDate = function (game) {
-      var gameDate = $moment(game.box_score.event.game_date);
+      var gameDate = $momentService.getDate(game.box_score.event.game_date);
       return gameDate.isAfter(arrayFilters.leagueStartDate);
     };
 
@@ -28,7 +28,7 @@ angular.module('sicklifes')
      * @returns {boolean}
      */
     arrayFilters.filterValidDate = function (player, game) {
-      var gameDate = $moment(game.box_score.event.game_date);
+      var gameDate = $momentService.getDate(game.box_score.event.game_date);
       if (player.status === 'added') {
         return gameDate.isAfter(player.dateOfTransaction);
       } else if (player.status === 'dropped') {
@@ -44,7 +44,7 @@ angular.module('sicklifes')
      */
     arrayFilters.filterOnValidGoals = function (player, game) {
       if (game.goals) {
-        var gameDate = $moment(game.box_score.event.game_date);
+        var gameDate = $momentService.getDate(game.box_score.event.game_date);
         if (player.status === 'added') {
           return gameDate.isAfter(player.dateOfTransaction);
         } else if (player.status === 'dropped') {
@@ -64,14 +64,14 @@ angular.module('sicklifes')
      * @returns {boolean}
      */
     arrayFilters.isSelectedMonth = function (selectedMonth, game) {
-      var gameDate = game.rawDatePlayed || $moment.create(game.box_score.event.game_date),
+      var gameDate = game.rawDatePlayed || $momentService.getDate(game.box_score.event.game_date),
         scoredAGoal = game.goals ? true : false,
         isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
       return isBetween && scoredAGoal;
     };
 
     /**
-     *
+     * filters on specific month and if 1 or more goals
      * @param manager
      * @param selectedMonth
      * @param player
@@ -80,7 +80,7 @@ angular.module('sicklifes')
      */
     arrayFilters.filterOnMonth = function (manager, selectedMonth, player, game) {
 
-      var gameDate = $moment.create(game.originalDate),
+      var gameDate = $momentService.getDate(game.originalDate),
         scoredAGoal = game.goalsScored ? true : false,
         isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
 

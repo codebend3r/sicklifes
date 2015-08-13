@@ -13,13 +13,13 @@ angular.module('sicklifes')
     var dataKeyName = 'playerPoolData';
 
     /**
-     * TODO
+     * if data is still loading
      */
     $scope.loading = true;
 
     /**
      * route param
-     * @type {*|$scope.admin}
+     * @type {boolean}
      */
     $scope.admin = $routeParams.admin;
 
@@ -282,7 +282,9 @@ angular.module('sicklifes')
      */
     var dataLoaded = function (data) {
 
-      console.log('transfersCtrl - dataLoaded', data);
+      console.log('///////////////////');
+      console.log('$HTTP --> data:', data);
+      console.log('///////////////////');
 
       if (angular.isUndefined($rootScope.managersData)) {
         $rootScope.managersData = [
@@ -314,46 +316,6 @@ angular.module('sicklifes')
       $scope.loading = false;
 
     };
-
-    /**
-     * callback data when firebase is loaded
-     */
-    /*var fireBaseLoaded = function (data) {
-
-     console.log('fireBaseLoaded -- transfersCtrl');
-
-     $rootScope.allPlayers = data.playerPoolData.allPlayers;
-
-     $rootScope.managersData = [
-     data.managersData.chester,
-     data.managersData.frank,
-     data.managersData.dan,
-     data.managersData.justin,
-     data.managersData.mike,
-     data.managersData.joe
-     ];
-
-     console.log('syncDate playerPoolData:', data.playerPoolData._lastSyncedOn);
-     console.log('syncDate leagueData:', data.leagueData._lastSyncedOn);
-     console.log('syncDate managersData:', data.managersData._lastSyncedOn);
-
-     //$scope.updatePlayerPoolData = $updateDataUtils.updatePlayerPoolData.bind($scope, $rootScope.managersData, $rootScope.allPlayers, onAllPlayersLoaded);
-     $scope.updatePlayerPoolData = function() {
-
-     $updateDataUtils.updatePlayerPoolData()
-     .then(function (result) {
-     console.log('============================');
-     console.log('player pool data updated', result);
-     console.log('============================');
-     });
-
-     };
-
-     chooseTeam();
-
-     $scope.loading = false;
-
-     };*/
 
     /**
      * defines $scope.selectedManager

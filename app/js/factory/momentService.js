@@ -15,7 +15,7 @@
         },
 
         chartDate: function (date) {
-          return $moment(date).format('M/D/YYYY');
+          return $moment(new Date(date)).format('M/D/YYYY');
         },
 
         goalDate: function () {
@@ -24,7 +24,7 @@
 
         getUnixTime: function (date) {
           date = date || '';
-          return $moment(date).getTime();
+          return $moment(new Date(date)).getTime();
         },
 
         transactionDate: function (date) {
@@ -35,8 +35,8 @@
           }
         },
 
-        goalLogDate: function (gameDate) {
-          return $moment(gameDate).format('M/D/YYYY');
+        goalLogDate: function (date) {
+          return $moment(new Date(date)).format('M/D/YYYY');
         },
 
         /**

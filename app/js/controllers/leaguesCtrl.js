@@ -90,6 +90,62 @@
 
       };
 
+      /**
+       * makes http request from thescore.ca API
+       * @param httpData
+       */
+      var httpDataLoaded = function (httpData) {
+
+        console.log('///////////////////');
+        console.log('$HTTP --> httpData:', httpData);
+        console.log('///////////////////');
+
+        $scope.allLeagues = [
+          {
+            name: $textManipulator.leagueLongNames.liga,
+            source: httpData[0].data,
+            className: 'liga',
+            img: $textManipulator.leagueImages.liga
+          },
+          {
+            name: $textManipulator.leagueLongNames.epl,
+            source: httpData[1].data,
+            className: 'epl',
+            img: $textManipulator.leagueImages.epl
+          },
+          {
+            name: $textManipulator.leagueLongNames.seri,
+            source: httpData[2].data,
+            className: 'seri',
+            img: $textManipulator.leagueImages.seri
+          },
+          {
+            name: $textManipulator.leagueLongNames.chlg,
+            source: httpData[3].data,
+            className: 'chlg',
+            img: $textManipulator.leagueImages.chlg
+          },
+          {
+            name: $textManipulator.leagueLongNames.euro,
+            source: httpData[4].data,
+            className: 'europa',
+            img: $textManipulator.leagueImages.euro
+          }
+        ];
+
+        $scope.selectedLeague = $scope.allLeagues[0];
+
+        $scope.loading = false;
+
+        // after http request start firebase so we can save later
+        startFireBase(function () {
+          console.log('HTTP --> FIREBASE READY');
+          $scope.fireBaseReady = true;
+          $scope.saveToFireBase();
+        });
+
+      };
+
       ////////////////////////////////////////
       ////////////// private /////////////////
       ////////////////////////////////////////
@@ -220,62 +276,6 @@
         console.log('syncDate:', localData._lastSyncedOn);
 
         checkYesterday(localData._lastSyncedOn);
-
-      };
-
-      /**
-       * makes http request from thescore.ca API
-       * @param httpData
-       */
-      var httpDataLoaded = function (httpData) {
-
-        console.log('///////////////////');
-        console.log('HTTP --> httpData:', httpData);
-        console.log('///////////////////');
-
-        $scope.allLeagues = [
-          {
-            name: $textManipulator.leagueLongNames.liga,
-            source: httpData[0].data,
-            className: 'liga',
-            img: $textManipulator.leagueImages.liga
-          },
-          {
-            name: $textManipulator.leagueLongNames.epl,
-            source: httpData[1].data,
-            className: 'epl',
-            img: $textManipulator.leagueImages.epl
-          },
-          {
-            name: $textManipulator.leagueLongNames.seri,
-            source: httpData[2].data,
-            className: 'seri',
-            img: $textManipulator.leagueImages.seri
-          },
-          {
-            name: $textManipulator.leagueLongNames.chlg,
-            source: httpData[3].data,
-            className: 'chlg',
-            img: $textManipulator.leagueImages.chlg
-          },
-          {
-            name: $textManipulator.leagueLongNames.euro,
-            source: httpData[4].data,
-            className: 'europa',
-            img: $textManipulator.leagueImages.euro
-          }
-        ];
-
-        $scope.selectedLeague = $scope.allLeagues[0];
-
-        $scope.loading = false;
-
-        // after http request start firebase so we can save later
-        startFireBase(function () {
-          console.log('HTTP --> FIREBASE READY');
-          $scope.fireBaseReady = true;
-          $scope.saveToFireBase();
-        });
 
       };
 

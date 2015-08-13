@@ -33,24 +33,24 @@ angular.module('sicklifes')
     /**
      * TODO
      */
-    apiFactory.getFromLocalStorage = function (cbObj) {
-
-      console.log('get from localStorage');
-
-      var currentDate = $moment.create(),
-        lDate = $localStorage.get('lastCheckDate');
-
-      cbObj.allLeagues = $localStorage.get('allLeagues');
-      cbObj.liga = $localStorage.get('liga');
-      cbObj.epl = $localStorage.get('epl');
-      cbObj.seri = $localStorage.get('seri');
-      cbObj.chlg = $localStorage.get('chlg');
-      cbObj.uefa = $localStorage.get('uefa');
-      cbObj.cb();
-
-      return [];
-
-    };
+    // apiFactory.getFromLocalStorage = function (cbObj) {
+    //
+    //   console.log('get from localStorage');
+    //
+    //   var currentDate = $moment.create(),
+    //     lDate = $localStorage.get('lastCheckDate');
+    //
+    //   cbObj.allLeagues = $localStorage.get('allLeagues');
+    //   cbObj.liga = $localStorage.get('liga');
+    //   cbObj.epl = $localStorage.get('epl');
+    //   cbObj.seri = $localStorage.get('seri');
+    //   cbObj.chlg = $localStorage.get('chlg');
+    //   cbObj.uefa = $localStorage.get('uefa');
+    //   cbObj.cb();
+    //
+    //   return [];
+    //
+    // };
 
     /**
      * gets players game log and goal per game details
@@ -103,7 +103,7 @@ angular.module('sicklifes')
         ],
         listOrPromises = [];
 
-      leagues.forEach(function (url) {
+      _.each(leagues, function (url) {
 
         var leagueRequest = apiFactory.getData({
           endPointURL: url
@@ -155,7 +155,7 @@ angular.module('sicklifes')
         ],
         listOrPromises = [];
 
-      allLeaguesURL.forEach(function (urlObj) {
+      _.each(allLeaguesURL, function (urlObj) {
 
         var leagueRequest = apiFactory.getData({
           endPointURL: urlObj.url
@@ -183,7 +183,7 @@ angular.module('sicklifes')
 
       var listOrPromises = [];
 
-      result.data.forEach(function (leagueData) {
+      _.each(result.data, function (leagueData) {
 
         var rosterRequest = apiFactory.getData({
           endPointURL: url + leagueData.id + '/players/'
@@ -217,7 +217,7 @@ angular.module('sicklifes')
         listOrPromises = [],
         listOfResults = [];
 
-      allLeaguesURL.forEach(function (url, index) {
+      _.each(allLeaguesURL, function (url, index) {
 
         console.log('url:', url);
 

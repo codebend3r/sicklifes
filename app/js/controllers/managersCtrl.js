@@ -187,7 +187,7 @@
       var httpDataLoaded = function (result) {
 
         console.log('///////////////////');
-        console.log('HTTP --> result', result);
+        console.log('$HTTP --> result', result);
         console.log('///////////////////');
 
         $scope.loading = false;
@@ -213,21 +213,47 @@
 
         $rootScope.managersData = $scope.managersData;
 
+        return  {
+          data: $scope.managersData,
+          _lastSyncedOn: $momentService.syncDate()
+        };
+
+      };
+
+      /**
+       * starts the process of getting data from firebase
+       * @param callback
+       */
+      var startFireBase = function (callback) {
+
+        console.log('--  firebase started --');
+        if ($scope.fireBaseReady) {
+          console.log('firebase previously loaded');
+          callback();
+        } else {
+          $fireBaseService.initialize($scope);
+          var firePromise = $fireBaseService.getFireBaseData();
+          firePromise.then(callback);
+        }
+
       };
 
       /**
        * callback for when local storage exists
        */
-      var loadFromLocal = function () {
-
-        $rootScope.managersData = $localStorage.managersData;
+      var loadFromLocal = function (localData) {
 
         console.log('///////////////////');
-        console.log('$localStorage.managersData', $localStorage.managersData);
-        console.log('$rootScope.managersData', $rootScope.managersData);
+        console.log('LOCAL --> localData:', localData);
         console.log('///////////////////');
 
-        checkYesterday($rootScope.managersData._lastSyncedOn);
+        var managerData = populateManagersData(localData);
+
+        //$rootScope.managersData = localData.managersData;
+
+        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
+
+        checkYesterday(managerData._lastSyncedOn);
 
         chooseTeam();
 
@@ -243,21 +269,21 @@
         console.log('FB --> firebaseData.managersData:', firebaseData[dataKeyName]);
         console.log('///////////////////');
 
-        populateManagersData(firebaseData.managersData);
+        var managerData = populateManagersData(firebaseData.managersData);
 
-        if (angular.isUndefinedOrNull($rootScope.playerPoolData)) {
-          $rootScope.playerPoolData = firebaseData.playerPoolData;
-        }
-
-        if (angular.isUndefinedOrNull($rootScope.allLeagueTeamsData)) {
-          $rootScope.allLeagueTeamsData = firebaseData.allLeagueTeamsData;
-        }
+        // if (angular.isUndefinedOrNull($rootScope.playerPoolData)) {
+        //   $rootScope.playerPoolData = firebaseData.playerPoolData;
+        // }
+        //
+        // if (angular.isUndefinedOrNull($rootScope.allLeagueTeamsData)) {
+        //   $rootScope.allLeagueTeamsData = firebaseData.allLeagueTeamsData;
+        // }
 
         $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
-        console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
+        console.log('syncDate:', managerData._lastSyncedOn);
 
-        checkYesterday(firebaseData[dataKeyName]._lastSyncedOn);
+        checkYesterday(managerData._lastSyncedOn);
 
         chooseTeam();
 
@@ -269,23 +295,23 @@
 
         if (angular.isDefined($rootScope[dataKeyName])) {
 
-          loadFromLocal();
+          console.log('load from $rootScope');
+          loadFromLocal($rootScope[dataKeyName]);
 
         } else if (angular.isDefined($localStorage[dataKeyName])) {
 
-          populateManagersData($localStorage[dataKeyName]);
-          loadFromLocal();
+          console.log('load from local storage');
+          loadFromLocal($localStorage[dataKeyName]);
 
         } else {
 
-          $fireBaseService.initialize($scope);
-          var firePromise = $fireBaseService.getFireBaseData();
-          firePromise.then(fireBaseLoaded);
+          console.log('load from firebase');
+          startFireBase(fireBaseLoaded);
         }
 
       };
 
-      $timeout(init, 0);
+      init();
 
     });
 

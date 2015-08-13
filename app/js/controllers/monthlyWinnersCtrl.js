@@ -12,10 +12,23 @@ angular.module('sicklifes')
     /////////////// public /////////////////
     ////////////////////////////////////////
 
+    /**
+     * if data is still loading
+     */
     $scope.loading = true;
 
+    /**
+     * route param
+     * @type {boolean}
+     */
     $scope.admin = $routeParams.admin;
 
+    var startYear = '2015';
+    var endYear = '2016';
+
+    /**
+     * table headers
+     */
     $scope.tableHeader = [
       {
         columnClass: 'col-md-3 col-sm-4 col-xs-4',
@@ -50,52 +63,68 @@ angular.module('sicklifes')
     $scope.allMonths = [
       {
         monthName: 'All Months',
-        range: ['August 1 2014', 'March 31 2015']
+        range: ['August 1 ' + startYear, 'June 30 ' + endYear]
       },
       {
-        monthName: 'August 2014',
-        range: ['August 1 2014', 'August 31 2014']
+        monthName: 'August ' + startYear,
+        range: ['August 1 ' + startYear, 'August 31 ' + startYear]
       },
       {
-        monthName: 'September 2014',
-        range: ['September 1 2014', 'September 30 2014']
+        monthName: 'September ' + startYear,
+        range: ['September 1 ' + startYear, 'September 30 ' + startYear]
       },
       {
-        monthName: 'October 2014',
-        range: ['October 1 2014', 'October 31 2014']
+        monthName: 'October ' + startYear,
+        range: ['October 1 ' + startYear, 'October 31 ' + startYear]
       },
       {
-        monthName: 'November 2014',
-        range: ['November 1 2014', 'November 30 2014']
+        monthName: 'November ' + startYear,
+        range: ['November 1 ' + startYear, 'November 30 ' + startYear]
       },
       {
-        monthName: 'December 2014',
-        range: ['December 1 2014', 'December 31 2014']
+        monthName: 'December ' + startYear,
+        range: ['December 1 ' + startYear, 'December 31 ' + startYear]
       },
       {
-        monthName: 'January 2015',
-        range: ['January 1 2015', 'January 31 2015']
+        monthName: 'January ' + endYear,
+        range: ['January 1 ' + endYear, 'January 31 ' + endYear]
       },
       {
-        monthName: 'February 2015',
-        range: ['February 1 2015', 'February 28 2015']
+        monthName: 'February ' + endYear,
+        range: ['February 1 ' + endYear, 'February 28 ' + endYear]
       },
       {
-        monthName: 'March 2015',
-        range: ['March 1 2015', 'March 31 2015']
+        monthName: 'March ' + endYear,
+        range: ['March 1 ' + endYear, 'March 31 ' + endYear]
       },
       {
-        monthName: 'April 2015',
-        range: ['April 1 2015', 'April 30 2015']
+        monthName: 'April ' + endYear,
+        range: ['April 1 ' + endYear, 'April 30 ' + endYear]
+      },
+      {
+        monthName: 'May ' + endYear,
+        range: ['May 1 ' + endYear, 'May 31 ' + endYear]
+      },
+      {
+        monthName: 'June ' + endYear,
+        range: ['June 1 ' + endYear, 'June 30 ' + endYear]
       }
     ];
 
+    /**
+     * the select box model
+     * @type {{monthName: string, range: string[]}}
+     */
     $scope.selectedMonth = $scope.allMonths[0];
 
+    /**
+     *
+     * @type {Array}
+     */
     $scope.managersData = [];
 
     /**
-     * {ng-click} - when manager option changes
+     * when manager option changes
      */
     $scope.changeManager = function (selectedManager) {
 
@@ -105,13 +134,17 @@ angular.module('sicklifes')
     };
 
     /**
-     * {ng-click} - when month option is changed
+     * when month option is changed
      */
     $scope.changeMonth = function (month) {
       $scope.selectedMonth = month;
       updateFilter();
     };
 
+    /**
+     *
+     * @type {null}
+     */
     $scope.updateAllManagerData = null;
 
     /**
@@ -151,12 +184,12 @@ angular.module('sicklifes')
 
       console.log('monthlyWinnersCtrl --> updateFilter');
 
-      $scope.managersData.forEach(function (manager) {
+      _.each($scope.managersData, function (manager) {
 
-        manager.players.forEach(function (player) {
+        _.each(manager.players, function (player) {
 
           manager = $objectUtils.cleanManager(manager, false);
-          manager.filteredMonthlyGoalsLog = manager.monthlyGoalsLog.filter($arrayFilter.filterOnMonth.bind($scope, manager, $scope.selectedMonth, player));
+          manager.filteredMonthlyGoalsLog = _.filter(manager.monthlyGoalsLog, $arrayFilter.filterOnMonth.bind($scope, manager, $scope.selectedMonth, player));
 
         });
 
@@ -169,26 +202,28 @@ angular.module('sicklifes')
      * defines $scope.managersData
      * @param data
      */
-    var fireBaseLoaded = function (data) {
+    var fireBaseLoaded = function (firebaseData) {
 
-      console.log('monthlyWinnersCtrl --> fireBaseLoaded');
+      console.log('///////////////////');
+      console.log('FB --> firebaseData.managersData:', firebaseData[dataKeyName]);
+      console.log('///////////////////');
 
       $scope.loading = false;
 
       $scope.managersData = [
-        data.managersData.chester,
-        data.managersData.frank,
-        data.managersData.dan,
-        data.managersData.justin,
-        data.managersData.mike,
-        data.managersData.joe
+        firebaseData.managersData.chester,
+        firebaseData.managersData.frank,
+        firebaseData.managersData.dan,
+        firebaseData.managersData.justin,
+        firebaseData.managersData.mike,
+        firebaseData.managersData.joe
       ];
 
       $scope.manager = $scope.managersData[0];
 
       $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
 
-      //updateFilter();
+      updateFilter();
 
     };
 
@@ -196,9 +231,27 @@ angular.module('sicklifes')
      * retrieve data from local storage
      */
     var loadFromLocal = function (localData) {
+      
+      console.log('///////////////////');
+      console.log('LOCAL --> localData:', localData);
+      console.log('///////////////////');
 
       $scope.loading = false;
-      console.log('localData', localData);
+
+      $scope.managersData = [
+        localData.chester,
+        localData.frank,
+        localData.dan,
+        localData.justin,
+        localData.mike,
+        localData.joe
+      ];
+
+      $scope.manager = $scope.managersData[0];
+
+      $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
+
+      updateFilter();
 
     };
 
@@ -240,7 +293,6 @@ angular.module('sicklifes')
      } else {
 
        console.log('load from firebase');
-
        startFireBase(fireBaseLoaded);
 
      }
