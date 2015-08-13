@@ -20,9 +20,7 @@ angular.module('sicklifes')
      */
     arrayFilters.filterAfterDate = function (game) {
       var gameDate = $moment(game.box_score.event.game_date);
-      //console.log('gameDate', gameDate);
       return gameDate.isAfter(arrayFilters.leagueStartDate);
-      //return false;
     };
 
     /**

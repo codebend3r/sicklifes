@@ -4,7 +4,9 @@
 
 angular.module('sicklifes')
 
-  .controller('monthlyWinnersCtrl', function ($scope, $timeout, $managersService, $routeParams, $updateDataUtils, $objectUtils, $arrayFilter, $fireBaseService, $dateService) {
+  .controller('monthlyWinnersCtrl', function ($scope, $timeout, $managersService, $routeParams, $rootScope, $updateDataUtils, $objectUtils, $arrayFilter, $fireBaseService, $localStorage, $momentService) {
+
+    var dataKeyName = 'managersData';
 
     ////////////////////////////////////////
     /////////////// public /////////////////
@@ -117,6 +119,8 @@ angular.module('sicklifes')
      */
     $scope.saveToFireBase = function () {
 
+      console.log('monthlyWinnersCtrl --> saveToFireBase');
+
       console.log('////////////////////////////////////');
       console.log('$scope.managersData', $scope.managersData);
       console.log('////////////////////////////////////');
@@ -145,6 +149,8 @@ angular.module('sicklifes')
      */
     var updateFilter = function () {
 
+      console.log('monthlyWinnersCtrl --> updateFilter');
+
       $scope.managersData.forEach(function (manager) {
 
         manager.players.forEach(function (player) {
@@ -154,7 +160,7 @@ angular.module('sicklifes')
 
         });
 
-      })
+      });
 
     };
 
@@ -165,7 +171,7 @@ angular.module('sicklifes')
      */
     var fireBaseLoaded = function (data) {
 
-      console.log('fireBaseLoaded -- monthlyWinnersCtrl');
+      console.log('monthlyWinnersCtrl --> fireBaseLoaded');
 
       $scope.loading = false;
 
@@ -182,23 +188,35 @@ angular.module('sicklifes')
 
       $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
 
-      updateFilter();
-
-      console.log('syncDate allPlayersData:', data.allPlayersData._lastSyncedOn);
-      console.log('syncDate leagueData:', data.leagueData._lastSyncedOn);
-      console.log('syncDate managersData:', data.managersData._lastSyncedOn);
+      //updateFilter();
 
     };
 
     /**
      * retrieve data from local storage
      */
-    var getFromLocalStorage = function () {
+    var loadFromLocal = function (localData) {
 
-      console.log('firebase unavailable');
       $scope.loading = false;
-      var localManagers = $localStorage.get('leagueTeamData');
-      console.log('localManagers', localManagers);
+      console.log('localData', localData);
+
+    };
+
+    /**
+     * starts the process of getting data from firebase
+     * @param callback
+     */
+    var startFireBase = function (callback) {
+
+      console.log('--  firebase started --');
+      if ($scope.fireBaseReady) {
+        console.log('firebase previously loaded');
+        callback();
+      } else {
+        $fireBaseService.initialize($scope);
+        var firePromise = $fireBaseService.getFireBaseData();
+        firePromise.then(callback);
+      }
 
     };
 
@@ -207,13 +225,28 @@ angular.module('sicklifes')
      */
     var init = function () {
 
-      console.log('monthlyWinnersCtrl - init');
-      $fireBaseService.initialize($scope);
-      var firePromise = $fireBaseService.getFireBaseData();
-      firePromise.promise.then(fireBaseLoaded, getFromLocalStorage);
+     console.log('monthlyWinnersCtrl --> init');
+
+     if (angular.isDefined($rootScope[dataKeyName])) {
+
+       console.log('load from $rootScope');
+       loadFromLocal($rootScope[dataKeyName]);
+
+     } else if (angular.isDefined($localStorage[dataKeyName])) {
+
+       console.log('load from local storage');
+       loadFromLocal($localStorage[dataKeyName]);
+
+     } else {
+
+       console.log('load from firebase');
+
+       startFireBase(fireBaseLoaded);
+
+     }
 
     };
 
-    $timeout(init, 250);
+    init();
 
   });
