@@ -129,6 +129,11 @@ h3.manager-name {
     padding: 5px 0;
     margin: 0;
     background-color: #FAFAFA;
+    line-height: 50px;
+    vertical-align: middle;
+    @media (max-width: 780px) {
+      line-height: 40px;
+    }
     &:nth-child(odd) {
       background-color: #eeeeee;
     }

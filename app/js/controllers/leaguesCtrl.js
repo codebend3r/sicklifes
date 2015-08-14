@@ -10,35 +10,51 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
+      /**
+       * TODO
+       */
       $scope.loading = true;
 
+      /**
+       * TODO
+       */
       $scope.fireBaseReady = false;
 
+      /**
+       * TODO
+       */
       $scope.admin = $routeParams.admin;
 
-      $scope.tableHeader = [
+      /**
+       * TODO
+       */
+      $scope.leagueTableHeader = [
         {
-          columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center small-hpadding',
+          columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center small-hpadding',
           text: 'Rank'
         },
         {
-          columnClass: 'col-md-3 col-sm-4 col-xs-6 small-hpadding',
+          columnClass: 'col-md-6 col-sm-4 col-xs-6 small-hpadding',
           text: 'Team'
         },
         {
-          columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
-          text: 'W'
+          columnClass: 'col-md-1 col-sm-4 hidden-xs text-center small-hpadding',
+          text: 'Record'
         },
         {
-          columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
-          text: 'L'
+          columnClass: 'col-md-1 hidden-sm hidden-xs text-center small-hpadding',
+          text: 'GP'
         },
         {
-          columnClass: 'col-md-2 col-sm-2 hidden-xs text-center small-hpadding',
-          text: 'T'
+          columnClass: 'col-md-1 hidden-sm hidden-xs text-center small-hpadding',
+          text: 'F'
         },
         {
-          columnClass: 'col-md-2 col-sm-4 col-xs-4 text-center small-hpadding',
+          columnClass: 'col-md-1 hidden-sm hidden-xs text-center small-hpadding',
+          text: 'A'
+        },
+        {
+          columnClass: 'col-md-1 col-sm-2 col-xs-4 text-center small-hpadding',
           text: 'Points'
         }
       ];
@@ -166,7 +182,6 @@
           $scope.loading = false;
           // no matter if it's yesterday or not, start firebase so we can save later
           startFireBase(function () {
-            console.log('checkYesterday() --> FIREBASE READY');
             $scope.fireBaseReady = true;
             $scope.saveToFireBase();
           });
@@ -306,14 +321,17 @@
 
         if (angular.isDefined($rootScope[dataKeyName])) {
 
+          console.log('load from $rootScope');
           loadFromLocal($rootScope[dataKeyName]);
 
         } else if (angular.isDefined($localStorage[dataKeyName])) {
 
+          console.log('load from local storage');
           loadFromLocal($localStorage[dataKeyName]);
 
         } else {
 
+          console.log('load from firebase');
           startFireBase(fireBaseLoaded);
 
         }

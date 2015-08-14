@@ -38,13 +38,16 @@
          */
         tableMap: function (teamData, index) {
 
+          console.log('teamData', teamData);
+
           var teamInTable = {
             index: index,
             id: teamData.id,
             logo: teamData.team.logos.small,
-            wins: teamData.wins,
-            losses: teamData.losses,
-            ties: teamData.ties,
+            record: teamData.wins + '-' + teamData.losses + '-' + teamData.ties,
+            goalsFor: teamData.goals_for,
+            goalsAgainst: teamData.goals_against,
+            gamesPlayed: teamData.games_played,
             rank: teamData.ranking,
             teamName: $textManipulator.teamNameFormatted(teamData.team.full_name),
             points: teamData.points
