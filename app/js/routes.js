@@ -2,81 +2,99 @@
  * Created by crivas on 9/12/2014.
  */
 
-angular.module('sicklifes')
+(function () {
 
-  .config(function ($routeProvider) {
+  angular.module('sicklifes')
 
-    $routeProvider
-      .when('/', {
+    .config(function ($stateProvider, $urlRouterProvider) {
 
-        redirectTo: '/leagues/',
-        templateUrl: 'views/leagues.html',
-        controller: 'leaguesCtrl'
+      console.log('sicklifes --> config');
 
-      })
-      /*.when('/login/', {
+      //$urlRouterProvider.otherwise('/leagues');
 
-       templateUrl: 'views/login.html',
-       login: true
+      $urlRouterProvider.when('', '/leagues');
 
-       }).when('/signup/', {
+      $stateProvider
+        .state('app', {
+          abstract: true
+        })
+        .state('leagues', {
 
-       templateUrl: 'views/signup.html',
-       public: true
+          url: '/leagues',
+          templateUrl: 'views/leagues.html',
+          //controller: 'leaguesCtrl'
+          controller: function() {
+            console.log('LEAGUES CTRL');
+          }
 
-       })*/
-      .when('/leagues/', {
+        });
 
-        templateUrl: 'views/leagues.html',
-        controller: 'leaguesCtrl'
+        //.state('login', {
+        //
+        //  url: '/login',
+        //  templateUrl: 'views/login.html',
+        //  login: true
+        //
+        //})
+        //.state('signup', {
+        //
+        //  url: '/signup',
+        //  templateUrl: 'views/signup.html',
+        //  public: true
+        //
+        //})
 
-      })
-      .when('/managers/', {
 
-        templateUrl: 'views/managers.html',
-        controller: 'managersCtrl'
+        // .state('managers', {
+        //
+        //   url: '/managers',
+        //   templateUrl: 'views/managers.html',
+        //   controller: 'managersCtrl'
+        //
+        // })
+        // .state('/playerDetails', {
+        //
+        //   url: '/player-details/:playerID',
+        //   templateUrl: 'views/player-details.html',
+        //   controller: 'playersDetailsCtrl'
+        //
+        // })
+        // .state('standings', {
+        //
+        //   url: '/standings',
+        //   templateUrl: 'views/standings.html',
+        //   controller: 'standingsCtrl'
+        //
+        // })
+        // .state('monthlyWinners', {
+        //
+        //   url: '/monthlywinners',
+        //   templateUrl: 'views/monthly-winners.html',
+        //   controller: 'monthlyWinnersCtrl'
+        //
+        // })
+        // .state('admin', {
+        //
+        //   url: '/admin',
+        //   templateUrl: 'views/admin.html',
+        //   controller: 'adminCtrl'
+        //
+        // })
+        // .state('transfers', {
+        //
+        //   url: '/transfers',
+        //   templateUrl: 'views/transfers.html',
+        //   controller: 'transfersCtrl'
+        //
+        // })
+        // .state('teams', {
+        //
+        //   url: '/teams',
+        //   templateUrl: 'views/teams.html',
+        //   controller: 'teamsCtrl'
+        //
+        // });
 
-      })
-      .when('/player-details/:playerID', {
+    });
 
-        templateUrl: 'views/player-details.html',
-        controller: 'playersDetailsCtrl'
-
-      })
-      .when('/standings/', {
-
-        templateUrl: 'views/standings.html',
-        controller: 'standingsCtrl'
-
-      })
-      .when('/monthlywinners/', {
-
-        templateUrl: 'views/monthly-winners.html',
-        controller: 'monthlyWinnersCtrl'
-
-      })
-      .when('/admin/', {
-
-        templateUrl: 'views/admin.html',
-        controller: 'adminCtrl'
-
-      })
-      .when('/transfers/', {
-
-        templateUrl: 'views/transfers.html',
-        controller: 'transfersCtrl'
-
-      })
-      .when('/teams/', {
-
-        templateUrl: 'views/teams.html',
-        controller: 'teamsCtrl'
-
-      })
-      .otherwise({
-
-        redirectTo: '/leagues/'
-
-      });
-
-  });
+})();

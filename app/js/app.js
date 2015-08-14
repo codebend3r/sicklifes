@@ -2,7 +2,7 @@
 
   angular.module('sicklifes', [
 
-    'ngRoute',
+    'ui.router',
     'ngResource',
     'ngSanitize',
     'ngStorage',
@@ -19,9 +19,11 @@
   //});
 
   angular.module('sicklifes')
-    .run(function(){
+    //.run(function(){
       //user.init({ appId: '5482b3c1ebdc7' });
-    })
+    //})
     .constant('$moment', moment);
+
+    console.log('sicklifes --> module');
 
 })();

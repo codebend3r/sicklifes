@@ -6,6 +6,8 @@
 
     .controller('leaguesCtrl', function ($scope, $timeout, $apiFactory, $moment, $localStorage, $managersService, $q, $location, $routeParams, $updateDataUtils, $arrayMappers, $momentService, $rootScope, $textManipulator, $fireBaseService) {
 
+      console.log('sicklifes --> leaguesCtrl');
+
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
@@ -338,7 +340,7 @@
 
       };
 
-      $timeout(init, 0);
+      init();
 
     });
 

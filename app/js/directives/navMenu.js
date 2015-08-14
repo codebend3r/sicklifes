@@ -13,7 +13,8 @@
 
           $scope.isActive = function (viewLocation) {
             //console.log(viewLocation, 'contains', $location.path(), '? ', viewLocation.contains($location.path()));
-            return $location.path().contains('player-details') && viewLocation === '/managers/' || viewLocation.contains($location.path());
+            return false;
+            //return $location.path().contains('player-details') && viewLocation === '/managers/' || viewLocation.contains($location.path());
           };
 
           $scope.menuOptions = [
