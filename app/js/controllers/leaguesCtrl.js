@@ -4,7 +4,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leaguesCtrl', function ($scope, $timeout, $apiFactory, $moment, $localStorage, $managersService, $q, $location, $routeParams, $updateDataUtils, $arrayMappers, $momentService, $rootScope, $textManipulator, $fireBaseService) {
+    .controller('leaguesCtrl', function ($scope, $stateParams, $timeout, $apiFactory, $moment, $localStorage, $managersService, $q, $location, $updateDataUtils, $arrayMappers, $momentService, $rootScope, $textManipulator, $fireBaseService) {
 
       console.log('sicklifes --> leaguesCtrl');
 
@@ -25,7 +25,7 @@
       /**
        * TODO
        */
-      $scope.admin = $routeParams.admin;
+      $scope.admin = $stateParams.admin;
 
       /**
        * TODO
@@ -201,7 +201,7 @@
         $scope.fireBaseReady = true;
 
         console.log('///////////////////');
-        console.log('FB --> leagueTables:', firebaseData[dataKeyName]);
+        console.log('FB --> firebaseData:', firebaseData[dataKeyName]);
         console.log('///////////////////');
 
         $scope.allLeagues = [

@@ -2,7 +2,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $timeout, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $routeParams, $q, $managersService, $location) {
+    .controller('managersCtrl', function ($scope, $rootScope, $timeout, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams, $q, $managersService, $location) {
 
       var dataKeyName = 'managersData';
 
@@ -18,7 +18,7 @@
       /**
        * TODO
        */
-      $scope.admin = $routeParams.admin;
+      $scope.admin = $stateParams.admin;
 
       /**
        * TODO
@@ -136,9 +136,9 @@
        */
       var chooseTeam = function () {
 
-        if ($routeParams.manager) {
+        if ($stateParams.manager) {
           _.each($rootScope.managersData, function (manager) {
-            if (manager.managerName === $routeParams.manager) {
+            if (manager.managerName === $stateParams.manager) {
               $scope.selectedManager = manager;
             }
           });

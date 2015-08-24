@@ -4,12 +4,14 @@
 
   angular.module('sicklifes')
 
-    .controller('teamsCtrl', function ($scope, $http) {
+    .controller('teamsCtrl', function ($scope, $http, $stateParams) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
+      console.log('> $stateParams', $stateParams);
+      
       /**
        * TODO
        */

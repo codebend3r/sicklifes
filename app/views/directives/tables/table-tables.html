@@ -7,7 +7,9 @@
   <div class='table-body'>
     <div class='row' ng-repeat='team in list'>
       <div class='col-md-1 col-sm-2 col-xs-2 small-hpadding text-center big-text'>{{team.rank}}</div>
-      <div class='col-md-6 col-sm-4 col-xs-6  small-hpadding bold'><img width="50" height="50" ng-src="{{team.logo}}" /> {{team.teamName}}</div>
+      <div class='col-md-6 col-sm-4 col-xs-6  small-hpadding bold'><img width="50" height="50" ng-src="{{team.logo}}" />
+        <a ui-sref='teams({teamID: team.id})'>{{team.teamName}}</a>
+      </div>
       <div class='col-md-1 col-sm-4 hidden-xs text-center small-hpadding'>{{team.record}}</div>
       <div class='col-md-1 hidden-sm hidden-xs text-center small-hpadding'>{{team.gamesPlayed}}</div>
       <div class='col-md-1 hidden-sm hidden-xs text-center small-hpadding'>{{team.goalsFor}}</div>

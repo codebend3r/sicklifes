@@ -4,7 +4,7 @@
 
 angular.module('sicklifes')
 
-  .controller('transfersCtrl', function ($scope, $rootScope, $q, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $momentService, $localStorage, $routeParams) {
+  .controller('transfersCtrl', function ($scope, $rootScope, $q, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $momentService, $localStorage, $stateParams) {
 
     ////////////////////////////////////////
     /////////////// public /////////////////
@@ -21,7 +21,7 @@ angular.module('sicklifes')
      * route param
      * @type {boolean}
      */
-    $scope.admin = $routeParams.admin;
+    $scope.admin = $stateParams.admin;
 
     /**
      * header for table

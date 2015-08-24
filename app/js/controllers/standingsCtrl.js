@@ -5,7 +5,7 @@
 
 angular.module('sicklifes')
 
-  .controller('standingsCtrl', function ($scope, $timeout, $apiFactory, $routeParams, $fireBaseService, $updateDataUtils, $objectUtils, $momentService, $managersService, $location) {
+  .controller('standingsCtrl', function ($scope, $timeout, $apiFactory, $stateParams, $fireBaseService, $updateDataUtils, $objectUtils, $momentService, $managersService, $location) {
 
     ////////////////////////////////////////
     /////////////// public /////////////////
@@ -19,7 +19,7 @@ angular.module('sicklifes')
     /**
      * url param - whether admin is true
      */
-    $scope.admin = $routeParams.admin;
+    $scope.admin = $stateParams.admin;
 
     /**
      * TODO
@@ -134,6 +134,6 @@ angular.module('sicklifes')
 
     };
 
-    $timeout(init, 250);
+    init();
 
   });

@@ -2,7 +2,7 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $timeout, $apiFactory, $location, $routeParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $momentService, $fireBaseService) {
+    .controller('playersDetailsCtrl', function ($scope, $timeout, $apiFactory, $location, $stateParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $momentService, $fireBaseService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -18,7 +18,7 @@
       /*
        * TODO
        */
-      $scope.admin = $routeParams.admin;
+      $scope.admin = $stateParams.admin;
 
       /*
        * TODO
@@ -183,21 +183,21 @@
       /**
        * id used to identify a player from thescore.ca api
        */
-      var id = Number($routeParams.playerID);
+      var id = Number($stateParams.playerID);
 
       /**
        * init function
        */
       var init = function () {
 
-        id = Number($routeParams.playerID);
+        id = Number($stateParams.playerID);
         $fireBaseService.initialize($scope);
         var firePromise = $fireBaseService.getFireBaseData();
         firePromise.then(fireBaseLoaded);
 
       };
 
-      $timeout(init, 0);
+      init();
 
     });
 

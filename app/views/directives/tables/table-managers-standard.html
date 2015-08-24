@@ -8,7 +8,7 @@
   <div class='table-body'>
     <div class='row' ng-repeat='player in list'>
       <div class='col-md-3 col-sm-3 col-xs-4 player-column' ng-class='{dropped: player.status === "dropped", added: player.status === "added"}'>
-        <a ng-href='#/player-details/{{player.id}}'>{{player.playerName}}</a>
+        <a ui-sref='playerDetails({playerID: player.id})'>{{player.playerName}}</a>
       </div>
       <div class='col-md-2 col-sm-3 col-xs-4 small-text bold'>{{player.teamName}}</div>
       <div class='col-md-2 col-sm-2 hidden-xs small-text'>{{player.leagueSlugs}}</div>

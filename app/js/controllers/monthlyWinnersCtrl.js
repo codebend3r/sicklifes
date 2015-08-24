@@ -4,7 +4,7 @@
 
 angular.module('sicklifes')
 
-  .controller('monthlyWinnersCtrl', function ($scope, $timeout, $managersService, $routeParams, $rootScope, $updateDataUtils, $objectUtils, $arrayFilter, $fireBaseService, $localStorage, $momentService) {
+  .controller('monthlyWinnersCtrl', function ($scope, $timeout, $managersService, $stateParams, $rootScope, $updateDataUtils, $objectUtils, $arrayFilter, $fireBaseService, $localStorage, $momentService) {
 
     var dataKeyName = 'managersData';
 
@@ -21,7 +21,7 @@ angular.module('sicklifes')
      * route param
      * @type {boolean}
      */
-    $scope.admin = $routeParams.admin;
+    $scope.admin = $stateParams.admin;
 
     var startYear = '2015';
     var endYear = '2016';
@@ -231,7 +231,7 @@ angular.module('sicklifes')
      * retrieve data from local storage
      */
     var loadFromLocal = function (localData) {
-      
+
       console.log('///////////////////');
       console.log('LOCAL --> localData:', localData);
       console.log('///////////////////');

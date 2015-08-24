@@ -12,18 +12,10 @@
     'ui.bootstrap',
     'angular.filter'
 
-  ]);
+  ])
 
-  //angular.module('sicklifes').run(function(user) {
-  //  user.init({ appId: '5482b3c1ebdc7' });
-  //});
+  .constant('$moment', moment);
 
-  angular.module('sicklifes')
-    //.run(function(){
-      //user.init({ appId: '5482b3c1ebdc7' });
-    //})
-    .constant('$moment', moment);
-
-    console.log('sicklifes --> module');
+  console.log('sicklifes --> module');
 
 })();
