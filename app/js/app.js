@@ -16,6 +16,4 @@
 
   .constant('$moment', moment);
 
-  console.log('sicklifes --> module');
-
 })();

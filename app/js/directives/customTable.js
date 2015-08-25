@@ -18,11 +18,12 @@
           addPlayer: '&',
           dropPlayer: '&',
           tableName: '@',
+          tableParams: '=',
           //playerSearch: '@',
           leagueImg: '='
         },
         controller: function ($scope) {
-
+          
           $scope.playerSearch = {
             playerQuery: '',
             teamQuery: ''

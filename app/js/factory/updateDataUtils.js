@@ -13,7 +13,7 @@ angular.module('sicklifes')
        */
       updatePlayerPoolData: function (callback) {
 
-        console.log('UPDATING -- updatePlayerPoolData');
+        console.log('$updateDataUtils -- updatePlayerPoolData');
 
         var allTeams = $apiFactory.getAllTeams(),
           allTeamsPromise = [],
@@ -70,7 +70,7 @@ angular.module('sicklifes')
        */
       updateLeagueTables: function () {
 
-        console.log('UPDATING -- updateLeagueTables');
+        console.log('$updateDataUtils -- updateLeagueTables');
 
         var leagueTables = $apiFactory.getLeagueTables(),
           defer = $q.defer(),
@@ -90,7 +90,6 @@ angular.module('sicklifes')
 
           });
 
-          //$fireBaseService.syncAllLeagueTeamsData(allLeagues);
           defer.resolve(leagueTablesData);
 
         });
@@ -189,7 +188,7 @@ angular.module('sicklifes')
       ///////////////////////////////////
 
       /**
-       *
+       * fetches everything
        */
       updateEverything: function () {
 

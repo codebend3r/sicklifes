@@ -2,8 +2,9 @@
 
 <div ng-if='!loading' class='panel-body'>
 
-  <h2>Teams</h2>
+  <!-- <h1>Teams</h1> -->
+  <h2>{{teamName}}</h2><img width="100" height="100" ng-src="{{largeLogo}}" />
 
-  <pre>{{players | json}}</pre>
+  <custom-table table-body-template='roster' list='players' table-header='leagueTableHeader'></custom-table>
 
 </div>

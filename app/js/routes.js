@@ -8,23 +8,28 @@
 
     .config(function ($stateProvider, $urlRouterProvider) {
 
-      console.log('sicklifes --> config');
-
       $urlRouterProvider.when('', '/leagues');
 
       //$urlRouterProvider.otherwise('/leagues');
+
+      var isAdmin = function($stateParams) {
+        return $stateParams.admin === true;
+      };
 
       $stateProvider
         .state('app', {
           abstract: true,
           template: '<div ui-view="content"></div>',
-          controller: 'appCtrl',
+          controller: 'appCtrl'
         })
         .state('leagues', {
 
-          url: '/leagues',
+          url: '/leagues/:admin',
           templateUrl: 'views/leagues.html',
-          controller: 'leaguesCtrl'
+          controller: 'leaguesCtrl',
+          resolve: {
+            isAdmin: isAdmin
+          }
 
         })
 
@@ -45,28 +50,28 @@
 
         .state('managers', {
 
-          url: '/managers',
+          url: '/managers/:admin',
           templateUrl: 'views/managers.html',
           controller: 'managersCtrl'
 
         })
         .state('playerDetails', {
 
-          url: '/player-details/:playerID',
+          url: '/player-details/:playerID/:admin',
           templateUrl: 'views/player-details.html',
           controller: 'playersDetailsCtrl'
 
         })
         .state('standings', {
 
-          url: '/standings',
+          url: '/standings/:admin',
           templateUrl: 'views/standings.html',
           controller: 'standingsCtrl'
 
         })
         .state('monthlyWinners', {
 
-          url: '/monthlywinners',
+          url: '/monthlywinners/:admin',
           templateUrl: 'views/monthly-winners.html',
           controller: 'monthlyWinnersCtrl'
 
@@ -87,7 +92,7 @@
         })
         .state('teams', {
 
-          url: '/teams/:teamID',
+          url: '/teams/:leagueName/:teamId',
           templateUrl: 'views/teams.html',
           controller: 'teamsCtrl'
 

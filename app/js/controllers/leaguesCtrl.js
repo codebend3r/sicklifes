@@ -4,9 +4,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leaguesCtrl', function ($scope, $stateParams, $timeout, $apiFactory, $moment, $localStorage, $managersService, $q, $location, $updateDataUtils, $arrayMappers, $momentService, $rootScope, $textManipulator, $fireBaseService) {
-
-      console.log('sicklifes --> leaguesCtrl');
+    .controller('leaguesCtrl', function ($scope, $stateParams, $state, $timeout, $apiFactory, $moment, $localStorage, $managersService, $q, $location, $updateDataUtils, $arrayMappers, $momentService, $rootScope, $textManipulator, $fireBaseService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -26,6 +24,10 @@
        * TODO
        */
       $scope.admin = $stateParams.admin;
+
+      //console.log('$stateParams', $stateParams);
+      //console.log('$state', $state);
+      //console.log('isAdmin', isAdmin);
 
       /**
        * TODO
@@ -64,7 +66,8 @@
       $scope.allRequest = [];
 
       $scope.changeLeague = function (league) {
-        //
+        $scope.leagueName = league.className;
+        console.log('leagueName', $scope.leagueName);
       };
 
       /**
@@ -239,6 +242,8 @@
 
         $scope.selectedLeague = $scope.allLeagues[0];
 
+        $scope.leagueName = $scope.selectedLeague.className;
+
         console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
 
         checkYesterday(firebaseData[dataKeyName]._lastSyncedOn);
@@ -289,6 +294,8 @@
         ];
 
         $scope.selectedLeague = $scope.allLeagues[0];
+
+        $scope.leagueName = $scope.selectedLeague.className;
 
         console.log('syncDate:', localData._lastSyncedOn);
 

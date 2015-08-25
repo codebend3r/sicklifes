@@ -1,0 +1,15 @@
+<div class='fantasy-table'>
+
+  <div class='header'>
+    <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'>{{header.text}}</div>
+  </div>
+
+  <div class='table-body'>
+    <div class='row' ng-repeat='player in list'>
+      <div class='col-xs-2 small-hpadding'><img width="50" height="50" ng-src="{{player.headshot}}" /></div>
+      <div class='col-xs-2 small-hpadding'>{{player.position}}</div>
+      <div class='col-xs-8 small-hpadding'>{{player.fullName}}</div>
+    </div>
+  </div>
+
+</div>
