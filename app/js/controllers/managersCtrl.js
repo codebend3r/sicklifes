@@ -2,7 +2,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $timeout, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams, $q, $managersService, $location) {
+    .controller('managersCtrl', function ($scope, $rootScope, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams, $q, $managersService, $location) {
 
       var dataKeyName = 'managersData';
 
@@ -18,56 +18,48 @@
       /**
        * TODO
        */
-      $scope.admin = $stateParams.admin;
+      $scope.admin = $location.search().admin;
 
       /**
        * TODO
        */
       $scope.tableHeader = [
         {
-          columnClass: 'col-md-3 col-sm-3 col-xs-4',
           text: 'Player',
           hoverText: 'Player',
           orderCriteria: 'playerName'
         },
         {
-          columnClass: 'col-md-2 col-sm-3 col-xs-4',
           text: 'Team',
           hoverText: 'Team',
           orderCriteria: 'teamName'
         },
         {
-          columnClass: 'col-md-2 col-sm-2 hidden-xs',
           text: 'League',
           hoverText: 'League',
           orderCriteria: 'leagueName'
         },
         {
-          columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center',
           text: 'TG',
           hoverText: 'Total Goals',
           orderCriteria: 'goals'
         },
         {
-          columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
           text: 'DG',
           hoverText: 'Domestic Goals',
           orderCriteria: 'domesticGoals'
         },
         {
-          columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
           text: 'CLG',
           hoverText: 'Champions League Goals',
           orderCriteria: 'clGoals'
         },
         {
-          columnClass: 'col-md-1 hidden-sm hidden-xs text-center',
           text: 'ELG',
           hoverText: 'Europa League Goals',
           orderCriteria: 'eGoals'
         },
         {
-          columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center',
           text: 'TP',
           hoverText: 'Total Points',
           orderCriteria: 'points()'
@@ -153,7 +145,7 @@
        */
       var getHttpData = function () {
 
-        console.log('GET FROM HTTP');
+        console.log('managersCtrl - getHttpData()');
 
         $updateDataUtils.updateLeagueTables()
           .then(httpDataLoaded);
@@ -166,8 +158,6 @@
        */
       var checkYesterday = function (syncDate) {
 
-        console.log('syncDate:', syncDate);
-
         if ($momentService.isPastYesterday(syncDate)) {
           console.log('IS YESTERDAY');
           getHttpData();
@@ -175,6 +165,10 @@
         } else {
           console.log('NOT YESTERDAY YET');
           $scope.loading = false;
+          startFireBase(function () {
+            $scope.fireBaseReady = true;
+            $scope.saveToFireBase();
+          });
           return false;
         }
 
@@ -221,24 +215,6 @@
       };
 
       /**
-       * starts the process of getting data from firebase
-       * @param callback
-       */
-      var startFireBase = function (callback) {
-
-        console.log('--  firebase started --');
-        if ($scope.fireBaseReady) {
-          console.log('firebase previously loaded');
-          callback();
-        } else {
-          $fireBaseService.initialize($scope);
-          var firePromise = $fireBaseService.getFireBaseData();
-          firePromise.then(callback);
-        }
-
-      };
-
-      /**
        * callback for when local storage exists
        */
       var loadFromLocal = function (localData) {
@@ -271,14 +247,6 @@
 
         var managerData = populateManagersData(firebaseData.managersData);
 
-        // if (angular.isUndefinedOrNull($rootScope.playerPoolData)) {
-        //   $rootScope.playerPoolData = firebaseData.playerPoolData;
-        // }
-        //
-        // if (angular.isUndefinedOrNull($rootScope.allLeagueTeamsData)) {
-        //   $rootScope.allLeagueTeamsData = firebaseData.allLeagueTeamsData;
-        // }
-
         $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
         console.log('syncDate:', managerData._lastSyncedOn);
@@ -286,6 +254,24 @@
         checkYesterday(managerData._lastSyncedOn);
 
         chooseTeam();
+
+      };
+
+      /**
+       * starts the process of getting data from firebase
+       * @param callback
+       */
+      var startFireBase = function (callback) {
+
+        console.log('--  firebase started --');
+        if ($scope.fireBaseReady) {
+          console.log('firebase previously loaded');
+          callback();
+        } else {
+          $fireBaseService.initialize($scope);
+          var firePromise = $fireBaseService.getFireBaseData();
+          firePromise.then(callback);
+        }
 
       };
 

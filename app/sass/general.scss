@@ -14,6 +14,13 @@ h1, h2 {
   color: $textColour;
 }
 
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 20vh; /* These two lines are counted as one :-)       */
+  display: flex;
+  align-items: center;
+}
+
 h3.manager-name {
   display: inline-block;
   color: $textColour;
@@ -69,10 +76,6 @@ h3.manager-name {
   margin-bottom: 20px;
 }
 
-.table-body {
-  clear: both;
-}
-
 .profile-pic {
   border-radius: 50%;
   //width: 100%;
@@ -101,45 +104,6 @@ h3.manager-name {
 
 .faded {
   opacity: .3;
-}
-
-.fantasy-table {
-
-  padding: 0;
-  margin: 0 0 20px 0;
-  width: 100%;
-  clear: both;
-  border: 1px solid $mainColour;
-
-  &.big {
-    div, p, a {
-      font-size: 18px;
-    }
-  }
-
-  .header {
-    font-weight: bold;
-    font-size: 14px;
-    height: 30px;
-    line-height: 30px;
-  }
-
-  .row {
-    width: 100%;
-    font-size: 12px;
-    padding: 5px 0;
-    margin: 0;
-    background-color: #FAFAFA;
-    line-height: 50px;
-    vertical-align: middle;
-    @media (max-width: 780px) {
-      line-height: 40px;
-    }
-    &:nth-child(odd) {
-      background-color: #eeeeee;
-    }
-  }
-
 }
 
 ///////////////////////////////////////

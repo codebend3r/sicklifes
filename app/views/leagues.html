@@ -12,15 +12,13 @@
     <button type='button' class='btn btn-danger' ng-disabled="!fireBaseReady" ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
-  <div class='well overflow-show'>
+  <div class='well overflow-show vertical-center'>
 
     <div class='col-md-3 col-sm-4 col-xs-5'>
       <img class='inline league-img' ng-src='{{selectedLeague.img}}'/>
     </div>
     <div class='col-md-9 col-sm-8 col-xs-7'>
-      <div class='row-fluid'>
-        <h3 class='inline vertical-center'>{{selectedLeague.name}}</h3>
-      </div>
+      <h3 class='inline vertical-center'>{{selectedLeague.name}}</h3>
     </div>
 
   </div>

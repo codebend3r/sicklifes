@@ -23,9 +23,7 @@
       /**
        * checks url for url param for key value pair of admin=true
        */
-      console.log('> $location.search():', $location.search());
       $scope.admin = $location.search().admin;
-      console.log('> $scope.admin:', $scope.admin);
 
       /**
        * header for custom-table directive
@@ -74,10 +72,6 @@
       $scope.saveToFireBase = function () {
 
         if ($scope.fireBaseReady) {
-
-          console.log('////////////////////////////////////');
-          console.log('$scope.allLeagues:', $scope.allLeagues);
-          console.log('////////////////////////////////////');
 
           var saveObject = {
             _syncedFrom: 'leaguesCtrl',
@@ -177,11 +171,11 @@
       var checkYesterday = function (syncDate) {
 
         if ($momentService.isPastYesterday(syncDate)) {
-          console.log('checkYesterday() --> IS YESTERDAY');
+          console.log('IS YESTERDAY');
           $scope.updateLeaguesData();
           return true;
         } else {
-          console.log('checkYesterday() --> NOT YESTERDAY YET');
+          console.log('NOT YESTERDAY YET');
           $scope.loading = false;
           // no matter if it's yesterday or not, start firebase so we can save later
           startFireBase(function () {

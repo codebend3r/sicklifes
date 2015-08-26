@@ -46,7 +46,7 @@
          */
         isPastYesterday: function (syncDate) {
 
-          console.log('syncDate', syncDate);
+          //console.log('syncDate', syncDate);
           var thenMoment = $moment(new Date(syncDate.split(' ')[0]));
           var nowMoment = $moment();
           var diff = nowMoment.diff(thenMoment, 'hours');

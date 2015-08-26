@@ -139,7 +139,7 @@ angular.module('sicklifes')
         epl: './images/leagues/epl.png',
         seri: './images/leagues/seri.png',
         chlg: './images/leagues/chlg.png',
-        uefa: './images/leagues/europa.png'
+        euro: './images/leagues/europa.png'
 
       },
 

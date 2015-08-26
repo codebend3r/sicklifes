@@ -26,27 +26,22 @@ angular.module('sicklifes')
      */
     $scope.tableHeader = [
       {
-        columnClass: 'col-md-4 col-xs-4 small-hpadding',
         hoverTitle: 'Team',
         text: 'Team'
       },
       {
-        columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
         hoverTitle: 'Domestic Goals',
         text: 'DG'
       },
       {
-        columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
         hoverTitle: 'Champions League Goals',
         text: 'CLG'
       },
       {
-        columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
         hoverTitle: 'Europa League Goals',
         text: 'EG'
       },
       {
-        columnClass: 'col-md-2 col-xs-2 text-center small-hpadding',
         hoverTitle: 'Total Points',
         text: 'PTS'
       }

@@ -148,7 +148,7 @@
           validLeagues = player.validLeagues || {};
 
           console.log('====================================');
-          console.log('player: ', player);
+          console.log('playerGamesLog --> player:', player);
 
           /*result.data.teams.forEach(function(team){
            console.log('teamName:', team.full_name);

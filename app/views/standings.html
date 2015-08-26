@@ -9,24 +9,21 @@
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
-  <div class='fantasy-table big'>
-
-    <div class='header'>
-      <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'><a class='clickable' ng-title='{{header.hoverTitle}}'>{{header.text}}</a></div>
-    </div>
-
-    <div class='table-body'>
-      <div class='row' ng-repeat='team in managersData | orderBy:"totalPoints":true'>
-        <div class='col-md-4 col-xs-4 small-hpadding'><a ng-href='#/managers?manager={{team.managerName}}'>{{team.managerName}}</a></div>
-        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.domesticGoals}}</div>
-        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.clGoals}}</div>
-        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.eGoals}}</div>
-        <div class='col-md-2 col-xs-2 small-hpadding text-center'>{{team.totalPoints}}</div>
-      </div>
-    </div>
-
-  </div>
-
-  <highchart id="chart1" config="chartConfig"></highchart>
+  <table class='table table-hover table-responsive'>
+    <thead>
+      <tr>
+        <th ng-repeat='header in tableHeader'>{{header.text}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat='manager in managersData | orderBy:"totalPoints":true'>
+        <td><a ng-href='#/managers?manager={{team.managerName}}'>{{manager.managerName}}</a></td>
+        <td>{{manager.domesticGoals}}</td>
+        <td>{{manager.clGoals}}</td>
+        <td>{{manager.eGoals}}</td>
+        <td>{{manager.totalPoints}}</td>
+      </tr>
+    </tbody>
+  </table>
 
 </div>

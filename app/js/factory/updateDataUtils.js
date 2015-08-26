@@ -152,7 +152,7 @@ angular.module('sicklifes')
        */
       updateLeagueLeadersData: function () {
 
-        console.log('UPDATING -- updateLeagueLeadersData');
+        console.log('$updateDataUtils --> updateLeagueLeadersData');
 
         var allLeagues = [],
           defer = $q.defer(),
