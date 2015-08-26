@@ -19,11 +19,12 @@
           dropPlayer: '&',
           tableName: '@',
           tableParams: '=',
+          sortFunction: '&',
           //playerSearch: '@',
           leagueImg: '='
         },
         controller: function ($scope) {
-          
+
           $scope.playerSearch = {
             playerQuery: '',
             teamQuery: ''

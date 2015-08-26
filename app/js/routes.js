@@ -24,12 +24,9 @@
         })
         .state('leagues', {
 
-          url: '/leagues/:admin',
+          url: '/leagues',
           templateUrl: 'views/leagues.html',
-          controller: 'leaguesCtrl',
-          resolve: {
-            isAdmin: isAdmin
-          }
+          controller: 'leaguesCtrl'
 
         })
 
@@ -50,28 +47,28 @@
 
         .state('managers', {
 
-          url: '/managers/:admin',
+          url: '/managers/?admin',
           templateUrl: 'views/managers.html',
           controller: 'managersCtrl'
 
         })
         .state('playerDetails', {
 
-          url: '/player-details/:playerID/:admin',
+          url: '/player-details/:playerID/?admin',
           templateUrl: 'views/player-details.html',
           controller: 'playersDetailsCtrl'
 
         })
         .state('standings', {
 
-          url: '/standings/:admin',
+          url: '/standings/?admin',
           templateUrl: 'views/standings.html',
           controller: 'standingsCtrl'
 
         })
         .state('monthlyWinners', {
 
-          url: '/monthlywinners/:admin',
+          url: '/monthlywinners/?admin',
           templateUrl: 'views/monthly-winners.html',
           controller: 'monthlyWinnersCtrl'
 
@@ -90,9 +87,9 @@
           controller: 'transfersCtrl'
 
         })
-        .state('teams', {
+        .state('roster', {
 
-          url: '/teams/:leagueName/:teamId',
+          url: '/roster/:leagueName/:teamId',
           templateUrl: 'views/teams.html',
           controller: 'teamsCtrl'
 

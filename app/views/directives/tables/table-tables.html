@@ -1,24 +1,20 @@
-<div class='fantasy-table'>
-
-  <h1>League Name</h1>
-  <pre>{{tableParams | json}}</pre>
-
-  <div class='header'>
-    <div ng-class='[header.columnClass]' ng-repeat='header in tableHeader'>{{header.text}}</div>
-  </div>
-
-  <div class='table-body'>
-    <div class='row' ng-repeat='team in list'>
-      <div class='col-md-1 col-sm-2 col-xs-2 small-hpadding text-center big-text'>{{team.rank}}</div>
-      <div class='col-md-6 col-sm-4 col-xs-6  small-hpadding bold'><img width="50" height="50" ng-src="{{team.logo}}" />
-        <a ui-sref='teams({leagueName: tableParams.leagueName, teamId: team.teamId})'>{{team.teamName}}</a>
-      </div>
-      <div class='col-md-1 col-sm-4 hidden-xs text-center small-hpadding'>{{team.record}}</div>
-      <div class='col-md-1 hidden-sm hidden-xs text-center small-hpadding'>{{team.gamesPlayed}}</div>
-      <div class='col-md-1 hidden-sm hidden-xs text-center small-hpadding'>{{team.goalsFor}}</div>
-      <div class='col-md-1 hidden-sm hidden-xs text-center small-hpadding'>{{team.goalsAgainst}}</div>
-      <div class='col-md-1 col-sm-2 col-xs-4 text-center small-hpadding bold'>{{team.points}}</div>
-    </div>
-  </div>
-
-</div>
+<table class='table table-hover'>
+  <thead>
+    <tr>
+      <th ng-repeat='header in tableHeader'>{{header.text}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat='team in list'>
+      <td class='big-text'>{{team.rank}}</td>
+      <td class='small-hpadding bold'><img width="50" height="50" ng-src="{{team.logo}}" />
+        <a ui-sref='roster({leagueName: tableParams.leagueName, teamId: team.teamId})'>{{team.teamName}}</a>
+      </td>
+      <td class='small-hpadding'>{{team.record}}</td>
+      <td class='small-hpadding'>{{team.gamesPlayed}}</td>
+      <td class='small-hpadding'>{{team.goalsFor}}</td>
+      <td class='small-hpadding'>{{team.goalsAgainst}}</td>
+      <td class='small-hpadding bold'>{{team.points}}</td>
+    </tr>
+  </tbody>
+</table>

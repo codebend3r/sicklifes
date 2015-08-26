@@ -3,6 +3,7 @@
 .idea
 node_modules
 builds/
+design
 .tmp
 bower_components
 app/js/templates/

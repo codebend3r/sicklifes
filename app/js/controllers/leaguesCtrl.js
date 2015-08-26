@@ -4,33 +4,31 @@
 
   angular.module('sicklifes')
 
-    .controller('leaguesCtrl', function ($scope, $stateParams, $state, $timeout, $apiFactory, $moment, $localStorage, $managersService, $q, $location, $updateDataUtils, $arrayMappers, $momentService, $rootScope, $textManipulator, $fireBaseService) {
+    .controller('leaguesCtrl', function ($scope, $apiFactory, $localStorage, $managersService, $q, $location, $updateDataUtils, $arrayMappers, $momentService, $rootScope, $textManipulator, $fireBaseService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
       /**
-       * TODO
+       * whether data is still loading
        */
       $scope.loading = true;
 
       /**
-       * TODO
+       * if firebase has been initalized
        */
       $scope.fireBaseReady = false;
 
       /**
-       * TODO
+       * checks url for url param for key value pair of admin=true
        */
-      $scope.admin = $stateParams.admin;
-
-      //console.log('$stateParams', $stateParams);
-      //console.log('$state', $state);
-      //console.log('isAdmin', isAdmin);
+      console.log('> $location.search():', $location.search());
+      $scope.admin = $location.search().admin;
+      console.log('> $scope.admin:', $scope.admin);
 
       /**
-       * TODO
+       * header for custom-table directive
        */
       $scope.leagueTableHeader = [
         {
