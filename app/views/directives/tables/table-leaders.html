@@ -1,0 +1,19 @@
+<table class="table table-hover table-responsive">
+  <thead>
+    <tr>
+      <th ng-repeat="header in tableHeader">{{header.text}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="player in list">
+      <td class="big-text"><div class="vertical-center">{{player.rank}}</div></td>
+      <td class="bold"><div class="vertical-center"><img width="50" height="50" ng-src="{{player.logo}}" />{{player.teamName}}</div></td>
+      <td>
+        <div class="vertical-center">
+          <a ui-sref="playerDetails({playerID: player.id})">{{player.playerName}}</a>
+        </div>
+      </td>
+      <td class="bold"><div class="vertical-center">{{player.goals}}</td>
+    </tr>
+  </tbody>
+</table>

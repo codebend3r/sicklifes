@@ -3,6 +3,7 @@
   angular.module('sicklifes', [
 
     'ui.router',
+    'ui.router.tabs',
     'ngResource',
     'ngSanitize',
     'ngStorage',

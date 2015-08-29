@@ -8,11 +8,15 @@
 
     .config(function ($stateProvider, $urlRouterProvider) {
 
-      $urlRouterProvider.when('', '/leagues');
+      $urlRouterProvider.when('', '/managers');
+
+      //$urlRouterProvider.when('leagues', '/leagues/liga');
+      //$urlRouterProvider.when('/leagues/{leagueName}', '/leagues/liga/tables');
+      $urlRouterProvider.when('/leagues/:leagueName', '/leagues/:leagueName/tables');
 
       //$urlRouterProvider.otherwise('/leagues');
 
-      var isAdmin = function($stateParams) {
+      var isAdmin = function ($stateParams) {
         return $stateParams.admin === true;
       };
 
@@ -24,9 +28,33 @@
         })
         .state('leagues', {
 
-          url: '/leagues',
+          url: '/leagues/:leagueName',
           templateUrl: 'views/leagues.html',
-          controller: 'leaguesCtrl'
+          controller: 'leaguesCtrl',
+          resolve: {
+            getLeagueName: function($stateParams) {
+              if (!$stateParams.leagueName) {
+                $stateParams.leagueName = 'liga';
+                // $state.go('leagues.tables', {
+                //   leagueName: 'liga'
+                // });
+              }
+              //return $stateParams.leagueName;
+            }
+          }
+
+        })
+        .state('leagues.tables', {
+
+          url: '/tables',
+          templateUrl: 'views/tables.html'
+
+        })
+        .state('leagues.leaders', {
+
+          url: '/leaders',
+          templateUrl: 'views/leaders.html',
+          controller: 'leadersCtrl'
 
         })
 
@@ -45,30 +73,31 @@
         //
         //})
 
-        .state('managers', {
+        .
+        state('managers', {
 
-          url: '/managers/?admin',
+          url: '/managers',
           templateUrl: 'views/managers.html',
           controller: 'managersCtrl'
 
         })
         .state('playerDetails', {
 
-          url: '/player-details/:playerID/?admin',
+          url: '/player-details/:playerID',
           templateUrl: 'views/player-details.html',
           controller: 'playersDetailsCtrl'
 
         })
         .state('standings', {
 
-          url: '/standings/?admin',
+          url: '/standings',
           templateUrl: 'views/standings.html',
           controller: 'standingsCtrl'
 
         })
         .state('monthlyWinners', {
 
-          url: '/monthlywinners/?admin',
+          url: '/monthlywinners',
           templateUrl: 'views/monthly-winners.html',
           controller: 'monthlyWinnersCtrl'
 

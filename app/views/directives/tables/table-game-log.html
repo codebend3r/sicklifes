@@ -5,7 +5,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat='player in list | orderBy:sortFunction()'>
+    <tr ng-repeat='game in list'>
       <td>{{game.alignment}} {{game.vsTeam}}</td>
       <td>{{game.goalsScored}}</td>
       <td>{{game.result}} {{game.finalScore}}</td>

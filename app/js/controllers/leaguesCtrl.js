@@ -4,7 +4,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leaguesCtrl', function ($scope, $apiFactory, $localStorage, $managersService, $q, $location, $updateDataUtils, $arrayMappers, $momentService, $rootScope, $textManipulator, $fireBaseService) {
+    .controller('leaguesCtrl', function ($scope, $stateParams, getLeagueName, $state, $apiFactory, $localStorage, $managersService, $q, $location, $updateDataUtils, $arrayMappers, $momentService, $rootScope, $textManipulator, $fireBaseService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -24,6 +24,29 @@
        * checks url for url param for key value pair of admin=true
        */
       $scope.admin = $location.search().admin;
+
+      /**
+       * TODO
+       */
+      //$scope.leagueName = $stateParams.leagueName;
+      $scope.allStates = $state.get();
+
+      console.log('getLeagueName', getLeagueName);
+
+      /**
+       * tabs data
+       */
+      $scope.tabData   = [
+        {
+          heading: 'Tables',
+          route:   'leagues.tables',
+          active:   true
+        },
+        {
+          heading: 'Leaders',
+          route:   'leagues.leaders'
+        }
+      ];
 
       /**
        * header for custom-table directive
@@ -62,8 +85,27 @@
       $scope.allRequest = [];
 
       $scope.changeLeague = function (league) {
-        $scope.leagueName = league.className;
-        console.log('leagueName', $scope.leagueName);
+        //$scope.leagueName = league.className;
+        //console.log('leagueName', $scope.leagueName);
+        $state.go('tables', {leagueName: league.className});
+      };
+
+      var setSelectedLeague = function () {
+
+        var selectedLeagueIndex = 0;
+
+        _.some($scope.allLeagues, function(l, index) {
+          if (l.className === $stateParams.leagueName) {
+            selectedLeagueIndex = index;
+            return true;
+          }
+        });
+
+        console.log('selectedLeagueIndex', selectedLeagueIndex);
+
+        $scope.selectedLeague = $scope.allLeagues[selectedLeagueIndex];
+        $scope.leagueName = $scope.selectedLeague.className;
+
       };
 
       /**
@@ -146,7 +188,7 @@
           }
         ];
 
-        $scope.selectedLeague = $scope.allLeagues[0];
+        setSelectedLeague();
 
         $scope.loading = false;
 
@@ -232,9 +274,7 @@
           }
         ];
 
-        $scope.selectedLeague = $scope.allLeagues[0];
-
-        $scope.leagueName = $scope.selectedLeague.className;
+        setSelectedLeague();
 
         console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
 
@@ -285,9 +325,7 @@
           }
         ];
 
-        $scope.selectedLeague = $scope.allLeagues[0];
-
-        $scope.leagueName = $scope.selectedLeague.className;
+        setSelectedLeague();
 
         console.log('syncDate:', localData._lastSyncedOn);
 
@@ -319,6 +357,7 @@
       var init = function () {
 
         console.log('leaguesCtrl - init');
+        console.log('> leagueName', $stateParams.leagueName);
 
         if (angular.isDefined($rootScope[dataKeyName])) {
 

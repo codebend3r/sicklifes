@@ -16,7 +16,7 @@ h1, h2 {
 
 .vertical-center {
   min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
-  min-height: 20vh; /* These two lines are counted as one :-)       */
+  min-height: 5vh; /* These two lines are counted as one :-)       */
   display: flex;
   align-items: center;
 }
@@ -78,8 +78,7 @@ h3.manager-name {
 
 .profile-pic {
   border-radius: 50%;
-  //width: 100%;
-  width: 100px;
+  width: 100%;
   border: 2px solid $secondaryColour;
   height: auto;
 }

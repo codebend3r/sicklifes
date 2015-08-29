@@ -1,0 +1,7 @@
+<div>
+  <tabset class="tab-container fido-tabs ute-tabs-primary" type="{{type}}" vertical="{{vertical}}" justified="{{justified}}">
+    <tab class="tab" ng-repeat="tab in tabs" active="tab.active" ng-click="go(tab.route, tab.params, tab.options)">
+      <tab-heading>{{tab.heading}}</tab-heading>
+    </tab>
+  </tabset>
+</div>

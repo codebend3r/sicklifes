@@ -31,28 +31,6 @@ angular.module('sicklifes')
     };
 
     /**
-     * TODO
-     */
-    // apiFactory.getFromLocalStorage = function (cbObj) {
-    //
-    //   console.log('get from localStorage');
-    //
-    //   var currentDate = $moment.create(),
-    //     lDate = $localStorage.get('lastCheckDate');
-    //
-    //   cbObj.allLeagues = $localStorage.get('allLeagues');
-    //   cbObj.liga = $localStorage.get('liga');
-    //   cbObj.epl = $localStorage.get('epl');
-    //   cbObj.seri = $localStorage.get('seri');
-    //   cbObj.chlg = $localStorage.get('chlg');
-    //   cbObj.uefa = $localStorage.get('uefa');
-    //   cbObj.cb();
-    //
-    //   return [];
-    //
-    // };
-
-    /**
      * gets players game log and goal per game details
      */
     apiFactory.getPlayerGameDetails = function (league, id) {

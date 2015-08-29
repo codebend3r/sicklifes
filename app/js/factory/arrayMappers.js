@@ -66,11 +66,11 @@
          */
         playerInfo: function (player, result) {
 
-          //console.log('1. playerInfo');
-
           var deferred = $q.defer(),
             playerLeagueProfileRequest,
             profileLeagueSlug = $textManipulator.getLeagueSlug(result);
+
+          player.id = result.data.id;
 
           if (result.data.teams[0]) {
             // url for team logo
@@ -91,17 +91,7 @@
           // set latest leagueName
           player.leagueName = $textManipulator.properLeagueName(profileLeagueSlug);
 
-          //console.log(player.playerName, ':', player.teamName, ':', player.managerName, ':', player.leagueName);
-
-          // set latest domesticLeagueName
-          //player.domesticLeagueName = $textManipulator.properLeagueName(profileLeagueSlug);
-
-          //console.log('player.domesticLeagueName', player.domesticLeagueName);
-
-          // combined league names
-          //player.combinedLeagues = player.tournamentLeagueName ? $textManipulator.properLeagueName(profileLeagueSlug) + '/' + player.tournamentLeagueName : $textManipulator.properLeagueName(profileLeagueSlug);
-
-          deferred.resolve(player);
+          deferred.resolve(result.data);
 
           ///////////////////////////////////
 
@@ -125,9 +115,9 @@
          * forEach function - loops through soccer roster
          * @param dataObj - an object containing a reference to a player and a manager
          */
-        playerGamesLog: function (dataObj) {
+        playerGamesLog: function (dataObj, result) {
 
-          //console.log('2. playerGamesLog');
+          console.log('dataObj:', dataObj);
 
           var deferred = $q.defer(),
             player = dataObj.player || null,
@@ -149,6 +139,7 @@
 
           console.log('====================================');
           console.log('playerGamesLog --> player:', player);
+          console.log('playerGamesLog --> manager:', manager);
 
           /*result.data.teams.forEach(function(team){
            console.log('teamName:', team.full_name);
@@ -180,7 +171,7 @@
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(ligaLogs);
               }
             });
-            allPromises.push(ligaGamesRequest.promise);
+            allPromises.push(ligaGamesRequest);
 
           }
 
@@ -205,7 +196,7 @@
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(eplLogs);
               }
             });
-            allPromises.push(eplGamesRequest.promise);
+            allPromises.push(eplGamesRequest);
 
           }
 
@@ -231,7 +222,7 @@
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(seriLogs);
               }
             });
-            allPromises.push(seriGamesRequest.promise);
+            allPromises.push(seriGamesRequest);
 
           }
 
@@ -257,7 +248,7 @@
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(chlgLogs);
               }
             });
-            allPromises.push(chlgGamesRequest.promise);
+            allPromises.push(chlgGamesRequest);
 
           }
 
@@ -283,7 +274,7 @@
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(euroLogs);
               }
             });
-            allPromises.push(euroGamesRequest.promise);
+            allPromises.push(euroGamesRequest);
 
           }
 
@@ -297,7 +288,7 @@
           }
 
           $q.all(allPromises).then(function (data) {
-            deferred.resolve(data);
+            deferred.resolve(player);
           });
 
           return deferred.promise;
