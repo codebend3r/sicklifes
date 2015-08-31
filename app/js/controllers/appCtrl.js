@@ -25,25 +25,20 @@ angular.module('sicklifes')
 
     /**
      * sets data in the initialized firebase service
+     * @param saveObject
+     * @param ctrlName
+     * @param dataKey
      */
-    $scope.saveToFireBase = function () {
+    $scope.saveToFireBase = function (saveObject, dataKey) {
 
       if ($scope.fireBaseReady) {
 
-        var saveObject = {
-          _syncedFrom: 'leaguesCtrl',
-          _lastSyncedOn: $momentService.syncDate(),
-          LIGA: $scope.allLeagues[0].source,
-          EPL: $scope.allLeagues[1].source,
-          SERI: $scope.allLeagues[2].source,
-          CHLG: $scope.allLeagues[3].source,
-          UEFA: $scope.allLeagues[4].source
-        };
-
-        $fireBaseService.saveToFireBase(saveObject, $scope.dataKeyName);
+        console.log('...SAVING TO FIREBASE');
+        $fireBaseService.saveToFireBase(saveObject, dataKey);
 
       } else {
 
+        console.log('...FIREBSE NOT READY, START FIREBASE NOW');
         $scope.startFireBase();
 
       }
@@ -55,10 +50,11 @@ angular.module('sicklifes')
      * @param callback
      */
     $scope.startFireBase = function (callback) {
-      $scope.startFireBase();
       if ($scope.fireBaseReady) {
+        console.log('return immediately');
         callback();
       } else {
+        console.log('initialzing firebase');
         $fireBaseService.initialize($scope);
         var firePromise = $fireBaseService.getFireBaseData();
         firePromise.then(callback);
@@ -68,24 +64,11 @@ angular.module('sicklifes')
 
     /**
      * check to see if date is yesterday
+     * @param syncDate
      */
     $scope.checkYesterday = function (syncDate) {
 
-      if ($momentService.isPastYesterday(syncDate)) {
-        console.log('IS YESTERDAY');
-        $scope.loading = false;
-        //$scope.updateLeaguesData();
-        return true;
-      } else {
-        console.log('NOT YESTERDAY YET');
-        $scope.loading = false;
-        // no matter if it's yesterday or not, start firebase so we can save later
-        //$scope.startFireBase(function () {
-        //  $scope.fireBaseReady = true;
-        //  $scope.saveToFireBase();
-        //});
-        return false;
-      }
+      return $momentService.isPastYesterday(syncDate);
 
     };
 

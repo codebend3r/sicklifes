@@ -4,7 +4,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leaguesCtrl', function ($scope, $stateParams, $state, $apiFactory, $localStorage, $managersService, $location, $updateDataUtils, $arrayMappers, $momentService, $rootScope, $textManipulator, $fireBaseService) {
+    .controller('leaguesCtrl', function ($scope, $stateParams, $state, $apiFactory, $localStorage, $location, $updateDataUtils, $momentService, $rootScope, $textManipulator, $fireBaseService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -16,40 +16,6 @@
        * checks url for url param for key value pair of admin=true
        */
       $scope.admin = $location.search().admin;
-
-      /**
-       * header for custom-table directive
-       */
-      $scope.leagueTableHeader = [
-        {
-          columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center small-hpadding',
-          text: 'Rank'
-        },
-        {
-          columnClass: 'col-md-6 col-sm-4 col-xs-6 small-hpadding',
-          text: 'Team'
-        },
-        {
-          columnClass: 'col-md-1 col-sm-4 hidden-xs text-center small-hpadding',
-          text: 'Record'
-        },
-        {
-          columnClass: 'col-md-1 hidden-sm hidden-xs text-center small-hpadding',
-          text: 'GP'
-        },
-        {
-          columnClass: 'col-md-1 hidden-sm hidden-xs text-center small-hpadding',
-          text: 'F'
-        },
-        {
-          columnClass: 'col-md-1 hidden-sm hidden-xs text-center small-hpadding',
-          text: 'A'
-        },
-        {
-          columnClass: 'col-md-1 col-sm-2 col-xs-4 text-center small-hpadding',
-          text: 'Points'
-        }
-      ];
 
       /**
        * TODO
@@ -78,8 +44,6 @@
           }
         });
 
-        console.log('selectedLeagueIndex', selectedLeagueIndex);
-
         $scope.selectedLeague = $scope.allLeagues[selectedLeagueIndex];
         $scope.leagueName = $scope.selectedLeague.className;
 
@@ -103,12 +67,48 @@
       /**
        * get data through HTTP request
        */
-      $scope.updateLeaguesData = function () {
+      $scope.updateFromHTTP = function () {
 
         $updateDataUtils.updateLeagueTables()
-          .then(httpDataLoaded);
+          .then($scope.httpDataLoaded);
 
       };
+
+      /**
+       * all leagues array
+       */
+      $scope.allLeagues = [
+        {
+          name: $textManipulator.leagueLongNames.liga,
+          source: null,
+          className: 'liga',
+          img: $textManipulator.leagueImages.liga
+        },
+        {
+          name: $textManipulator.leagueLongNames.epl,
+          source: null,
+          className: 'epl',
+          img: $textManipulator.leagueImages.epl
+        },
+        {
+          name: $textManipulator.leagueLongNames.seri,
+          source: null,
+          className: 'seri',
+          img: $textManipulator.leagueImages.seri
+        },
+        {
+          name: $textManipulator.leagueLongNames.chlg,
+          source: null,
+          className: 'chlg',
+          img: $textManipulator.leagueImages.chlg
+        },
+        {
+          name: $textManipulator.leagueLongNames.euro,
+          source: null,
+          className: 'europa',
+          img: $textManipulator.leagueImages.euro
+        }
+      ];
 
       /**
        * makes http request from thescore.ca API
@@ -120,38 +120,11 @@
         console.log('$HTTP --> httpData:', httpData);
         console.log('///////////////////');
 
-        $scope.allLeagues = [
-          {
-            name: $textManipulator.leagueLongNames.liga,
-            source: httpData[0].data,
-            className: 'liga',
-            img: $textManipulator.leagueImages.liga
-          },
-          {
-            name: $textManipulator.leagueLongNames.epl,
-            source: httpData[1].data,
-            className: 'epl',
-            img: $textManipulator.leagueImages.epl
-          },
-          {
-            name: $textManipulator.leagueLongNames.seri,
-            source: httpData[2].data,
-            className: 'seri',
-            img: $textManipulator.leagueImages.seri
-          },
-          {
-            name: $textManipulator.leagueLongNames.chlg,
-            source: httpData[3].data,
-            className: 'chlg',
-            img: $textManipulator.leagueImages.chlg
-          },
-          {
-            name: $textManipulator.leagueLongNames.euro,
-            source: httpData[4].data,
-            className: 'europa',
-            img: $textManipulator.leagueImages.euro
-          }
-        ];
+        $scope.allLeagues[0].source = httpData[0].data;
+        $scope.allLeagues[1].source = httpData[1].data;
+        $scope.allLeagues[2].source = httpData[2].data;
+        $scope.allLeagues[3].source = httpData[3].data;
+        $scope.allLeagues[4].source = httpData[4].data;
 
         $scope.setSelectedLeague();
 
@@ -159,9 +132,21 @@
 
         // after http request start firebase so we can save later
         $scope.startFireBase(function () {
-          console.log('HTTP --> FIREBASE READY');
+
           $scope.fireBaseReady = true;
-          $scope.saveToFireBase();
+
+          saveObject = {
+            _syncedFrom: 'leagusCtrl',
+            _lastSyncedOn: $momentService.syncDate(),
+            LIGA: $scope.allLeagues[0].source,
+            EPL: $scope.allLeagues[1].source,
+            SERI: $scope.allLeagues[2].source,
+            CHLG: $scope.allLeagues[3].source,
+            UEFA: $scope.allLeagues[4].source
+          };
+
+          $scope.saveToFireBase(saveObject, 'leagueTables');
+
         });
 
       };
@@ -176,46 +161,35 @@
 
         console.log('///////////////////');
         console.log('FB --> firebaseData:', firebaseData[dataKeyName]);
+        console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
         console.log('///////////////////');
 
-        $scope.allLeagues = [
-          {
-            name: $textManipulator.leagueLongNames.liga,
-            source: firebaseData.leagueTables.LIGA,
-            className: 'liga',
-            img: $textManipulator.leagueImages.liga
-          },
-          {
-            name: $textManipulator.leagueLongNames.epl,
-            source: firebaseData.leagueTables.EPL,
-            className: 'epl',
-            img: $textManipulator.leagueImages.epl
-          },
-          {
-            name: $textManipulator.leagueLongNames.seri,
-            source: firebaseData.leagueTables.SERI,
-            className: 'seri',
-            img: $textManipulator.leagueImages.seri
-          },
-          {
-            name: $textManipulator.leagueLongNames.chlg,
-            source: firebaseData.leagueTables.CHLG,
-            className: 'chlg',
-            img: $textManipulator.leagueImages.chlg
-          },
-          {
-            name: $textManipulator.leagueLongNames.euro,
-            source: firebaseData.leagueTables.UEFA,
-            className: 'europa',
-            img: $textManipulator.leagueImages.euro
-          }
-        ];
+        $scope.allLeagues[0].source = firebaseData.leagueTables.LIGA;
+        $scope.allLeagues[1].source = firebaseData.leagueTables.EPL;
+        $scope.allLeagues[2].source = firebaseData.leagueTables.SERI;
+        $scope.allLeagues[3].source = firebaseData.leagueTables.CHLG;
+        $scope.allLeagues[4].source = firebaseData.leagueTables.UEFA;
 
         $scope.setSelectedLeague();
 
-        console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
+        saveObject = {
+          _syncedFrom: 'leagusCtrl',
+          _lastSyncedOn: $momentService.syncDate(),
+          LIGA: $scope.allLeagues[0].source,
+          EPL: $scope.allLeagues[1].source,
+          SERI: $scope.allLeagues[2].source,
+          CHLG: $scope.allLeagues[3].source,
+          UEFA: $scope.allLeagues[4].source
+        };
 
-        $scope.checkYesterday(firebaseData[dataKeyName]._lastSyncedOn);
+        if ($scope.checkYesterday(firebaseData[dataKeyName]._lastSyncedOn, saveObject)) {
+          $scope.updateFromHTTP();
+        } else {
+          $scope.startFireBase(function () {
+            $scope.fireBaseReady = true;
+            $scope.saveToFireBase(saveObject, 'leagueTables');
+          });
+        }
 
       };
 
@@ -227,46 +201,35 @@
 
         console.log('///////////////////');
         console.log('LOCAL --> localData:', localData);
+        console.log('syncDate:', localData._lastSyncedOn);
         console.log('///////////////////');
 
-        $scope.allLeagues = [
-          {
-            name: $textManipulator.leagueLongNames.liga,
-            source: localData.LIGA,
-            className: 'liga',
-            img: $textManipulator.leagueImages.liga
-          },
-          {
-            name: $textManipulator.leagueLongNames.epl,
-            source: localData.EPL,
-            className: 'epl',
-            img: $textManipulator.leagueImages.epl
-          },
-          {
-            name: $textManipulator.leagueLongNames.seri,
-            source: localData.SERI,
-            className: 'seri',
-            img: $textManipulator.leagueImages.seri
-          },
-          {
-            name: $textManipulator.leagueLongNames.chlg,
-            source: localData.CHLG,
-            className: 'chlg',
-            img: $textManipulator.leagueImages.chlg
-          },
-          {
-            name: $textManipulator.leagueLongNames.euro,
-            source: localData.UEFA,
-            className: 'europa',
-            img: $textManipulator.leagueImages.euro
-          }
-        ];
+        $scope.allLeagues[0].source = localData.LIGA;
+        $scope.allLeagues[1].source = localData.EPL;
+        $scope.allLeagues[2].source = localData.SERI;
+        $scope.allLeagues[3].source = localData.CHLG;
+        $scope.allLeagues[4].source = localData.UEFA;
 
         $scope.setSelectedLeague();
 
-        console.log('syncDate:', localData._lastSyncedOn);
+        saveObject = {
+          _syncedFrom: 'leagusCtrl',
+          _lastSyncedOn: $momentService.syncDate(),
+          LIGA: $scope.allLeagues[0].source,
+          EPL: $scope.allLeagues[1].source,
+          SERI: $scope.allLeagues[2].source,
+          CHLG: $scope.allLeagues[3].source,
+          UEFA: $scope.allLeagues[4].source
+        };
 
-        $scope.checkYesterday(localData._lastSyncedOn);
+        if ($scope.checkYesterday(localData._lastSyncedOn, saveObject)) {
+          $scope.updateFromHTTP();
+        } else {
+          $scope.startFireBase(function () {
+            $scope.fireBaseReady = true;
+            $scope.saveToFireBase(saveObject, 'leagueTables');
+          });
+        }
 
       };
 
@@ -274,7 +237,7 @@
       ////////////// private /////////////////
       ////////////////////////////////////////
 
-      var dataKeyName = 'leagueTables';
+      var saveObject;
 
       /**
        * init
@@ -283,6 +246,7 @@
 
         console.log('leaguesCtrl - init');
         console.log('> leagueName', $stateParams.leagueName);
+
         $scope.dataKeyName = 'leagueTables';
 
         if (angular.isDefined($rootScope[$scope.dataKeyName])) {

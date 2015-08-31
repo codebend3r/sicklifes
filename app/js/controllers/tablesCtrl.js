@@ -8,6 +8,40 @@ angular.module('sicklifes')
 
     console.log('--> tablesCtrl');
 
+    /**
+     * header for custom-table directive
+     */
+    $scope.leagueTableHeader = [
+      {
+        columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center small-hpadding',
+        text: 'Rank'
+      },
+      {
+        columnClass: 'col-md-6 col-sm-4 col-xs-6 small-hpadding',
+        text: 'Team'
+      },
+      {
+        columnClass: 'col-md-1 col-sm-4 hidden-xs text-center small-hpadding',
+        text: 'Record'
+      },
+      {
+        columnClass: 'col-md-1 hidden-sm hidden-xs text-center small-hpadding',
+        text: 'GP'
+      },
+      {
+        columnClass: 'col-md-1 hidden-sm hidden-xs text-center small-hpadding',
+        text: 'F'
+      },
+      {
+        columnClass: 'col-md-1 hidden-sm hidden-xs text-center small-hpadding',
+        text: 'A'
+      },
+      {
+        columnClass: 'col-md-1 col-sm-2 col-xs-4 text-center small-hpadding',
+        text: 'Points'
+      }
+    ];
+
     ////////////////////////////////////////
     ////////////// private /////////////////
     ////////////////////////////////////////
@@ -19,23 +53,6 @@ angular.module('sicklifes')
 
       console.log('tablesCtrl - init');
       console.log('> leagueName', $stateParams.leagueName);
-
-      //if (angular.isDefined($rootScope[dataKeyName])) {
-      //
-      //  console.log('load from $rootScope');
-      //  $scope.loadFromLocal($rootScope[dataKeyName]);
-      //
-      //} else if (angular.isDefined($localStorage[dataKeyName])) {
-      //
-      //  console.log('load from local storage');
-      //  $scope.loadFromLocal($localStorage[dataKeyName]);
-      //
-      //} else {
-      //
-      //  console.log('load from firebase');
-      //  $scope.startFireBase(fireBaseLoaded);
-      //
-      //}
 
     };
 
