@@ -8,46 +8,36 @@
 
     .config(function ($stateProvider, $urlRouterProvider) {
 
-      $urlRouterProvider.when('', '/managers');
+      $urlRouterProvider.when('', '/leagues/liga/tables');
+      $urlRouterProvider.when('/', '/leagues/liga/tables');
 
       //$urlRouterProvider.when('leagues', '/leagues/liga');
       //$urlRouterProvider.when('/leagues/{leagueName}', '/leagues/liga/tables');
+
       $urlRouterProvider.when('/leagues/:leagueName', '/leagues/:leagueName/tables');
-
-      //$urlRouterProvider.otherwise('/leagues');
-
-      var isAdmin = function ($stateParams) {
-        return $stateParams.admin === true;
-      };
+      $urlRouterProvider.when('/leagues', '/leagues/liga/tables');
+      $urlRouterProvider.when('/leagues/liga', '/leagues/liga/tables');
+      $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
       $stateProvider
         .state('app', {
-          abstract: true,
-          template: '<div ui-view="content"></div>',
-          controller: 'appCtrl'
+
+          abstract: true
+          //controller: 'appCtrl'
+
         })
         .state('leagues', {
 
           url: '/leagues/:leagueName',
           templateUrl: 'views/leagues.html',
-          controller: 'leaguesCtrl',
-          resolve: {
-            getLeagueName: function($stateParams) {
-              if (!$stateParams.leagueName) {
-                $stateParams.leagueName = 'liga';
-                // $state.go('leagues.tables', {
-                //   leagueName: 'liga'
-                // });
-              }
-              //return $stateParams.leagueName;
-            }
-          }
+          controller: 'leaguesCtrl'
 
         })
         .state('leagues.tables', {
 
           url: '/tables',
-          templateUrl: 'views/tables.html'
+          templateUrl: 'views/tables.html',
+          controller: 'tablesCtrl'
 
         })
         .state('leagues.leaders', {
