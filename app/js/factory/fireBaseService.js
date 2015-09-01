@@ -1,70 +1,73 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Created by Bouse on 09/01/2015
  */
 
+(function () {
 
-angular.module('sicklifes')
+  'use strict';
 
-  .factory('$fireBaseService', function ($q, $firebase, $rootScope, $localStorage) {
+  angular.module('sicklifes')
 
-    var ref,
-      sync,
-      syncObject;
+    .factory('$fireBaseService', function ($q, $firebase, $rootScope, $localStorage) {
 
-    var fireBaseObj = {
+      var ref,
+        sync,
+        syncObject;
 
-      list: null,
+      return {
 
-      initialize: function (scope) {
+        list: null,
 
-        ref = new Firebase('https://glaring-fire-9383.firebaseio.com/');
-        sync = $firebase(ref);
+        initialize: function (scope) {
 
-        // create a synchronized array for use in our HTML code
-        //var syncArray = sync.$asArray();
-        syncObject = sync.$asObject();
+          ref = new Firebase('https://glaring-fire-9383.firebaseio.com/');
+          sync = $firebase(ref);
 
-        syncObject.$bindTo(scope, 'syncedObject');
+          // create a synchronized array for use in our HTML code
+          //var syncArray = sync.$asArray();
+          syncObject = sync.$asObject();
 
-      },
+          syncObject.$bindTo(scope, 'syncedObject');
 
-      getFireBaseData: function () {
+        },
 
-        var defer = $q.defer();
+        getFireBaseData: function () {
 
-        ref.on('value', function (snapshot) {
-          defer.resolve(snapshot.val());
-        }, function (errorObject) {
-          console.log('The read failed: ' + errorObject.code);
-        });
+          var defer = $q.defer();
 
-        return defer.promise;
+          ref.on('value', function (snapshot) {
+            defer.resolve(snapshot.val());
+          }, function (errorObject) {
+            console.log('The read failed: ' + errorObject.code);
+          });
 
-      },
+          return defer.promise;
 
-      saveToFireBase: function (saveObject, key) {
+        },
 
-        console.log('saveToFireBase -- START');
+        saveToFireBase: function (saveObject, key) {
 
-        var cleanedData = angular.copy(saveObject);
+          console.log('saveToFireBase -- START');
 
-        var usersRef = ref.child(key);
+          var cleanedData = angular.copy(saveObject);
 
-        // save to local storage
-        $localStorage[key] = cleanedData;
+          var usersRef = ref.child(key);
 
-        // save to $rootScope
-        $rootScope[key] = cleanedData
+          // save to local storage
+          $localStorage[key] = cleanedData;
 
-        console.log('cleanedData', cleanedData);
+          // save to $rootScope
+          $rootScope[key] = cleanedData;
 
-        usersRef.set(cleanedData);
-        console.log('saveToFireBase -- COMPLETE');
+          //console.log('cleanedData', cleanedData);
 
-      }
+          usersRef.set(cleanedData);
+          console.log('saveToFireBase -- COMPLETE');
 
-    };
+        }
 
-    return fireBaseObj;
+      };
 
-  });
+    });
+
+})();

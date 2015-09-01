@@ -1,4 +1,10 @@
+/**
+ * Created by Bouse on 09/01/2015
+ */
+
 (function () {
+
+  'use strict';
 
   angular.module('sicklifes', [
 
@@ -13,8 +19,6 @@
     'ui.bootstrap',
     'angular.filter'
 
-  ])
-
-  .constant('$moment', moment);
+  ]).constant('$moment', moment);
 
 })();

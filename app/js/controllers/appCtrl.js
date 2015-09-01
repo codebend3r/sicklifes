@@ -1,76 +1,82 @@
 /**
- * Created by Bouse on 12/23/2014
+ * Created by Bouse on 09/01/2015
  */
 
-angular.module('sicklifes')
+(function () {
 
-  .controller('appCtrl', function ($scope, $fireBaseService, $momentService) {
+  'use strict';
 
-    console.log('--> appCtrl');
+  angular.module('sicklifes')
 
-    /**
-     * whether data is still loading
-     */
-    $scope.loading = true;
+    .controller('appCtrl', function ($scope, $fireBaseService, $momentService) {
 
-    /**
-     * if firebase has been initalized
-     */
-    $scope.fireBaseReady = false;
+      console.log('--> appCtrl');
 
-    /**
-     * key name
-     */
-    $scope.dataKeyName = '';
+      /**
+       * whether data is still loading
+       */
+      $scope.loading = true;
 
-    /**
-     * sets data in the initialized firebase service
-     * @param saveObject
-     * @param ctrlName
-     * @param dataKey
-     */
-    $scope.saveToFireBase = function (saveObject, dataKey) {
+      /**
+       * if firebase has been initalized
+       */
+      $scope.fireBaseReady = false;
 
-      if ($scope.fireBaseReady) {
+      /**
+       * key name
+       */
+      $scope.dataKeyName = '';
 
-        console.log('...SAVING TO FIREBASE');
-        $fireBaseService.saveToFireBase(saveObject, dataKey);
+      /**
+       * sets data in the initialized firebase service
+       * @param saveObject
+       * @param ctrlName
+       * @param dataKey
+       */
+      $scope.saveToFireBase = function (saveObject, dataKey) {
 
-      } else {
+        if ($scope.fireBaseReady) {
 
-        console.log('...FIREBSE NOT READY, START FIREBASE NOW');
-        $scope.startFireBase();
+          console.log('...SAVING TO FIREBASE');
+          $fireBaseService.saveToFireBase(saveObject, dataKey);
 
-      }
+        } else {
 
-    };
+          console.log('...FIREBSE NOT READY, START FIREBASE NOW');
+          $scope.startFireBase();
 
-    /**
-     * starts the process of getting data from firebase
-     * @param callback
-     */
-    $scope.startFireBase = function (callback) {
-      if ($scope.fireBaseReady) {
-        console.log('return immediately');
-        callback();
-      } else {
-        console.log('initialzing firebase');
-        $fireBaseService.initialize($scope);
-        var firePromise = $fireBaseService.getFireBaseData();
-        firePromise.then(callback);
-      }
+        }
 
-    };
+      };
 
-    /**
-     * check to see if date is yesterday
-     * @param syncDate
-     */
-    $scope.checkYesterday = function (syncDate) {
+      /**
+       * starts the process of getting data from firebase
+       * @param callback
+       */
+      $scope.startFireBase = function (callback) {
+        if ($scope.fireBaseReady) {
+          console.log('return immediately');
+          callback();
+        } else {
+          console.log('initialzing firebase');
+          $fireBaseService.initialize($scope);
+          var firePromise = $fireBaseService.getFireBaseData();
+          firePromise.then(callback);
+        }
 
-      return $momentService.isPastYesterday(syncDate);
+      };
 
-    };
+      /**
+       * check to see if date is yesterday
+       * @param syncDate
+       */
+      $scope.checkYesterday = function (syncDate) {
+
+        return $momentService.isPastYesterday(syncDate);
+
+      };
 
 
-  });
+    });
+
+})();

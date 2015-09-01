@@ -4,6 +4,8 @@
 
 (function () {
 
+  'use strict';
+
   angular.module('sicklifes')
 
     .config(function ($stateProvider, $urlRouterProvider) {

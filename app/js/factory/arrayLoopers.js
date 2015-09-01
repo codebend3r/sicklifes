@@ -1,114 +1,120 @@
 /**
- * Created by Bouse on 10/2/2014
+ * Created by Bouse on 09/01/2015
  */
 
-angular.module('sicklifes')
+(function () {
 
-  .factory('$arrayLoopers', function ($rootScope, $textManipulator, $objectUtils, $localStorage, $managersService, $apiFactory, $scoringLogic) {
+  'use strict';
 
-    var arrayLoopers = {
+  angular.module('sicklifes')
 
-      /**
-       * loops through all players and fetches goals and calculates points
-       * @param $scope - controller $scope
-       * @param manager - manager which contains players
-       * @param players - from loop
-       */
-      forEachPlayer: function ($scope, manager, players) {
+    .factory('$arrayLoopers', function ($rootScope, $textManipulator, $objectUtils, $localStorage, $managersService, $apiFactory, $scoringLogic) {
 
-        arrayLoopers.resetScoreCount(manager, players);
+      var arrayLoopers = {
 
-        players = objectUtils.playerResetGoalPoints(players);
-        manager = objectUtils.managerResetGoalPoints(manager);
+        /**
+         * loops through all players and fetches goals and calculates points
+         * @param $scope - controller $scope
+         * @param manager - manager which contains players
+         * @param players - from loop
+         */
+        forEachPlayer: function ($scope, manager, players) {
 
-        var deferredList = deferredList || [];
+          arrayLoopers.resetScoreCount(manager, players);
 
-        if (angular.isDefined(players.league) && players.id !== null) {
+          players = objectUtils.playerResetGoalPoints(players);
+          manager = objectUtils.managerResetGoalPoints(manager);
 
-          var request = $apiFactory.getData({
+          var deferredList = deferredList || [];
 
-            endPointURL: $textManipulator.getPlayerSummaryURL(players.league, players.id),
+          if (angular.isDefined(players.league) && players.id !== null) {
 
-            qCallBack: function (result) {
+            var request = $apiFactory.getData({
 
-              var league,
-                gameGoals;
+              endPointURL: $textManipulator.getPlayerSummaryURL(players.league, players.id),
 
-              result.data.map(function (i) {
+              qCallBack: function (result) {
 
-                league = i.league.slug;
-                gameGoals = i.games_goals;
+                var league,
+                  gameGoals;
 
-                if ($textManipulator.acceptedLeague(league)) {
+                result.data.map(function (i) {
 
-                  players.goals += gameGoals;
-                  manager.totalGoals += gameGoals;
+                  league = i.league.slug;
+                  gameGoals = i.games_goals;
 
-                  if ($textManipulator.isLeagueGoal(league)) {
-                    players.leagueGoals += gameGoals;
+                  if ($textManipulator.acceptedLeague(league)) {
+
+                    players.goals += gameGoals;
+                    manager.totalGoals += gameGoals;
+
+                    if ($textManipulator.isLeagueGoal(league)) {
+                      players.leagueGoals += gameGoals;
+                    }
+
+                    if ($textManipulator.isDomesticGoal(league)) {
+                      players.domesticGoals += gameGoals;
+                      manager.domesticGoals += players.domesticGoals;
+                    } else if ($textManipulator.isChampionsLeagueGoal(league)) {
+                      players.clGoals += gameGoals;
+                      manager.clGoals += players.clGoals;
+                    } else if ($textManipulator.isEuropaGoal(league)) {
+                      players.eGoals += gameGoals;
+                      manager.eGoals += players.eGoals;
+                    }
+
+                    players.points += $scoringLogic.calculatePoints(gameGoals, league, players);
+
                   }
 
-                  if ($textManipulator.isDomesticGoal(league)) {
-                    players.domesticGoals += gameGoals;
-                    manager.domesticGoals += players.domesticGoals;
-                  } else if ($textManipulator.isChampionsLeagueGoal(league)) {
-                    players.clGoals += gameGoals;
-                    manager.clGoals += players.clGoals;
-                  } else if ($textManipulator.isEuropaGoal(league)) {
-                    players.eGoals += gameGoals;
-                    manager.eGoals += players.eGoals;
-                  }
+                });
 
-                  players.points += $scoringLogic.calculatePoints(gameGoals, league, players);
+                manager.totalPoints += players.points;
 
-                }
+                /*console.log('--------------------------------------------');
+                 console.log('managerName', manager.managerName);
+                 console.log('playerName', players.playerName);
+                 console.log('players.points', players.points);
+                 console.log('manager.testPoints', manager.testPoints);
+                 console.log('manager.totalPoints', manager.totalPoints);
+                 console.log('manager.testGoals', manager.testGoals);
+                 console.log('manager.totalGoals', manager.totalGoals);*/
 
-              });
+              }
 
-              manager.totalPoints += players.points;
+            });
 
-              /*console.log('--------------------------------------------');
-               console.log('managerName', manager.managerName);
-               console.log('playerName', players.playerName);
-               console.log('players.points', players.points);
-               console.log('manager.testPoints', manager.testPoints);
-               console.log('manager.totalPoints', manager.totalPoints);
-               console.log('manager.testGoals', manager.testGoals);
-               console.log('manager.totalGoals', manager.totalGoals);*/
+          }
 
-            }
+          deferredList.push(request.promise);
 
+        },
+
+        /**
+         * loops through all managers roster and finds owner by player id
+         */
+        getOwnerByID: function (id) {
+
+          var owner = 'Free Agent';
+
+          _.some($rootScope.managersData, function (manager) {
+            _.some(manager.players, function (p) {
+              if (p.id === id) {
+                //console.log('found owned player', p);
+                owner = manager.managerName;
+                return true;
+              }
+            });
           });
+
+          return owner;
 
         }
 
-        deferredList.push(request.promise);
+      };
 
-      },
+      return arrayLoopers;
 
-      /**
-       * loops through all managers roster and finds owner by player id
-       */
-      getOwnerByID: function (id) {
+    });
 
-        var owner = 'Free Agent';
-
-        _.some($rootScope.managersData, function (manager) {
-          _.some(manager.players, function (p) {
-            if (p.id === id) {
-              //console.log('found owned player', p);
-              owner = manager.managerName;
-              return true;
-            }
-          });
-        });
-
-        return owner;
-
-      }
-
-    };
-
-    return arrayLoopers;
-
-  });
+})();

@@ -1,233 +1,239 @@
 /**
- * Created by Bouse on 10/24/2014
+ * Created by Bouse on 09/01/2015
  */
 
-angular.module('sicklifes')
+(function () {
 
-  .factory('$apiFactory', function ($http, $q, $localStorage, $moment, $textManipulator) {
+  'use strict';
 
-    var apiFactory = {};
+  angular.module('sicklifes')
 
-    /**
-     * TODO
-     */
-    apiFactory.getData = function (endPoint) {
+    .factory('$apiFactory', function ($http, $q, $localStorage, $moment, $textManipulator) {
 
-      var defer = $q.defer(),
-        httpObject = {
-          method: endPoint.method || 'GET',
-          url: endPoint.endPointURL
-        };
+      var apiFactory = {};
 
-      $http(httpObject).then(function (result) {
+      /**
+       * TODO
+       */
+      apiFactory.getData = function (endPoint) {
 
-        defer.resolve(result);
-        if (angular.isDefined(endPoint.qCallBack)) endPoint.qCallBack(result);
+        var defer = $q.defer(),
+          httpObject = {
+            method: endPoint.method || 'GET',
+            url: endPoint.endPointURL
+          };
 
-      });
+        $http(httpObject).then(function (result) {
 
-      return defer.promise;
-
-    };
-
-    /**
-     * gets players game log and goal per game details
-     */
-    apiFactory.getPlayerGameDetails = function (league, id) {
-
-      var request = apiFactory.getData({
-        endPointURL: $textManipulator.getPlayerPlayerRecordURL(league, id)
-      });
-
-      return request;
-
-    };
-
-    /**
-     * gets player's league related data
-     */
-    apiFactory.getPlayerProfile = function (league, id) {
-
-      //league === 'soccer' ? console.log('1. getPlayerProfile') : console.log('3. getPlayerProfile');
-
-      if (angular.isUndefinedOrNull(league) || league === '') {
-        league = 'soccer';
-      }
-
-      return apiFactory.getData({
-        endPointURL: $textManipulator.getPlayerProfileURL(league, id)
-      });
-
-    };
-
-    /**
-     * getting league tables
-     */
-    apiFactory.getLeagueTables = function () {
-
-      // var leagues = [
-      //     'http://api.thescore.com/liga/standings/1643', // 2015-2016
-      //     'http://api.thescore.com/epl/standings/1586', // 2015-2016
-      //     'http://api.thescore.com/seri/standings/1288', // 2014-2015
-      //     'http://api.thescore.com/chlg/standings/1319', // 2014-2015
-      //     'http://api.thescore.com/uefa/standings/1353' // 2014-2015
-      //   ],
-      var leagues = [
-          'http://api.thescore.com/liga/standings/',
-          'http://api.thescore.com/epl/standings/',
-          'http://api.thescore.com/seri/standings/',
-          'http://api.thescore.com/chlg/standings/',
-          'http://api.thescore.com/uefa/standings/'
-        ],
-        listOrPromises = [];
-
-      _.each(leagues, function (url) {
-
-        var leagueRequest = apiFactory.getData({
-          endPointURL: url
-        });
-
-        leagueRequest.then(function (result) {
-
-          result.data.leagueURL = url;
+          defer.resolve(result);
+          if (angular.isDefined(endPoint.qCallBack)) endPoint.qCallBack(result);
 
         });
 
-        listOrPromises.push(leagueRequest);
+        return defer.promise;
 
+      };
 
-      });
+      /**
+       * gets players game log and goal per game details
+       */
+      apiFactory.getPlayerGameDetails = function (league, id) {
 
-      return listOrPromises;
-
-    };
-
-    /**
-     * getting teamms in all the leagues
-     */
-    apiFactory.getAllTeams = function () {
-
-      console.log('getting teamms in all the leagues');
-
-      var allLeaguesURL = [
-          {
-            url: 'http://origin-api.thescore.com/liga/teams/',
-            leagueName: 'liga'
-          },
-          {
-            url: 'http://origin-api.thescore.com/epl/teams/',
-            leagueName: 'epl'
-          },
-          {
-            url: 'http://origin-api.thescore.com/seri/teams/',
-            leagueName: 'seri'
-          },
-          {
-            url: 'http://origin-api.thescore.com/chlg/teams/',
-            leagueName: 'chlg'
-          },
-          {
-            url: 'http://origin-api.thescore.com/uefa/teams/',
-            leagueName: 'uefa'
-          }
-        ],
-        listOrPromises = [];
-
-      _.each(allLeaguesURL, function (urlObj) {
-
-        var leagueRequest = apiFactory.getData({
-          endPointURL: urlObj.url
+        var request = apiFactory.getData({
+          endPointURL: $textManipulator.getPlayerPlayerRecordURL(league, id)
         });
 
-        leagueRequest.then(function (result) {
+        return request;
 
-          result.leagueURL = urlObj.url;
-          result.leagueName = urlObj.leagueName;
+      };
 
+      /**
+       * gets player's league related data
+       */
+      apiFactory.getPlayerProfile = function (league, id) {
+
+        //league === 'soccer' ? console.log('1. getPlayerProfile') : console.log('3. getPlayerProfile');
+
+        if (angular.isUndefinedOrNull(league) || league === '') {
+          league = 'soccer';
+        }
+
+        return apiFactory.getData({
+          endPointURL: $textManipulator.getPlayerProfileURL(league, id)
         });
 
-        listOrPromises.push(leagueRequest);
+      };
 
-      });
+      /**
+       * getting league tables
+       */
+      apiFactory.getLeagueTables = function () {
 
-      return listOrPromises;
+        // var leagues = [
+        //     'http://api.thescore.com/liga/standings/1643', // 2015-2016
+        //     'http://api.thescore.com/epl/standings/1586', // 2015-2016
+        //     'http://api.thescore.com/seri/standings/1288', // 2014-2015
+        //     'http://api.thescore.com/chlg/standings/1319', // 2014-2015
+        //     'http://api.thescore.com/uefa/standings/1353' // 2014-2015
+        //   ],
+        var leagues = [
+            'http://api.thescore.com/liga/standings/',
+            'http://api.thescore.com/epl/standings/',
+            'http://api.thescore.com/seri/standings/',
+            'http://api.thescore.com/chlg/standings/',
+            'http://api.thescore.com/uefa/standings/'
+          ],
+          listOrPromises = [];
 
-    };
+        _.each(leagues, function (url) {
 
-    /**
-     * TODO
-     */
-    apiFactory.getRoster = function (result) {
+          var leagueRequest = apiFactory.getData({
+            endPointURL: url
+          });
 
-      var listOrPromises = [];
+          leagueRequest.then(function (result) {
 
-      _.each(result.data, function (leagueData) {
+            result.data.leagueURL = url;
 
-        var rosterRequest = apiFactory.getData({
-          endPointURL: url + leagueData.id + '/players/'
-        });
+          });
 
-        rosterRequest.promise.then(function () {
+          listOrPromises.push(leagueRequest);
 
-          listOrPromises.push(rosterRequest.promise);
 
         });
 
-      });
+        return listOrPromises;
 
-    };
+      };
 
-    /**
-     * TODO
-     */
-    apiFactory.getAllGoalLeaders = function () {
+      /**
+       * getting teamms in all the leagues
+       */
+      apiFactory.getAllTeams = function () {
 
-      console.log('getting goal leaders in each league');
+        console.log('getting teamms in all the leagues');
 
-      var allLeaguesURL = [
-          'http://api.thescore.com/liga/leaders?categories=goals',
-          'http://api.thescore.com/epl/leaders?categories=goals',
-          'http://api.thescore.com/seri/leaders?categories=goals',
-          'http://api.thescore.com/chlg/leaders?categories=goals',
-          'http://api.thescore.com/uefa/leaders?categories=goals'
-        ],
-        allLeagues = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
-        listOrPromises = [],
-        listOfResults = [];
+        var allLeaguesURL = [
+            {
+              url: 'http://origin-api.thescore.com/liga/teams/',
+              leagueName: 'liga'
+            },
+            {
+              url: 'http://origin-api.thescore.com/epl/teams/',
+              leagueName: 'epl'
+            },
+            {
+              url: 'http://origin-api.thescore.com/seri/teams/',
+              leagueName: 'seri'
+            },
+            {
+              url: 'http://origin-api.thescore.com/chlg/teams/',
+              leagueName: 'chlg'
+            },
+            {
+              url: 'http://origin-api.thescore.com/uefa/teams/',
+              leagueName: 'uefa'
+            }
+          ],
+          listOrPromises = [];
 
-      _.each(allLeaguesURL, function (url, index) {
+        _.each(allLeaguesURL, function (urlObj) {
 
-        console.log('url:', url);
+          var leagueRequest = apiFactory.getData({
+            endPointURL: urlObj.url
+          });
 
-        var leagueRequest = apiFactory.getData({
-          endPointURL: url
+          leagueRequest.then(function (result) {
+
+            result.leagueURL = urlObj.url;
+            result.leagueName = urlObj.leagueName;
+
+          });
+
+          listOrPromises.push(leagueRequest);
+
         });
 
-        leagueRequest.then(function (result) {
+        return listOrPromises;
 
-          result.leagueURL = url;
-          result.leagueName = allLeagues[index];
-          listOfResults.push(result);
+      };
+
+      /**
+       * TODO
+       */
+      apiFactory.getRoster = function (result) {
+
+        var listOrPromises = [];
+
+        _.each(result.data, function (leagueData) {
+
+          var rosterRequest = apiFactory.getData({
+            endPointURL: url + leagueData.id + '/players/'
+          });
+
+          rosterRequest.promise.then(function () {
+
+            listOrPromises.push(rosterRequest.promise);
+
+          });
 
         });
 
-        listOrPromises.push(leagueRequest);
+      };
 
-      });
+      /**
+       * TODO
+       */
+      apiFactory.getAllGoalLeaders = function () {
 
-      return listOrPromises;
+        console.log('getting goal leaders in each league');
 
-    };
+        var allLeaguesURL = [
+            'http://api.thescore.com/liga/leaders?categories=goals',
+            'http://api.thescore.com/epl/leaders?categories=goals',
+            'http://api.thescore.com/seri/leaders?categories=goals',
+            'http://api.thescore.com/chlg/leaders?categories=goals',
+            'http://api.thescore.com/uefa/leaders?categories=goals'
+          ],
+          allLeagues = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
+          listOrPromises = [],
+          listOfResults = [];
 
-    /**
-     * waits for an array of promises to resolve
-     */
-    apiFactory.listOfPromises = function (list, callbackFunc) {
+        _.each(allLeaguesURL, function (url, index) {
 
-      $q.all(list).then(callbackFunc);
+          console.log('url:', url);
 
-    };
+          var leagueRequest = apiFactory.getData({
+            endPointURL: url
+          });
 
-    return apiFactory;
+          leagueRequest.then(function (result) {
 
-  });
+            result.leagueURL = url;
+            result.leagueName = allLeagues[index];
+            listOfResults.push(result);
+
+          });
+
+          listOrPromises.push(leagueRequest);
+
+        });
+
+        return listOrPromises;
+
+      };
+
+      /**
+       * waits for an array of promises to resolve
+       */
+      apiFactory.listOfPromises = function (list, callbackFunc) {
+
+        $q.all(list).then(callbackFunc);
+
+      };
+
+      return apiFactory;
+
+    });
+
+})();

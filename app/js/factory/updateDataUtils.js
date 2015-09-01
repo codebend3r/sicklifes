@@ -1,347 +1,353 @@
 /**
- * Updated by Bouse on 12/23/2014
+ * Created by Bouse on 09/01/2015
  */
 
-angular.module('sicklifes')
+(function () {
 
-  .factory('$updateDataUtils', function ($apiFactory, $objectUtils, $q, $managersService, $momentService, $fireBaseService, $textManipulator, $arrayMappers, $rootScope) {
+  'use strict';
 
-    var updateDataUtils = {
+  angular.module('sicklifes')
 
-      /**
-       * gets data from all of the players in all valid leagues
-       */
-      updatePlayerPoolData: function (callback) {
+    .factory('$updateDataUtils', function ($apiFactory, $objectUtils, $q, $managersService, $momentService, $fireBaseService, $textManipulator, $arrayMappers, $rootScope) {
 
-        console.log('$updateDataUtils -- updatePlayerPoolData');
+      var updateDataUtils = {
 
-        var allTeams = $apiFactory.getAllTeams(),
-          allTeamsPromise = [],
-          allPlayers = [];
+        /**
+         * gets data from all of the players in all valid leagues
+         */
+        updatePlayerPoolData: function (callback) {
 
-        // returns a list of promise with the end point for each league
-        $apiFactory.listOfPromises(allTeams, function (result) {
+          console.log('$updateDataUtils -- updatePlayerPoolData');
 
-          _.each(result, function (leagueData) {
+          var allTeams = $apiFactory.getAllTeams(),
+            allTeamsPromise = [],
+            allPlayers = [];
 
-            _.each(leagueData.data, function (teamData) {
+          // returns a list of promise with the end point for each league
+          $apiFactory.listOfPromises(allTeams, function (result) {
 
-              console.log('LEAGUE:', leagueData.leagueName);
-              //console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
+            _.each(result, function (leagueData) {
 
-              // returns a promise with the end point for each team
-              var rosterRequest = $apiFactory.getData({
-                endPointURL: $textManipulator.getTeamRosterURL(leagueData.leagueName, teamData.id)
-              });
+              _.each(leagueData.data, function (teamData) {
 
+                console.log('LEAGUE:', leagueData.leagueName);
+                //console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
 
-              allTeamsPromise.push(rosterRequest);
-
-              rosterRequest.then(function (playerData) {
-
-                _.each(playerData.data, function (eachPlayer) {
-                  // console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
+                // returns a promise with the end point for each team
+                var rosterRequest = $apiFactory.getData({
+                  endPointURL: $textManipulator.getTeamRosterURL(leagueData.leagueName, teamData.id)
                 });
 
-                // each player on each team
-                var rosterArray = playerData.data.map($arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
-                allPlayers = allPlayers.concat(rosterArray);
+
+                allTeamsPromise.push(rosterRequest);
+
+                rosterRequest.then(function (playerData) {
+
+                  _.each(playerData.data, function (eachPlayer) {
+                    // console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
+                  });
+
+                  // each player on each team
+                  var rosterArray = playerData.data.map($arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
+                  allPlayers = allPlayers.concat(rosterArray);
+
+                });
 
               });
 
             });
 
+            console.log('allTeamsPromise', allTeamsPromise.length);
+
+            $q.all(allTeamsPromise).then(function (data) {
+              console.log('updatePlayerPoolData - listOfPromises - COMPLETE', data.length);
+              callback(allPlayers);
+            });
+
+
           });
 
-          console.log('allTeamsPromise', allTeamsPromise.length);
+        },
 
-          $q.all(allTeamsPromise).then(function (data) {
-            console.log('updatePlayerPoolData - listOfPromises - COMPLETE', data.length);
-            callback(allPlayers);
-          });
+        /**
+         * gets all leagues in teams
+         */
+        updateLeagueTables: function () {
 
+          console.log('$updateDataUtils -- updateLeagueTables');
 
-        });
-
-      },
-
-      /**
-       * gets all leagues in teams
-       */
-      updateLeagueTables: function () {
-
-        console.log('$updateDataUtils -- updateLeagueTables');
-
-        var leagueTables = $apiFactory.getLeagueTables(),
-          defer = $q.defer(),
-          leagueTablesData = [],
-          allLeagues = {
-            _lastSyncedOn: $momentService.syncDate()
-          };
-
-        // returns a list of promise with the end point for each league
-        $apiFactory.listOfPromises(leagueTables, function (promiseData) {
-
-          leagueTablesData = _.map(promiseData, function (result) {
-
-            return {
-              data: _.map(result.data, $arrayMappers.tableMap)
+          var leagueTables = $apiFactory.getLeagueTables(),
+            defer = $q.defer(),
+            leagueTablesData = [],
+            allLeagues = {
+              _lastSyncedOn: $momentService.syncDate()
             };
 
-          });
+          // returns a list of promise with the end point for each league
+          $apiFactory.listOfPromises(leagueTables, function (promiseData) {
 
-          defer.resolve(leagueTablesData);
+            leagueTablesData = _.map(promiseData, function (result) {
 
-        });
+              return {
+                data: _.map(result.data, $arrayMappers.tableMap)
+              };
 
-        //return leagueTablesData;
-        return defer.promise;
-
-      },
-
-      /**
-       * gets data from all of the players in all valid leagues
-       */
-      updateAllManagerData: function () {
-
-        console.log('$updateDataUtils --> updateAllManagerData');
-
-        var allLeaguePromises = [],
-          defer = $q.defer();
-
-        $rootScope.managersData = $rootScope.managersData || $managersService;
-
-        _.each($rootScope.managersData, function (manager) {
-
-          // reset goal counts
-          manager = $objectUtils.cleanManager(manager, true);
-
-          _.each(manager.players, function (player) {
-
-            player = $objectUtils.playerResetGoalPoints(player);
-
-            manager.seriCount = 0;
-            manager.ligaCount = 0;
-            manager.eplCount = 0;
-            manager.chlgCount = 0;
-            manager.euroCount = 0;
-            manager.wildCardCount = 0;
-
-            var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
-
-            allLeaguePromises.push(playerProfileRequest);
-
-            playerProfileRequest
-              .then($arrayMappers.playerInfo.bind(this, player))
-              .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }));
-
-          });
-
-        });
-
-        $apiFactory.listOfPromises(allLeaguePromises, function (result) {
-          defer.resolve(result);
-        });
-
-        return defer.promise;
-
-      },
-
-      /**
-       * fetches all league leaders in goals
-       */
-      updateLeagueLeadersData: function () {
-
-        console.log('$updateDataUtils --> updateLeagueLeadersData');
-
-        var allLeagues = [],
-          defer = $q.defer(),
-        // list of all goal scorers in all leagues
-          consolidatedGoalScorers = [],
-        // makes a request for all leagues in a loop returns a list of promises
-          allPromises = $apiFactory.getAllGoalLeaders();
-
-        // waits for an array of promises to resolve, sets allLeagues data
-        $apiFactory.listOfPromises(allPromises, function (result) {
-
-          allLeagues = [];
-
-          _.each(result, function (league) {
-            var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, $rootScope.managersData, league.leagueURL));
-            allLeagues.push({
-              name: $textManipulator.properLeagueName(league.leagueName),
-              source: goalsMap,
-              className: league.leagueName,
-              img: $textManipulator.leagueImages[league.leagueName]
             });
-            consolidatedGoalScorers = consolidatedGoalScorers.concat(goalsMap);
+
+            defer.resolve(leagueTablesData);
+
           });
 
-          defer.resolve(allLeagues);
+          //return leagueTablesData;
+          return defer.promise;
 
-        });
+        },
 
-        return defer.promise;
-
-      },
-
-      ///////////////////////////////////
-
-      /**
-       * fetches everything
-       */
-      updateEverything: function () {
-
-        console.log('is managersData undefined:', angular.isUndefinedOrNull($localStorage.get('managersData')));
-        console.log('is leagueLeadersData undefined:', angular.isUndefinedOrNull($localStorage.get('leagueLeadersData')));
-        console.log('is playerPoolData undefined:', angular.isUndefinedOrNull($localStorage.get('playerPoolData')));
-        console.log('is allLeagueTeamsData undefined:', angular.isUndefinedOrNull($localStorage.get('allLeagueTeamsData')));
-
-        ///////////////////////////////////////
-
-        /*$fireBaseService.initialize(updateDataUtils);
-         var firePromise = $fireBaseService.getFireBaseData();
-         firePromise.then(function (result) {
-
-         console.log('result', result);
-
-         _.each(result, function (resultObj, key) {
-         console.log('key', key);
-         $localStorage.set(key, resultObj);
-         });
-         });
+        /**
+         * gets data from all of the players in all valid leagues
          */
+        updateAllManagerData: function () {
 
-        console.log('////////////////////////');
+          console.log('$updateDataUtils --> updateAllManagerData');
 
-        if (angular.isUndefinedOrNull($localStorage.get('managersData'))) {
+          var allLeaguePromises = [],
+            defer = $q.defer();
 
-          console.log('managersData - no localstorage found');
+          $rootScope.managersData = $rootScope.managersData || $managersService;
 
-          updateDataUtils.updateAllManagerData()
-            .then(function (result) {
-              //result._lastSyncedOn = $momentService.syncDate();
-              console.log('managersData - data fetched', result);
-              //$localStorage.set('managersData', result);
-              //$fireBaseService.syncLeagueLeadersData(result);
+          _.each($rootScope.managersData, function (manager) {
+
+            // reset goal counts
+            manager = $objectUtils.cleanManager(manager, true);
+
+            _.each(manager.players, function (player) {
+
+              player = $objectUtils.playerResetGoalPoints(player);
+
+              manager.seriCount = 0;
+              manager.ligaCount = 0;
+              manager.eplCount = 0;
+              manager.chlgCount = 0;
+              manager.euroCount = 0;
+              manager.wildCardCount = 0;
+
+              var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
+
+              allLeaguePromises.push(playerProfileRequest);
+
+              playerProfileRequest
+                .then($arrayMappers.playerInfo.bind(this, player))
+                .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }));
 
             });
-        } else {
 
-          console.log('managersData - exists in localstorage');
-          var managerObject = $localStorage.get('managersData');
-          managerObject._lastSyncedOn = $momentService.syncDate();
-          $fireBaseService.syncManagersData(managerObject);
+          });
+
+          $apiFactory.listOfPromises(allLeaguePromises, function (result) {
+            defer.resolve(result);
+          });
+
+          return defer.promise;
+
+        },
+
+        /**
+         * fetches all league leaders in goals
+         */
+        updateLeagueLeadersData: function () {
+
+          console.log('$updateDataUtils --> updateLeagueLeadersData');
+
+          var allLeagues = [],
+            defer = $q.defer(),
+          // list of all goal scorers in all leagues
+            consolidatedGoalScorers = [],
+          // makes a request for all leagues in a loop returns a list of promises
+            allPromises = $apiFactory.getAllGoalLeaders();
+
+          // waits for an array of promises to resolve, sets allLeagues data
+          $apiFactory.listOfPromises(allPromises, function (result) {
+
+            allLeagues = [];
+
+            _.each(result, function (league) {
+              var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, $rootScope.managersData, league.leagueURL));
+              allLeagues.push({
+                name: $textManipulator.properLeagueName(league.leagueName),
+                source: goalsMap,
+                className: league.leagueName,
+                img: $textManipulator.leagueImages[league.leagueName]
+              });
+              consolidatedGoalScorers = consolidatedGoalScorers.concat(goalsMap);
+            });
+
+            defer.resolve(allLeagues);
+
+          });
+
+          return defer.promise;
+
+        },
+
+        ///////////////////////////////////
+
+        /**
+         * fetches everything
+         */
+        updateEverything: function () {
+
+          console.log('is managersData undefined:', angular.isUndefinedOrNull($localStorage.get('managersData')));
+          console.log('is leagueLeadersData undefined:', angular.isUndefinedOrNull($localStorage.get('leagueLeadersData')));
+          console.log('is playerPoolData undefined:', angular.isUndefinedOrNull($localStorage.get('playerPoolData')));
+          console.log('is allLeagueTeamsData undefined:', angular.isUndefinedOrNull($localStorage.get('allLeagueTeamsData')));
+
+          ///////////////////////////////////////
+
+          /*$fireBaseService.initialize(updateDataUtils);
+           var firePromise = $fireBaseService.getFireBaseData();
+           firePromise.then(function (result) {
+
+           console.log('result', result);
+
+           _.each(result, function (resultObj, key) {
+           console.log('key', key);
+           $localStorage.set(key, resultObj);
+           });
+           });
+           */
+
+          console.log('////////////////////////');
+
+          if (angular.isUndefinedOrNull($localStorage.get('managersData'))) {
+
+            console.log('managersData - no localstorage found');
+
+            updateDataUtils.updateAllManagerData()
+              .then(function (result) {
+                //result._lastSyncedOn = $momentService.syncDate();
+                console.log('managersData - data fetched', result);
+                //$localStorage.set('managersData', result);
+                //$fireBaseService.syncLeagueLeadersData(result);
+
+              });
+          } else {
+
+            console.log('managersData - exists in localstorage');
+            var managerObject = $localStorage.get('managersData');
+            managerObject._lastSyncedOn = $momentService.syncDate();
+            $fireBaseService.syncManagersData(managerObject);
+
+          }
+
+          ///////////////////////////////////////
+
+          /*if (angular.isUndefinedOrNull($localStorage.get('leagueLeadersData'))) {
+
+           console.log('leagueLeadersData - no localstorage found');
+
+           updateDataUtils.updateLeagueLeadersData()
+           .then(function (result) {
+
+           console.log('leagueLeadersData - data fetched');
+
+           var saveObject = {
+           _lastSyncedOn: $momentService.syncDate(),
+           liga: result[0].source,
+           epl: result[1].source,
+           seri: result[2].source,
+           chlg: result[3].source,
+           uefa: result[4].source
+           };
+
+           $localStorage.set('leagueLeadersData', saveObject);
+           $fireBaseService.syncLeagueLeadersData(saveObject);
+
+           });
+           } else {
+
+           console.log('leagueLeadersData - exists in localstorage');
+
+           var leagueLeadersObject = $localStorage.get('leagueLeadersData'),
+           saveObject = {
+           _lastSyncedOn: $momentService.syncDate(),
+           liga: leagueLeadersObject.liga,
+           epl: leagueLeadersObject.epl,
+           seri: leagueLeadersObject.seri,
+           chlg: leagueLeadersObject.chlg,
+           uefa: leagueLeadersObject.uefa
+           };
+
+           $localStorage.set('leagueLeadersData', saveObject);
+           $fireBaseService.syncLeagueLeadersData(saveObject);
+
+           }
+
+           ///////////////////////////////////////
+
+           // player pool
+           if (angular.isUndefinedOrNull($localStorage.get('playerPoolData'))) {
+           updateDataUtils.updatePlayerPoolData()
+           .then(function (result) {
+
+           console.log('updatePlayerPoolData LOADED');
+           debugger;
+
+           var allPlayersObject = {
+           _lastSyncedOn: $momentService.syncDate(),
+           allPlayers: result
+           };
+
+           $localStorage.set('playerPoolData', allPlayersObject);
+           $fireBaseService.syncPlayerPoolData(allPlayersObject);
+
+           });
+           } else {
+
+           console.log('playerPoolData exists in localstorage');
+
+           var allPlayersObject = {
+           _lastSyncedOn: $momentService.syncDate(),
+           allPlayers: $localStorage.get('playerPoolData')
+           };
+
+           //console.log('allPlayersObject', allPlayersObject);
+           $localStorage.set('playerPoolData', allPlayersObject);
+           $fireBaseService.syncPlayerPoolData(allPlayersObject);
+
+           }
+
+           ///////////////////////////////////////
+
+           if (angular.isUndefinedOrNull($localStorage.get('allLeagueTeamsData'))) {
+
+           console.log('allLeagueTeamsData - no localstorage found');
+
+           updateDataUtils.updateTeamsInLeague()
+           .then(function (result) {
+
+           console.log('allLeagueTeamsData - data fetched', result);
+           $localStorage.set('allLeagueTeamsData', saveObject);
+           $fireBaseService.syncAllLeagueTeamsData(result)
+
+           });
+
+           } else {
+
+           console.log('allLeagueTeamsData - exists in localstorage');
+           var result = $localStorage.get('allLeagueTeamsData');
+           result._lastSyncedOn = $momentService.syncDate();
+           $localStorage.set('allLeagueTeamsData', result);
+           $fireBaseService.syncAllLeagueTeamsData(result);
+
+           }
+           */
 
         }
 
-        ///////////////////////////////////////
+      };
 
-        /*if (angular.isUndefinedOrNull($localStorage.get('leagueLeadersData'))) {
+      return updateDataUtils;
 
-         console.log('leagueLeadersData - no localstorage found');
+    });
 
-         updateDataUtils.updateLeagueLeadersData()
-         .then(function (result) {
-
-         console.log('leagueLeadersData - data fetched');
-
-         var saveObject = {
-         _lastSyncedOn: $momentService.syncDate(),
-         liga: result[0].source,
-         epl: result[1].source,
-         seri: result[2].source,
-         chlg: result[3].source,
-         uefa: result[4].source
-         };
-
-         $localStorage.set('leagueLeadersData', saveObject);
-         $fireBaseService.syncLeagueLeadersData(saveObject);
-
-         });
-         } else {
-
-         console.log('leagueLeadersData - exists in localstorage');
-
-         var leagueLeadersObject = $localStorage.get('leagueLeadersData'),
-         saveObject = {
-         _lastSyncedOn: $momentService.syncDate(),
-         liga: leagueLeadersObject.liga,
-         epl: leagueLeadersObject.epl,
-         seri: leagueLeadersObject.seri,
-         chlg: leagueLeadersObject.chlg,
-         uefa: leagueLeadersObject.uefa
-         };
-
-         $localStorage.set('leagueLeadersData', saveObject);
-         $fireBaseService.syncLeagueLeadersData(saveObject);
-
-         }
-
-         ///////////////////////////////////////
-
-         // player pool
-         if (angular.isUndefinedOrNull($localStorage.get('playerPoolData'))) {
-         updateDataUtils.updatePlayerPoolData()
-         .then(function (result) {
-
-         console.log('updatePlayerPoolData LOADED');
-         debugger;
-
-         var allPlayersObject = {
-         _lastSyncedOn: $momentService.syncDate(),
-         allPlayers: result
-         };
-
-         $localStorage.set('playerPoolData', allPlayersObject);
-         $fireBaseService.syncPlayerPoolData(allPlayersObject);
-
-         });
-         } else {
-
-         console.log('playerPoolData exists in localstorage');
-
-         var allPlayersObject = {
-         _lastSyncedOn: $momentService.syncDate(),
-         allPlayers: $localStorage.get('playerPoolData')
-         };
-
-         //console.log('allPlayersObject', allPlayersObject);
-         $localStorage.set('playerPoolData', allPlayersObject);
-         $fireBaseService.syncPlayerPoolData(allPlayersObject);
-
-         }
-
-         ///////////////////////////////////////
-
-         if (angular.isUndefinedOrNull($localStorage.get('allLeagueTeamsData'))) {
-
-         console.log('allLeagueTeamsData - no localstorage found');
-
-         updateDataUtils.updateTeamsInLeague()
-         .then(function (result) {
-
-         console.log('allLeagueTeamsData - data fetched', result);
-         $localStorage.set('allLeagueTeamsData', saveObject);
-         $fireBaseService.syncAllLeagueTeamsData(result)
-
-         });
-
-         } else {
-
-         console.log('allLeagueTeamsData - exists in localstorage');
-         var result = $localStorage.get('allLeagueTeamsData');
-         result._lastSyncedOn = $momentService.syncDate();
-         $localStorage.set('allLeagueTeamsData', result);
-         $fireBaseService.syncAllLeagueTeamsData(result);
-
-         }
-         */
-
-      }
-
-    };
-
-    return updateDataUtils;
-
-  });
+})();

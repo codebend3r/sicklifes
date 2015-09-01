@@ -1,13 +1,19 @@
 /**
- * Created by Bouse on 12/23/2014
+ * Created by Bouse on 09/01/2015
  */
 
-angular.module('sicklifes')
+(function () {
 
-  .controller('masterCtrl', function ($scope) {
+  'use strict';
 
-    $scope.version = '0.5.0';
+  angular.module('sicklifes')
 
-    $scope.loaded = true;
+    .controller('masterCtrl', function ($scope) {
 
-  });
+      $scope.version = '0.5.0';
+
+      $scope.loaded = true;
+
+    });
+
+})();

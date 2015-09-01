@@ -1,134 +1,139 @@
 /**
- * Created by Bouse on 10/24/2014
+ * Created by Bouse on 09/01/2015
  */
 
+(function () {
 
-angular.module('sicklifes')
+  'use strict';
 
-  .controller('standingsCtrl', function ($scope, $timeout, $apiFactory, $stateParams, $fireBaseService, $updateDataUtils, $objectUtils, $momentService, $managersService, $location) {
+  angular.module('sicklifes')
 
-    ////////////////////////////////////////
-    /////////////// public /////////////////
-    ////////////////////////////////////////
+    .controller('standingsCtrl', function ($scope, $timeout, $apiFactory, $stateParams, $fireBaseService, $updateDataUtils, $objectUtils, $momentService, $managersService, $location) {
 
-    /**
-     * whether data is still loading
-     */
-    $scope.loading = true;
+      ////////////////////////////////////////
+      /////////////// public /////////////////
+      ////////////////////////////////////////
 
-    /**
-     * url param - whether admin is true
-     */
-    $scope.admin = $stateParams.admin;
+      /**
+       * whether data is still loading
+       */
+      $scope.loading = true;
 
-    /**
-     * TODO
-     */
-    $scope.tableHeader = [
-      {
-        hoverTitle: 'Team',
-        text: 'Team'
-      },
-      {
-        hoverTitle: 'Domestic Goals',
-        text: 'DG'
-      },
-      {
-        hoverTitle: 'Champions League Goals',
-        text: 'CLG'
-      },
-      {
-        hoverTitle: 'Europa League Goals',
-        text: 'EG'
-      },
-      {
-        hoverTitle: 'Total Points',
-        text: 'PTS'
-      }
-    ];
+      /**
+       * url param - whether admin is true
+       */
+      $scope.admin = $stateParams.admin;
 
-    /**
-     * consolidated list of all owned players by a manager
-     */
-    $scope.allLeagues = null;
-
-    $scope.updateAllManagerData = null;
-
-    ////////////////////////////////////////
-    ////////////// private /////////////////
-    ////////////////////////////////////////
-
-    /**
-     * TODO
-     */
-    var allRequestComplete = function () {
-
-      console.log('allRequestComplete');
-
-      $scope.loading = false;
-
-    };
-
-    $scope.saveToFireBase = function () {
-
-      console.log('////////////////////////////////////');
-      console.log('$scope.managersData', $scope.managersData);
-      console.log('////////////////////////////////////');
-
-      var saveObject = {
-        _syncedFrom: 'standingsCtrl',
-        _lastSyncedOn: $dateService.syncDate(),
-        chester: $scope.managersData[0],
-        frank: $scope.managersData[1],
-        dan: $scope.managersData[2],
-        justin: $scope.managersData[3],
-        mike: $scope.managersData[4],
-        joe: $scope.managersData[5]
-      };
-
-      $fireBaseService.syncManagersData(saveObject);
-
-    };
-
-    /**
-     * call when firebase data has loaded
-     * defines $scope.managersData
-     * @param data
-     */
-    var fireBaseLoaded = function (data) {
-
-      console.log('fireBaseLoaded -- standingsCtrl', data);
-
-      $scope.managersData = [
-        data.managersData.chester,
-        data.managersData.frank,
-        data.managersData.dan,
-        data.managersData.justin,
-        data.managersData.mike,
-        data.managersData.joe
+      /**
+       * TODO
+       */
+      $scope.tableHeader = [
+        {
+          hoverTitle: 'Team',
+          text: 'Team'
+        },
+        {
+          hoverTitle: 'Domestic Goals',
+          text: 'DG'
+        },
+        {
+          hoverTitle: 'Champions League Goals',
+          text: 'CLG'
+        },
+        {
+          hoverTitle: 'Europa League Goals',
+          text: 'EG'
+        },
+        {
+          hoverTitle: 'Total Points',
+          text: 'PTS'
+        }
       ];
 
-      //console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
-      //console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
-      //console.log('syncDate managersData', data.managersData._lastSyncedOn);
+      /**
+       * consolidated list of all owned players by a manager
+       */
+      $scope.allLeagues = null;
 
-      $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
+      $scope.updateAllManagerData = null;
 
-      $scope.loading = false;
+      ////////////////////////////////////////
+      ////////////// private /////////////////
+      ////////////////////////////////////////
 
-    };
+      /**
+       * TODO
+       */
+      var allRequestComplete = function () {
 
-    /**
-     * init function
-     */
-    var init = function () {
+        console.log('allRequestComplete');
 
-      $fireBaseService.initialize($scope);
-      var firePromise = $fireBaseService.getFireBaseData();
-      firePromise.then(fireBaseLoaded);
+        $scope.loading = false;
 
-    };
+      };
 
-    init();
+      $scope.saveToFireBase = function () {
 
-  });
+        console.log('////////////////////////////////////');
+        console.log('$scope.managersData', $scope.managersData);
+        console.log('////////////////////////////////////');
+
+        var saveObject = {
+          _syncedFrom: 'standingsCtrl',
+          _lastSyncedOn: $dateService.syncDate(),
+          chester: $scope.managersData[0],
+          frank: $scope.managersData[1],
+          dan: $scope.managersData[2],
+          justin: $scope.managersData[3],
+          mike: $scope.managersData[4],
+          joe: $scope.managersData[5]
+        };
+
+        $fireBaseService.syncManagersData(saveObject);
+
+      };
+
+      /**
+       * call when firebase data has loaded
+       * defines $scope.managersData
+       * @param data
+       */
+      var fireBaseLoaded = function (data) {
+
+        console.log('fireBaseLoaded -- standingsCtrl', data);
+
+        $scope.managersData = [
+          data.managersData.chester,
+          data.managersData.frank,
+          data.managersData.dan,
+          data.managersData.justin,
+          data.managersData.mike,
+          data.managersData.joe
+        ];
+
+        //console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
+        //console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
+        //console.log('syncDate managersData', data.managersData._lastSyncedOn);
+
+        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
+
+        $scope.loading = false;
+
+      };
+
+      /**
+       * init function
+       */
+      var init = function () {
+
+        $fireBaseService.initialize($scope);
+        var firePromise = $fireBaseService.getFireBaseData();
+        firePromise.then(fireBaseLoaded);
+
+      };
+
+      init();
+
+    });
+
+})();

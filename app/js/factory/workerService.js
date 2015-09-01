@@ -1,27 +1,33 @@
 /**
- * Created by Bouse on 01/01/2015
+ * Created by Bouse on 09/01/2015
  */
 
-angular.module('sicklifes')
+(function () {
 
-  .factory('$workerService', function () {
+  'use strict';
 
-    var worker,
-      defer;
+  angular.module('sicklifes')
 
-    worker = new Worker('./js/workers/statsFetcher.js');
+    .factory('$workerService', function () {
 
-    worker.addEventListener('message', function (e) {
-      console.log('Worker said: ', e.data);
-      defer.resolve(e.data);
-    }, false);
+      var worker,
+        defer;
 
-    return {
-      doWork: function (myData) {
-        defer = $q.defer();
-        worker.postMessage(myData); // Send data to our worker.
-        return defer.promise;
-      }
-    };
+      worker = new Worker('./js/workers/statsFetcher.js');
 
-  });
+      worker.addEventListener('message', function (e) {
+        console.log('Worker said: ', e.data);
+        defer.resolve(e.data);
+      }, false);
+
+      return {
+        doWork: function (myData) {
+          defer = $q.defer();
+          worker.postMessage(myData); // Send data to our worker.
+          return defer.promise;
+        }
+      };
+
+    });
+
+})();
