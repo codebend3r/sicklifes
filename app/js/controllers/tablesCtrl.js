@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('tablesCtrl', function ($scope, $http, $stateParams, $updateDataUtils, $textManipulator, $momentService, $localStorage) {
+    .controller('tablesCtrl', function ($scope, $http, $rootScope, $stateParams, $updateDataUtils, $textManipulator, $momentService, $localStorage) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -102,7 +102,7 @@
         $scope.allLeagues[3].source = httpData[3].data;
         $scope.allLeagues[4].source = httpData[4].data;
 
-        $scope.setSelectedLeague();
+        $scope.setSelectedLeague($scope.allLeagues);
 
         $scope.loading = false;
 
@@ -146,7 +146,7 @@
         $scope.allLeagues[3].source = firebaseData.leagueTables.CHLG;
         $scope.allLeagues[4].source = firebaseData.leagueTables.UEFA;
 
-        $scope.setSelectedLeague();
+        $scope.setSelectedLeague($scope.allLeagues);
 
         saveObject = {
           _syncedFrom: 'leagusCtrl',
@@ -186,7 +186,7 @@
         $scope.allLeagues[3].source = localData.CHLG;
         $scope.allLeagues[4].source = localData.UEFA;
 
-        $scope.setSelectedLeague();
+        $scope.setSelectedLeague($scope.allLeagues);
 
         saveObject = {
           _syncedFrom: 'leagusCtrl',

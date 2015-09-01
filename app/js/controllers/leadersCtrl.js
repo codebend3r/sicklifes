@@ -6,8 +6,6 @@
 
   'use strict';
 
-  console.log('app/controllers/leadersCtrl/js');
-
   angular.module('sicklifes')
 
     .controller('leadersCtrl', function ($scope, $http, $stateParams, $localStorage, $rootScope, $momentService) {
@@ -56,18 +54,74 @@
               goals: data.stat,
               logo: data.team.logos.small,
               playerName: data.player.full_name,
-              teamName: data.team.full_name,
+              teamName: data.team.full_name
             };
 
           });
 
-          saveObject = {
-            _syncedFrom: 'leadersCtrl',
-            _lastSyncedOn: $momentService.syncDate(),
-            leagueLeaders: $scope.leagueLeaders
-          };
+          console.log('after http data is loaded, save to firebase');
 
-          $scope.saveToFireBase(saveObject, 'scoringLeaders');
+          prepareForFirebase();
+
+        });
+
+      };
+
+      /**
+       * extends league object and makes the call to firebase
+       */
+      var prepareForFirebase = function () {
+
+        console.log('prepareForFirebase()');
+
+        saveObject = {};
+        saveObject._syncedFrom = 'leadersCtrl';
+        saveObject._lastSyncedOn = $momentService.syncDate();
+        saveObject.leagues = {};
+        saveObject.leagues[$stateParams.leagueName] = $scope.leagueLeaders;
+        //saveObject.leagues[$stateParams.leagueName] = {};
+
+        //console.log('saveObject', saveObject);
+
+        //var mergeLeagueObj1 = _.defaults(null, firebaseData, saveObject);
+        //var mergeLeagueObj2 = _.defaults(null, saveObject, firebaseData);
+        //var mergeLeagueObj3 = _.defaults(saveObject, firebaseData);
+        //var mergeLeagueObj4 = _.defaults(firebaseData, saveObject);
+
+        //_.defaults(saveObject, firebaseData);
+
+        //console.log('mergeLeagueObj1', mergeLeagueObj1);
+        //console.log('mergeLeagueObj2', mergeLeagueObj2);
+        //console.log('mergeLeagueObj3', mergeLeagueObj3);
+        //console.log('mergeLeagueObj4', mergeLeagueObj4);
+
+        //console.log('> saveObject', saveObject);
+
+        $scope.saveToFireBase(saveObject, 'scoringLeaders');
+
+      };
+
+      /**
+       * read data from local storage
+       * @param localData
+       */
+      $scope.loadFromLocal = function (localData) {
+
+        console.log('///////////////////');
+        console.log('LOCAL --> localData:', localData);
+        console.log('syncDate:', localData._lastSyncedOn);
+        console.log('$stateParams.leagueName:', $stateParams.leagueName);
+        console.log('///////////////////');
+
+        $scope.leagueLeaders = localData[$stateParams.leagueName];
+
+        $scope.startFireBase(function (firebaseObj) {
+
+          firebaseData = firebaseObj;
+
+          $rootScope.fireBaseReady = true;
+
+          prepareForFirebase();
 
         });
 
@@ -80,7 +134,12 @@
       /**
        * TODO
        */
-      var saveObject;
+      var saveObject = {};
+
+      /**
+       * TODO
+       */
+      var firebaseData = null;
 
       /**
        * TODO
@@ -92,30 +151,33 @@
         if (angular.isDefined($rootScope[$scope.dataKeyName])) {
 
           console.log('load from $rootScope');
-          //$scope.loadFromLocal($rootScope[$scope.dataKeyName]);
+          $scope.loadFromLocal($rootScope[$scope.dataKeyName]);
 
         } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
 
           console.log('load from local storage');
-          //$scope.loadFromLocal($localStorage[$scope.dataKeyName]);
+          $scope.loadFromLocal($localStorage[$scope.dataKeyName]);
 
         } else {
 
           console.log('load from firebase');
           $scope.startFireBase(function (firebaseObj) {
 
-            $scope.fireBaseReady = true;
+            firebaseData = firebaseObj;
 
-            if (angular.isUndefinedOrNull(firebaseObj[$scope.dataKeyName])) {
+            $rootScope.fireBaseReady = true;
 
-              console.log('not defined in firebase');
-              $scope.updateFromHTTP();
+            console.log('1', firebaseData[$scope.dataKeyName]);
+
+            if (!angular.isUndefinedOrNull(firebaseObj[$scope.dataKeyName]) && !angular.isUndefinedOrNull(firebaseObj[$scope.dataKeyName].leagues) && !angular.isUndefinedOrNull(firebaseObj[$scope.dataKeyName].leagues[$stateParams.leagueName])) {
+
+              console.log('defined in firebase', firebaseData[$scope.dataKeyName].leagues);
+              $scope.leagueLeaders = firebaseData[$scope.dataKeyName].leagues[$stateParams.leagueName];
 
             } else {
 
-              console.log('defined in firebase');
-              var leagueLeaders = firebaseData[$scope.dataKeyName];
-              $scope.leagueLeaders = leagueLeaders;
+              console.log('not defined in firebase');
+              $scope.updateFromHTTP();
 
             }
 

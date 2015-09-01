@@ -8,14 +8,18 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $fireBaseService, $momentService) {
+    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $momentService) {
+
+      ////////////////////////////////////////
+      /////////////// public /////////////////
+      ////////////////////////////////////////
 
       console.log('--> appCtrl');
 
       /**
        * whether data is still loading
        */
-      $scope.loading = true;
+      $scope.loading = false;
 
       /**
        * if firebase has been initalized
@@ -30,19 +34,16 @@
       /**
        * sets data in the initialized firebase service
        * @param saveObject
-       * @param ctrlName
        * @param dataKey
        */
       $scope.saveToFireBase = function (saveObject, dataKey) {
 
-        if ($scope.fireBaseReady) {
+        if ($rootScope.fireBaseReady) {
 
-          console.log('...SAVING TO FIREBASE');
           $fireBaseService.saveToFireBase(saveObject, dataKey);
 
         } else {
 
-          console.log('...FIREBSE NOT READY, START FIREBASE NOW');
           $scope.startFireBase();
 
         }
@@ -54,11 +55,9 @@
        * @param callback
        */
       $scope.startFireBase = function (callback) {
-        if ($scope.fireBaseReady) {
-          console.log('return immediately');
+        if ($rootScope.fireBaseReady) {
           callback();
         } else {
-          console.log('initialzing firebase');
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(callback);

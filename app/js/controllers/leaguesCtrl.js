@@ -30,21 +30,35 @@
       };
 
       /**
+       * TODO
+       */
+      $scope.selectedLeague = null;
+
+      /**
+       * TODO
+       */
+      $scope.allLeagues = [];
+
+      /**
        * sets the league
        */
-      $scope.setSelectedLeague = function () {
+      $scope.setSelectedLeague = function (allLeagues) {
 
         var selectedLeagueIndex = 0;
 
-        _.some($scope.allLeagues, function (l, index) {
+        _.some(allLeagues, function (l, index) {
           if (l.className === $stateParams.leagueName) {
+            console.log('match at', selectedLeagueIndex, $stateParams.leagueName);
             selectedLeagueIndex = index;
             return true;
           }
         });
 
-        $scope.selectedLeague = $scope.allLeagues[selectedLeagueIndex];
+        $scope.selectedLeague = allLeagues[selectedLeagueIndex];
+
         $scope.leagueName = $scope.selectedLeague.className;
+
+        return allLeagues[selectedLeagueIndex];
 
       };
 
