@@ -50,17 +50,23 @@
 
       };
 
+      $scope.firebaseData = {};
+
       /**
        * starts the process of getting data from firebase
        * @param callback
        */
       $scope.startFireBase = function (callback) {
         if ($rootScope.fireBaseReady) {
-          callback();
+          console.log('firebase already started, returning now');
+          callback($scope.firebaseData);
         } else {
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
-          firePromise.then(callback);
+          firePromise.then(function(fbData) {
+            $scope.firebaseData = fbData;
+            callback($scope.firebaseData);
+          });
         }
 
       };

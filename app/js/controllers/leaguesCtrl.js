@@ -25,8 +25,7 @@
        * select box changes function
        */
       $scope.changeLeague = function (league) {
-        //console.log('> leagueName', league);
-        //$state.go('tables', {leagueName: league.className});
+        $state.go($state.current.name, {leagueName: league.className});
       };
 
       /**
@@ -35,18 +34,49 @@
       $scope.selectedLeague = null;
 
       /**
-       * TODO
+       * all leagues array
        */
-      $scope.allLeagues = [];
+      $scope.allLeagues = [
+        {
+          name: $textManipulator.leagueLongNames.liga,
+          source: null,
+          className: 'liga',
+          img: $textManipulator.leagueImages.liga
+        },
+        {
+          name: $textManipulator.leagueLongNames.epl,
+          source: null,
+          className: 'epl',
+          img: $textManipulator.leagueImages.epl
+        },
+        {
+          name: $textManipulator.leagueLongNames.seri,
+          source: null,
+          className: 'seri',
+          img: $textManipulator.leagueImages.seri
+        },
+        {
+          name: $textManipulator.leagueLongNames.chlg,
+          source: null,
+          className: 'chlg',
+          img: $textManipulator.leagueImages.chlg
+        },
+        {
+          name: $textManipulator.leagueLongNames.euro,
+          source: null,
+          className: 'europa',
+          img: $textManipulator.leagueImages.euro
+        }
+      ];
 
       /**
        * sets the league
        */
-      $scope.setSelectedLeague = function (allLeagues) {
+      $scope.setSelectedLeague = function () {
 
         var selectedLeagueIndex = 0;
 
-        _.some(allLeagues, function (l, index) {
+        _.some($scope.allLeagues, function (l, index) {
           if (l.className === $stateParams.leagueName) {
             console.log('match at', selectedLeagueIndex, $stateParams.leagueName);
             selectedLeagueIndex = index;
@@ -54,11 +84,11 @@
           }
         });
 
-        $scope.selectedLeague = allLeagues[selectedLeagueIndex];
+        $scope.selectedLeague = $scope.allLeagues[selectedLeagueIndex];
 
         $scope.leagueName = $scope.selectedLeague.className;
 
-        return allLeagues[selectedLeagueIndex];
+        return $scope.allLeagues[selectedLeagueIndex];
 
       };
 

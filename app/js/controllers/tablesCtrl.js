@@ -51,42 +51,6 @@
       ];
 
       /**
-       * all leagues array
-       */
-      $scope.allLeagues = [
-        {
-          name: $textManipulator.leagueLongNames.liga,
-          source: null,
-          className: 'liga',
-          img: $textManipulator.leagueImages.liga
-        },
-        {
-          name: $textManipulator.leagueLongNames.epl,
-          source: null,
-          className: 'epl',
-          img: $textManipulator.leagueImages.epl
-        },
-        {
-          name: $textManipulator.leagueLongNames.seri,
-          source: null,
-          className: 'seri',
-          img: $textManipulator.leagueImages.seri
-        },
-        {
-          name: $textManipulator.leagueLongNames.chlg,
-          source: null,
-          className: 'chlg',
-          img: $textManipulator.leagueImages.chlg
-        },
-        {
-          name: $textManipulator.leagueLongNames.euro,
-          source: null,
-          className: 'europa',
-          img: $textManipulator.leagueImages.euro
-        }
-      ];
-
-      /**
        * makes http request from thescore.ca API
        * @param httpData
        */
@@ -102,14 +66,14 @@
         $scope.allLeagues[3].source = httpData[3].data;
         $scope.allLeagues[4].source = httpData[4].data;
 
-        $scope.setSelectedLeague($scope.allLeagues);
+        $scope.setSelectedLeague();
 
         $scope.loading = false;
 
         // after http request start firebase so we can save later
         $scope.startFireBase(function () {
 
-          $scope.fireBaseReady = true;
+          $rootScope.fireBaseReady = true;
 
           saveObject = {
             _syncedFrom: 'leagusCtrl',
@@ -146,7 +110,7 @@
         $scope.allLeagues[3].source = firebaseData.leagueTables.CHLG;
         $scope.allLeagues[4].source = firebaseData.leagueTables.UEFA;
 
-        $scope.setSelectedLeague($scope.allLeagues);
+        $scope.setSelectedLeague();
 
         saveObject = {
           _syncedFrom: 'leagusCtrl',
@@ -162,7 +126,7 @@
           $scope.updateFromHTTP();
         } else {
           $scope.startFireBase(function () {
-            $scope.fireBaseReady = true;
+            $rootScope.fireBaseReady = true;
             $scope.saveToFireBase(saveObject, 'leagueTables');
           });
         }
@@ -186,7 +150,7 @@
         $scope.allLeagues[3].source = localData.CHLG;
         $scope.allLeagues[4].source = localData.UEFA;
 
-        $scope.setSelectedLeague($scope.allLeagues);
+        $scope.setSelectedLeague();
 
         saveObject = {
           _syncedFrom: 'leagusCtrl',
@@ -202,7 +166,7 @@
           $scope.updateFromHTTP();
         } else {
           $scope.startFireBase(function () {
-            $scope.fireBaseReady = true;
+            $rootScope.fireBaseReady = true;
             $scope.saveToFireBase(saveObject, 'leagueTables');
           });
         }
