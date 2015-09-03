@@ -7,11 +7,11 @@
     background-color: $mainColour;
     &:hover {
       color: $textColour;
-      background-color: $secondaryColour;
+      //background-color: $secondaryColour;
     }
     &:active, &:visited {
       color: $textColour;
-      background-color: $secondaryColour;
+      //background-color: $secondaryColour;
     }
   }
   .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {

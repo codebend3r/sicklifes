@@ -39,6 +39,26 @@
           }
 
         })
+        .state('signUp', {
+
+          url: '/signup',
+          templateUrl: 'views/signup.html',
+          controller: 'loginCtrl',
+          data: {
+            public: true
+          }
+
+        })
+        .state('resetPassword', {
+
+          url: '/reset-password',
+          templateUrl: 'views/reset-password.html',
+          controller: 'loginCtrl',
+          data: {
+            public: true
+          }
+
+        })
         .state('leagues', {
 
           url: '/leagues/:leagueName',
@@ -60,24 +80,7 @@
           controller: 'leadersCtrl'
 
         })
-
-        //.state('login', {
-        //
-        //  url: '/login',
-        //  templateUrl: 'views/login.html',
-        //  login: true
-        //
-        //})
-        //.state('signup', {
-        //
-        //  url: '/signup',
-        //  templateUrl: 'views/signup.html',
-        //  public: true
-        //
-        //})
-
-        .
-        state('managers', {
+        .state('managers', {
 
           url: '/managers',
           templateUrl: 'views/managers.html',

@@ -8,20 +8,14 @@
 
   angular.module('sicklifes')
 
-    .directive('navMenu', function ($location) {
+    .directive('navMenu', function ($location, user) {
 
       return {
         restrict: 'E',
         replace: true,
         templateUrl: 'views/directives/nav.html',
-        scope: {},
+        scope: true,
         link: function ($scope) {
-
-          $scope.isActive = function (viewLocation) {
-            //console.log(viewLocation, 'contains', $location.path(), '? ', viewLocation.contains($location.path()));
-            return false;
-            //return $location.path().contains('player-details') && viewLocation === '/managers/' || viewLocation.contains($location.path());
-          };
 
           $scope.menuOptions = [
             {

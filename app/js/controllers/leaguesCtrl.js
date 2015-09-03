@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leaguesCtrl', function ($scope, $stateParams, $state, $apiFactory, $localStorage, $location, $updateDataUtils, $momentService, $rootScope, $textManipulator, $fireBaseService) {
+    .controller('leaguesCtrl', function ($scope, $stateParams, $state, user, $apiFactory, $localStorage, $location, $updateDataUtils, $momentService, $rootScope, $textManipulator, $fireBaseService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////

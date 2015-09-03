@@ -8,13 +8,19 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $momentService) {
+    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $momentService, user) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
       console.log('--> appCtrl');
+
+      user.getCurrent().then(function(currentUser) {
+        console.log('currentUser:', currentUser);
+        $rootScope.user = user;
+        $scope.user = user;
+      });
 
       /**
        * whether data is still loading

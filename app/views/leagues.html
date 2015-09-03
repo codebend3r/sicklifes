@@ -3,8 +3,8 @@
 <div ng-show='!loading' class='panel-body'>
 
   <h2>Leagues</h2>
-  <!-- <div>Welcome {{ user.first_name }}!</div> -->
-  <pre>user | json</pre>
+  <h3>Welcome {{ user.current.first_name }}</h3>
+  <button class="btn btn-success" href="#" ng-show="{{user.authenticated}}" ua-logout>Log Out</button>
 
   <select class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague(selectedLeague)'></select>
 

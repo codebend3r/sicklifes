@@ -10,7 +10,9 @@
 
     .controller('loginCtrl', function ($scope, user, $http) {
 
-      console.log('--> loginCtrl', user);
+      console.log('--> loginCtrl');
+
+      $scope.loading = false;
 
       // /var currenUser = user.init({ appId: '55e67bdde35f9' });
       //user.init({ appId: '5482b3c1ebdc7' });
@@ -46,10 +48,10 @@
       //   console.log('result:', result);
       // });
       //
-      user.login({ login: 'chester.rivas@gmail.com', password: 'DunnyFrench82' }, function(error, result) {
-        console.log('error:', error);
-        console.log('result:', result);
-      });
+      // user.login({ login: 'chester.rivas@gmail.com', password: 'DunnyFrench82' }, function(error, result) {
+      //   console.log('error:', error);
+      //   console.log('result:', result);
+      // });
       //
       // user.login({ login: 'crivas', password: 'Souldier82' }, function(error, result) {
       //   console.log('error:', error);

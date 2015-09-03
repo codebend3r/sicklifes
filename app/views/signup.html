@@ -1,14 +1,16 @@
-<p>Sign up</p>
-
-<form ua-signup ng-show="!verificationEmailSent">
-	<input name="first_name" placeholder="Your name"><br>
-	<input name="login" ua-is-email placeholder="Email"><br>
-	<input name="password" placeholder="Password" type="password"><br>
-	<p><button type="submit">Create account</button> or <a href="" ua-oauth-link="google">Sign up with Google</a></p>
-	
-	<p ng-show="loading"><img src="https://app.userapp.io/img/ajax-loader-transparent.gif"></p>
-	<p ng-show="error">{{ error.message }}</p>
+<form class="form" ua-signup>
+  <h2 class="form-heading">Please Sign Up</h2>
+  <div class="form-fields">
+    <input name="first_name" placeholder="First Name" type="text" class="form-control">
+    <input name="login" placeholder="Email" type="text" class="form-control" ua-is-email>
+    <input name="password" placeholder="Password" type="password" class="form-control">
+  </div>
+  <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="loading">
+    <span ng-show="!loading">Sign Up</span>
+    <img ng-show="loading" src="images/ajax-loader-blue.gif">
+  </button>
+  <div ng-show="error" class="alert alert-danger">{{ error.message }}</div>
+  <div ng-show="verificationEmailSent" class="alert alert-success">An email has been sent to your inbox. Click on the link to verify your account.</div>
 </form>
 
-<p ng-show="verificationEmailSent">An email has been sent to your inbox. Click on the link to verify your account.</p>
-<p><a href="#/login">Log in</a></p>
+<p style="text-align: center;"><a href="" ua-oauth-link="facebook">Or sign up with Facebook</a></p>
