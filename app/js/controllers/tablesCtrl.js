@@ -95,13 +95,11 @@
        *
        * @param firebaseData
        */
-      $scope.fireBaseLoaded = function (firebaseData) {
-
-        $scope.fireBaseReady = true;
+      var fireBaseLoaded = function (firebaseData) {
 
         console.log('///////////////////');
-        console.log('FB --> firebaseData:', firebaseData[dataKeyName]);
-        console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
+        console.log('FB --> firebaseData:', firebaseData[$scope.dataKeyName]);
+        console.log('syncDate:', firebaseData[$scope.dataKeyName]._lastSyncedOn);
         console.log('///////////////////');
 
         $scope.allLeagues[0].source = firebaseData.leagueTables.LIGA;
@@ -122,14 +120,16 @@
           UEFA: $scope.allLeagues[4].source
         };
 
-        if ($scope.checkYesterday(firebaseData[dataKeyName]._lastSyncedOn, saveObject)) {
+        if ($scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn, saveObject)) {
           $scope.updateFromHTTP();
         } else {
           $scope.startFireBase(function () {
             $rootScope.fireBaseReady = true;
-            $scope.saveToFireBase(saveObject, 'leagueTables');
+            $scope.saveToFireBase(saveObject, $scope.dataKeyName);
           });
         }
+
+        $rootScope.loading = false;
 
       };
 
@@ -137,7 +137,7 @@
        * read data from local storage
        * @param localData
        */
-      $scope.loadFromLocal = function (localData) {
+      var loadFromLocal = function (localData) {
 
         console.log('///////////////////');
         console.log('LOCAL --> localData:', localData);
@@ -171,6 +171,8 @@
           });
         }
 
+        $rootScope.loading = false;
+
       };
 
       ////////////////////////////////////////
@@ -187,19 +189,18 @@
        */
       var init = function () {
 
-        console.log('> leagueName', $stateParams.leagueName);
-
         $scope.dataKeyName = 'leagueTables';
+        $rootScope.loading = true;
 
         if (angular.isDefined($rootScope[$scope.dataKeyName])) {
 
           console.log('load from $rootScope');
-          $scope.loadFromLocal($rootScope[$scope.dataKeyName]);
+          loadFromLocal($rootScope[$scope.dataKeyName]);
 
         } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
 
           console.log('load from local storage');
-          $scope.loadFromLocal($localStorage[$scope.dataKeyName]);
+          loadFromLocal($localStorage[$scope.dataKeyName]);
 
         } else {
 

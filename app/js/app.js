@@ -13,12 +13,19 @@
     'ngResource',
     'ngSanitize',
     'ngStorage',
-    //'UserApp',
+    'UserApp',
     'jsonFormatter',
     'firebase',
     'ui.bootstrap',
     'angular.filter'
 
-  ]).constant('$moment', moment);
+  ])
+
+  .constant('$moment', moment)
+
+  .run(function(user) {
+    user.init({ appId: '55e67bdde35f9' });
+    //user.init({ appId: '5482b3c1ebdc7' });
+  });
 
 })();

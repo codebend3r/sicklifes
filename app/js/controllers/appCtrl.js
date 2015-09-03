@@ -19,7 +19,7 @@
       /**
        * whether data is still loading
        */
-      $scope.loading = false;
+      $rootScope.loading = true;
 
       /**
        * if firebase has been initalized

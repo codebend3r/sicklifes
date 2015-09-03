@@ -17,6 +17,11 @@
       console.log('--> leadersCtrl');
 
       /**
+       * whether data is still loading
+       */
+      $scope.loading = true;
+
+      /**
        * TODO
        */
       $scope.tableHeader = [
@@ -87,6 +92,41 @@
       };
 
       /**
+       * when firebase data is loaded
+       */
+      var firebaseLoaded = function (firebaseObj) {
+
+        firebaseData = firebaseObj;
+
+        $rootScope.fireBaseReady = true;
+
+        if (angular.isDefined(firebaseObj.leagueTables)) {
+          $scope.allLeagues[0].source = firebaseObj.leagueTables.LIGA;
+          $scope.allLeagues[1].source = firebaseObj.leagueTables.EPL;
+          $scope.allLeagues[2].source = firebaseObj.leagueTables.SERI;
+          $scope.allLeagues[3].source = firebaseObj.leagueTables.CHLG;
+          $scope.allLeagues[4].source = firebaseObj.leagueTables.UEFA;
+        }
+
+        $scope.setSelectedLeague();
+
+        $scope.loading = false;
+
+        if (!angular.isUndefinedOrNull(firebaseObj[$scope.dataKeyName]) && !angular.isUndefinedOrNull(firebaseObj[$scope.dataKeyName].leagues) && !angular.isUndefinedOrNull(firebaseObj[$scope.dataKeyName].leagues[$stateParams.leagueName])) {
+
+          console.log('defined in firebase');
+          $scope.leagueLeaders = firebaseData[$scope.dataKeyName].leagues[$stateParams.leagueName];
+
+        } else {
+
+          console.log('not defined in firebase');
+          $scope.updateFromHTTP();
+
+        }
+
+      };
+
+      /**
        * read data from local storage
        * @param localData
        */
@@ -115,6 +155,8 @@
           prepareForFirebase();
 
         });
+
+        $scope.loading = false;
 
       };
 
@@ -152,35 +194,7 @@
         } else {
 
           console.log('load from firebase');
-          $scope.startFireBase(function (firebaseObj) {
-
-            firebaseData = firebaseObj;
-
-            $rootScope.fireBaseReady = true;
-
-            if (angular.isDefined(firebaseObj.leagueTables)) {
-              $scope.allLeagues[0].source = firebaseObj.leagueTables.LIGA;
-              $scope.allLeagues[1].source = firebaseObj.leagueTables.EPL;
-              $scope.allLeagues[2].source = firebaseObj.leagueTables.SERI;
-              $scope.allLeagues[3].source = firebaseObj.leagueTables.CHLG;
-              $scope.allLeagues[4].source = firebaseObj.leagueTables.UEFA;
-            }
-
-            $scope.setSelectedLeague();
-
-            if (!angular.isUndefinedOrNull(firebaseObj[$scope.dataKeyName]) && !angular.isUndefinedOrNull(firebaseObj[$scope.dataKeyName].leagues) && !angular.isUndefinedOrNull(firebaseObj[$scope.dataKeyName].leagues[$stateParams.leagueName])) {
-
-              console.log('defined in firebase', firebaseData[$scope.dataKeyName].leagues);
-              $scope.leagueLeaders = firebaseData[$scope.dataKeyName].leagues[$stateParams.leagueName];
-
-            } else {
-
-              console.log('not defined in firebase');
-              $scope.updateFromHTTP();
-
-            }
-
-          });
+          $scope.startFireBase(firebaseLoaded);
 
         }
 

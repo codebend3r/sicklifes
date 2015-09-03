@@ -1,25 +1,6 @@
-<p>Please log in</p>
-
 <form ua-login>
-  
-  <div class='form-group'>
-    <label for='j_username'>Username</label>
-    <input type='username' class='form-control' placeholder='Enter Username' name='login'>
-    <span class='glyphicon glyphicon-user'></span>
-  </div>
-  <div class='form-group'>
-    <label for='j_password'>Password</label>
-    <input type='password' class='form-control' placeholder='Enter Password' name='password'>
-    <span class='glyphicon glyphicon-lock'></span>
-  </div>
-  
-  <button type="submit">Log in</button> or 
-  <!-- <a href="" ua-oauth-link="google">Log in with Google</a> -->
-  <button ua-oauth-link="facebook" class="btn btn-lg btn-facebook"><i class="fa fa-facebook"></i></button>
-  
-  <p ng-show="loading"><img src="https://app.userapp.io/img/ajax-loader-transparent.gif"></p>
+  <input name="login" placeholder="Username"><br>
+  <input name="password" placeholder="Password" type="password"><br>
+  <button type="submit">Log In</button>
   <p ng-show="error">{{ error.message }}</p>
 </form>
-
-<p><a href="#/signup">Sign up</a></p>
-<p><a href="#/reset-password">Reset password</a></p>

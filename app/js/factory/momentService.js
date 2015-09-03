@@ -17,7 +17,7 @@
         },
 
         syncDate: function () {
-          return $moment().format('M/D/YYYY');
+          return $moment().format('M/D/YYYY h:mm:ss a');
         },
 
         chartDate: function (date) {

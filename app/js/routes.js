@@ -28,6 +28,17 @@
           //controller: 'appCtrl'
 
         })
+        .state('signIn', {
+
+          url: '/login',
+          templateUrl: 'views/login.html',
+          controller: 'loginCtrl',
+          data: {
+            public: true,
+            login: true
+          }
+
+        })
         .state('leagues', {
 
           url: '/leagues/:leagueName',
@@ -111,8 +122,8 @@
         .state('roster', {
 
           url: '/roster/:leagueName/:teamId',
-          templateUrl: 'views/teams.html',
-          controller: 'teamsCtrl'
+          templateUrl: 'views/rosters.html',
+          controller: 'rostersCtrl'
 
         });
 

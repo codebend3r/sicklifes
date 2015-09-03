@@ -29,7 +29,7 @@
       };
 
       /**
-       * TODO
+       * object of current league in the url as a stateParams
        */
       $scope.selectedLeague = null;
 
@@ -78,7 +78,6 @@
 
         _.some($scope.allLeagues, function (l, index) {
           if (l.className === $stateParams.leagueName) {
-            console.log('match at', selectedLeagueIndex, $stateParams.leagueName);
             selectedLeagueIndex = index;
             return true;
           }

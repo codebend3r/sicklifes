@@ -1,9 +1,10 @@
 <preloader loading='loading'></preloader>
 
-<div ng-if='!loading' class='panel-body'>
+<div ng-show='!loading' class='panel-body'>
 
   <h2>Leagues</h2>
   <!-- <div>Welcome {{ user.first_name }}!</div> -->
+  <pre>user | json</pre>
 
   <select class='form-control' ng-model='selectedLeague' ng-options='option.name for option in allLeagues' ng-change='changeLeague(selectedLeague)'></select>
 
