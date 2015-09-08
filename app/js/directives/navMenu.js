@@ -24,24 +24,30 @@
               active: true
             },
             {
-              name: 'Managers',
-              url: 'managers',
-              active: true
-            },
-            {
-              name: 'Standings',
-              url: 'standings',
-              active: true
-            },
-            {
-              name: 'Monthly Winners',
-              url: 'monthlyWinners',
-              active: true
+              name: 'Fantasy',
+              active: true,
+              subMenu: [
+                {
+                  name: 'Managers',
+                  url: 'managers',
+                  active: true
+                },
+                {
+                  name: 'Standings',
+                  url: 'standings',
+                  active: true
+                },
+                {
+                  name: 'Monthly Winners',
+                  url: 'monthlyWinners',
+                  active: false
+                }
+              ]
             },
             {
               name: 'Transfers',
               url: 'transfers',
-              active: true
+              active: false
             },
             {
               name: 'Admin',

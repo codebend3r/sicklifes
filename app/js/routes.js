@@ -21,6 +21,8 @@
       $urlRouterProvider.when('/leagues/liga', '/leagues/liga/tables');
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
+      $urlRouterProvider.otherwise('/leagues/liga/tables');
+
       $stateProvider
         .state('app', {
 
