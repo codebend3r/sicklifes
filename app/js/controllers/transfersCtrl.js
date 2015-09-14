@@ -31,7 +31,7 @@
        * if manually adding players to roster
        * @type {boolean}
        */
-      $scope.draftMode = $location.search().draftMode;
+      $rootScope.draftMode = $location.search().draftMode;
 
       /**
        * header for table
@@ -55,39 +55,37 @@
         }
       ];
 
+      /**
+       * TODO
+       * @type {*[]}
+       */
       $scope.managersTableHeader = [
         {
-          columnClass: 'col-md-4 col-sm-5 col-xs-6',
           text: 'Player',
           hoverText: 'Player',
           orderCriteria: 'player'
         },
         {
-          columnClass: 'col-md-3 col-sm-4 hidden-xs',
           text: 'Team',
           hoverText: 'Team',
           orderCriteria: 'team'
         },
         {
-          columnClass: 'col-md-2 hidden-sm hidden-xs',
           text: 'League',
           hoverText: 'League Goals',
           orderCriteria: 'league'
         },
         {
-          columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
           text: 'DG',
           hoverText: 'Domestic Goals',
           orderCriteria: 'domestic'
         },
         {
-          columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
           text: 'LG',
           hoverText: 'Champions League Goals',
           orderCriteria: 'champions'
         },
         {
-          columnClass: 'col-md-1 col-sm-1 col-xs-2 text-center',
           text: 'P',
           hoverText: 'Total Points',
           orderCriteria: 'points()'
@@ -95,42 +93,19 @@
       ];
 
       /**
-       * sets data in the initialized firebase service
+       * TODO
+       * @type {Array}
        */
-      //$scope.saveToFireBase = function () {
-      //
-      //  if ($scope.fireBaseReady) {
-      //
-      //    console.log('////////////////////////////////////');
-      //    console.log('$rootScope.allPlayers:', $rootScope.allPlayers);
-      //    console.log('////////////////////////////////////');
-      //
-      //    var saveObject = {
-      //      _syncedFrom: 'transfersCtrl',
-      //      _lastSyncedOn: $momentService.syncDate(),
-      //      allPlayers: $rootScope.allPlayers
-      //    };
-      //
-      //    $fireBaseService.saveToFireBase(saveObject, dataKeyName);
-      //
-      //  } else {
-      //
-      //    startFireBase();
-      //
-      //  }
-      //
-      //};
-
       $rootScope.allPlayers = [];
 
       /**
-       *
+       * TODO
        * @type {null}
        */
       $scope.updatePlayerPoolData = null;
 
       /**
-       *
+       * TODO
        * @type {object}
        */
       $scope.selectedPlayers = null;
@@ -310,42 +285,42 @@
        * call from when $rootScope, localstorage, or firebase data is loaded
        * @param data - data passed from promise
        */
-      var dataLoaded = function (data) {
-
-        console.log('///////////////////');
-        console.log('$HTTP --> data:', data);
-        console.log('///////////////////');
-
-        if (angular.isUndefined($rootScope.managersData)) {
-          $rootScope.managersData = [
-            data.managersData.chester,
-            data.managersData.frank,
-            data.managersData.dan,
-            data.managersData.justin,
-            data.managersData.mike,
-            data.managersData.joe
-          ];
-        }
-
-        if (angular.isUndefined($rootScope.playerPoolData)) {
-          $rootScope.playerPoolData = data.playerPoolData;
-        }
-
-        if (angular.isUndefined($rootScope.allLeagueTeamsData)) {
-          $rootScope.allLeagueTeamsData = data.allLeagueTeamsData;
-        }
-
-        console.log('$rootScope.managersData', $rootScope.managersData);
-        console.log('$rootScope.playerPoolData', $rootScope.playerPoolData);
-        console.log('$rootScope.allLeagueTeamsData', $rootScope.allLeagueTeamsData);
-
-        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
-
-        chooseTeam();
-
-        $scope.loading = false;
-
-      };
+      //var dataLoaded = function (data) {
+      //
+      //  console.log('///////////////////');
+      //  console.log('$HTTP --> data:', data);
+      //  console.log('///////////////////');
+      //
+      //  if (angular.isUndefined($rootScope.managersData)) {
+      //    $rootScope.managersData = [
+      //      data.managersData.chester,
+      //      data.managersData.frank,
+      //      data.managersData.dan,
+      //      data.managersData.justin,
+      //      data.managersData.mike,
+      //      data.managersData.joe
+      //    ];
+      //  }
+      //
+      //  if (angular.isUndefined($rootScope.playerPoolData)) {
+      //    $rootScope.playerPoolData = data.playerPoolData;
+      //  }
+      //
+      //  if (angular.isUndefined($rootScope.allLeagueTeamsData)) {
+      //    $rootScope.allLeagueTeamsData = data.allLeagueTeamsData;
+      //  }
+      //
+      //  console.log('$rootScope.managersData', $rootScope.managersData);
+      //  console.log('$rootScope.playerPoolData', $rootScope.playerPoolData);
+      //  console.log('$rootScope.allLeagueTeamsData', $rootScope.allLeagueTeamsData);
+      //
+      //  $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
+      //
+      //  chooseTeam();
+      //
+      //  $scope.loading = false;
+      //
+      //};
 
       /**
        * defines $scope.selectedManager
@@ -406,7 +381,7 @@
 
         $updateDataUtils.updatePlayerPoolData(function (result) {
 
-          console.log('============================');
+          console.log('///////////////////');
 
           $scope.allPlayers = result;
 
@@ -428,7 +403,7 @@
 
           });
 
-          console.log('============================');
+          console.log('///////////////////');
 
         });
 
