@@ -17,7 +17,7 @@
       console.log('--> appCtrl');
 
       user.getCurrent().then(function(currentUser) {
-        console.log('currentUser:', currentUser);
+        //console.log('currentUser:', currentUser);
         $rootScope.user = user;
         $scope.user = user;
       });
@@ -30,7 +30,7 @@
       /**
        * if firebase has been initalized
        */
-      $scope.fireBaseReady = false;
+      $rootScope.fireBaseReady = false;
 
       /**
        * key name
@@ -70,6 +70,7 @@
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function(fbData) {
+            console.log('firebase initialized');
             $scope.firebaseData = fbData;
             callback($scope.firebaseData);
           });

@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('transfersCtrl', function ($scope, $rootScope, $q, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $momentService, $localStorage, $stateParams) {
+    .controller('transfersCtrl', function ($scope, $rootScope, $q, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $momentService, $localStorage, $stateParams, $location) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -22,10 +22,16 @@
       $scope.loading = true;
 
       /**
-       * route param
+       * if admin buttons will show
        * @type {boolean}
        */
-      $scope.admin = $stateParams.admin;
+      $scope.admin = $location.search().admin;
+
+      /**
+       * if manually adding players to roster
+       * @type {boolean}
+       */
+      $scope.draftMode = $location.search().draftMode;
 
       /**
        * header for table
@@ -33,23 +39,18 @@
        */
       $scope.tableHeader = [
         {
-          columnClass: 'col-md-1 col-sm-2 col-xs-2',
           text: 'ID'
         },
         {
-          columnClass: 'col-md-3 col-sm-4 col-xs-4',
           text: 'Player'
         },
         {
-          columnClass: 'col-md-3 col-sm-3 hidden-xs',
           text: 'Owned By'
         },
         {
-          columnClass: 'col-md-2 hidden-sm hidden-xs',
           text: 'League'
         },
         {
-          columnClass: 'col-md-3 col-sm-3 col-xs-6',
           text: 'Team'
         }
       ];
@@ -96,29 +97,29 @@
       /**
        * sets data in the initialized firebase service
        */
-      $scope.saveToFireBase = function () {
-
-        if ($scope.fireBaseReady) {
-
-          console.log('////////////////////////////////////');
-          console.log('$rootScope.allPlayers:', $rootScope.allPlayers);
-          console.log('////////////////////////////////////');
-
-          var saveObject = {
-            _syncedFrom: 'transfersCtrl',
-            _lastSyncedOn: $momentService.syncDate(),
-            allPlayers: $rootScope.allPlayers
-          };
-
-          $fireBaseService.saveToFireBase(saveObject, dataKeyName);
-
-        } else {
-
-          startFireBase();
-
-        }
-
-      };
+      //$scope.saveToFireBase = function () {
+      //
+      //  if ($scope.fireBaseReady) {
+      //
+      //    console.log('////////////////////////////////////');
+      //    console.log('$rootScope.allPlayers:', $rootScope.allPlayers);
+      //    console.log('////////////////////////////////////');
+      //
+      //    var saveObject = {
+      //      _syncedFrom: 'transfersCtrl',
+      //      _lastSyncedOn: $momentService.syncDate(),
+      //      allPlayers: $rootScope.allPlayers
+      //    };
+      //
+      //    $fireBaseService.saveToFireBase(saveObject, dataKeyName);
+      //
+      //  } else {
+      //
+      //    startFireBase();
+      //
+      //  }
+      //
+      //};
 
       $rootScope.allPlayers = [];
 
@@ -144,6 +145,31 @@
         console.log('$scope.selectedPlayers', $scope.selectedPlayers);
 
       };
+
+      /**
+       * populates $rootScope.managersData
+       * @param data
+       */
+      var populateManagersData = function (data) {
+
+        $scope.managersData = [
+          data.chester,
+          data.frank,
+          data.dan,
+          data.justin,
+          data.mike,
+          data.joe
+        ];
+
+        $rootScope.managersData = $scope.managersData;
+
+        return {
+          data: $scope.managersData,
+          _lastSyncedOn: $momentService.syncDate()
+        };
+
+      };
+
 
       /**
        *
@@ -228,7 +254,7 @@
       };
 
       /**
-       *
+       * open modal
        */
       $scope.openModal = function (player) {
 
@@ -326,16 +352,15 @@
        */
       var chooseTeam = function () {
 
-        if ($routeParams.manager) {
-          $rootScope.managersData.forEach(function (manager) {
-            if (manager.managerName === $routeParams.manager) {
+        if ($stateParams.manager) {
+          _.each($rootScope.managersData, function (manager) {
+            if (manager.managerName === $stateParams.manager) {
               $scope.selectedManager = manager;
             }
           });
         } else {
           $scope.selectedManager = $rootScope.managersData[0];
         }
-        $scope.selectedPlayers = $scope.selectedManager.players;
 
       };
 
@@ -353,23 +378,12 @@
 
         $rootScope.allPlayers = localData.allPlayers;
 
-      };
+        $scope.startFireBase(function (firebaseData) {
 
-      /**
-       * starts the process of getting data from firebase
-       * @param callback
-       */
-      var startFireBase = function (callback) {
+          populateManagersData(firebaseData.managersData);
+          chooseTeam();
 
-        console.log('--  firebase started --');
-        if ($scope.fireBaseReady) {
-          console.log('firebase previously loaded');
-          callback();
-        } else {
-          $fireBaseService.initialize($scope);
-          var firePromise = $fireBaseService.getFireBaseData();
-          firePromise.then(callback);
-        }
+        });
 
       };
 
@@ -391,10 +405,31 @@
       $scope.updatePlayerPoolData = function () {
 
         $updateDataUtils.updatePlayerPoolData(function (result) {
+
           console.log('============================');
-          console.log('player pool data updated', result);
-          $rootScope.allPlayers = result;
+
+          $scope.allPlayers = result;
+
+          $scope.startFireBase(function (firebaseData) {
+
+            $rootScope.fireBaseReady = true;
+
+            //console.log('firebaseData', firebaseData[dataKeyName]);
+            populateManagersData(firebaseData.managersData);
+            chooseTeam();
+
+            var saveObject = {
+              _syncedFrom: 'transfersCtrl',
+              _lastSyncedOn: $momentService.syncDate(),
+              allPlayers: $scope.allPlayers
+            };
+
+            $scope.saveToFireBase(saveObject, dataKeyName);
+
+          });
+
           console.log('============================');
+
         });
 
       };
@@ -404,7 +439,7 @@
        */
       var init = function () {
 
-        console.log('transfersCtrl - init');
+        console.log('transfersCtrl - init', dataKeyName);
 
         if (angular.isDefined($rootScope[dataKeyName])) {
 
@@ -420,11 +455,14 @@
 
           console.log('load from firebase');
 
-          startFireBase(function (firebaseData) {
-            console.log('HTTP --> FIREBASE READY');
+          $scope.startFireBase(function (firebaseData) {
+
+            console.log('firebaseData', firebaseData[dataKeyName]);
+
             $scope.fireBaseReady = true;
             $scope.loading = false;
-            //$scope.saveToFireBase();
+            $scope.allPlayers = firebaseData[dataKeyName].allPlayers;
+
           });
 
         }

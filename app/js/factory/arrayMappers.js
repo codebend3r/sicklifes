@@ -311,16 +311,17 @@
          */
         transferPlayersMap: function (leagueData, teamData, i, index) {
 
-          var playerObject = {
+          //console.log('transferPlayersMap >', teamData.logos);
+
+          return {
             index: index,
             id: i.id,
             playerName: $textManipulator.formattedFullName(i.first_name, i.last_name),
             managerName: $arrayLoopers.getOwnerByID(i.id),
             teamName: $textManipulator.teamNameFormatted(teamData.full_name),
+            teamLogo: teamData.logos.small,
             leagueName: $textManipulator.getLeagueByURL(leagueData.leagueURL).toUpperCase()
           };
-
-          return playerObject;
 
         },
 

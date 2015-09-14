@@ -30,7 +30,7 @@
 
               _.each(leagueData.data, function (teamData) {
 
-                console.log('LEAGUE:', leagueData.leagueName);
+                //console.log('LEAGUE:', leagueData.leagueName);
                 //console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
 
                 // returns a promise with the end point for each team
@@ -43,9 +43,9 @@
 
                 rosterRequest.then(function (playerData) {
 
-                  _.each(playerData.data, function (eachPlayer) {
-                    // console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
-                  });
+                  //_.each(playerData.data, function (eachPlayer) {
+                  //  console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
+                  //});
 
                   // each player on each team
                   var rosterArray = playerData.data.map($arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
@@ -57,10 +57,8 @@
 
             });
 
-            console.log('allTeamsPromise', allTeamsPromise.length);
-
             $q.all(allTeamsPromise).then(function (data) {
-              console.log('updatePlayerPoolData - listOfPromises - COMPLETE', data.length);
+              //console.log('updatePlayerPoolData - listOfPromises - COMPLETE', data.length);
               callback(allPlayers);
             });
 

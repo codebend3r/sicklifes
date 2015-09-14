@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leaguesCtrl', function ($scope, $stateParams, $state, user, $apiFactory, $localStorage, $location, $updateDataUtils, $momentService, $rootScope, $textManipulator, $fireBaseService) {
+    .controller('leaguesCtrl', function ($scope, $stateParams, $state, user, $apiFactory, $localStorage, $location, $http, $updateDataUtils, $momentService, $rootScope, $textManipulator, $fireBaseService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -22,10 +22,19 @@
       $scope.admin = $location.search().admin;
 
       /**
+       * TODO
+       * @type {boolean}
+       */
+      $rootScope.fireBaseReady = false;
+
+      $rootScope.loading = true;
+
+      /**
        * select box changes function
        */
       $scope.changeLeague = function (league) {
-        $state.go($state.current.name, {leagueName: league.className});
+        $state.go($state.current.name, { leagueName: league.className });
+        //$rootScope.loading = true;
       };
 
       /**
@@ -107,18 +116,30 @@
       ];
 
       /**
-       * get data through HTTP request
+       * make http request for current league leader in goals
+       * @param callback
        */
-      $scope.updateFromHTTP = function () {
+      $scope.updateLeadersFromHTTP = function (callback) {
 
-        $updateDataUtils.updateLeagueTables()
-          .then($scope.httpDataLoaded);
+        console.log('--> updateLeadersFromHTTP');
+
+        $http({
+          url: 'http://api.thescore.com/' + $stateParams.leagueName + '/leaders?categories=Goals&season_type=regular',
+          method: 'GET'
+        }).then(callback);
 
       };
 
-      ////////////////////////////////////////
-      ////////////// private /////////////////
-      ////////////////////////////////////////
+      /**
+       * get data through HTTP request
+       * @param callback
+       */
+      $scope.updateTablesFromHTTP = function (callback) {
+
+        $updateDataUtils.updateLeagueTables()
+          .then(callback);
+
+      };
 
 
     });

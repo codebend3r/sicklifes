@@ -111,8 +111,6 @@
        */
       apiFactory.getAllTeams = function () {
 
-        console.log('getting teamms in all the leagues');
-
         var allLeaguesURL = [
             {
               url: 'http://origin-api.thescore.com/liga/teams/',

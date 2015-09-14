@@ -54,7 +54,7 @@
        * makes http request from thescore.ca API
        * @param httpData
        */
-      $scope.httpDataLoaded = function (httpData) {
+      var httpDataLoaded = function (httpData) {
 
         console.log('///////////////////');
         console.log('$HTTP --> httpData:', httpData);
@@ -68,7 +68,7 @@
 
         $scope.setSelectedLeague();
 
-        $scope.loading = false;
+        $rootScope.loading = false;
 
         // after http request start firebase so we can save later
         $scope.startFireBase(function () {
@@ -92,7 +92,7 @@
       };
 
       /**
-       *
+       * callback for when firebase data is loaded
        * @param firebaseData
        */
       var fireBaseLoaded = function (firebaseData) {
@@ -101,6 +101,8 @@
         console.log('FB --> firebaseData:', firebaseData[$scope.dataKeyName]);
         console.log('syncDate:', firebaseData[$scope.dataKeyName]._lastSyncedOn);
         console.log('///////////////////');
+
+        $rootScope.fireBaseReady = true;
 
         $scope.allLeagues[0].source = firebaseData.leagueTables.LIGA;
         $scope.allLeagues[1].source = firebaseData.leagueTables.EPL;
@@ -113,23 +115,21 @@
         saveObject = {
           _syncedFrom: 'leagusCtrl',
           _lastSyncedOn: $momentService.syncDate(),
-          LIGA: $scope.allLeagues[0].source,
-          EPL: $scope.allLeagues[1].source,
-          SERI: $scope.allLeagues[2].source,
-          CHLG: $scope.allLeagues[3].source,
-          UEFA: $scope.allLeagues[4].source
+          liga: $scope.allLeagues[0].source,
+          epl: $scope.allLeagues[1].source,
+          seri: $scope.allLeagues[2].source,
+          chlg: $scope.allLeagues[3].source,
+          uefa: $scope.allLeagues[4].source
         };
 
         if ($scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn, saveObject)) {
-          $scope.updateFromHTTP();
+          console.log('-- data is too old --');
+          $scope.updateTablesFromHTTP(httpDataLoaded);
         } else {
-          $scope.startFireBase(function () {
-            $rootScope.fireBaseReady = true;
-            $scope.saveToFireBase(saveObject, $scope.dataKeyName);
-          });
+          console.log('-- data is up to date --');
+          $scope.saveToFireBase(saveObject, $scope.dataKeyName);
+          $rootScope.loading = false;
         }
-
-        $rootScope.loading = false;
 
       };
 
@@ -155,16 +155,18 @@
         saveObject = {
           _syncedFrom: 'leagusCtrl',
           _lastSyncedOn: $momentService.syncDate(),
-          LIGA: $scope.allLeagues[0].source,
-          EPL: $scope.allLeagues[1].source,
-          SERI: $scope.allLeagues[2].source,
-          CHLG: $scope.allLeagues[3].source,
-          UEFA: $scope.allLeagues[4].source
+          liga: $scope.allLeagues[0].source,
+          epl: $scope.allLeagues[1].source,
+          seri: $scope.allLeagues[2].source,
+          chlg: $scope.allLeagues[3].source,
+          uefa: $scope.allLeagues[4].source
         };
 
         if ($scope.checkYesterday(localData._lastSyncedOn, saveObject)) {
-          $scope.updateFromHTTP();
+          console.log('-- data is too old --');
+          $scope.updateTablesFromHTTP(httpDataLoaded);
         } else {
+          console.log('-- data is up to date --');
           $scope.startFireBase(function () {
             $rootScope.fireBaseReady = true;
             $scope.saveToFireBase(saveObject, 'leagueTables');
