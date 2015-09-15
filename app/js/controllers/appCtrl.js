@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $momentService, user) {
+    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $momentService, $location, user) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -16,21 +16,33 @@
 
       console.log('--> appCtrl');
 
-      user.getCurrent().then(function(currentUser) {
-        //console.log('currentUser:', currentUser);
+      user.getCurrent().then(function (currentUser) {
+        console.log('currentUser:', currentUser);
         $rootScope.user = user;
-        $scope.user = user;
+        //$scope.user = user;
       });
 
       /**
        * whether data is still loading
        */
-      $rootScope.loading = true;
+      $scope.loading = true;
 
       /**
        * if firebase has been initalized
        */
-      $rootScope.fireBaseReady = false;
+      $scope.fireBaseReady = false;
+
+      /**
+       * if admin buttons will show
+       * @type {boolean}
+       */
+      $scope.admin = $location.search().admin;
+
+      /**
+       * if manually adding players to roster
+       * @type {boolean}
+       */
+      $scope.draftMode = $location.search().draftMode;
 
       /**
        * key name
@@ -43,19 +55,17 @@
        * @param dataKey
        */
       $scope.saveToFireBase = function (saveObject, dataKey) {
-
         if ($rootScope.fireBaseReady) {
-
           $fireBaseService.saveToFireBase(saveObject, dataKey);
-
         } else {
-
           $scope.startFireBase();
-
         }
-
       };
 
+      /**
+       * TODO
+       * @type {{}}
+       */
       $scope.firebaseData = {};
 
       /**
@@ -69,12 +79,45 @@
         } else {
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
-          firePromise.then(function(fbData) {
+          firePromise.then(function (fbData) {
             console.log('firebase initialized');
             $scope.firebaseData = fbData;
             callback($scope.firebaseData);
           });
         }
+
+      };
+
+      /**
+       * clears all players from every roster
+       */
+      $scope.resetAllPlayers = function () {
+
+        _.each($rootScope.managersData, function (manager) {
+
+          manager.players = {};
+          manager.chlgCount = 0;
+          manager.clGoals = 0;
+          manager.domesticGoals = 0;
+          manager.eGoals = 0;
+          manager.eplCount = 0;
+          manager.euroCount = 0;
+          manager.filteredMonthlyGoalsLog = [];
+          manager.ligaCount = 0;
+          manager.monthlyGoalsLog = [];
+          manager.seriCount = 0;
+          manager.totalGoals = 0;
+          manager.totalPoints = 0;
+          manager.transactions = [];
+          manager.wildCardCount = 0;
+
+          //_.each(manager.players, function (eachPlayer) {
+          //
+          //});
+
+        });
+
+        console.log('>> $rootScope.managersData', $rootScope.managersData);
 
       };
 

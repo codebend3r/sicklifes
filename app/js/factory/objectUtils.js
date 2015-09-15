@@ -59,13 +59,17 @@
          */
         cleanPlayer: function (p) {
 
-          p.dateOfTransaction = $momentService.transactionDate();
-          p.goals = 0;
-          p.points = 0;
-          p.domesticGoals = 0;
-          p.clGoals = 0;
-          p.eGoals = 0;
-          return p;
+          if (p) {
+            p.dateOfTransaction = $momentService.transactionDate();
+            p.goals = 0;
+            p.points = 0;
+            p.domesticGoals = 0;
+            p.clGoals = 0;
+            p.eGoals = 0;
+            return p;
+          } else {
+            return {};
+          }
 
         }
 

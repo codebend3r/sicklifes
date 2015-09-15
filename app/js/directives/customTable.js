@@ -19,12 +19,9 @@
         scope: {
           list: '=',
           tableHeader: '=',
-          addPlayer: '&',
-          dropPlayer: '&',
           tableName: '@',
           tableParams: '=',
           sortFunction: '&',
-          //playerSearch: '@',
           leagueImg: '='
         },
         controller: function ($scope) {

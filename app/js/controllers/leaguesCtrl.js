@@ -17,24 +17,11 @@
       console.log('--> leaguesCtrl');
 
       /**
-       * checks url for url param for key value pair of admin=true
-       */
-      $scope.admin = $location.search().admin;
-
-      /**
-       * TODO
-       * @type {boolean}
-       */
-      $rootScope.fireBaseReady = false;
-
-      $rootScope.loading = true;
-
-      /**
        * select box changes function
        */
       $scope.changeLeague = function (league) {
         $state.go($state.current.name, { leagueName: league.className });
-        //$rootScope.loading = true;
+        $scope.loading = true;
       };
 
       /**

@@ -1,34 +1,39 @@
-<div ng-if='list.length > 0' class='well'>
-  <input class='form-control' name='input' ng-model='playerSearch.playerQuery' ng-model-options="{ debounce: 500 }" placeholder='Search for player by name'>
-  <input class='form-control' name='input' ng-model='playerSearch.teamQuery' ng-model-options="{ debounce: 500 }" placeholder='Search for player by team'>
+<div ng-if="list.length > 0" class="well">
+  <input class="form-control" name="input" ng-model="playerSearch.playerQuery" ng-model-options="{ debounce: 500 }" placeholder="Search for player by name">
+  <input class="form-control" name="input" ng-model="playerSearch.teamQuery" ng-model-options="{ debounce: 500 }" placeholder="Search for player by team">
 </div>
 
-<table class='table table-hover table-responsive'>
+<table class="table table-hover table-responsive">
 
   <thead>
-    <tr>
-      <th ng-repeat='header in tableHeader'>{{header.text}}</th>
-    </tr>
+  <tr>
+    <th ng-repeat="header in tableHeader">{{header.text}}</th>
+  </tr>
   </thead>
 
   <tbody>
-    <tr ng-repeat='player in list | unique: "id" | filter: { playerName: playerSearch.playerQuery, teamName: playerSearch.teamQuery } | orderBy: "+playerName" | limitTo: 50'>
-      <td class='small-text'>{{player.id}}</td>
-      <td class='player-column'>
-        <div class="vertical-center">
-          <span ng-switch on='player.managerName'>
-            <button ng-switch-when='Free Agent' ng-click='addPlayer({player:player})' type='button' class='btn btn-primary btn-xs'><span class='glyphicon glyphicon-plus'></span></button>
-            <button ng-switch-default type='button' ng-click='dropPlayer({player:player})' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-minus'></span></button>
-          </span>&nbsp;
-          <a ui-sref="playerDetails({playerID: player.id})">{{player.playerName}}</a>
-        </div>
-      </td>
-      <td class='bold small-text' ng-class='{"free-agent": player.managerName === "Free Agent"}'>{{player.managerName}}</td>
-      <td>{{player.leagueName}}</td>
-      <td class="bold">
-        <div class="vertical-center"><img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;{{player.teamName}}</div>
-      </td>
-    </tr>
+  <tr ng-repeat="player in list | unique: 'id' | filter: { playerName: playerSearch.playerQuery, teamName: playerSearch.teamQuery } | orderBy: '+playerName' | limitTo: 50">
+    <td class="small-text"><div class="vertical-center">{{player.id}}</div></td>
+    <td class="player-column">
+      <div class="vertical-center">
+        <span ng-switch on="tableParams.draftMode">
+          <span ng-switch-when="true"><button ng-click="tableParams.addPlayer({player:player})" type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span></button></span>
+          <span ng-switch-when="false">
+            <span ng-switch on="player.managerName">
+              <button ng-switch-when="Free Agent" ng-click="tableParams.addPlayer({player:player})" type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
+              <button ng-switch-default ng-click="tableParams.dropPlayer({player:player})" type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
+            </span>
+          </span>
+        </span>&nbsp;
+        <a ui-sref="playerDetails({playerID: player.id})">{{player.playerName}}</a>
+      </div>
+    </td>
+    <td class="bold small-text" ng-class="{'free-agent': player.managerName === 'Free Agent'}"><div class="vertical-center">{{player.managerName}}</div></td>
+    <td><div class="vertical-center">{{player.leagueName}}</div></td>
+    <td class="bold">
+      <div class="vertical-center"><img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;{{player.teamName}}</div>
+    </td>
+  </tr>
   </tbody>
 
 </table>

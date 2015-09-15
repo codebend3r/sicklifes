@@ -26,13 +26,16 @@
       $stateProvider
         .state('app', {
 
-          abstract: true
-          //controller: 'appCtrl'
+          abstract: true,
+          //template: '<div ui-view="content"></div>',
+          template: '<ui-view />',
+          controller: 'appCtrl'
 
         })
         .state('signIn', {
 
           url: '/login',
+          parent: 'app',
           templateUrl: 'views/login.html',
           controller: 'loginCtrl',
           data: {
@@ -44,6 +47,7 @@
         .state('signUp', {
 
           url: '/signup',
+          parent: 'app',
           templateUrl: 'views/signup.html',
           controller: 'loginCtrl',
           data: {
@@ -54,6 +58,7 @@
         .state('resetPassword', {
 
           url: '/reset-password',
+          parent: 'app',
           templateUrl: 'views/reset-password.html',
           controller: 'loginCtrl',
           data: {
@@ -64,6 +69,7 @@
         .state('leagues', {
 
           url: '/leagues/:leagueName',
+          parent: 'app',
           templateUrl: 'views/leagues.html',
           controller: 'leaguesCtrl'
 
@@ -84,14 +90,16 @@
         })
         .state('managers', {
 
-          url: '/managers',
+          url: '/managers/:managerId',
+          parent: 'app',
           templateUrl: 'views/managers.html',
           controller: 'managersCtrl'
 
         })
         .state('playerDetails', {
 
-          url: '/player-details/:playerID',
+          url: '/player-details/:playerId',
+          parent: 'app',
           templateUrl: 'views/player-details.html',
           controller: 'playersDetailsCtrl'
 
@@ -99,6 +107,7 @@
         .state('standings', {
 
           url: '/standings',
+          parent: 'app',
           templateUrl: 'views/standings.html',
           controller: 'standingsCtrl'
 
@@ -106,6 +115,7 @@
         .state('monthlyWinners', {
 
           url: '/monthlywinners',
+          parent: 'app',
           templateUrl: 'views/monthly-winners.html',
           controller: 'monthlyWinnersCtrl'
 
@@ -113,6 +123,7 @@
         .state('admin', {
 
           url: '/admin',
+          parent: 'app',
           templateUrl: 'views/admin.html',
           controller: 'adminCtrl'
 
@@ -120,6 +131,7 @@
         .state('transfers', {
 
           url: '/transfers',
+          parent: 'app',
           templateUrl: 'views/transfers.html',
           controller: 'transfersCtrl'
 
@@ -127,6 +139,7 @@
         .state('roster', {
 
           url: '/roster/:leagueName/:teamId',
+          parent: 'app',
           templateUrl: 'views/rosters.html',
           controller: 'rostersCtrl'
 

@@ -16,22 +16,7 @@
 
       var dataKeyName = 'playerPoolData';
 
-      /**
-       * if data is still loading
-       */
       $scope.loading = true;
-
-      /**
-       * if admin buttons will show
-       * @type {boolean}
-       */
-      $scope.admin = $location.search().admin;
-
-      /**
-       * if manually adding players to roster
-       * @type {boolean}
-       */
-      $rootScope.draftMode = $location.search().draftMode;
 
       /**
        * header for table
@@ -151,10 +136,38 @@
        */
       $scope.addPlayer = function (player) {
 
-        //console.log('addPlayer --> player', player);
-        player.managerName = $scope.selectedManager.managerName;
-        player.transactionType = 'ADD';
-        $scope.openModal(player);
+        var draftedPlayer = $objectUtils.cleanPlayer(player);
+
+        //console.log('draftedPlayer:', draftedPlayer);
+
+        //console.log('current roster before:', $scope.selectedManager);
+
+        $scope.selectedManager.players = $scope.selectedManager.players || [];
+        $scope.selectedManager.players.push(draftedPlayer);
+
+        //console.log('current roster after:', $scope.selectedManager);
+        var mappedManagers = {};
+
+        _.each($rootScope.managersData, function (manager, key) {
+
+          mappedManagers[manager.managerName.toLowerCase()] = manager;
+
+        });
+
+        console.log('mappedManagers', mappedManagers);
+
+        var saveObject = {
+          _lastSyncedOn: $momentService.syncDate(),
+          managersData: mappedManagers
+        };
+
+        console.log('saveObject', saveObject);
+
+        $scope.saveToFireBase(saveObject, 'managersData');
+
+        //player.managerName = $scope.selectedManager.managerName;
+        //player.transactionType = 'ADD';
+        //$scope.openModal(player);
 
       };
 
@@ -163,11 +176,21 @@
        */
       $scope.dropPlayer = function (player) {
 
-        //console.log('dropPlayer --> player', player);
-        player.managerName = $scope.selectedManager.managerName;
-        player.transactionType = 'DROP';
-        $scope.openModal(player);
+        console.log('dropPlayer --> player', player);
+        //player.managerName = $scope.selectedManager.managerName;
+        //player.transactionType = 'DROP';
+        //$scope.openModal(player);
 
+      };
+
+      /**
+       *
+       * @type {{addPlayer: (Function|*), dropPlayer: (Function|*), draftMode: boolean}}
+       */
+      $scope.playersTableParams = {
+        addPlayer: $scope.addPlayer,
+        dropPlayer: $scope.dropPlayer,
+        draftMode: $scope.draftMode
       };
 
       /**
@@ -267,20 +290,6 @@
 
       };
 
-      $scope.resetAllPlayers = function () {
-
-        $rootScope.managersData.forEach(function (manager) {
-
-          manager.players.forEach(function (eachPlayer) {
-
-          });
-
-        });
-
-        console.log('>> $rootScope.managersData', $rootScope.managersData);
-
-      };
-
       /**
        * call from when $rootScope, localstorage, or firebase data is loaded
        * @param data - data passed from promise
@@ -355,6 +364,8 @@
 
         $scope.startFireBase(function (firebaseData) {
 
+          $scope.fireBaseReady = true;
+          $scope.loading = false;
           populateManagersData(firebaseData.managersData);
           chooseTeam();
 
@@ -415,6 +426,7 @@
       var init = function () {
 
         console.log('transfersCtrl - init', dataKeyName);
+        console.log('> $scope.draftMode', $scope.draftMode);
 
         if (angular.isDefined($rootScope[dataKeyName])) {
 

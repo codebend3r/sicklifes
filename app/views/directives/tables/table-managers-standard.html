@@ -5,13 +5,15 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat='player in list | orderBy:sortFunction()'>
-      <td class='player-column' ng-class='{dropped: player.status === "dropped", added: player.status === "added"}'>
-        <a ui-sref='playerDetails({playerID: player.id})'>{{player.playerName}}</a>
+    <tr ng-repeat="player in list | orderBy:sortFunction()">
+      <td class="player-column" ng-class='{dropped: player.status === "dropped", added: player.status === "added"}'>
+        <a ui-sref="playerDetails({playerID: player.id})">{{player.playerName}}</a>
       </td>
-      <td class='small-text bold'>{{player.teamName}}</td>
+      <td class="bold">
+        <div class="vertical-center"><img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;{{player.teamName}}</div>
+      </td>
       <!-- <td class='small-text'>{{player.leagueSlugs}}</td> -->
-      <td class='small-text'>{{player.allLeaguesName}}</td>
+      <td class="small-text">{{player.allLeaguesName}}</td>
       <td>{{player.goals}}</td>
       <td>{{player.domesticGoals}}</td>
       <td>{{player.clGoals}}</td>

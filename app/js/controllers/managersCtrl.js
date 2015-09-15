@@ -8,23 +8,13 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams, $q, $managersService, $location) {
+    .controller('managersCtrl', function ($scope, $rootScope, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams) {
 
       var dataKeyName = 'managersData';
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
-
-      /**
-       * TODO
-       */
-      $scope.loading = true;
-
-      /**
-       * TODO
-       */
-      $scope.admin = $location.search().admin;
 
       /**
        * TODO
@@ -89,14 +79,15 @@
       $scope.changeManager = function (selectedManager) {
 
         $scope.selectedManager = selectedManager;
-        $location.url($location.path() + '?manager=' + selectedManager.managerName); // route change
+        //$location.url($location.path() + '?manager=' + selectedManager.managerName); // route change
+        $state.go($state.current.name, { managerId: selectedManager.managerName });
 
       };
 
       /**
        * saves current data to firebase
        */
-      $scope.saveToFireBase = function () {
+      $scope.saveRoster = function () {
 
         console.log('////////////////////////////////////');
         console.log('$rootScope.managersData', $rootScope.managersData);
@@ -112,7 +103,9 @@
           joe: $rootScope.managersData[5]
         };
 
-        $fireBaseService.saveToFireBase(saveObject, dataKeyName);
+        console.log('saveObject', saveObject);
+
+        $scope.saveToFireBase(saveObject, dataKeyName);
 
       };
 
@@ -159,28 +152,6 @@
       };
 
       /**
-       * is it past yesterday
-       * @param syncDate {string}
-       */
-      var checkYesterday = function (syncDate) {
-
-        if ($momentService.isPastYesterday(syncDate)) {
-          console.log('IS YESTERDAY');
-          getHttpData();
-          return true;
-        } else {
-          console.log('NOT YESTERDAY YET');
-          $scope.loading = false;
-          startFireBase(function () {
-            $scope.fireBaseReady = true;
-            $scope.saveToFireBase();
-          });
-          return false;
-        }
-
-      };
-
-      /**
        * callback for when http data is loaded
        * @param result {object}
        */
@@ -198,7 +169,7 @@
 
       /**
        * populates $rootScope.managersData
-       * @param data
+       * @param data {object}
        */
       var populateManagersData = function (data) {
 
@@ -222,6 +193,7 @@
 
       /**
        * callback for when local storage exists
+       * @param localData {object}
        */
       var loadFromLocal = function (localData) {
 
@@ -230,14 +202,21 @@
         console.log('///////////////////');
 
         var managerData = populateManagersData(localData);
-
-        //$rootScope.managersData = localData.managersData;
+        console.log('syncDate:', managerData._lastSyncedOn);
 
         $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
-        checkYesterday(managerData._lastSyncedOn);
+        $scope.checkYesterday(managerData._lastSyncedOn);
 
         chooseTeam();
+
+        $scope.loading = false;
+
+        $scope.startFireBase(function () {
+
+          $rootScope.fireBaseReady = true;
+
+        });
 
       };
 
@@ -245,39 +224,24 @@
        * callback for when firebase is loaded
        * @param firebaseData {object} - firebase data object
        */
-      var fireBaseLoaded = function (firebaseData) {
+      var firebaseLoaded = function (firebaseData) {
 
         console.log('///////////////////');
         console.log('FB --> firebaseData.managersData:', firebaseData[dataKeyName]);
         console.log('///////////////////');
 
+        $rootScope.fireBaseReady = true;
+
         var managerData = populateManagersData(firebaseData.managersData);
+        console.log('syncDate:', managerData._lastSyncedOn);
 
         $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
-
-        console.log('syncDate:', managerData._lastSyncedOn);
 
         checkYesterday(managerData._lastSyncedOn);
 
         chooseTeam();
 
-      };
-
-      /**
-       * starts the process of getting data from firebase
-       * @param callback
-       */
-      var startFireBase = function (callback) {
-
-        console.log('--  firebase started --');
-        if ($scope.fireBaseReady) {
-          console.log('firebase previously loaded');
-          callback();
-        } else {
-          $fireBaseService.initialize($scope);
-          var firePromise = $fireBaseService.getFireBaseData();
-          firePromise.then(callback);
-        }
+        $scope.loading = false;
 
       };
 
@@ -298,7 +262,7 @@
         } else {
 
           console.log('load from firebase');
-          startFireBase(fireBaseLoaded);
+          $scope.startFireBase(firebaseLoaded);
         }
 
       };

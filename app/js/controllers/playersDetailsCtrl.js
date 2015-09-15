@@ -226,17 +226,18 @@
       /**
        * id used to identify a player from thescore.ca api
        */
-      var id = Number($stateParams.playerID);
+      var id = Number($stateParams.playerId);
 
       /**
        * init function
        */
       var init = function () {
 
-        id = Number($stateParams.playerID);
-        $fireBaseService.initialize($scope);
-        var firePromise = $fireBaseService.getFireBaseData();
-        firePromise.then(fireBaseLoaded);
+        id = Number($stateParams.playerId);
+        //$fireBaseService.initialize($scope);
+        //var firePromise = $fireBaseService.getFireBaseData();
+        //firePromise.then(fireBaseLoaded);
+        $scope.startFireBase(fireBaseLoaded);
 
       };
 
