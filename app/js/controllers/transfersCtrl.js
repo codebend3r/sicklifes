@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('transfersCtrl', function ($scope, $rootScope, $q, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $momentService, $localStorage, $stateParams, $location) {
+    .controller('transfersCtrl', function ($scope, $rootScope, $q, $timeout, $fireBaseService, $apiFactory, $objectUtils, $modal, $updateDataUtils, $momentService, $localStorage, $stateParams) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -16,7 +16,7 @@
 
       var dataKeyName = 'playerPoolData';
 
-      $scope.loading = true;
+      $rootScope.loading = true;
 
       /**
        * header for table
@@ -107,67 +107,41 @@
       };
 
       /**
-       * populates $rootScope.managersData
-       * @param data
-       */
-      var populateManagersData = function (data) {
-
-        $scope.managersData = [
-          data.chester,
-          data.frank,
-          data.dan,
-          data.justin,
-          data.mike,
-          data.joe
-        ];
-
-        $rootScope.managersData = $scope.managersData;
-
-        return {
-          data: $scope.managersData,
-          _lastSyncedOn: $momentService.syncDate()
-        };
-
-      };
-
-
-      /**
        *
        */
       $scope.addPlayer = function (player) {
 
-        var draftedPlayer = $objectUtils.cleanPlayer(player);
+        if ($scope.draftMode) {
 
-        //console.log('draftedPlayer:', draftedPlayer);
+          var draftedPlayer = $objectUtils.cleanPlayer(player, $scope.draftMode);
 
-        //console.log('current roster before:', $scope.selectedManager);
+          $scope.selectedManager.players = $scope.selectedManager.players || [];
+          $scope.selectedManager.players.push(draftedPlayer);
 
-        $scope.selectedManager.players = $scope.selectedManager.players || [];
-        $scope.selectedManager.players.push(draftedPlayer);
+          //var mappedManagers = {};
+          //
+          //_.each($rootScope.managersData, function (manager) {
+          //  mappedManagers[manager.managerName.toLowerCase()] = manager;
+          //});
 
-        //console.log('current roster after:', $scope.selectedManager);
-        var mappedManagers = {};
+          var saveObject = {
+            _lastSyncedOn: $momentService.syncDate(),
+            managersData: $scope.managersData
+          };
 
-        _.each($rootScope.managersData, function (manager, key) {
+          console.log('saveObject', saveObject);
 
-          mappedManagers[manager.managerName.toLowerCase()] = manager;
+          $scope.startFireBase(function () {
 
-        });
+            $scope.saveToFireBase(saveObject, 'managersData');
 
-        console.log('mappedManagers', mappedManagers);
+          });
 
-        var saveObject = {
-          _lastSyncedOn: $momentService.syncDate(),
-          managersData: mappedManagers
-        };
+          //player.managerName = $scope.selectedManager.managerName;
+          //player.transactionType = 'ADD';
+          //$scope.openModal(player);
 
-        console.log('saveObject', saveObject);
-
-        $scope.saveToFireBase(saveObject, 'managersData');
-
-        //player.managerName = $scope.selectedManager.managerName;
-        //player.transactionType = 'ADD';
-        //$scope.openModal(player);
+        }
 
       };
 
@@ -291,64 +265,6 @@
       };
 
       /**
-       * call from when $rootScope, localstorage, or firebase data is loaded
-       * @param data - data passed from promise
-       */
-      //var dataLoaded = function (data) {
-      //
-      //  console.log('///////////////////');
-      //  console.log('$HTTP --> data:', data);
-      //  console.log('///////////////////');
-      //
-      //  if (angular.isUndefined($rootScope.managersData)) {
-      //    $rootScope.managersData = [
-      //      data.managersData.chester,
-      //      data.managersData.frank,
-      //      data.managersData.dan,
-      //      data.managersData.justin,
-      //      data.managersData.mike,
-      //      data.managersData.joe
-      //    ];
-      //  }
-      //
-      //  if (angular.isUndefined($rootScope.playerPoolData)) {
-      //    $rootScope.playerPoolData = data.playerPoolData;
-      //  }
-      //
-      //  if (angular.isUndefined($rootScope.allLeagueTeamsData)) {
-      //    $rootScope.allLeagueTeamsData = data.allLeagueTeamsData;
-      //  }
-      //
-      //  console.log('$rootScope.managersData', $rootScope.managersData);
-      //  console.log('$rootScope.playerPoolData', $rootScope.playerPoolData);
-      //  console.log('$rootScope.allLeagueTeamsData', $rootScope.allLeagueTeamsData);
-      //
-      //  $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
-      //
-      //  chooseTeam();
-      //
-      //  $scope.loading = false;
-      //
-      //};
-
-      /**
-       * defines $scope.selectedManager
-       */
-      var chooseTeam = function () {
-
-        if ($stateParams.manager) {
-          _.each($rootScope.managersData, function (manager) {
-            if (manager.managerName === $stateParams.manager) {
-              $scope.selectedManager = manager;
-            }
-          });
-        } else {
-          $scope.selectedManager = $rootScope.managersData[0];
-        }
-
-      };
-
-      /**
        * read data from local storage
        * @param localData
        */
@@ -358,18 +274,38 @@
         console.log('LOCAL --> localData:', localData);
         console.log('///////////////////');
 
-        $scope.loading = false;
+        $rootScope.loading = false;
+
+        $scope.managerData = $scope.populateManagersData(localData);
 
         $rootScope.allPlayers = localData.allPlayers;
 
         $scope.startFireBase(function (firebaseData) {
 
           $scope.fireBaseReady = true;
-          $scope.loading = false;
-          populateManagersData(firebaseData.managersData);
-          chooseTeam();
+          //$scope.managerData = $scope.populateManagersData(firebaseData);
+          $scope.chooseManager($stateParams.managerId);
 
         });
+
+      };
+
+      /**
+       * read data from firebase
+       * @param firebaseData
+       */
+      var fireBaseLoaded = function (firebaseData) {
+
+        console.log('///////////////////');
+        console.log('FIREBASE --> firebaseData:', firebaseData[dataKeyName]);
+        console.log('///////////////////');
+
+        $scope.managersData = $scope.populateManagersData(firebaseData.managersData.managersData);
+
+        $rootScope.fireBaseReady = true;
+        $rootScope.loading = false;
+        $scope.allPlayers = firebaseData[dataKeyName].allPlayers;
+        $scope.chooseManager($stateParams.managerId);
 
       };
 
@@ -380,8 +316,8 @@
       var allRequestComplete = function () {
 
         console.log('transfersCtrl - allRequestComplete');
-        $scope.loading = false;
-        chooseTeam();
+        $rootScope.loading = false;
+        $scope.chooseManager($stateParams.managerId);
 
       };
 
@@ -426,7 +362,6 @@
       var init = function () {
 
         console.log('transfersCtrl - init', dataKeyName);
-        console.log('> $scope.draftMode', $scope.draftMode);
 
         if (angular.isDefined($rootScope[dataKeyName])) {
 
@@ -441,16 +376,7 @@
         } else {
 
           console.log('load from firebase');
-
-          $scope.startFireBase(function (firebaseData) {
-
-            console.log('firebaseData', firebaseData[dataKeyName]);
-
-            $scope.fireBaseReady = true;
-            $scope.loading = false;
-            $scope.allPlayers = firebaseData[dataKeyName].allPlayers;
-
-          });
+          $scope.startFireBase(fireBaseLoaded);
 
         }
 

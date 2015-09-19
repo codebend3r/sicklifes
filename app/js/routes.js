@@ -21,13 +21,15 @@
       $urlRouterProvider.when('/leagues/liga', '/leagues/liga/tables');
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
+      $urlRouterProvider.when('/managers/', '/managers/chester');
+      $urlRouterProvider.when('/transfers/', '/transfers/chester');
+
       $urlRouterProvider.otherwise('/leagues/liga/tables');
 
       $stateProvider
         .state('app', {
 
           abstract: true,
-          //template: '<div ui-view="content"></div>',
           template: '<ui-view />',
           controller: 'appCtrl'
 
@@ -130,7 +132,7 @@
         })
         .state('transfers', {
 
-          url: '/transfers',
+          url: '/transfers/:managerId',
           parent: 'app',
           templateUrl: 'views/transfers.html',
           controller: 'transfersCtrl'

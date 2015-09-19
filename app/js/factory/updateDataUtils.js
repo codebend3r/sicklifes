@@ -73,6 +73,7 @@
 
           var leagueTables = $apiFactory.getLeagueTables(),
             defer = $q.defer(),
+            //leagues = [ 'liga', 'epl', 'seri', 'chlg', 'uefa' ],
             leagueTablesData = [],
             allLeagues = {
               _lastSyncedOn: $momentService.syncDate()
@@ -81,11 +82,21 @@
           // returns a list of promise with the end point for each league
           $apiFactory.listOfPromises(leagueTables, function (promiseData) {
 
-            leagueTablesData = _.map(promiseData, function (result) {
+            leagueTablesData = _.map(promiseData, function (result, index) {
 
-              return {
-                data: _.map(result.data, $arrayMappers.tableMap)
-              };
+              if (index <= 2) {
+
+                return {
+                  data: _.map(result.data, $arrayMappers.tableMap)
+                };
+
+              } else {
+
+                return {
+                  data: _.map(result.data, $arrayMappers.tableTournamentMap)
+                };
+
+              }
 
             });
 

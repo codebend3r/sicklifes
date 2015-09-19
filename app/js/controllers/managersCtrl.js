@@ -8,9 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams) {
-
-      var dataKeyName = 'managersData';
+    .controller('managersCtrl', function ($scope, $rootScope, $state, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -79,8 +77,7 @@
       $scope.changeManager = function (selectedManager) {
 
         $scope.selectedManager = selectedManager;
-        //$location.url($location.path() + '?manager=' + selectedManager.managerName); // route change
-        $state.go($state.current.name, { managerId: selectedManager.managerName });
+        $state.go($state.current.name, { managerId: selectedManager.managerName.toLowerCase() });
 
       };
 
@@ -89,18 +86,14 @@
        */
       $scope.saveRoster = function () {
 
-        console.log('////////////////////////////////////');
-        console.log('$rootScope.managersData', $rootScope.managersData);
-        console.log('////////////////////////////////////');
-
         var saveObject = {
           _lastSyncedOn: $momentService.syncDate(),
-          chester: $rootScope.managersData[0],
-          frank: $rootScope.managersData[1],
-          dan: $rootScope.managersData[2],
-          justin: $rootScope.managersData[3],
-          mike: $rootScope.managersData[4],
-          joe: $rootScope.managersData[5]
+          chester: $rootScope.managersData.chester,
+          frank: $rootScope.managersData.frank,
+          dan: $rootScope.managersData.dan,
+          justin: $rootScope.managersData.justin,
+          mike: $rootScope.managersData.mike,
+          joe: $rootScope.managersData.joe
         };
 
         console.log('saveObject', saveObject);
@@ -123,21 +116,10 @@
       ////////////////////////////////////////
 
       /**
-       * defines $scope.selectedManager
+       *
+       * @type {string}
        */
-      var chooseTeam = function () {
-
-        if ($stateParams.manager) {
-          _.each($rootScope.managersData, function (manager) {
-            if (manager.managerName === $stateParams.manager) {
-              $scope.selectedManager = manager;
-            }
-          });
-        } else {
-          $scope.selectedManager = $rootScope.managersData[0];
-        }
-
-      };
+      var dataKeyName = 'managersData';
 
       /**
        * get data through HTTP request
@@ -163,31 +145,7 @@
 
         $scope.loading = false;
 
-        chooseTeam();
-
-      };
-
-      /**
-       * populates $rootScope.managersData
-       * @param data {object}
-       */
-      var populateManagersData = function (data) {
-
-        $scope.managersData = [
-          data.chester,
-          data.frank,
-          data.dan,
-          data.justin,
-          data.mike,
-          data.joe
-        ];
-
-        $rootScope.managersData = $scope.managersData;
-
-        return {
-          data: $scope.managersData,
-          _lastSyncedOn: $momentService.syncDate()
-        };
+        $scope.chooseManager($stateParams.managerId);
 
       };
 
@@ -201,20 +159,20 @@
         console.log('LOCAL --> localData:', localData);
         console.log('///////////////////');
 
-        var managerData = populateManagersData(localData);
-        console.log('syncDate:', managerData._lastSyncedOn);
+        console.log('syncDate:', localData._lastSyncedOn);
 
         $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
-        $scope.checkYesterday(managerData._lastSyncedOn);
-
-        chooseTeam();
+        $scope.checkYesterday(localData._lastSyncedOn);
 
         $scope.loading = false;
 
-        $scope.startFireBase(function () {
+        $scope.startFireBase(function (firebaseData) {
 
           $rootScope.fireBaseReady = true;
+          $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
+          $scope.chooseManager($stateParams.managerId);
+          $scope.saveRoster();
 
         });
 
@@ -232,16 +190,18 @@
 
         $rootScope.fireBaseReady = true;
 
-        var managerData = populateManagersData(firebaseData.managersData);
-        console.log('syncDate:', managerData._lastSyncedOn);
+        $rootScope.loading = false;
+
+        $scope.managersData = $scope.populateManagersData(firebaseData.managersData.managersData);
+        console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
 
         $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
-        checkYesterday(managerData._lastSyncedOn);
+        $scope.checkYesterday(firebaseData[dataKeyName]._lastSyncedOn);
 
-        chooseTeam();
+        $scope.chooseManager($stateParams.managerId);
 
-        $scope.loading = false;
+        $scope.saveRoster();
 
       };
 

@@ -17,20 +17,20 @@
       console.log('--> appCtrl');
 
       user.getCurrent().then(function (currentUser) {
-        console.log('currentUser:', currentUser);
-        $rootScope.user = user;
+        //console.log('currentUser:', currentUser);
+        $rootScope.user = currentUser;
         //$scope.user = user;
       });
 
       /**
        * whether data is still loading
        */
-      $scope.loading = true;
+      $rootScope.loading = true;
 
       /**
        * if firebase has been initalized
        */
-      $scope.fireBaseReady = false;
+      $rootScope.fireBaseReady = false;
 
       /**
        * if admin buttons will show
@@ -50,6 +50,39 @@
       $scope.dataKeyName = '';
 
       /**
+       * populates $rootScope.managersData
+       * @param data {object}
+       */
+      $scope.populateManagersData = function (data) {
+
+        var managerData = {
+          chester: data.chester,
+          frank: data.frank,
+          dan: data.dan,
+          justin: data.justin,
+          mike: data.mike,
+          joe: data.joe
+        };
+
+        $scope.managersData = managerData;
+        $rootScope.managersData = managerData;
+
+        return managerData;
+
+      };
+
+      /**
+       * defines $scope.selectedManager
+       */
+      $scope.chooseManager = function (managerId) {
+
+        console.log('> $scope.managersData:', $scope.managersData);
+        $scope.selectedManager = $scope.managersData[managerId.toLowerCase()];
+        console.log('selected managerName:', $scope.selectedManager.managerName);
+
+      };
+
+      /**
        * sets data in the initialized firebase service
        * @param saveObject
        * @param dataKey
@@ -58,21 +91,16 @@
         if ($rootScope.fireBaseReady) {
           $fireBaseService.saveToFireBase(saveObject, dataKey);
         } else {
-          $scope.startFireBase();
+          $scope.startFireBase($scope.saveToFireBase);
         }
       };
-
-      /**
-       * TODO
-       * @type {{}}
-       */
-      $scope.firebaseData = {};
 
       /**
        * starts the process of getting data from firebase
        * @param callback
        */
       $scope.startFireBase = function (callback) {
+        if (angular.isUndefinedOrNull(callback)) throw new Error('$scope.startFireBase: the callback parameter was not defined');
         if ($rootScope.fireBaseReady) {
           console.log('firebase already started, returning now');
           callback($scope.firebaseData);
@@ -80,9 +108,8 @@
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
-            console.log('firebase initialized');
-            $scope.firebaseData = fbData;
-            callback($scope.firebaseData);
+            console.log('firebase initialized', fbData);
+            callback(fbData);
           });
         }
 

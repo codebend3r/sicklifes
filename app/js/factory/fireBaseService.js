@@ -47,7 +47,7 @@
 
         saveToFireBase: function (saveObject, key) {
 
-          console.log('saveToFireBase -- START');
+          console.log('saveToFireBase -- START | key:', key);
 
           var cleanedData = angular.copy(saveObject);
 

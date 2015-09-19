@@ -2,6 +2,11 @@
 
   <h2>Leaders</h2>
 
+  <div ng-if='admin' class='well'>
+    <button type='button' class='btn btn-danger' ng-disabled="!fireBaseReady" ng-click='updateLeaders()'>Update League Leaders</button>
+    <button type='button' class='btn btn-danger' ng-disabled="!fireBaseReady" ng-click='saveToFireBase()'>Save Data to Firebase</button>
+  </div>
+
   <custom-table table-body-template='leaders' list='leagueLeaders' table-header="tableHeader" table-name=''></custom-table>
 
 </div>

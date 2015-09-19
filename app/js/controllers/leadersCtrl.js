@@ -17,11 +17,6 @@
       console.log('--> leadersCtrl');
 
       /**
-       * whether data is still loading
-       */
-      $scope.loading = true;
-
-      /**
        * TODO
        */
       $scope.tableHeader = [
@@ -38,6 +33,16 @@
           text: 'Goals'
         }
       ];
+
+      /**
+       * TODO
+       */
+      $scope.updateLeaders = function() {
+
+        console.log('updateLeaders()');
+        $scope.updateLeadersFromHTTP(mapLeagueLeaders);
+
+      };
 
       /**
        * TODO
@@ -154,7 +159,6 @@
 
         console.log('///////////////////');
         console.log('LOCAL --> localData:', localData.leagues[$stateParams.leagueName]);
-        console.log($stateParams.leagueName, 'last synced on', localData.leagues[$stateParams.leagueName]._lastSyncedOn);
         console.log('///////////////////');
 
         //$scope.allLeagues[0].source = localData.LIGA;
@@ -174,9 +178,11 @@
           console.log('-- data is up to date --');
           $rootScope.loading = false;
           $scope.startFireBase(function (firebaseObj) {
+
             firebaseData = firebaseObj;
             $rootScope.fireBaseReady = true;
             prepareForFirebase();
+
           });
         }
 
@@ -201,7 +207,7 @@
        */
       var init = function () {
 
-        $scope.dataKeyName = 'scoringLeaders';
+        $scope.dataKeyName = 'leagueLeaders';
 
         if (angular.isDefined($rootScope[$scope.dataKeyName]) && angular.isDefined($rootScope[$scope.dataKeyName].leagues[$stateParams.leagueName])) {
 

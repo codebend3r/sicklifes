@@ -6,6 +6,7 @@
   </thead>
   <tbody>
     <tr ng-repeat="player in list | orderBy:sortFunction()">
+      <pre>{{player | json}}</pre>
       <td class="player-column" ng-class='{dropped: player.status === "dropped", added: player.status === "added"}'>
         <a ui-sref="playerDetails({playerID: player.id})">{{player.playerName}}</a>
       </td>

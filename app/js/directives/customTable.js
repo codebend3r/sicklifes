@@ -26,6 +26,12 @@
         },
         controller: function ($scope) {
 
+          $scope.everyFourth = function(index) {
+
+            return index % 4 === 0;
+
+          };
+
           $scope.playerSearch = {
             playerQuery: '',
             teamQuery: ''

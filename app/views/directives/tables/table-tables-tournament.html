@@ -1,0 +1,32 @@
+
+<table class='table table-hover table-responsive'>
+  <tbody>
+    <tr ng-repeat='team in list | orderBy:sortFunction()' ng-if="everyFourth($index)">
+      <td>{{team.group}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class='table table-hover table-responsive'>
+  <thead>
+    <tr>
+      <th ng-repeat='header in tableHeader'>{{header.text}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat='team in list | orderBy:sortFunction()' ng-if="everyFourth($index)">
+      <td>{{team.group}}</td>
+    </tr>
+    <tr ng-repeat='team in list | orderBy:sortFunction()'>
+      <td class='big-text'>{{team.rank}}</td>
+      <td class='small-hpadding bold'><img width="50" height="50" ng-src="{{team.logo}}" />
+        <a ui-sref='roster({leagueName: tableParams.leagueName, teamId: team.teamId})'>{{team.teamName}}</a>
+      </td>
+      <td class='small-hpadding'>{{team.record}}</td>
+      <td class='small-hpadding'>{{team.gamesPlayed}}</td>
+      <td class='small-hpadding'>{{team.goalsFor}}</td>
+      <td class='small-hpadding'>{{team.goalsAgainst}}</td>
+      <td class='small-hpadding bold'>{{team.points}}</td>
+    </tr>
+  </tbody>
+</table>

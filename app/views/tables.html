@@ -2,6 +2,17 @@
 
   <h2>Tables</h2>
 
-  <custom-table table-body-template='tables' list='selectedLeague.source' table-params='{leagueName: leagueName}' table-header='leagueTableHeader' table-name=''></custom-table>
+  <div ng-if='admin' class='well'>
+    <button type='button' class='btn btn-danger' ng-disabled="!fireBaseReady" ng-click='updateTables()'>Update League Tables</button>
+    <button type='button' class='btn btn-danger' ng-disabled="!fireBaseReady" ng-click='saveToFireBase()'>Save Data to Firebase</button>
+  </div>
+
+  <span ng-switch on="leagueName">
+    <custom-table ng-switch-when="epl" table-body-template='tables' list='selectedLeague.source' table-params='{leagueName: leagueName}' table-header='leagueTableHeader'></custom-table>
+    <custom-table ng-switch-when="liga" table-body-template='tables' list='selectedLeague.source' table-params='{leagueName: leagueName}' table-header='leagueTableHeader'></custom-table>
+    <custom-table ng-switch-when="seri" table-body-template='tables' list='selectedLeague.source' table-params='{leagueName: leagueName}' table-header='leagueTableHeader'></custom-table>
+    <custom-table ng-switch-when="chlg" table-body-template='tables-tournament' list='selectedLeague.source' sort-function="groupPosition" table-params='{leagueName: leagueName}' table-header='leagueTableHeader'></custom-table>
+    <custom-table ng-switch-when="euro" table-body-template='tables-tournament' list='selectedLeague.source' sort-function="groupPosition" table-params='{leagueName: leagueName}' table-header='leagueTableHeader'></custom-table>
+  </span>
 
 </div>

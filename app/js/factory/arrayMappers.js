@@ -40,13 +40,13 @@
         },
 
         /**
-         * maps league table data
+         * maps league table data for epl, seri, and la liga
+         * @param teamData
+         * @param index
          */
         tableMap: function (teamData, index) {
 
-          //console.log('teamData', teamData);
-
-          var teamInTable = {
+          return {
             index: index,
             id: teamData.id,
             logo: teamData.team.logos.small,
@@ -60,7 +60,31 @@
             points: teamData.points
           };
 
-          return teamInTable;
+        },
+
+        /**
+         * maps league table data for epl, seri, and la liga
+         * @param teamData
+         * @param index
+         */
+        tableTournamentMap: function (teamData, index) {
+
+          //console.log('group:', teamData.group);
+
+          return {
+            index: index,
+            id: teamData.id,
+            group: teamData.group,
+            logo: teamData.team.logos.small,
+            teamId: teamData.team.id,
+            record: teamData.wins + '-' + teamData.losses + '-' + teamData.ties,
+            goalsFor: teamData.goals_for,
+            goalsAgainst: teamData.goals_against,
+            gamesPlayed: teamData.games_played,
+            rank: teamData.ranking,
+            teamName: $textManipulator.teamNameFormatted(teamData.team.full_name),
+            points: teamData.points
+          };
 
         },
 
@@ -315,7 +339,6 @@
             index: index,
             id: i.id,
             playerName: $textManipulator.formattedFullName(i.first_name, i.last_name),
-            //managerName: $arrayLoopers.getOwnerByID(i.id),
             managerName: $rootScope.draftMode ? 'Free Agent' : $arrayLoopers.getOwnerByID(i.id),
             teamName: $textManipulator.teamNameFormatted(teamData.full_name),
             teamLogo: teamData.logos.small,

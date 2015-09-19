@@ -57,10 +57,10 @@
         /**
          * resets goal and points count for a player
          */
-        cleanPlayer: function (p) {
+        cleanPlayer: function (p, draftMode) {
 
           if (p) {
-            p.dateOfTransaction = $momentService.transactionDate();
+            p.dateOfTransaction = draftMode ? $momentService.leagueStartDate() : $momentService.transactionDate();
             p.goals = 0;
             p.points = 0;
             p.domesticGoals = 0;

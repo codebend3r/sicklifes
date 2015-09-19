@@ -20,7 +20,7 @@
        * select box changes function
        */
       $scope.changeLeague = function (league) {
-        $state.go($state.current.name, { leagueName: league.className });
+        $state.go($state.current.name, { leagueName: league.slug });
         $scope.loading = true;
       };
 
@@ -36,31 +36,31 @@
         {
           name: $textManipulator.leagueLongNames.liga,
           source: null,
-          className: 'liga',
+          slug: 'liga',
           img: $textManipulator.leagueImages.liga
         },
         {
           name: $textManipulator.leagueLongNames.epl,
           source: null,
-          className: 'epl',
+          slug: 'epl',
           img: $textManipulator.leagueImages.epl
         },
         {
           name: $textManipulator.leagueLongNames.seri,
           source: null,
-          className: 'seri',
+          slug: 'seri',
           img: $textManipulator.leagueImages.seri
         },
         {
           name: $textManipulator.leagueLongNames.chlg,
           source: null,
-          className: 'chlg',
+          slug: 'chlg',
           img: $textManipulator.leagueImages.chlg
         },
         {
           name: $textManipulator.leagueLongNames.euro,
           source: null,
-          className: 'europa',
+          slug: 'euro',
           img: $textManipulator.leagueImages.euro
         }
       ];
@@ -73,7 +73,7 @@
         var selectedLeagueIndex = 0;
 
         _.some($scope.allLeagues, function (l, index) {
-          if (l.className === $stateParams.leagueName) {
+          if (l.slug === $stateParams.leagueName) {
             selectedLeagueIndex = index;
             return true;
           }
@@ -81,7 +81,7 @@
 
         $scope.selectedLeague = $scope.allLeagues[selectedLeagueIndex];
 
-        $scope.leagueName = $scope.selectedLeague.className;
+        $scope.leagueName = $scope.selectedLeague.slug;
 
         return $scope.allLeagues[selectedLeagueIndex];
 
@@ -108,7 +108,7 @@
        */
       $scope.updateLeadersFromHTTP = function (callback) {
 
-        console.log('--> updateLeadersFromHTTP');
+        console.log('leaguesCtrl --> updateLeadersFromHTTP');
 
         $http({
           url: 'http://api.thescore.com/' + $stateParams.leagueName + '/leaders?categories=Goals&season_type=regular',
@@ -122,6 +122,8 @@
        * @param callback
        */
       $scope.updateTablesFromHTTP = function (callback) {
+
+        console.log('leaguesCtrl --> updateTablesFromHTTP');
 
         $updateDataUtils.updateLeagueTables()
           .then(callback);
