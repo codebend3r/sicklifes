@@ -69,8 +69,8 @@
           joe: data.joe
         };
 
-        $scope.managersData = managerData;
-        $rootScope.managersData = managerData;
+        $scope.managerData = managerData;
+        $rootScope.managerData = managerData;
 
         return managerData;
 
@@ -81,7 +81,7 @@
        */
       $scope.chooseManager = function (managerId) {
 
-        $rootScope.selectedManager = $scope.managersData[managerId.toLowerCase()];
+        $rootScope.selectedManager = $scope.managerData[managerId.toLowerCase()];
 
       };
 
@@ -94,7 +94,7 @@
         if ($rootScope.fireBaseReady) {
           $fireBaseService.saveToFireBase(saveObject, dataKey);
         } else {
-          $scope.startFireBase($scope.saveToFireBase);
+          $scope.startFireBase($scope.saveToFireBase.bind($scope, saveObject, dataKey));
         }
       };
 

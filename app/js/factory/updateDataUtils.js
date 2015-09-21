@@ -117,12 +117,12 @@
           var allLeaguePromises = [],
             defer = $q.defer();
 
-          if (angular.isUndefinedOrNull($rootScope.managersData)) throw new Error('$rootScope.managersData is not defined');
+          if (angular.isUndefinedOrNull($rootScope.managerData)) throw new Error('$rootScope.managerData is not defined');
 
-          var managersData = angular.copy($rootScope.managersData);
-          delete managersData._lastSyncedOn;
+          var managerData = angular.copy($rootScope.managerData);
+          delete managerData._lastSyncedOn;
 
-          _.each(managersData, function (manager) {
+          _.each(managerData, function (manager) {
 
             // reset goal counts
             manager = $objectUtils.cleanManager(manager, true);
@@ -151,7 +151,7 @@
           });
 
           $apiFactory.listOfPromises(allLeaguePromises, function () {
-            defer.resolve(managersData);
+            defer.resolve(managerData);
           });
 
           return defer.promise;

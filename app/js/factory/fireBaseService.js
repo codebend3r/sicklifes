@@ -49,9 +49,8 @@
 
           console.log('saveToFireBase -- START | key:', key);
 
-          var cleanedData = angular.copy(saveObject);
-
-          var usersRef = ref.child(key);
+          var cleanedData = angular.copy(saveObject),
+            usersRef = ref.child(key);
 
           // save to local storage
           $localStorage[key] = cleanedData;
@@ -59,10 +58,8 @@
           // save to $rootScope
           $rootScope[key] = cleanedData;
 
-          //console.log('cleanedData', cleanedData);
-
           usersRef.set(cleanedData);
-          console.log('saveToFireBase -- COMPLETE');
+          console.log('saveToFireBase -- COMPLETE', cleanedData.chester.players[1365].goals);
 
         }
 

@@ -95,15 +95,19 @@
        */
       $scope.saveRoster = function () {
 
+        debugger;
+
         var saveObject = {
           _lastSyncedOn: $momentService.syncDate(),
-          chester: $scope.managersData.chester,
-          frank: $scope.managersData.frank,
-          dan: $scope.managersData.dan,
-          justin: $scope.managersData.justin,
-          mike: $scope.managersData.mike,
-          joe: $scope.managersData.joe
+          chester: $scope.managerData.chester,
+          frank: $scope.managerData.frank,
+          dan: $scope.managerData.dan,
+          justin: $scope.managerData.justin,
+          mike: $scope.managerData.mike,
+          joe: $scope.managerData.joe
         };
+
+        console.log('> saveRoster', saveObject.chester.players[1365].goals);
 
         $scope.saveToFireBase(saveObject, dataKeyName);
 
@@ -161,7 +165,25 @@
 
         $rootScope.loading = false;
 
-        if ($scope.checkYesterday(localData._lastSyncedOn)) {
+        if ($scope.admin) {
+
+          console.log('-- is admin --');
+
+          $scope.managerData = $scope.populateManagersData(localData);
+          $scope.chooseManager($stateParams.managerId);
+
+          console.log('> loadFromLocal', $scope.managerData.chester.players[1365].goals);
+
+          $scope.startFireBase(function (firebaseData) {
+
+            $rootScope.fireBaseReady = true;
+
+            $updateDataUtils.updateAllManagerData()
+              .then(onManagersRequestFinished);
+
+          });
+
+        } else if ($scope.checkYesterday(localData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
@@ -181,7 +203,7 @@
           $scope.startFireBase(function (firebaseData) {
 
             $rootScope.fireBaseReady = true;
-            $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
+            $scope.managerData = $scope.populateManagersData(localData.managersData);
             $scope.chooseManager($stateParams.managerId);
 
             $scope.saveRoster();
@@ -209,9 +231,20 @@
         $scope.managersData = $scope.populateManagersData(firebaseData.managersData);
         console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
 
-        if ($scope.checkYesterday(firebaseData[dataKeyName]._lastSyncedOn)) {
+        if ($scope.admin) {
+
+          console.log('-- is admin --');
+
+          $scope.chooseManager($stateParams.managerId);
+
+          $updateDataUtils.updateAllManagerData()
+            .then(onManagersRequestFinished);
+
+        } else if ($scope.checkYesterday(firebaseData[dataKeyName]._lastSyncedOn)) {
 
           console.log('-- data is too old --');
+          $scope.chooseManager($stateParams.managerId);
+
           $updateDataUtils.updateAllManagerData()
             .then(onManagersRequestFinished);
 
@@ -221,7 +254,7 @@
 
           $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
           $scope.chooseManager($stateParams.managerId);
-          //$scope.saveRoster();
+          $scope.saveRoster();
 
         }
 
@@ -234,10 +267,13 @@
        */
       var onManagersRequestFinished = function (managerData) {
         console.log('-- http request finished --');
-        //$scope.managerData = managerData;
-        $scope.managerData = $scope.populateManagersData(managerData);
-        $scope.chooseManager($stateParams.managerId);
+        $scope.managerData = managerData;
+        //$scope.managerData = $scope.populateManagersData(managerData);
+        //$scope.chooseManager($stateParams.managerId);
+
+        console.log('> onManagersRequestFinished', $scope.managerData.chester.players[1365].goals);
         $scope.saveRoster();
+        
       };
 
       var init = function () {
@@ -261,7 +297,10 @@
 
         }
 
-        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
+        //$scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope);
+        // .then(function(d) {
+        //   console.log('all managers data loaded', d);
+        // });
 
       };
 
