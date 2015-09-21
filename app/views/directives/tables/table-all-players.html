@@ -12,7 +12,7 @@
   </thead>
 
   <tbody>
-  <tr ng-repeat="player in list | unique: 'id' | filter: { playerName: playerSearch.playerQuery, teamName: playerSearch.teamQuery } | orderBy: '+playerName' | limitTo: 50">
+  <tr ng-repeat="player in list | unique: 'id' | filter: { playerName: playerSearch.playerQuery, teamName: playerSearch.teamQuery } | orderBy: '+playerName' | limitTo: 20">
     <td class="small-text"><div class="vertical-center">{{player.id}}</div></td>
     <td class="player-column">
       <div class="vertical-center">

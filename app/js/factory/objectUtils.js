@@ -32,6 +32,11 @@
 
         },
 
+        /**
+         *
+         * @param p
+         * @returns {*}
+         */
         playerResetGoalPoints: function (p) {
 
           p.goals = 0;
@@ -43,6 +48,10 @@
 
         },
 
+        /**
+         *
+         * @param m
+         */
         managerResetGoalPoints: function (m) {
 
           m.totalGoals = 0;
@@ -66,6 +75,12 @@
             p.domesticGoals = 0;
             p.clGoals = 0;
             p.eGoals = 0;
+            _.each(p.player, function(playerData, key) {
+
+              p[key] = playerData;
+
+            });
+            delete p.player;
             return p;
           } else {
             return {};

@@ -1,24 +1,25 @@
 <table class='table table-hover table-responsive'>
   <thead>
-    <tr>
-      <th ng-repeat='header in tableHeader'>{{header.text}}</th>
-    </tr>
+  <tr>
+    <th ng-repeat='header in tableHeader'>{{header.text}}</th>
+  </tr>
   </thead>
   <tbody>
-    <tr ng-repeat='player in list | orderBy:sortFunction()'>
-      <td class='player-column'>
-        <button type='button' ng-if='player.status !== "dropped"' ng-click='dropPlayer({player:player})' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-minus'></span></button>
-        <button type='button' ng-if='player.status === "dropped"' class='btn btn-warning btn-xs'><span class='glyphicon glyphicon-asterisk'></span></button>
-        &nbsp;
-        <a ng-href='#/player-details/{{scorer.id}}' ng-class='{dropped: scorer.status === "dropped", added: scorer.status === "added"}'>
-          {{player.playerName}}
-        </a>
-      </td>
-      <td class='small-text bold'>{{player.teamName}}</td>
-      <td>{{player.leagueName}}</td>
-      <td>{{player.domesticGoals}}</td>
-      <td>{{player.leagueGoals}}</td>
-      <td>{{player.points}}</td>
-    </tr>
+  <tr ng-repeat='player in list | orderBy:sortFunction()'>
+    <td class='player-column'>
+      <button ng-show="!tableParams.draftMode" type='button' ng-if='player.status !== "dropped"' ng-click='dropPlayer({player:player})' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-minus'></span></button>
+      <button ng-show="!tableParams.draftMode" type='button' ng-if='player.status === "dropped"' class='btn btn-warning btn-xs'><span class='glyphicon glyphicon-asterisk'>&nbsp;</span></button>
+      <div class="vertical-center">
+        <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+      </div>
+    </td>
+    <td class="bold small-text">
+      <div class="vertical-center"><img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;{{player.teamName}}</div>
+    </td>
+    <td class="small-text"><div class="vertical-center">{{player.leagueName}}</div></td>
+    <td><div class="vertical-center">{{player.domesticGoals}}</div></td>
+    <td><div class="vertical-center">{{player.leagueGoals}}</div></td>
+    <td><div class="vertical-center">{{player.points}}</div></td>
+  </tr>
   </tbody>
 </table>

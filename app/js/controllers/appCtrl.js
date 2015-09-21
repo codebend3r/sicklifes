@@ -33,6 +33,11 @@
       $rootScope.fireBaseReady = false;
 
       /**
+       * TODO
+       */
+      $rootScope.firebaseData = null;
+
+      /**
        * if admin buttons will show
        * @type {boolean}
        */
@@ -76,9 +81,7 @@
        */
       $scope.chooseManager = function (managerId) {
 
-        console.log('> $scope.managersData:', $scope.managersData);
-        $scope.selectedManager = $scope.managersData[managerId.toLowerCase()];
-        console.log('selected managerName:', $scope.selectedManager.managerName);
+        $rootScope.selectedManager = $scope.managersData[managerId.toLowerCase()];
 
       };
 
@@ -103,12 +106,12 @@
         if (angular.isUndefinedOrNull(callback)) throw new Error('$scope.startFireBase: the callback parameter was not defined');
         if ($rootScope.fireBaseReady) {
           console.log('firebase already started, returning now');
-          callback($scope.firebaseData);
+          callback($rootScope.firebaseData);
         } else {
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
-            console.log('firebase initialized', fbData);
+            $rootScope.firebaseData = fbData;
             callback(fbData);
           });
         }

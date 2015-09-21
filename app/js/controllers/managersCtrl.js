@@ -14,6 +14,8 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
+      $rootScope.loading = true;
+
       /**
        * TODO
        */
@@ -61,6 +63,13 @@
       ];
 
       /**
+       *
+       */
+      $scope.byPickNumber = function (player) {
+        return player.pickNumber;
+      };
+
+      /**
        * all managers data
        */
       $scope.updateAllManagerData = null;
@@ -88,26 +97,15 @@
 
         var saveObject = {
           _lastSyncedOn: $momentService.syncDate(),
-          chester: $rootScope.managersData.chester,
-          frank: $rootScope.managersData.frank,
-          dan: $rootScope.managersData.dan,
-          justin: $rootScope.managersData.justin,
-          mike: $rootScope.managersData.mike,
-          joe: $rootScope.managersData.joe
+          chester: $scope.managersData.chester,
+          frank: $scope.managersData.frank,
+          dan: $scope.managersData.dan,
+          justin: $scope.managersData.justin,
+          mike: $scope.managersData.mike,
+          joe: $scope.managersData.joe
         };
 
-        console.log('saveObject', saveObject);
-
         $scope.saveToFireBase(saveObject, dataKeyName);
-
-      };
-
-      /**
-       *
-       */
-      $scope.populateTeamsInLeague = function () {
-
-        //$updateDataUtils.updateTeamsInLeague();
 
       };
 
@@ -161,20 +159,36 @@
 
         console.log('syncDate:', localData._lastSyncedOn);
 
-        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
+        $rootScope.loading = false;
 
-        $scope.checkYesterday(localData._lastSyncedOn);
+        if ($scope.checkYesterday(localData._lastSyncedOn)) {
 
-        $scope.loading = false;
+          console.log('-- data is too old --');
 
-        $scope.startFireBase(function (firebaseData) {
+          $scope.startFireBase(function (firebaseData) {
 
-          $rootScope.fireBaseReady = true;
-          $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
-          $scope.chooseManager($stateParams.managerId);
-          $scope.saveRoster();
+            $rootScope.fireBaseReady = true;
 
-        });
+            $updateDataUtils.updateAllManagerData()
+              .then(onManagersRequestFinished);
+
+          });
+
+        } else {
+
+          console.log('-- data is up to date --');
+
+          $scope.startFireBase(function (firebaseData) {
+
+            $rootScope.fireBaseReady = true;
+            $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
+            $scope.chooseManager($stateParams.managerId);
+
+            $scope.saveRoster();
+
+          });
+
+        }
 
       };
 
@@ -192,17 +206,38 @@
 
         $rootScope.loading = false;
 
-        $scope.managersData = $scope.populateManagersData(firebaseData.managersData.managersData);
+        $scope.managersData = $scope.populateManagersData(firebaseData.managersData);
         console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
 
-        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
+        if ($scope.checkYesterday(firebaseData[dataKeyName]._lastSyncedOn)) {
 
-        $scope.checkYesterday(firebaseData[dataKeyName]._lastSyncedOn);
+          console.log('-- data is too old --');
+          $updateDataUtils.updateAllManagerData()
+            .then(onManagersRequestFinished);
 
+        } else {
+
+          console.log('-- data is up to date --');
+
+          $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
+          $scope.chooseManager($stateParams.managerId);
+          //$scope.saveRoster();
+
+        }
+
+
+      };
+
+      /**
+       *
+       * @param managerData
+       */
+      var onManagersRequestFinished = function (managerData) {
+        console.log('-- http request finished --');
+        //$scope.managerData = managerData;
+        $scope.managerData = $scope.populateManagersData(managerData);
         $scope.chooseManager($stateParams.managerId);
-
         $scope.saveRoster();
-
       };
 
       var init = function () {
@@ -223,7 +258,10 @@
 
           console.log('load from firebase');
           $scope.startFireBase(firebaseLoaded);
+
         }
+
+        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
       };
 

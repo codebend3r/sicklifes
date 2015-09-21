@@ -77,6 +77,10 @@
         }
       ];
 
+      $scope.byPickNumber = function (player) {
+        return player.pickNumber;
+      };
+
       /**
        * TODO
        * @type {Array}
@@ -114,22 +118,20 @@
         if ($scope.draftMode) {
 
           var draftedPlayer = $objectUtils.cleanPlayer(player, $scope.draftMode);
+          draftedPlayer.managerName = $scope.selectedManager.managerName;
 
-          $scope.selectedManager.players = $scope.selectedManager.players || [];
-          $scope.selectedManager.players.push(draftedPlayer);
+          $scope.selectedManager.players = $scope.selectedManager.players || {};
 
-          //var mappedManagers = {};
-          //
-          //_.each($rootScope.managersData, function (manager) {
-          //  mappedManagers[manager.managerName.toLowerCase()] = manager;
-          //});
+          var pickNumber = _.keys($scope.selectedManager.players).length + 1;
 
-          var saveObject = {
-            _lastSyncedOn: $momentService.syncDate(),
-            managersData: $scope.managersData
-          };
+          draftedPlayer.pickNumber = pickNumber;
 
-          console.log('saveObject', saveObject);
+          console.log('pick #', pickNumber);
+          //$scope.selectedManager.players.push(draftedPlayer);
+          $scope.selectedManager.players[draftedPlayer.id] = draftedPlayer;
+
+          var saveObject = $scope.managersData;
+          saveObject._lastSyncedOn = $momentService.syncDate();
 
           $scope.startFireBase(function () {
 
@@ -285,6 +287,9 @@
           $scope.fireBaseReady = true;
           //$scope.managerData = $scope.populateManagersData(firebaseData);
           $scope.chooseManager($stateParams.managerId);
+          $scope.selectedManager = $scope.managersData[$stateParams.managerId];
+          console.log('> managersData', $scope.managersData);
+          console.log('> selectedManager', $scope.selectedManager);
 
         });
 
@@ -297,29 +302,32 @@
       var fireBaseLoaded = function (firebaseData) {
 
         console.log('///////////////////');
-        console.log('FIREBASE --> firebaseData:', firebaseData[dataKeyName]);
+        console.log('FIREBASE --> firebaseData:', firebaseData);
         console.log('///////////////////');
 
-        $scope.managersData = $scope.populateManagersData(firebaseData.managersData.managersData);
+        $scope.managersData = $scope.populateManagersData(firebaseData.managersData);
 
         $rootScope.fireBaseReady = true;
         $rootScope.loading = false;
         $scope.allPlayers = firebaseData[dataKeyName].allPlayers;
         $scope.chooseManager($stateParams.managerId);
+        $scope.selectedManager = $scope.managersData[$stateParams.managerId];
+        console.log('> managersData', $scope.managersData);
+        console.log('> selectedManager', $scope.selectedManager);
 
       };
 
 
-      /**
-       * all requests complete
-       */
-      var allRequestComplete = function () {
-
-        console.log('transfersCtrl - allRequestComplete');
-        $rootScope.loading = false;
-        $scope.chooseManager($stateParams.managerId);
-
-      };
+      ///**
+      // * all requests complete
+      // */
+      //var allRequestComplete = function () {
+      //
+      //  console.log('transfersCtrl - allRequestComplete');
+      //  $rootScope.loading = false;
+      //  $scope.chooseManager($stateParams.managerId);
+      //
+      //};
 
       /**
        * http request all player pool
@@ -338,7 +346,7 @@
 
             //console.log('firebaseData', firebaseData[dataKeyName]);
             populateManagersData(firebaseData.managersData);
-            chooseTeam();
+            $scope.chooseManager($stateParams.managerId);
 
             var saveObject = {
               _syncedFrom: 'transfersCtrl',

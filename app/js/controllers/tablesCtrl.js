@@ -76,7 +76,7 @@
         console.log('httpDataLoaded --> httpData:', httpData);
         console.log('///////////////////');
 
-        $scope.loading = false;
+        $rootScope.loading = false;
 
         $scope.allLeagues[0].source = httpData[0].data;
         $scope.allLeagues[1].source = httpData[1].data;
@@ -89,23 +89,23 @@
         // after http request start firebase so we can save later
         $scope.startFireBase(function (firebaseData) {
 
-          $scope.fireBaseReady = true;
+          $rootScope.fireBaseReady = true;
 
-          debugger;
+          $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
 
-          //$scope.managerData = $scope.populateManagersData(firebaseData);
+          var saveObject = {
+            _syncedFrom: 'tablesCtrl',
+            _lastSyncedOn: $momentService.syncDate(),
+            liga: $scope.allLeagues[0].source,
+            epl: $scope.allLeagues[1].source,
+            seri: $scope.allLeagues[2].source,
+            chlg: $scope.allLeagues[3].source,
+            uefa: $scope.allLeagues[4].source
+          };
 
-          //saveObject = {
-          //  _syncedFrom: 'leagusCtrl',
-          //  _lastSyncedOn: $momentService.syncDate(),
-          //  liga: $scope.allLeagues[0].source,
-          //  epl: $scope.allLeagues[1].source,
-          //  seri: $scope.allLeagues[2].source,
-          //  chlg: $scope.allLeagues[3].source,
-          //  uefa: $scope.allLeagues[4].source
-          //};
-          //
-          //$scope.saveToFireBase(saveObject, 'leagueTables');
+          //console.log('saveObject', saveObject);
+
+          $scope.saveToFireBase(saveObject, 'leagueTables');
 
         });
 

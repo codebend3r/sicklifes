@@ -66,6 +66,8 @@
 
         $rootScope.loading = false;
 
+        console.log('mapLeagueLeaders --> firebaseData', firebaseData);
+
         $scope.startFireBase(function (firebaseObj) {
           firebaseData = firebaseObj;
           $rootScope.fireBaseReady = true;
@@ -79,7 +81,7 @@
        */
       var prepareForFirebase = function () {
 
-        saveObject = {};
+        var saveObject = {};
         saveObject._syncedFrom = 'leadersCtrl';
         saveObject.leagues = {};
         saveObject.leagues[$stateParams.leagueName] = {
@@ -91,12 +93,14 @@
           _.defaults(saveObject.leagues, firebaseData[$scope.dataKeyName].leagues);
         }
 
-        console.log('saveObject', saveObject);
-
         $scope.saveToFireBase(saveObject, 'scoringLeaders');
 
       };
 
+      /**
+       * TODO
+       * @returns {boolean}
+       */
       var existsInFireBase = function () {
 
         return !angular.isUndefinedOrNull(firebaseData[$scope.dataKeyName])
@@ -107,6 +111,7 @@
 
       /**
        * when firebase data is loaded
+       * @param firebaseObj
        */
       var firebaseLoaded = function (firebaseObj) {
 
@@ -207,7 +212,7 @@
        */
       var init = function () {
 
-        $scope.dataKeyName = 'leagueLeaders';
+        $scope.dataKeyName = 'scoringLeaders';
 
         if (angular.isDefined($rootScope[$scope.dataKeyName]) && angular.isDefined($rootScope[$scope.dataKeyName].leagues[$stateParams.leagueName])) {
 

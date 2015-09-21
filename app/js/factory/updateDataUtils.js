@@ -46,7 +46,7 @@
                   });
 
                   // each player on each team
-                  var rosterArray = playerData.data.map($arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
+                  var rosterArray = _.map(playerData.data, $arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
                   allPlayers = allPlayers.concat(rosterArray);
 
                 });
@@ -73,7 +73,6 @@
 
           var leagueTables = $apiFactory.getLeagueTables(),
             defer = $q.defer(),
-            //leagues = [ 'liga', 'epl', 'seri', 'chlg', 'uefa' ],
             leagueTablesData = [],
             allLeagues = {
               _lastSyncedOn: $momentService.syncDate()
@@ -104,7 +103,6 @@
 
           });
 
-          //return leagueTablesData;
           return defer.promise;
 
         },
@@ -119,9 +117,12 @@
           var allLeaguePromises = [],
             defer = $q.defer();
 
-          $rootScope.managersData = $rootScope.managersData || $managersService;
+          if (angular.isUndefinedOrNull($rootScope.managersData)) throw new Error('$rootScope.managersData is not defined');
 
-          _.each($rootScope.managersData, function (manager) {
+          var managersData = angular.copy($rootScope.managersData);
+          delete managersData._lastSyncedOn;
+
+          _.each(managersData, function (manager) {
 
             // reset goal counts
             manager = $objectUtils.cleanManager(manager, true);
@@ -149,8 +150,8 @@
 
           });
 
-          $apiFactory.listOfPromises(allLeaguePromises, function (result) {
-            defer.resolve(result);
+          $apiFactory.listOfPromises(allLeaguePromises, function () {
+            defer.resolve(managersData);
           });
 
           return defer.promise;
@@ -194,8 +195,6 @@
           return defer.promise;
 
         },
-
-        ///////////////////////////////////
 
         /**
          * fetches everything

@@ -7,14 +7,15 @@
   <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managersData' ng-change='changeManager(selectedManager)'></select>
 
   <div ng-if='admin' class='well'>
-    <!--<button type='button' class='btn btn-danger' ng-click='updateAllManagerData()'>Update All Managers Data</button>-->
+    <button type='button' class='btn btn-danger' ng-click='updateAllManagerData()'>Update All Managers Data</button>
     <button type='button' class='btn btn-danger' ng-click='resetAllPlayers()'>Clear Rosters</button>
     <button type='button' class='btn btn-danger' ng-click='saveRoster()'>Save Roster</button>
     <!--<button type='button' class='btn btn-danger' ng-click='populateTeamsInLeague()'>Populate Teams in League</button>-->
   </div>
 
-  <manager-jumbotron manager='selectedManager'></manager-jumbotron>
+  <!--<manager-jumbotron manager='selectedManager'></manager-jumbotron>-->
+  <!--<pre>{{selectedManager.players| json}}</pre>-->
 
-  <custom-table table-body-template='managers-standard' list='selectedManager.players' table-header='tableHeader'></custom-table>
+  <custom-table table-body-template='managers-standard' list='selectedManager.players' sort-function="byPickNumber" table-header='tableHeader'></custom-table>
 
 </div>

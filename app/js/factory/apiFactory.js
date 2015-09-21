@@ -39,11 +39,9 @@
        */
       apiFactory.getPlayerGameDetails = function (league, id) {
 
-        var request = apiFactory.getData({
+        return apiFactory.getData({
           endPointURL: $textManipulator.getPlayerPlayerRecordURL(league, id)
         });
-
-        return request;
 
       };
 
@@ -76,7 +74,7 @@
             'http://api.thescore.com/chlg/standings/',
             'http://api.thescore.com/uefa/standings/'
           ],
-          leagueSlugs = [ 'liga', 'epl', 'seri', 'chlg', 'uefa' ],
+          leagueSlugs = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
           listOrPromises = [];
 
         _.each(leagues, function (url, index) {
@@ -86,9 +84,6 @@
           });
 
           leagueRequest.then(function (result) {
-
-            console.log(index);
-            console.log(leagueSlugs[index]);
 
             result.data.leagueURL = url;
             result.data.leagueSlug = leagueSlugs[index];
