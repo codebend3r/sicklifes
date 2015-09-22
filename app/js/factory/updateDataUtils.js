@@ -115,6 +115,8 @@
           console.log('$updateDataUtils --> updateAllManagerData');
 
           var allLeaguePromises = [],
+            current = 0,
+            total = 0,
             defer = $q.defer();
 
           if (angular.isUndefinedOrNull($rootScope.managerData)) throw new Error('$rootScope.managerData is not defined');
@@ -127,6 +129,8 @@
             // reset goal counts
             manager = $objectUtils.cleanManager(manager, true);
 
+            total += _.keys(manager.players).length;
+
             _.each(manager.players, function (player) {
 
               player = $objectUtils.playerResetGoalPoints(player);
@@ -138,20 +142,28 @@
               manager.euroCount = 0;
               manager.wildCardCount = 0;
 
-              var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
+              //console.log(manager.managerName, '|', player.playerName);
 
-              allLeaguePromises.push(playerProfileRequest);
+              //var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
+              //$apiFactory.getPlayerProfile('soccer', player.id);
 
-              playerProfileRequest
+              //allLeaguePromises.push(playerProfileRequest);
+
+              $apiFactory.getPlayerProfile('soccer', player.id)
                 .then($arrayMappers.playerInfo.bind(this, player))
-                .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }));
+                .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }))
+                .then(function () {
+                  current += 1;
+                  //console.log(player.id + ' ' + player.playerName, '|', player.leagueName, '|', player.goals);
+                  //console.log(current + '/' + total);
+                  if (current === total) {
+                    console.log('-- DONE --');
+                    defer.resolve(managerData);
+                  }
+                });
 
             });
 
-          });
-
-          $apiFactory.listOfPromises(allLeaguePromises, function () {
-            defer.resolve(managerData);
           });
 
           return defer.promise;

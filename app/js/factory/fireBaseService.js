@@ -53,13 +53,13 @@
             usersRef = ref.child(key);
 
           // save to local storage
-          $localStorage[key] = cleanedData;
+          //$localStorage[key] = cleanedData;
 
           // save to $rootScope
           $rootScope[key] = cleanedData;
 
           usersRef.set(cleanedData);
-          console.log('saveToFireBase -- COMPLETE', cleanedData.chester.players[1365].goals);
+          console.log('saveToFireBase -- COMPLETE');
 
         }
 

@@ -102,13 +102,15 @@
 
           player.id = result.data.id;
 
+          //console.log('id', player.id, player.playerName);
+
           // do it only if player.teamLogo, and player.teamName doesn't exist
           /*if (result.data.teams[0]) {
-            // url for team logo
-            player.teamLogo = result.data.teams[0].sportsnet_logos.large;
-            // set latest teamName to whatever the first value is in the stack
-            player.teamName = $textManipulator.teamNameFormatted(result.data.teams[0].full_name);
-          }*/
+           // url for team logo
+           player.teamLogo = result.data.teams[0].sportsnet_logos.large;
+           // set latest teamName to whatever the first value is in the stack
+           player.teamName = $textManipulator.teamNameFormatted(result.data.teams[0].full_name);
+           }*/
 
           // url for player image
           player.playerImage = result.data.headshots.original;
@@ -173,20 +175,28 @@
 
             ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id);
             // if player is not dropped then count on active roster
+
             ligaGamesRequest.then(function (result) {
+
               ligaLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
               }));
-              player.ligaGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
+
+              player.ligaGameLog = result.data
+                .filter($arrayFilter.filterAfterDate)
+                .map(arrayMaper.gameMapper);
+
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.status !== 'dropped' && ($rootScope.firebaseData.leagueTables.liga.indexOf(player.teamName) !== -1 || ligaLogs.length > 0)) {
+                if (player.status !== 'dropped' && ($rootScope.firebaseData.leagueTables.liga.indexOf(player.teamName) !== -1 || player.ligaGameLog.length > 0)) {
                   manager.ligaCount += 1;
-                  player.leagueSlugs += player.leagueSlugs.length === 0 ? 'LIGA' : '/LIGA';
+                  player.leagueSlugs += player.leagueSlugs.length === 0 ? 'liga' : '/liga';
+                  player.leagueName = 'LA LIGA';
                 }
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(ligaLogs);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(ligaLogs);
               }
+
             });
             allPromises.push(ligaGamesRequest);
 
@@ -196,25 +206,30 @@
 
             eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id);
             // if player is not dropped then count on active roster
+
             eplGamesRequest.then(function (result) {
-              _.each(result.data, function(eachGame) {
 
-                player.domesticGoals += eachGame.goals;
+              eplLogs = result.data
+                .filter($arrayFilter.filterOnValidGoals.bind(this, player))
+                .map(arrayMaper.monthlyMapper.bind(this, {
+                  player: player,
+                  manager: manager || null
+                }));
 
-              });
-              eplLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this, {
-                player: player,
-                manager: manager || null
-              }));
-              player.eplGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
+              player.eplGameLog = result.data
+                .filter($arrayFilter.filterAfterDate)
+                .map(arrayMaper.gameMapper);
+
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.status !== 'dropped' && ($rootScope.firebaseData.leagueTables.epl.indexOf(player.teamName) !== -1 || eplLogs.length > 0)) {
+                if (player.status !== 'dropped' && ($rootScope.firebaseData.leagueTables.epl.indexOf(player.teamName) !== -1 || player.eplGameLog.length > 0)) {
                   manager.eplCount += 1;
-                  player.leagueSlugs += player.leagueSlugs.length === 0 ? 'EPL' : '/EPL';
+                  player.leagueSlugs += player.leagueSlugs.length === 0 ? 'epl' : '/epl';
+                  player.leagueName = 'EPL';
                 }
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(eplLogs);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(eplLogs);
               }
+
             });
             allPromises.push(eplGamesRequest);
 
@@ -225,19 +240,27 @@
             seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id);
             // if player is not dropped then count on active roster
             seriGamesRequest.then(function (result) {
-              seriLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this, {
-                player: player,
-                manager: manager || null
-              }));
-              player.seriGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
+              seriLogs = result.data
+                .filter($arrayFilter.filterOnValidGoals.bind(this, player))
+                .map(arrayMaper.monthlyMapper.bind(this, {
+                  player: player,
+                  manager: manager || null
+                }));
+
+              player.seriGameLog = result.data
+                .filter($arrayFilter.filterAfterDate)
+                .map(arrayMaper.gameMapper);
+
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.status !== 'dropped' && ($rootScope.firebaseData.leagueTables.seri.indexOf(player.teamName) !== -1 || seriLogs.length > 0)) {
+                if (player.status !== 'dropped' && ($rootScope.firebaseData.leagueTables.seri.indexOf(player.teamName) !== -1 || player.seriGameLog.length > 0)) {
                   manager.seriCount += 1;
-                  player.leagueSlugs += player.leagueSlugs.length === 0 ? 'SERI' : '/SERI';
+                  player.leagueSlugs += player.leagueSlugs.length === 0 ? 'seri' : '/seri';
+                  player.leagueName = 'SERIE A';
                 }
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(seriLogs);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(seriLogs);
               }
+
             });
             allPromises.push(seriGamesRequest);
 
@@ -247,14 +270,22 @@
 
             chlgGamesRequest = $apiFactory.getPlayerGameDetails('chlg', player.id);
             chlgGamesRequest.then(function (result) {
-              chlgLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this, {
-                player: player,
-                manager: manager || null
-              }));
-              player.chlgGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
+
+              chlgLogs = result.data
+                .filter($arrayFilter.filterOnValidGoals.bind(this, player))
+                .map(arrayMaper.monthlyMapper.bind(this, {
+                  player: player,
+                  manager: manager || null
+                }));
+
+              player.chlgGameLog = result.data
+                .filter($arrayFilter.filterAfterDate)
+                .map(arrayMaper.gameMapper);
+
               if (!angular.isUndefinedOrNull(manager)) {
-                if (chlgLogs.length > 0 || $rootScope.firebaseData.leagueTables.chlg.indexOf(player.teamName) !== -1) {
+                if (chlgLogs.length > 0 || $rootScope.firebaseData.leagueTables.chlg.indexOf(player.teamName) !== -1 || player.chlgGameLog.length > 0) {
                   manager.chlgCount += 1;
+                  player.leagueSlugs += player.leagueSlugs.length === 0 ? 'chlg' : '/chlg';
                   player.tournamentLeagueName = $textManipulator.formattedLeagueName('chlg');
                 }
               }
@@ -263,6 +294,7 @@
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(chlgLogs);
               }
             });
+
             allPromises.push(chlgGamesRequest);
 
           }
@@ -275,9 +307,13 @@
                 player: player,
                 manager: manager || null
               }));
-              player.euroGameLog = result.data.filter($arrayFilter.filterAfterDate).map(arrayMaper.gameMapper);
+
+              player.euroGameLog = result.data
+                .filter($arrayFilter.filterAfterDate)
+                .map(arrayMaper.gameMapper);
+
               if (!angular.isUndefinedOrNull(manager)) {
-                if (euroLogs.length > 0 || $rootScope.firebaseData.leagueTables.uefa.indexOf(player.teamName) !== -1) {
+                if (euroLogs.length > 0 || $rootScope.firebaseData.leagueTables.uefa.indexOf(player.teamName) !== -1 || player.euroGameLog.length > 0) {
                   manager.euroCount += 1;
                   player.tournamentLeagueName = $textManipulator.formattedLeagueName('uefa');
                 }
@@ -292,10 +328,11 @@
           }
 
           // logical definition for a wildcard player
-          if ((validLeagues.inChlg || validLeagues.inEuro) && (!validLeagues.inLiga && !validLeagues.inEPL && !validLeagues.inSeri)) {
+          if (angular.isUndefinedOrNull(player.ligaGameLog)
+            && angular.isUndefinedOrNull(player.eplGameLog)
+            && angular.isUndefinedOrNull(player.seriGameLog)) {
             // if player is not dropped then count on active roster
-            // if (player.status !== 'dropped' && manager && (chlgLogs.length > 0 || euroLogs.length > 0)) {
-            if (player.status !== 'dropped' && ($rootScope.allLeagueTeamsData.chlg.indexOf(player.teamName) !== -1 || $rootScope.allLeagueTeamsData.uefa.indexOf(player.teamName) !== -1)) {
+            if (player.status !== 'dropped') {
               manager.wildCardCount += 1;
             }
           }
@@ -338,7 +375,7 @@
             alignment: game.alignment === 'away' ? '@' : 'vs',
             vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
             goalsScored: game.goals || 0,
-            leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
+            //leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
             leagueSlug: game.box_score.event.league.slug,
             datePlayed: $momentService.goalLogDate(game.box_score.event.game_date),
             //rawDatePlayed: $moment(game.box_score.event.game_date),
@@ -353,7 +390,7 @@
             leagueSlug = gameMapsObj.leagueSlug,
             computedPoints;
 
-          dataObj.player.leagueName = gameMapsObj.leagueName;
+          //dataObj.player.leagueName = gameMapsObj.leagueName;
 
           if ($textManipulator.acceptedLeague(leagueSlug)) {
 

@@ -5,7 +5,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat='player in list | orderBy:sortFunction()'>
+  <tr ng-repeat='player in list | orderBy: "sortByPickNumber(player)"'>
     <td class='player-column'>
       <button ng-show="!tableParams.draftMode" type='button' ng-if='player.status !== "dropped"' ng-click='dropPlayer({player:player})' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-minus'></span></button>
       <button ng-show="!tableParams.draftMode" type='button' ng-if='player.status === "dropped"' class='btn btn-warning btn-xs'><span class='glyphicon glyphicon-asterisk'>&nbsp;</span></button>
@@ -18,7 +18,7 @@
     </td>
     <td class="small-text"><div class="vertical-center">{{player.leagueName}}</div></td>
     <td><div class="vertical-center">{{player.domesticGoals}}</div></td>
-    <td><div class="vertical-center">{{player.leagueGoals}}</div></td>
+    <td><div class="vertical-center">{{player.clGoals + player.eGoals}}</div></td>
     <td><div class="vertical-center">{{player.points}}</div></td>
   </tr>
   </tbody>

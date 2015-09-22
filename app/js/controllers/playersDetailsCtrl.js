@@ -16,15 +16,7 @@
 
       var dataKeyName = 'playerPoolData';
 
-      /*
-       * TODO
-       */
-      $scope.loading = true;
-
-      /*
-       * TODO
-       */
-      $scope.admin = $stateParams.admin;
+      $rootScope.loading = true;
 
       /*
        * TODO
@@ -75,7 +67,7 @@
           return true;
         } else {
           console.log('NOT YESTERDAY YET');
-          $scope.loading = false;
+          $rootScope.loading = false;
           return false;
         }
 
@@ -167,31 +159,31 @@
 
         var manager = managersData[$scope.player.managerName] || null;
 
-        $apiFactory.getPlayerProfile('soccer', id)
+        $apiFactory.getPlayerProfile($scope.player.leagueSlugs, id)
           .then(function (result) {
 
             var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
-            $scope.player.id = result.data.id;
+            //$scope.player.id = result.data.id;
 
-            if (result.data.teams[0]) {
+            /*if (result.data.teams[0]) {
               // url for team logo
               $scope.player.teamLogo = result.data.teams[0].sportsnet_logos.large;
               // set latest teamName to whatever the first value is in the stack
               $scope.player.teamName = $textManipulator.teamNameFormatted(result.data.teams[0].full_name);
-            }
+            }*/
 
             // url for $scope.player image
-            $scope.player.playerImage = result.data.headshots.original;
+            //$scope.player.playerImage = result.data.headshots.original;
 
             // returns a concat string with all valid leagues
-            $scope.player.allLeaguesName = $textManipulator.validLeagueNamesFormatted(result);
+            //$scope.player.allLeaguesName = $textManipulator.validLeagueNamesFormatted(result);
 
             // based on $scope.player result data return an object with the valid leagues for this $scope.player
-            $scope.player.validLeagues = $textManipulator.getPlayerValidLeagues(result);
+            //$scope.player.validLeagues = $textManipulator.getPlayerValidLeagues(result);
 
             // set latest leagueName
-            $scope.player.leagueName = $textManipulator.properLeagueName(profileLeagueSlug);
+            //$scope.player.leagueName = $textManipulator.properLeagueName(profileLeagueSlug);
 
             return $http({
               url: 'http://origin-api.thescore.com/' + result.data.api_uri,
@@ -234,9 +226,6 @@
       var init = function () {
 
         id = Number($stateParams.playerId);
-        //$fireBaseService.initialize($scope);
-        //var firePromise = $fireBaseService.getFireBaseData();
-        //firePromise.then(fireBaseLoaded);
         $scope.startFireBase(fireBaseLoaded);
 
       };

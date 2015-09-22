@@ -14,6 +14,8 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
+      $scope.dataKeyName = 'managersData';
+
       $rootScope.loading = true;
 
       /**
@@ -70,11 +72,6 @@
       };
 
       /**
-       * all managers data
-       */
-      $scope.updateAllManagerData = null;
-
-      /**
        *
        */
       $scope.updateEverything = $updateDataUtils.updateEverything;
@@ -95,8 +92,6 @@
        */
       $scope.saveRoster = function () {
 
-        debugger;
-
         var saveObject = {
           _lastSyncedOn: $momentService.syncDate(),
           chester: $scope.managerData.chester,
@@ -107,21 +102,34 @@
           joe: $scope.managerData.joe
         };
 
-        console.log('> saveRoster', saveObject.chester.players[1365].goals);
+        //console.log('saveObject:', saveObject);
 
-        $scope.saveToFireBase(saveObject, dataKeyName);
+        //_.each($scope.managerData, function (m) {
+        //
+        //  _.each(m.players, function (p) {
+        //
+        //    if (p.leagueName === 'SERI') {
+        //      p.leagueName = 'SERIE A';
+        //    }
+        //
+        //    if (p.leagueName === 'LIGA') {
+        //      p.leagueName = 'LA LIGA';
+        //    }
+        //
+        //    console.log(m.managerName, '|',p.playerName, '|', p.leagueName);
+        //
+        //  });
+        //
+        //});
+
+
+        $scope.saveToFireBase(saveObject, $scope.dataKeyName);
 
       };
 
       ////////////////////////////////////////
       ////////////// private /////////////////
       ////////////////////////////////////////
-
-      /**
-       *
-       * @type {string}
-       */
-      var dataKeyName = 'managersData';
 
       /**
        * get data through HTTP request
@@ -163,20 +171,21 @@
 
         console.log('syncDate:', localData._lastSyncedOn);
 
-        $rootScope.loading = false;
-
         if ($scope.admin) {
 
           console.log('-- is admin --');
 
-          $scope.managerData = $scope.populateManagersData(localData);
-          $scope.chooseManager($stateParams.managerId);
-
-          console.log('> loadFromLocal', $scope.managerData.chester.players[1365].goals);
-
-          $scope.startFireBase(function (firebaseData) {
+          $scope.startFireBase(function () {
 
             $rootScope.fireBaseReady = true;
+
+            // define managerData on scope and $rootScope
+            $scope.managerData = $scope.populateManagersData(localData);
+
+            // define the current manager
+            $scope.chooseManager($stateParams.managerId);
+
+            //$scope.selectedManager = $scope.managerData[$stateParams.managerId];
 
             $updateDataUtils.updateAllManagerData()
               .then(onManagersRequestFinished);
@@ -191,6 +200,14 @@
 
             $rootScope.fireBaseReady = true;
 
+            // define managerData on scope and $rootScope
+            $scope.managerData = $scope.populateManagersData(localData);
+
+            // define the current manager
+            $scope.chooseManager($stateParams.managerId);
+
+            //$scope.selectedManager = $scope.managerData[$stateParams.managerId];
+
             $updateDataUtils.updateAllManagerData()
               .then(onManagersRequestFinished);
 
@@ -200,13 +217,13 @@
 
           console.log('-- data is up to date --');
 
-          $scope.startFireBase(function (firebaseData) {
+          $scope.startFireBase(function () {
 
             $rootScope.fireBaseReady = true;
-            $scope.managerData = $scope.populateManagersData(localData.managersData);
+            $rootScope.loading = false;
+            $scope.managerData = $scope.populateManagersData(localData);
             $scope.chooseManager($stateParams.managerId);
-
-            $scope.saveRoster();
+            //$scope.saveRoster();
 
           });
 
@@ -221,43 +238,66 @@
       var firebaseLoaded = function (firebaseData) {
 
         console.log('///////////////////');
-        console.log('FB --> firebaseData.managersData:', firebaseData[dataKeyName]);
+        console.log('FB --> firebaseData.managersData:', firebaseData[$scope.dataKeyName]);
         console.log('///////////////////');
 
         $rootScope.fireBaseReady = true;
 
-        $rootScope.loading = false;
-
         $scope.managersData = $scope.populateManagersData(firebaseData.managersData);
-        console.log('syncDate:', firebaseData[dataKeyName]._lastSyncedOn);
+        console.log('syncDate:', firebaseData[$scope.dataKeyName]._lastSyncedOn);
 
         if ($scope.admin) {
 
           console.log('-- is admin --');
 
-          $scope.chooseManager($stateParams.managerId);
+          $scope.startFireBase(function () {
 
-          $updateDataUtils.updateAllManagerData()
-            .then(onManagersRequestFinished);
+            $rootScope.fireBaseReady = true;
 
-        } else if ($scope.checkYesterday(firebaseData[dataKeyName]._lastSyncedOn)) {
+            // define managerData on scope and $rootScope
+            $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
+
+            // define the current manager
+            $scope.chooseManager($stateParams.managerId);
+
+            //$scope.selectedManager = $scope.managerData[$stateParams.managerId];
+
+            $updateDataUtils.updateAllManagerData()
+              .then(onManagersRequestFinished);
+
+          });
+
+        } else if ($scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
 
           console.log('-- data is too old --');
-          $scope.chooseManager($stateParams.managerId);
 
-          $updateDataUtils.updateAllManagerData()
-            .then(onManagersRequestFinished);
+          $scope.startFireBase(function () {
+
+            $rootScope.fireBaseReady = true;
+
+            // define managerData on scope and $rootScope
+            $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
+
+            // define the current manager
+            $scope.chooseManager($stateParams.managerId);
+
+            //$scope.selectedManager = $scope.managerData[$stateParams.managerId];
+
+            $updateDataUtils.updateAllManagerData()
+              .then(onManagersRequestFinished);
+
+          });
 
         } else {
 
           console.log('-- data is up to date --');
 
+          $rootScope.loading = false;
           $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
           $scope.chooseManager($stateParams.managerId);
           $scope.saveRoster();
 
         }
-
 
       };
 
@@ -266,29 +306,28 @@
        * @param managerData
        */
       var onManagersRequestFinished = function (managerData) {
-        console.log('-- http request finished --');
-        $scope.managerData = managerData;
-        //$scope.managerData = $scope.populateManagersData(managerData);
-        //$scope.chooseManager($stateParams.managerId);
+        $rootScope.loading = false;
+        //$rootScope.loading = false;
+        $scope.managerData = $scope.populateManagersData(managerData);
+        console.log('> Diego Costa:', $scope.managerData.chester.players[1365]);
+        $scope.chooseManager($stateParams.managerId);
+        //$scope.saveRoster();
 
-        console.log('> onManagersRequestFinished', $scope.managerData.chester.players[1365].goals);
-        $scope.saveRoster();
-        
       };
 
       var init = function () {
 
         console.log('managersCtrl - init');
 
-        if (angular.isDefined($rootScope[dataKeyName])) {
+        if (angular.isDefined($rootScope[$scope.dataKeyName])) {
 
           console.log('load from $rootScope');
-          loadFromLocal($rootScope[dataKeyName]);
+          loadFromLocal($rootScope[$scope.dataKeyName]);
 
-        } else if (angular.isDefined($localStorage[dataKeyName])) {
+        } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
 
           console.log('load from local storage');
-          loadFromLocal($localStorage[dataKeyName]);
+          loadFromLocal($localStorage[$scope.dataKeyName]);
 
         } else {
 
@@ -297,10 +336,7 @@
 
         }
 
-        //$scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope);
-        // .then(function(d) {
-        //   console.log('all managers data loaded', d);
-        // });
+        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
       };
 

@@ -48,7 +48,7 @@
     </div>
   </div>
 
-  <custom-table ng-if='transactionPlayerAdded || draftMode' table-body-template='manager-players' sort-function="byPickNumber" table-params="playersTableParams" list='selectedManager.players' table-name='Manager Players' table-header='managersTableHeader'></custom-table>
-  <custom-table ng-if='!transactionPlayerAdded' table-body-template='all-players' table-params="playersTableParams" list='allPlayers' table-name='All Players' table-header='tableHeader'></custom-table>
+  <custom-table ng-if='selectedManager.players.length > 0 && transactionPlayerAdded || draftMode' table-body-template='managers-players' sort-function="byPickNumber" table-params="playersTableParams" list='selectedManager.players' table-header='managersTableHeader'></custom-table>
+  <custom-table ng-if='!transactionPlayerAdded' table-body-template='all-players' table-params="playersTableParams" list='allPlayers' table-header='tableHeader'></custom-table>
 
 </div>

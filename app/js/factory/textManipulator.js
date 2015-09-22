@@ -107,7 +107,7 @@
           } else if (league === 'chlg') {
             return textManipulator.leagueShortNames.chlg;
           } else {
-            return league.toUpperCase();
+            return league.toLocaleLowerCase();
           }
         },
 

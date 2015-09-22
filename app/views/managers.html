@@ -4,7 +4,9 @@
 
   <h2>Managers</h2>
 
-  <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managersData' ng-change='changeManager(selectedManager)'></select>
+  <!-- <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managerData' ng-change='changeManager(selectedManager)'></select> -->
+
+  <!--<pre>{{selectedManager.players| json}}</pre>-->
 
   <div ng-if='admin' class='well'>
     <button type='button' class='btn btn-danger' ng-click='updateAllManagerData()'>Update All Managers Data</button>
@@ -13,8 +15,7 @@
     <!--<button type='button' class='btn btn-danger' ng-click='populateTeamsInLeague()'>Populate Teams in League</button>-->
   </div>
 
-  <!--<manager-jumbotron manager='selectedManager'></manager-jumbotron>-->
-  <!--<pre>{{selectedManager.players| json}}</pre>-->
+  <manager-jumbotron manager='selectedManager'></manager-jumbotron>
 
   <custom-table table-body-template='managers-standard' list='selectedManager.players' sort-function="byPickNumber" table-header='tableHeader'></custom-table>
 

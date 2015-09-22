@@ -5,21 +5,21 @@
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="playerObj in list | orderBy:sortFunction()">
-    <td class="player-column" ng-class='{dropped: playerObj.status === "dropped", added: playerObj.status === "added"}'>
+  <tr ng-repeat='player in list | orderBy: "sortByPickNumber(player)"'>
+    <td class="player-column" ng-class='{dropped: player.status === "dropped", added: playerObj.status === "added"}'>
       <div class="vertical-center">
-        <a ui-sref="playerDetails({playerId: player.id})">{{playerObj.playerName}}</a>
+        <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
       </div>
     </td>
     <td class="bold small-text">
-      <div class="vertical-center"><img width="40" height="40" ng-src="{{playerObj.teamLogo}}"/>&nbsp;{{playerObj.teamName}}</div>
+      <div class="vertical-center"><img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;{{player.teamName}}</div>
     </td>
-    <td class="small-text">{{playerObj.leagueName}}</td>
-    <td>{{playerObj.goals}}</td>
-    <td>{{playerObj.domesticGoals}}</td>
-    <td>{{playerObj.clGoals}}</td>
-    <td>{{playerObj.eGoals}}</td>
-    <td>{{playerObj.points}}</td>
+    <td class="small-text"><div class="vertical-center">{{player.leagueName}}</div></td>
+    <td><div class="vertical-center">{{player.goals}}</div></td>
+    <td><div class="vertical-center">{{player.domesticGoals}}</div></td>
+    <td><div class="vertical-center">{{player.clGoals}}</div></td>
+    <td><div class="vertical-center">{{player.eGoals}}</div></td>
+    <td><div class="vertical-center">{{player.points}}</div></td>
   </tr>
   </tbody>
 </table>

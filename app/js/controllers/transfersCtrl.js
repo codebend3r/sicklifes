@@ -77,7 +77,12 @@
         }
       ];
 
+      /**
+       * TODO
+       * @type {Function}
+       */
       $scope.byPickNumber = function (player) {
+        console.log('$scope.byPickNumber');
         return player.pickNumber;
       };
 
@@ -312,8 +317,6 @@
         $scope.allPlayers = firebaseData[dataKeyName].allPlayers;
         $scope.chooseManager($stateParams.managerId);
         $scope.selectedManager = $scope.managersData[$stateParams.managerId];
-        console.log('> managersData', $scope.managersData);
-        console.log('> selectedManager', $scope.selectedManager);
 
       };
 

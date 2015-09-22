@@ -16,6 +16,8 @@
 
       console.log('--> tablesCtrl');
 
+      $rootScope.loading = true;
+
       /**
        * header for custom-table directive
        */
@@ -149,7 +151,7 @@
         } else {
           console.log('-- data is up to date --');
           $rootScope.loading = false;
-          $scope.saveToFireBase(saveObject, $scope.dataKeyName);
+          //$scope.saveToFireBase(saveObject, $scope.dataKeyName);
         }
 
       };
