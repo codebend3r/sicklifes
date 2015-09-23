@@ -23,9 +23,6 @@
        */
       $scope.leagueTableHeader = [
         {
-          text: 'Rank'
-        },
-        {
           text: 'Team'
         },
         {
@@ -62,7 +59,7 @@
       /**
        * makes a request to get all the tables data
        */
-      $scope.updateTables = function() {
+      $scope.updateTables = function () {
 
         $scope.updateTablesFromHTTP(httpDataLoaded);
 

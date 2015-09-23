@@ -66,18 +66,6 @@
 
       /**
        *
-       */
-      $scope.byPickNumber = function (player) {
-        return player.pickNumber;
-      };
-
-      /**
-       *
-       */
-      $scope.updateEverything = $updateDataUtils.updateEverything;
-
-      /**
-       *
        * @param selectedManager
        */
       $scope.changeManager = function (selectedManager) {
@@ -92,6 +80,24 @@
        */
       $scope.saveRoster = function () {
 
+        _.each($scope.managerData, function (m) {
+
+          _.each(m.players, function (p) {
+
+            if (p.leagueName === 'SERIE A') {
+              p.leagueName = 'SERI';
+            }
+
+            if (p.leagueName === 'LA LIGA') {
+              p.leagueName = 'LIGA';
+            }
+
+            //console.log(m.managerName, '|',p.playerName, '|', p.leagueName);
+
+          });
+
+        });
+
         var saveObject = {
           _lastSyncedOn: $momentService.syncDate(),
           chester: $scope.managerData.chester,
@@ -101,27 +107,6 @@
           mike: $scope.managerData.mike,
           joe: $scope.managerData.joe
         };
-
-        //console.log('saveObject:', saveObject);
-
-        //_.each($scope.managerData, function (m) {
-        //
-        //  _.each(m.players, function (p) {
-        //
-        //    if (p.leagueName === 'SERI') {
-        //      p.leagueName = 'SERIE A';
-        //    }
-        //
-        //    if (p.leagueName === 'LIGA') {
-        //      p.leagueName = 'LA LIGA';
-        //    }
-        //
-        //    console.log(m.managerName, '|',p.playerName, '|', p.leagueName);
-        //
-        //  });
-        //
-        //});
-
 
         $scope.saveToFireBase(saveObject, $scope.dataKeyName);
 
@@ -171,28 +156,7 @@
 
         console.log('syncDate:', localData._lastSyncedOn);
 
-        if ($scope.admin) {
-
-          console.log('-- is admin --');
-
-          $scope.startFireBase(function () {
-
-            $rootScope.fireBaseReady = true;
-
-            // define managerData on scope and $rootScope
-            $scope.managerData = $scope.populateManagersData(localData);
-
-            // define the current manager
-            $scope.chooseManager($stateParams.managerId);
-
-            //$scope.selectedManager = $scope.managerData[$stateParams.managerId];
-
-            $updateDataUtils.updateAllManagerData()
-              .then(onManagersRequestFinished);
-
-          });
-
-        } else if ($scope.checkYesterday(localData._lastSyncedOn)) {
+        if ($scope.checkYesterday(localData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
@@ -246,28 +210,7 @@
         $scope.managersData = $scope.populateManagersData(firebaseData.managersData);
         console.log('syncDate:', firebaseData[$scope.dataKeyName]._lastSyncedOn);
 
-        if ($scope.admin) {
-
-          console.log('-- is admin --');
-
-          $scope.startFireBase(function () {
-
-            $rootScope.fireBaseReady = true;
-
-            // define managerData on scope and $rootScope
-            $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
-
-            // define the current manager
-            $scope.chooseManager($stateParams.managerId);
-
-            //$scope.selectedManager = $scope.managerData[$stateParams.managerId];
-
-            $updateDataUtils.updateAllManagerData()
-              .then(onManagersRequestFinished);
-
-          });
-
-        } else if ($scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
+        if ($scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
@@ -295,7 +238,7 @@
           $rootScope.loading = false;
           $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
           $scope.chooseManager($stateParams.managerId);
-          $scope.saveRoster();
+          //$scope.saveRoster();
 
         }
 
@@ -309,10 +252,8 @@
         $rootScope.loading = false;
         //$rootScope.loading = false;
         $scope.managerData = $scope.populateManagersData(managerData);
-        console.log('> Diego Costa:', $scope.managerData.chester.players[1365]);
         $scope.chooseManager($stateParams.managerId);
         //$scope.saveRoster();
-
       };
 
       var init = function () {

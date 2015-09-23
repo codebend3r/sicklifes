@@ -79,15 +79,6 @@
 
       /**
        * TODO
-       * @type {Function}
-       */
-      $scope.byPickNumber = function (player) {
-        console.log('$scope.byPickNumber');
-        return player.pickNumber;
-      };
-
-      /**
-       * TODO
        * @type {Array}
        */
       $rootScope.allPlayers = [];

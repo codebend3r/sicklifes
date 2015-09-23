@@ -23,6 +23,7 @@
 
       $urlRouterProvider.when('/managers/', '/managers/chester');
       $urlRouterProvider.when('/transfers/', '/transfers/chester');
+      $urlRouterProvider.when('/monthlywinners/', '/monthlywinners/chester');
 
       $urlRouterProvider.otherwise('/leagues/liga/tables');
 
@@ -116,7 +117,7 @@
         })
         .state('monthlyWinners', {
 
-          url: '/monthlywinners',
+          url: '/monthlywinners/:managerId',
           parent: 'app',
           templateUrl: 'views/monthly-winners.html',
           controller: 'monthlyWinnersCtrl'

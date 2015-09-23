@@ -26,11 +26,6 @@
         },
         controller: function ($scope) {
 
-          $scope.sortByPickNumber = function(player) {
-            console.log('> player:', player);
-            return 1;
-          };
-
           $scope.everyFourth = function(index) {
             return index % 4 === 0;
           };

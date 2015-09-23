@@ -1,19 +1,19 @@
 <table class='table table-hover table-responsive'>
-  <thead>
+  <!-- <thead>
     <tr>
       <th ng-repeat='header in tableHeader'>{{header.text}}</th>
     </tr>
-  </thead>
+  </thead> -->
   <tbody>
     <tr ng-repeat='player in list | orderBy: "-datePlayed"'>
-      <td class='player-column'>
-        <a ng-href='#/player-details/{{game.id}}'>{{game.playerName}}</a>
+      <td>
+        <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
       </td>
-      <td>{{game.alignment}} {{game.vsTeam}}</td>
-      <td>{{game.goalsScored}}</td>
-      <td>{{game.result}} {{game.finalScore}}</td>
-      <td>{{game.leagueName}}</td>
-      <td>{{game.datePlayed}}</td>
+      <td>{{player.alignment}} {{player.vsTeam}}</td>
+      <td>{{player.goalsScored}}</td>
+      <td>{{player.result}} {{player.finalScore}}</td>
+      <td>{{player.leagueName}}</td>
+      <td>{{player.datePlayed}}</td>
     </tr>
   </tbody>
 </table>

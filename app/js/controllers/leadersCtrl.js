@@ -21,10 +21,7 @@
        */
       $scope.tableHeader = [
         {
-          text: 'Ranking'
-        },
-        {
-          text: 'Team'
+          text: 'Rank'
         },
         {
           text: 'Player'
@@ -37,7 +34,7 @@
       /**
        * TODO
        */
-      $scope.updateLeaders = function() {
+      $scope.updateLeaders = function () {
 
         console.log('updateLeaders()');
         $scope.updateLeadersFromHTTP(mapLeagueLeaders);
@@ -53,7 +50,7 @@
 
           return {
             id: data.id,
-            rank: data.ranking,
+            rank: data.ranking_tie ? 'T' + data.ranking : data.ranking,
             goals: data.stat,
             logo: data.team.logos.small,
             playerName: $textManipulator.formattedFullName(data.player.first_name, data.player.last_name),

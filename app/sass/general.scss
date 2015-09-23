@@ -238,6 +238,21 @@ h3.manager-name {
 
 }
 
+.panel-body {
+  padding: 0;
+}
+
+.fa-facebook-f:before,
+.fa-facebook:before {
+  content: "\f09a";
+}
+
+form.form {
+  padding: 0 15px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
 ///////////////////////////////////////
 
 footer {

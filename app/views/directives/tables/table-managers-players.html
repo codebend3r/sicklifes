@@ -1,12 +1,12 @@
 <table class='table table-hover table-responsive'>
-  <thead>
+  <!--<thead>
   <tr>
     <th ng-repeat='header in tableHeader'>{{header.text}}</th>
   </tr>
-  </thead>
+  </thead>-->
   <tbody>
-  <tr ng-repeat='player in list | orderBy: "sortByPickNumber(player)"'>
-    <td class='player-column'>
+  <tr ng-repeat="player in list | orderObjectBy:'pickNumber':false">
+    <td class="player-column">
       <button ng-show="!tableParams.draftMode" type='button' ng-if='player.status !== "dropped"' ng-click='dropPlayer({player:player})' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-minus'></span></button>
       <button ng-show="!tableParams.draftMode" type='button' ng-if='player.status === "dropped"' class='btn btn-warning btn-xs'><span class='glyphicon glyphicon-asterisk'>&nbsp;</span></button>
       <div class="vertical-center">

@@ -11,18 +11,18 @@
 
   <table class='table table-hover table-responsive'>
     <thead>
-      <tr>
-        <th ng-repeat='header in tableHeader'>{{header.text}}</th>
-      </tr>
+    <tr>
+      <th ng-repeat='header in tableHeader'>{{header.text}}</th>
+    </tr>
     </thead>
     <tbody>
-      <tr ng-repeat='manager in managersData | orderBy:"totalPoints":true'>
-        <td><a ng-href='#/managers?manager={{team.managerName}}'>{{manager.managerName}}</a></td>
-        <td>{{manager.domesticGoals}}</td>
-        <td>{{manager.clGoals}}</td>
-        <td>{{manager.eGoals}}</td>
-        <td>{{manager.totalPoints}}</td>
-      </tr>
+    <tr ng-repeat='manager in managersData | orderBy:"totalPoints":true'>
+      <td><a ui-sref="managers({managerId: manager.managerName.toLowerCase()})">{{manager.managerName}}</a></td>
+      <td>{{manager.domesticGoals}}</td>
+      <td>{{manager.clGoals}}</td>
+      <td>{{manager.eGoals}}</td>
+      <td>{{manager.totalPoints}}</td>
+    </tr>
     </tbody>
   </table>
 

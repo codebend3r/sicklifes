@@ -178,10 +178,12 @@
 
             ligaGamesRequest.then(function (result) {
 
-              ligaLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this, {
-                player: player,
-                manager: manager || null
-              }));
+              ligaLogs = result.data
+                .filter($arrayFilter.filterOnValidGoals.bind(this, player))
+                .map(arrayMaper.monthlyMapper.bind(this, {
+                  player: player,
+                  manager: manager || null
+                }));
 
               player.ligaGameLog = result.data
                 .filter($arrayFilter.filterAfterDate)
@@ -375,6 +377,8 @@
             alignment: game.alignment === 'away' ? '@' : 'vs',
             vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
             goalsScored: game.goals || 0,
+            teamName: dataObj.player.teamName,
+            teamLogo: dataObj.player.teamLogo,
             //leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
             leagueSlug: game.box_score.event.league.slug,
             datePlayed: $momentService.goalLogDate(game.box_score.event.game_date),
@@ -426,6 +430,7 @@
           }
 
           // gameMapsObj maps to a player
+          console.log('teamName', gameMapsObj.teamName);
           return gameMapsObj;
 
         },
