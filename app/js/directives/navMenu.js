@@ -12,10 +12,10 @@
 
       return {
         restrict: 'E',
-        replace: true,
+        replace: false,
         templateUrl: 'views/directives/nav.html',
         scope: true,
-        link: function ($scope) {
+        controller: function ($scope) {
 
           $scope.menuOptions = [
             {

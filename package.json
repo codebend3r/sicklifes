@@ -28,6 +28,7 @@
     "run-sequence": "^1.1.0"
   },
   "scripts": {
-    "test": "gulp build-GUI"
+    "test": "gulp build-GUI",
+    "release": "gulp build-GUI --build=release"
   }
 }

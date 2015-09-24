@@ -334,7 +334,7 @@
             && angular.isUndefinedOrNull(player.eplGameLog)
             && angular.isUndefinedOrNull(player.seriGameLog)) {
             // if player is not dropped then count on active roster
-            if (player.status !== 'dropped') {
+            if (player.status !== 'dropped' && manager) {
               manager.wildCardCount += 1;
             }
           }
@@ -430,7 +430,6 @@
           }
 
           // gameMapsObj maps to a player
-          console.log('teamName', gameMapsObj.teamName);
           return gameMapsObj;
 
         },

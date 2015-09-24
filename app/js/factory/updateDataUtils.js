@@ -110,7 +110,7 @@
         /**
          * gets data from all of the players in all valid leagues
          */
-        updateAllManagerData: function () {
+        updateAllManagerData: function (cb) {
 
           console.log('$updateDataUtils --> updateAllManagerData');
 
@@ -158,7 +158,8 @@
                   //console.log(current + '/' + total);
                   if (current === total) {
                     console.log('-- DONE --');
-                    defer.resolve(managerData);
+                    //defer.resolve(managerData);
+                    cb(managerData);
                   }
                 });
 

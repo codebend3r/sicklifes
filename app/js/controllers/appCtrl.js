@@ -17,8 +17,9 @@
       console.log('--> appCtrl');
 
       user.getCurrent().then(function (currentUser) {
-        //console.log('currentUser:', currentUser);
+        console.log('currentUser:', currentUser);
         $rootScope.user = currentUser;
+        console.log('WELCOME', $rootScope.user.first_name);
         //$scope.user = user;
       });
 

@@ -164,10 +164,22 @@
           joe: $scope.managerData.joe
         };
 
-        console.log('saveObject', saveObject);
+        console.log('saveObject', saveObject.chester.filteredMonthlyGoalsLog[0]);
 
         $scope.saveToFireBase(saveObject, $scope.dataKeyName);
 
+      };
+
+      /**
+       *
+       * @param managerData
+       */
+      $scope.onManagersRequestFinished = function (managerData) {
+        $rootScope.loading = false;
+        //$rootScope.loading = false;
+        $scope.managerData = $scope.populateManagersData(managerData);
+        $scope.chooseManager($stateParams.managerId);
+        //$scope.saveRoster();
       };
 
       ////////////////////////////////////////
@@ -318,7 +330,7 @@
 
         }
 
-        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
+        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope);
 
       };
 

@@ -59,20 +59,6 @@
       ////////////// private /////////////////
       ////////////////////////////////////////
 
-      var checkYesterday = function (syncDate) {
-
-        if ($momentService.isPastYesterday(syncDate)) {
-          console.log('IS YESTERDAY');
-          //getHttpData();
-          return true;
-        } else {
-          console.log('NOT YESTERDAY YET');
-          $rootScope.loading = false;
-          return false;
-        }
-
-      };
-
       /**
        * saves current data to firebase
        */
@@ -110,8 +96,6 @@
        */
       var fireBaseLoaded = function (firebaseData) {
 
-        console.log('playersDetailsCtrl --> fireBaseLoaded');
-
         var playerPoolData = firebaseData[dataKeyName];
         $scope.allPlayers = playerPoolData.allPlayers;
 
@@ -126,19 +110,17 @@
 
         //////////////////
 
-        console.log('syncDate:', playerPoolData._lastSyncedOn);
+        if ($scope.checkYesterday(playerPoolData._lastSyncedOn)) {
 
-        // checkYesterday(syncDate);
+          console.log('-- data is too old --');
+
+        } else {
+
+          console.log('-- data is up to date --');
+
+        }
 
         findPlayerByID();
-
-      };
-
-      var onRequestFinished = function (data) {
-
-        console.log('DATA:', data);
-        //console.log('CURRENT PLAYER:', $scope.player);
-        //console.log(data);
 
       };
 
@@ -149,69 +131,85 @@
 
         var foundPlayer = false;
 
-        $scope.allPlayers.some(function (player) {
-          if (player.id === id) {
-            $scope.player = player;
+        _.some(managersData, function (manager) {
+
+          if (angular.isDefined(manager.players[$stateParams.playerId])) {
+
+            $scope.player = manager.players[$stateParams.playerId];
             foundPlayer = true;
             return true;
+
           }
+
         });
 
-        var manager = managersData[$scope.player.managerName] || null;
+        if (foundPlayer) {
 
-        $apiFactory.getPlayerProfile($scope.player.leagueSlugs, id)
-          .then(function (result) {
+          console.log('foundPlayer:', $scope.player);
+          $rootScope.loading = false;
 
-            var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
+        } else {
 
-            //$scope.player.id = result.data.id;
+          var manager = managersData[$scope.player.managerName] || null;
 
-            /*if (result.data.teams[0]) {
-              // url for team logo
-              $scope.player.teamLogo = result.data.teams[0].sportsnet_logos.large;
-              // set latest teamName to whatever the first value is in the stack
-              $scope.player.teamName = $textManipulator.teamNameFormatted(result.data.teams[0].full_name);
-            }*/
+          $apiFactory.getPlayerProfile($scope.player.leagueSlugs, id)
+            .then(function (result) {
 
-            // url for $scope.player image
-            //$scope.player.playerImage = result.data.headshots.original;
+              var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
-            // returns a concat string with all valid leagues
-            //$scope.player.allLeaguesName = $textManipulator.validLeagueNamesFormatted(result);
+              //$scope.player.id = result.data.id;
 
-            // based on $scope.player result data return an object with the valid leagues for this $scope.player
-            //$scope.player.validLeagues = $textManipulator.getPlayerValidLeagues(result);
+              /*if (result.data.teams[0]) {
+                // url for team logo
+                $scope.player.teamLogo = result.data.teams[0].sportsnet_logos.large;
+                // set latest teamName to whatever the first value is in the stack
+                $scope.player.teamName = $textManipulator.teamNameFormatted(result.data.teams[0].full_name);
+              }*/
 
-            // set latest leagueName
-            //$scope.player.leagueName = $textManipulator.properLeagueName(profileLeagueSlug);
+              // url for $scope.player image
+              //$scope.player.playerImage = result.data.headshots.original;
 
-            return $http({
-              url: 'http://origin-api.thescore.com/' + result.data.api_uri,
-              method: 'GET'
+              // returns a concat string with all valid leagues
+              //$scope.player.allLeaguesName = $textManipulator.validLeagueNamesFormatted(result);
+
+              // based on $scope.player result data return an object with the valid leagues for this $scope.player
+              //$scope.player.validLeagues = $textManipulator.getPlayerValidLeagues(result);
+
+              // set latest leagueName
+              //$scope.player.leagueName = $textManipulator.properLeagueName(profileLeagueSlug);
+
+              return $http({
+                url: 'http://origin-api.thescore.com/' + result.data.api_uri,
+                method: 'GET'
+              });
+
+            })
+            .then(function (result) {
+
+              $scope.player.playerPos = result.data.position;
+              $scope.player.weight = result.data.weight;
+              $scope.player.height = result.data.height_feet + '\'' + result.data.height_inches;
+              $scope.player.birthdate = result.data.birthdate;
+              $scope.player.birthplace = result.data.birth_city + ', ' + result.data.birth_country;
+
+              $rootScope.allPlayers = $rootScope.allPlayers || {};
+              $rootScope.allPlayers[id] = $scope.player;
+
+              return $arrayMappers.playerGamesLog({ player: $scope.player, manager: manager }, result);
+
+            })
+            .then(function (result) {
+
+              $rootScope.loading = false;
+
+              console.log('> result:', result);
+              console.log('> $scope.player:', $scope.player);
+              var newPlayer = _.defaults({}, $scope.player, result);
+              console.log('newPlayer:', newPlayer);
+
             });
 
-          })
-          .then(function (result) {
-
-            $scope.player.playerPos = result.data.position;
-            $scope.player.weight = result.data.weight;
-            $scope.player.height = result.data.height_feet + '\'' + result.data.height_inches;
-            $scope.player.birthdate = result.data.birthdate;
-            $scope.player.birthplace = result.data.birth_city + ', ' + result.data.birth_country;
-
-            $scope.loading = false;
-
-            $rootScope.allPlayers = $rootScope.allPlayers || {};
-            $rootScope.allPlayers[id] = $scope.player;
-
-            return $arrayMappers.playerGamesLog({ player: $scope.player, manager: manager }, result);
-
-          })
-          .then(function (result) {
-
-            console.log('> result:', result);
-
-          });
+        }
 
       };
 

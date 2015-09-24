@@ -213,6 +213,7 @@
         if ($scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
 
           console.log('-- data is too old --');
+          $rootScope.loading = false;
 
           $scope.startFireBase(function () {
 
@@ -249,6 +250,7 @@
        * @param managerData
        */
       var onManagersRequestFinished = function (managerData) {
+        console.log('onManagersRequestFinished');
         $rootScope.loading = false;
         //$rootScope.loading = false;
         $scope.managerData = $scope.populateManagersData(managerData);
@@ -278,6 +280,8 @@
         }
 
         $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
+
+        $scope.updateAllManagerData.then(onManagersRequestFinished);
 
       };
 
