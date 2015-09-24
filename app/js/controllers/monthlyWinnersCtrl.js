@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('monthlyWinnersCtrl', function ($scope, $timeout, $managersService, $stateParams, $rootScope, $updateDataUtils, $objectUtils, $arrayFilter, $fireBaseService, $localStorage, $momentService) {
+    .controller('monthlyWinnersCtrl', function ($scope, $timeout, $managersService, $stateParams, $state, $rootScope, $updateDataUtils, $objectUtils, $arrayFilter, $fireBaseService, $localStorage, $momentService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -136,7 +136,7 @@
        */
       $scope.saveRoster = function () {
 
-        _.each($scope.managerData, function (m) {
+        /*_.each($scope.managerData, function (m) {
 
           _.each(m.players, function (p) {
 
@@ -152,7 +152,7 @@
 
           });
 
-        });
+        });*/
 
         var saveObject = {
           _lastSyncedOn: $momentService.syncDate(),
@@ -164,7 +164,7 @@
           joe: $scope.managerData.joe
         };
 
-        console.log('saveObject', saveObject.chester.filteredMonthlyGoalsLog[0]);
+        console.log('saveRoster --> saveObject', saveObject);
 
         $scope.saveToFireBase(saveObject, $scope.dataKeyName);
 
@@ -235,10 +235,9 @@
             // define the current manager
             $scope.chooseManager($stateParams.managerId);
 
-            //$scope.selectedManager = $scope.managerData[$stateParams.managerId];
+            $scope.selectedManager = $scope.managerData[$stateParams.managerId];
 
-            $updateDataUtils.updateAllManagerData()
-              .then(onManagersRequestFinished);
+            $updateDataUtils.updateAllManagerData(onManagersRequestFinished);
 
           });
 
@@ -298,12 +297,23 @@
             $rootScope.loading = false;
             $scope.managerData = $scope.populateManagersData(localData);
             $scope.chooseManager($stateParams.managerId);
-            //$scope.saveRoster();
 
           });
 
         }
 
+      };
+
+      /**
+       *
+       * @param managerData
+       */
+      var onManagersRequestFinished = function (managerData) {
+        console.log('onManagersRequestFinished');
+        $rootScope.loading = false;
+        $scope.managerData = $scope.populateManagersData(managerData);
+        $scope.chooseManager($stateParams.managerId);
+        $scope.saveRoster();
       };
 
       /**
@@ -330,7 +340,7 @@
 
         }
 
-        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope);
+        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
       };
 

@@ -17,7 +17,7 @@
         },
 
         leagueStartDate: function() {
-          return $moment('2015 August 1', 'YYYY MM DD').format('M/D/YYYY h:mm:ss a');
+          return $moment('2015 08 01').format('M/D/YYYY h:mm:ss a');
         },
 
         syncDate: function () {

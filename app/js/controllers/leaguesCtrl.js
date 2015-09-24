@@ -60,7 +60,7 @@
         {
           name: $textManipulator.leagueLongNames.euro,
           source: null,
-          slug: 'euro',
+          slug: 'uefa',
           img: $textManipulator.leagueImages.euro
         }
       ];
