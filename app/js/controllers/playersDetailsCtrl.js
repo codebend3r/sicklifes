@@ -8,18 +8,18 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, $apiFactory, $location, $stateParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $momentService, $fireBaseService) {
+    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, $apiFactory, $location, $stateParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $momentService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      var dataKeyName = 'playerPoolData';
+      $scope.dataKeyName = 'allPlayersIndex';
 
       $rootScope.loading = true;
 
-      /*
-       * TODO
+      /**
+       * table headers
        */
       $scope.tableHeader = [
         {
@@ -39,7 +39,7 @@
         }
       ];
 
-      /*
+      /**
        * player
        */
       $scope.player = {};
@@ -49,39 +49,9 @@
        */
       $scope.leagueImages = $textManipulator.leagueImages;
 
-      $scope.getAllGameLogs = function () {
-
-        console.log('get all game logs');
-
-      };
-
       ////////////////////////////////////////
       ////////////// private /////////////////
       ////////////////////////////////////////
-
-      /**
-       * saves current data to firebase
-       */
-      var saveToFireBase = function () {
-
-        console.log('////////////////////////////////////');
-        console.log('managersData', managersData);
-        console.log('////////////////////////////////////');
-
-        var saveObject = {
-          _syncedFrom: 'playerDetailsCtrl',
-          _lastSyncedOn: $dateService.syncDate(),
-          chester: managersData.chester,
-          frank: managersData.frank,
-          dan: managersData.dan,
-          justin: managersData.justin,
-          mike: managersData.mike,
-          joe: managersData.joe
-        };
-
-        $fireBaseService.saveToFireBase(saveObject, playerPoolData);
-
-      };
 
       /**
        *
@@ -96,29 +66,35 @@
        */
       var fireBaseLoaded = function (firebaseData) {
 
-        var playerPoolData = firebaseData[dataKeyName];
-        $scope.allPlayers = playerPoolData.allPlayers;
+        $rootScope.fireBaseReady = true;
 
         managersData = {
-          chester: firebaseData.managersData.chester,
-          frank: firebaseData.managersData.frank,
-          dan: firebaseData.managersData.dan,
-          justin: firebaseData.managersData.justin,
-          mike: firebaseData.managersData.mike,
-          joe: firebaseData.managersData.joe
+          chester: firebaseData.managersData.data.chester,
+          frank: firebaseData.managersData.data.frank,
+          dan: firebaseData.managersData.data.dan,
+          justin: firebaseData.managersData.data.justin,
+          mike: firebaseData.managersData.data.mike,
+          joe: firebaseData.managersData.data.joe
         };
 
-        //////////////////
+        if (angular.isDefined(firebaseData[$scope.dataKeyName].data)) {
 
-        if ($scope.checkYesterday(playerPoolData._lastSyncedOn)) {
+          $scope.allPlayers = firebaseData[$scope.dataKeyName];
 
-          console.log('-- data is too old --');
+          console.log('loaded allPlayersIndex:', angular.copy($scope.allPlayers.data), _.keys($scope.allPlayers.data).length);
 
-        } else {
+          if (angular.isDefined($scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn)) && $scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
 
-          console.log('-- data is up to date --');
+            console.log('-- data is too old --');
 
+          } else {
+
+            console.log('-- data is up to date --');
+
+          }
         }
+
+        //////////////////
 
         findPlayerByID();
 
@@ -131,40 +107,54 @@
 
         var foundPlayer = false;
 
-        _.some(managersData, function (manager) {
+        if (angular.isDefined($scope.allPlayers) && angular.isDefined($scope.allPlayers.data) && angular.isDefined($scope.allPlayers.data[$stateParams.playerId]) && !Array.isArray($scope.allPlayers)) {
 
-          if (angular.isDefined(manager.players[$stateParams.playerId])) {
-
-            $scope.player = manager.players[$stateParams.playerId];
-            foundPlayer = true;
-            return true;
-
-          }
-
-        });
-
-        if (foundPlayer) {
-
-          console.log('foundPlayer:', $scope.player);
-          $rootScope.loading = false;
+          $scope.player = $scope.allPlayers.data[$stateParams.playerId];
+          foundPlayer = true;
 
         } else {
 
+          _.some(managersData, function (manager) {
+
+            if (angular.isDefined(manager.players[$stateParams.playerId])) {
+
+              $scope.player = manager.players[$stateParams.playerId];
+              foundPlayer = true;
+              return true;
+
+            }
+
+          });
+
+        }
+
+        if (foundPlayer) {
+
+          console.log('foundPlayer:', $scope.player.playerName);
+          $rootScope.loading = false;
+          saveToIndex();
+
+        } else {
+
+          console.log('not found player, start searching');
           var manager = managersData[$scope.player.managerName] || null;
 
-          $apiFactory.getPlayerProfile($scope.player.leagueSlugs, id)
+          $apiFactory.getPlayerProfile($scope.player.leagueSlugs, $stateParams.playerId)
             .then(function (result) {
 
               var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
+              console.log('result:', result.data);
+              console.log('profileLeagueSlug:', profileLeagueSlug);
+
               //$scope.player.id = result.data.id;
 
               /*if (result.data.teams[0]) {
-                // url for team logo
-                $scope.player.teamLogo = result.data.teams[0].sportsnet_logos.large;
-                // set latest teamName to whatever the first value is in the stack
-                $scope.player.teamName = $textManipulator.teamNameFormatted(result.data.teams[0].full_name);
-              }*/
+               // url for team logo
+               $scope.player.teamLogo = result.data.teams[0].sportsnet_logos.large;
+               // set latest teamName to whatever the first value is in the stack
+               $scope.player.teamName = $textManipulator.teamNameFormatted(result.data.teams[0].full_name);
+               }*/
 
               // url for $scope.player image
               //$scope.player.playerImage = result.data.headshots.original;
@@ -192,9 +182,6 @@
               $scope.player.birthdate = result.data.birthdate;
               $scope.player.birthplace = result.data.birth_city + ', ' + result.data.birth_country;
 
-              $rootScope.allPlayers = $rootScope.allPlayers || {};
-              $rootScope.allPlayers[id] = $scope.player;
-
               return $arrayMappers.playerGamesLog({ player: $scope.player, manager: manager }, result);
 
             })
@@ -203,9 +190,10 @@
               $rootScope.loading = false;
 
               console.log('> result:', result);
-              console.log('> $scope.player:', $scope.player);
-              var newPlayer = _.defaults({}, $scope.player, result);
-              console.log('newPlayer:', newPlayer);
+              //console.log('> $scope.player:', $scope.player);
+              //var newPlayer = _.defaults({}, $scope.player, result);
+              //console.log('newPlayer:', newPlayer);
+              saveToIndex();
 
             });
 
@@ -213,17 +201,24 @@
 
       };
 
-      /**
-       * id used to identify a player from thescore.ca api
-       */
-      var id = Number($stateParams.playerId);
+      var saveToIndex = function () {
+
+        $scope.allPlayers = $scope.allPlayers || {};
+        $scope.allPlayers.data[$stateParams.playerId] = $scope.player;
+
+        $scope.allPlayers._lastSyncedOn = $momentService.syncDate();
+
+        console.log('saving allPlayersIndex:', angular.copy($scope.allPlayers.data), _.keys($scope.allPlayers.data).length);
+
+        $scope.saveToFireBase($scope.allPlayers, $scope.dataKeyName);
+
+      };
 
       /**
        * init function
        */
       var init = function () {
 
-        id = Number($stateParams.playerId);
         $scope.startFireBase(fireBaseLoaded);
 
       };

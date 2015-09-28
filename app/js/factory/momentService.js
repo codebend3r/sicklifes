@@ -13,11 +13,11 @@
       return {
 
         getDate: function (date) {
-          return $moment(date);
+          return $moment(new Date(date));
         },
 
         leagueStartDate: function() {
-          return $moment('2015 08 01').format('M/D/YYYY h:mm:ss a');
+          return $moment(new Date('August 1 2015')).format('M/D/YYYY h:mm:ss a');
         },
 
         syncDate: function () {

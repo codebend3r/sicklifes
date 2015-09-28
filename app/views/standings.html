@@ -16,7 +16,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat='manager in managersData | orderBy:"totalPoints":true'>
+    <tr ng-repeat="manager in managersData | orderObjectBy:'totalPoints':true">
       <td><a ui-sref="managers({managerId: manager.managerName.toLowerCase()})">{{manager.managerName}}</a></td>
       <td>{{manager.domesticGoals}}</td>
       <td>{{manager.clGoals}}</td>

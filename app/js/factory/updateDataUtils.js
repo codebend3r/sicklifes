@@ -159,7 +159,11 @@
                   if (current === total) {
                     console.log('-- DONE --');
                     //defer.resolve(managerData);
-                    cb(managerData);
+                    if (typeof cb === 'function') {
+                      cb(managerData);
+                    } else {
+                      throw new Error('cb parameter is not type function');
+                    }
                   }
                 });
 

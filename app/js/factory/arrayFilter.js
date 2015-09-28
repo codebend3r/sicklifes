@@ -23,7 +23,7 @@
        * @returns {boolean}
        */
       arrayFilters.filterAfterDate = function (game) {
-        var gameDate = $momentService.getDate(game.box_score.event.game_date);
+        var gameDate = $momentService.getDate(new Date(game.box_score.event.game_date));
         return gameDate.isAfter(arrayFilters.leagueStartDate);
       };
 
@@ -32,7 +32,7 @@
        * @returns {boolean}
        */
       arrayFilters.filterValidDate = function (player, game) {
-        var gameDate = $momentService.getDate(game.box_score.event.game_date);
+        var gameDate = $momentService.getDate(new Date(game.box_score.event.game_date));
         if (player.status === 'added') {
           return gameDate.isAfter(player.dateOfTransaction);
         } else if (player.status === 'dropped') {
@@ -48,7 +48,7 @@
        */
       arrayFilters.filterOnValidGoals = function (player, game) {
         if (game.goals) {
-          var gameDate = $momentService.getDate(game.box_score.event.game_date);
+          var gameDate = $momentService.getDate(new Date(game.box_score.event.game_date));
           if (player.status === 'added') {
             return gameDate.isAfter(player.dateOfTransaction);
           } else if (player.status === 'dropped') {

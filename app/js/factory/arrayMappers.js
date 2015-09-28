@@ -334,7 +334,12 @@
             && angular.isUndefinedOrNull(player.eplGameLog)
             && angular.isUndefinedOrNull(player.seriGameLog)) {
             // if player is not dropped then count on active roster
-            if (player.status !== 'dropped' && manager) {
+            if (player.status !== 'dropped'
+              && angular.isDefined(manager)
+              && angular.isDefined(player.chlgGameLog)
+              && angular.isDefined(player.euroGameLog)
+              && player.chlgGameLog.length
+              && player.euroGameLog.length) {
               manager.wildCardCount += 1;
             }
           }

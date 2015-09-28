@@ -87,6 +87,28 @@
       };
 
       /**
+       * saves current manager roster data to firebase
+       */
+      $scope.saveRoster = function () {
+
+        var saveObject = {
+          _lastSyncedOn: $momentService.syncDate(),
+          data: {
+            chester: $scope.managerData.chester,
+            frank: $scope.managerData.frank,
+            dan: $scope.managerData.dan,
+            justin: $scope.managerData.justin,
+            mike: $scope.managerData.mike,
+            joe: $scope.managerData.joe
+          }
+        };
+
+        //console.log('saveObject', saveObject);
+        $scope.saveToFireBase(saveObject, 'managersData');
+
+      };
+
+      /**
        * sets data in the initialized firebase service
        * @param saveObject
        * @param dataKey

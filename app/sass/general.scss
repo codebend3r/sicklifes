@@ -15,7 +15,7 @@ h1, h2 {
 }
 
 .vertical-center {
-  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100%; /* Fallback for browsers do NOT support vh unit */
   min-height: 5vh; /* These two lines are counted as one :-)       */
   display: flex;
   align-items: center;
@@ -51,10 +51,11 @@ h3.manager-name {
   padding: 0;
 }
 
-.info-text {
+p.info-text {
   color: $textColour;
   font-weight: normal;
   font-size: 16px;
+  margin: 0;
 }
 
 .info-title {
@@ -82,6 +83,7 @@ h3.manager-name {
   border: 2px solid $secondaryColour;
   height: auto;
 }
+
 .modal-dialog {
   .profile-pic {
     width: 100px;

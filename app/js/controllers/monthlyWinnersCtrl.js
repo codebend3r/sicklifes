@@ -138,21 +138,21 @@
 
         /*_.each($scope.managerData, function (m) {
 
-          _.each(m.players, function (p) {
+         _.each(m.players, function (p) {
 
-            if (p.leagueName === 'SERIE A') {
-              p.leagueName = 'SERI';
-            }
+         if (p.leagueName === 'SERIE A') {
+         p.leagueName = 'SERI';
+         }
 
-            if (p.leagueName === 'LA LIGA') {
-              p.leagueName = 'LIGA';
-            }
+         if (p.leagueName === 'LA LIGA') {
+         p.leagueName = 'LIGA';
+         }
 
-            //console.log(m.managerName, '|',p.playerName, '|', p.leagueName);
+         //console.log(m.managerName, '|',p.playerName, '|', p.leagueName);
 
-          });
+         });
 
-        });*/
+         });*/
 
         var saveObject = {
           _lastSyncedOn: $momentService.syncDate(),
@@ -210,31 +210,34 @@
        * callback for when firebase is loaded
        * @param firebaseData {object} - firebase data object
        */
-      var firebaseLoaded = function (firebaseData) {
+      var loadData = function (result) {
 
         console.log('///////////////////');
-        console.log('FB --> firebaseData.managersData:', firebaseData[$scope.dataKeyName]);
+        console.log('result:', result);
         console.log('///////////////////');
 
         $rootScope.fireBaseReady = true;
 
-        $scope.managersData = $scope.populateManagersData(firebaseData.managersData);
-        console.log('syncDate:', firebaseData[$scope.dataKeyName]._lastSyncedOn);
+        $scope.managersData = $scope.populateManagersData(result.data);
+        console.log('syncDate:', result._lastSyncedOn);
 
-        if ($scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
+        if ($scope.checkYesterday(result._lastSyncedOn)) {
 
           console.log('-- data is too old --');
+
+          $rootScope.loading = false;
 
           $scope.startFireBase(function () {
 
             $rootScope.fireBaseReady = true;
 
             // define managerData on scope and $rootScope
-            $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
+            $scope.managerData = $scope.populateManagersData(result.data);
 
             // define the current manager
             $scope.chooseManager($stateParams.managerId);
 
+            // define selectedManager by managerId
             $scope.selectedManager = $scope.managerData[$stateParams.managerId];
 
             $updateDataUtils.updateAllManagerData(onManagersRequestFinished);
@@ -246,59 +249,8 @@
           console.log('-- data is up to date --');
 
           $rootScope.loading = false;
-          $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
+          $scope.managerData = $scope.populateManagersData(result.data);
           $scope.chooseManager($stateParams.managerId);
-          //$scope.saveRoster();
-
-        }
-
-      };
-
-      /**
-       * callback for when local storage exists
-       * @param localData {object}
-       */
-      var loadFromLocal = function (localData) {
-
-        console.log('///////////////////');
-        console.log('LOCAL --> localData:', localData);
-        console.log('///////////////////');
-
-        console.log('syncDate:', localData._lastSyncedOn);
-
-        if ($scope.checkYesterday(localData._lastSyncedOn)) {
-
-          console.log('-- data is too old --');
-
-          $scope.startFireBase(function (firebaseData) {
-
-            $rootScope.fireBaseReady = true;
-
-            // define managerData on scope and $rootScope
-            $scope.managerData = $scope.populateManagersData(localData);
-
-            // define the current manager
-            $scope.chooseManager($stateParams.managerId);
-
-            //$scope.selectedManager = $scope.managerData[$stateParams.managerId];
-
-            $updateDataUtils.updateAllManagerData()
-              .then(onManagersRequestFinished);
-
-          });
-
-        } else {
-
-          console.log('-- data is up to date --');
-
-          $scope.startFireBase(function () {
-
-            $rootScope.fireBaseReady = true;
-            $rootScope.loading = false;
-            $scope.managerData = $scope.populateManagersData(localData);
-            $scope.chooseManager($stateParams.managerId);
-
-          });
 
         }
 
@@ -311,32 +263,32 @@
       var onManagersRequestFinished = function (managerData) {
         console.log('onManagersRequestFinished');
         $rootScope.loading = false;
-        $scope.managerData = $scope.populateManagersData(managerData);
-        $scope.chooseManager($stateParams.managerId);
+        //$scope.managerData = $scope.populateManagersData(managerData);
+        //$scope.chooseManager($stateParams.managerId);
         $scope.saveRoster();
       };
 
-      /**
-       * init controller
-       */
       var init = function () {
-
-        console.log('monthlyWinnersCtrl --> init');
 
         if (angular.isDefined($rootScope[$scope.dataKeyName])) {
 
           console.log('load from $rootScope');
-          loadFromLocal($rootScope[$scope.dataKeyName]);
+          loadData($rootScope[$scope.dataKeyName]);
 
         } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
 
           console.log('load from local storage');
-          loadFromLocal($localStorage[$scope.dataKeyName]);
+          loadData($localStorage[$scope.dataKeyName]);
 
         } else {
 
-          console.log('load from firebase');
-          $scope.startFireBase(firebaseLoaded);
+
+          $scope.startFireBase(function (firebaseData) {
+
+            console.log('load from firebase');
+            loadData(firebaseData[$scope.dataKeyName]);
+
+          });
 
         }
 

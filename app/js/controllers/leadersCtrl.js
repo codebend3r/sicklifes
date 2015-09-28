@@ -27,6 +27,9 @@
           text: 'Player'
         },
         {
+          text: 'Owner'
+        },
+        {
           text: 'Goals'
         }
       ];
@@ -41,15 +44,37 @@
 
       };
 
+      var findOwner = function(playerId) {
+
+        var managerName = 'Free Agent';
+
+        _.some($rootScope.firebaseData.managersData.data, function (manager) {
+
+          if (angular.isDefined(manager.players[playerId])) {
+
+            managerName = manager.managerName;
+            return true;
+
+          }
+
+        });
+
+        return managerName;
+
+      };
+
       /**
-       * TODO
+       * map the http response to leagueLeaders array
        */
       var mapLeagueLeaders = function (result) {
+
+        var self = this;
 
         $scope.leagueLeaders = _.map(result.data.Goals, function (data) {
 
           return {
-            id: data.id,
+            id: data.player.id,
+            owner: findOwner.call(self, data.player.id),
             rank: data.ranking_tie ? 'T' + data.ranking : data.ranking,
             goals: data.stat,
             logo: data.team.logos.small,
@@ -66,9 +91,11 @@
         console.log('mapLeagueLeaders --> firebaseData', firebaseData);
 
         $scope.startFireBase(function (firebaseObj) {
+
           firebaseData = firebaseObj;
           $rootScope.fireBaseReady = true;
           prepareForFirebase();
+
         });
 
       };
@@ -98,11 +125,11 @@
        * TODO
        * @returns {boolean}
        */
-      var existsInFireBase = function () {
+      var existsInFireBase = function (data) {
 
-        return !angular.isUndefinedOrNull(firebaseData[$scope.dataKeyName])
-          && !angular.isUndefinedOrNull(firebaseData[$scope.dataKeyName].leagues)
-          && !angular.isUndefinedOrNull(firebaseData[$scope.dataKeyName].leagues[$stateParams.leagueName]);
+        return !angular.isUndefinedOrNull(data)
+          && !angular.isUndefinedOrNull(data.leagues)
+          && !angular.isUndefinedOrNull(data.leagues[$stateParams.leagueName]);
 
       };
 
@@ -110,38 +137,26 @@
        * when firebase data is loaded
        * @param firebaseObj
        */
-      var firebaseLoaded = function (firebaseObj) {
-
-        firebaseData = firebaseObj;
+      var loadData = function (data) {
 
         console.log('///////////////////');
-        console.log('FB --> firebaseData:', firebaseData[$scope.dataKeyName]);
-        //console.log($stateParams.leagueName, 'last synced on', firebaseData[$scope.dataKeyName].leagues[$stateParams.leagueName]._lastSyncedOn);
+        console.log('data:', data);
         console.log('///////////////////');
 
         $rootScope.fireBaseReady = true;
 
-        // leagueTables is the key name
-        //if (angular.isDefined(firebaseObj.leagueTables)) {
-        //  $scope.allLeagues[0].source = firebaseObj.leagueTables.LIGA;
-        //  $scope.allLeagues[1].source = firebaseObj.leagueTables.EPL;
-        //  $scope.allLeagues[2].source = firebaseObj.leagueTables.SERI;
-        //  $scope.allLeagues[3].source = firebaseObj.leagueTables.CHLG;
-        //  $scope.allLeagues[4].source = firebaseObj.leagueTables.UEFA;
-        //}
-
-        if (angular.isDefined(firebaseData[$scope.dataKeyName].leagues)
-          && angular.isDefined(firebaseData[$scope.dataKeyName].leagues[$stateParams.leagueName])
-          && $scope.checkYesterday(firebaseData[$scope.dataKeyName].leagues[$stateParams.leagueName]._lastSyncedOn)) {
+        if (angular.isDefined(data.leagues)
+          && angular.isDefined(data.leagues[$stateParams.leagueName])
+          && $scope.checkYesterday(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
 
           console.log('-- data is too old --');
           $scope.updateLeadersFromHTTP(mapLeagueLeaders);
 
-        } else if (existsInFireBase()) {
+        } else if (existsInFireBase(data)) {
 
           console.log('-- data is up to date & exists in firebase --');
           $scope.setSelectedLeague();
-          $scope.leagueLeaders = firebaseData[$scope.dataKeyName].leagues[$stateParams.leagueName].goalLeaders;
+          $scope.leagueLeaders = data.leagues[$stateParams.leagueName].goalLeaders;
           $rootScope.loading = false;
 
         } else {
@@ -149,43 +164,6 @@
           console.log('-- data not available in firebase --');
           $scope.updateLeadersFromHTTP(mapLeagueLeaders);
 
-        }
-
-      };
-
-      /**
-       * read data from local storage
-       * @param localData
-       */
-      $scope.loadFromLocal = function (localData) {
-
-        console.log('///////////////////');
-        console.log('LOCAL --> localData:', localData.leagues[$stateParams.leagueName]);
-        console.log('///////////////////');
-
-        //$scope.allLeagues[0].source = localData.LIGA;
-        //$scope.allLeagues[1].source = localData.EPL;
-        //$scope.allLeagues[2].source = localData.SERI;
-        //$scope.allLeagues[3].source = localData.CHLG;
-        //$scope.allLeagues[4].source = localData.UEFA;
-
-        $scope.setSelectedLeague();
-
-        $scope.leagueLeaders = localData.leagues[$stateParams.leagueName].goalLeaders;
-
-        if ($scope.checkYesterday(localData.leagues[$stateParams.leagueName]._lastSyncedOn)) {
-          console.log('-- data is too old --');
-          $scope.updateLeadersFromHTTP(mapLeagueLeaders);
-        } else {
-          console.log('-- data is up to date --');
-          $rootScope.loading = false;
-          $scope.startFireBase(function (firebaseObj) {
-
-            firebaseData = firebaseObj;
-            $rootScope.fireBaseReady = true;
-            prepareForFirebase();
-
-          });
         }
 
       };
@@ -214,17 +192,23 @@
         if (angular.isDefined($rootScope[$scope.dataKeyName]) && angular.isDefined($rootScope[$scope.dataKeyName].leagues[$stateParams.leagueName])) {
 
           console.log('load from $rootScope');
-          $scope.loadFromLocal($rootScope[$scope.dataKeyName]);
+          loadData($rootScope[$scope.dataKeyName]);
 
         } else if (angular.isDefined($localStorage[$scope.dataKeyName]) && angular.isDefined($localStorage[$scope.dataKeyName].leagues[$stateParams.leagueName])) {
 
           console.log('load from local storage');
-          $scope.loadFromLocal($localStorage[$scope.dataKeyName]);
+          loadData($localStorage[$scope.dataKeyName]);
 
         } else {
 
-          console.log('load from firebase');
-          $scope.startFireBase(firebaseLoaded);
+          $scope.startFireBase(function (firebaseObj) {
+
+            firebaseData = firebaseObj;
+
+            console.log('load from firebase');
+            loadData(firebaseData[$scope.dataKeyName]);
+
+          });
 
         }
 
