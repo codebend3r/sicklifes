@@ -13,19 +13,23 @@
       $urlRouterProvider.when('', '/leagues/liga/tables');
       $urlRouterProvider.when('/', '/leagues/liga/tables');
 
-      //$urlRouterProvider.when('leagues', '/leagues/liga');
-      //$urlRouterProvider.when('/leagues/{leagueName}', '/leagues/liga/tables');
-
       $urlRouterProvider.when('/leagues/:leagueName', '/leagues/:leagueName/tables');
       $urlRouterProvider.when('/leagues', '/leagues/liga/tables');
       $urlRouterProvider.when('/leagues/liga', '/leagues/liga/tables');
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
+      $urlRouterProvider.when('/leagues//leaders', '/leagues/liga/leaders');
 
-      $urlRouterProvider.when('/managers/', '/managers/chester');
+      $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
+      //$urlRouterProvider.when('/managers', '/managers/chester/overview');
+      //$urlRouterProvider.when('/managers', '/managers/chester/overview');
+      //$urlRouterProvider.when('/managers/', '/managers/chester/overview');
+      $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
+      $urlRouterProvider.when('/managers//gamelogs', '/managers/chester/gamelogs');
+
+      $urlRouterProvider.when('/transfers', '/transfers/chester');
       $urlRouterProvider.when('/transfers/', '/transfers/chester');
-      $urlRouterProvider.when('/monthlywinners/', '/monthlywinners/chester');
 
-      $urlRouterProvider.otherwise('/leagues/liga/tables');
+      $urlRouterProvider.otherwise('/standings');
 
       $stateProvider
         .state('app', {
@@ -99,6 +103,18 @@
           controller: 'managersCtrl'
 
         })
+        .state('managers.overview', {
+
+          url: '/overview',
+          templateUrl: 'views/overview.html'
+
+        })
+        .state('managers.gamelogs', {
+
+          url: '/gamelog',
+          templateUrl: 'views/gamelogs.html'
+
+        })
         .state('playerDetails', {
 
           url: '/player-details/:playerId',
@@ -115,14 +131,14 @@
           controller: 'standingsCtrl'
 
         })
-        .state('monthlyWinners', {
-
-          url: '/monthlywinners/:managerId',
-          parent: 'app',
-          templateUrl: 'views/monthly-winners.html',
-          controller: 'monthlyWinnersCtrl'
-
-        })
+        //.state('monthlyWinners', {
+        //
+        //  url: '/monthlywinners/:managerId',
+        //  parent: 'app',
+        //  templateUrl: 'views/monthly-winners.html',
+        //  controller: 'monthlyWinnersCtrl'
+        //
+        //})
         .state('admin', {
 
           url: '/admin',

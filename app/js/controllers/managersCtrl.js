@@ -14,6 +14,8 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
+      console.log('-- managersCtrl --');
+
       $scope.dataKeyName = 'managersData';
 
       $rootScope.loading = true;
@@ -75,13 +77,27 @@
 
       };
 
+      /**
+       * tabs data
+       */
+      $scope.tabData = [
+        {
+          heading: 'Overview',
+          route: 'managers.overview'
+        },
+        {
+          heading: 'Game Logs',
+          route: 'managers.gamelogs'
+        }
+      ];
+
       ////////////////////////////////////////
       ////////////// private /////////////////
       ////////////////////////////////////////
 
       /**
        * callback for when firebase is loaded
-       * @param firebaseData {object} - firebase data object
+       * @param result {object} - response
        */
       var loadData = function (result) {
 
@@ -91,7 +107,6 @@
 
         $rootScope.fireBaseReady = true;
 
-        $scope.managersData = $scope.populateManagersData(result.data);
         console.log('syncDate:', result._lastSyncedOn);
 
         if ($scope.checkYesterday(result._lastSyncedOn)) {
@@ -102,6 +117,7 @@
 
           $scope.startFireBase(function () {
 
+            // tell firebase it is ready to be updated
             $rootScope.fireBaseReady = true;
 
             // define managerData on scope and $rootScope
@@ -121,9 +137,17 @@
 
           console.log('-- data is up to date --');
 
+          // tell firebase it is ready to be updated
           $rootScope.loading = false;
+
+          // define managerData on scope and $rootScope
           $scope.managerData = $scope.populateManagersData(result.data);
+
+          // define the current manager
           $scope.chooseManager($stateParams.managerId);
+
+          // define selectedManager by managerId
+          $scope.selectedManager = $scope.managerData[$stateParams.managerId];
 
         }
 
@@ -136,9 +160,14 @@
       var onManagersRequestFinished = function (managerData) {
         console.log('onManagersRequestFinished');
         $rootScope.loading = false;
-        //$scope.managerData = $scope.populateManagersData(managerData);
-        //$scope.chooseManager($stateParams.managerId);
+        $scope.managerData = $scope.populateManagersData(managerData);
+        $scope.chooseManager($stateParams.managerId);
         $scope.saveRoster();
+      };
+
+      $scope.updateAllManagerData = function() {
+        $rootScope.loading = true;
+        $updateDataUtils.updateAllManagerData(onManagersRequestFinished);
       };
 
       var init = function () {
@@ -164,8 +193,6 @@
           });
 
         }
-
-        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
       };
 

@@ -36,11 +36,6 @@
                   name: 'Standings',
                   url: 'standings',
                   active: true
-                },
-                {
-                  name: 'Monthly Winners',
-                  url: 'monthlyWinners',
-                  active: false
                 }
               ]
             },

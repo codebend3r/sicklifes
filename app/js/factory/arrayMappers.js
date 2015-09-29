@@ -96,21 +96,11 @@
          */
         playerInfo: function (player, result) {
 
-          var deferred = $q.defer(),
-            playerLeagueProfileRequest,
-            profileLeagueSlug = $textManipulator.getLeagueSlug(result);
+          //console.log('playerInfo', player, result);
+
+          var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
           player.id = result.data.id;
-
-          //console.log('id', player.id, player.playerName);
-
-          // do it only if player.teamLogo, and player.teamName doesn't exist
-          /*if (result.data.teams[0]) {
-           // url for team logo
-           player.teamLogo = result.data.teams[0].sportsnet_logos.large;
-           // set latest teamName to whatever the first value is in the stack
-           player.teamName = $textManipulator.teamNameFormatted(result.data.teams[0].full_name);
-           }*/
 
           // url for player image
           player.playerImage = result.data.headshots.original;
@@ -124,23 +114,19 @@
           // set latest leagueName
           //player.leagueName = $textManipulator.properLeagueName(profileLeagueSlug);
 
-          deferred.resolve(result.data);
-
           ///////////////////////////////////
 
-          playerLeagueProfileRequest = $apiFactory.getPlayerProfile(profileLeagueSlug, player.id);
-          playerLeagueProfileRequest.then(function (profileData) {
+          return $apiFactory.getPlayerProfile(profileLeagueSlug, player.id);
 
-            player.playerPos = profileData.data.position;
-            player.weight = profileData.data.weight;
-            player.height = profileData.data.height_feet + '\'' + profileData.data.height_inches;
-            player.birthdate = profileData.data.birthdate;
-            player.birthplace = profileData.data.birth_city + ', ' + profileData.data.birth_country;
+        },
 
+        playerMapPersonalInfo: function(player, result) {
 
-          });
-
-          return deferred.promise;
+          player.playerPos = result.data.position;
+          player.weight = result.data.weight;
+          player.height = result.data.height_feet + '\'' + result.data.height_inches;
+          player.birthdate = result.data.birthdate;
+          player.birthplace = result.data.birth_city + ', ' + result.data.birth_country;
 
         },
 
@@ -150,6 +136,8 @@
          * @param result
          */
         playerGamesLog: function (dataObj, result) {
+
+          //console.log('playerGamesLog');
 
           var deferred = $q.defer(),
             player = dataObj.player || null,
@@ -361,6 +349,8 @@
          * @returns {{index: *, id: *, playerName: *, managerName: *, teamName: string, leagueName: string}}
          */
         transferPlayersMap: function (leagueData, teamData, i, index) {
+
+          console.log('transferPlayersMap');
 
           return {
             index: index,

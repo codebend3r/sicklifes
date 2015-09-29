@@ -132,45 +132,6 @@
       };
 
       /**
-       * saves current data to firebase
-       */
-      $scope.saveRoster = function () {
-
-        /*_.each($scope.managerData, function (m) {
-
-         _.each(m.players, function (p) {
-
-         if (p.leagueName === 'SERIE A') {
-         p.leagueName = 'SERI';
-         }
-
-         if (p.leagueName === 'LA LIGA') {
-         p.leagueName = 'LIGA';
-         }
-
-         //console.log(m.managerName, '|',p.playerName, '|', p.leagueName);
-
-         });
-
-         });*/
-
-        var saveObject = {
-          _lastSyncedOn: $momentService.syncDate(),
-          chester: $scope.managerData.chester,
-          frank: $scope.managerData.frank,
-          dan: $scope.managerData.dan,
-          justin: $scope.managerData.justin,
-          mike: $scope.managerData.mike,
-          joe: $scope.managerData.joe
-        };
-
-        console.log('saveRoster --> saveObject', saveObject);
-
-        $scope.saveToFireBase(saveObject, $scope.dataKeyName);
-
-      };
-
-      /**
        *
        * @param managerData
        */
@@ -208,7 +169,7 @@
 
       /**
        * callback for when firebase is loaded
-       * @param firebaseData {object} - firebase data object
+       * @param result {object} - response
        */
       var loadData = function (result) {
 
@@ -218,14 +179,13 @@
 
         $rootScope.fireBaseReady = true;
 
-        $scope.managersData = $scope.populateManagersData(result.data);
-        console.log('syncDate:', result._lastSyncedOn);
-
         if ($scope.checkYesterday(result._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
           $rootScope.loading = false;
+
+          console.log('syncDate:', result._lastSyncedOn);
 
           $scope.startFireBase(function () {
 

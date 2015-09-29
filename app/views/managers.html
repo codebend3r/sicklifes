@@ -7,7 +7,7 @@
   <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managerData' ng-change='changeManager(selectedManager)'></select>
 
   <div ng-if='admin' class='well'>
-    <button type='button' class='btn btn-danger' ng-click='updateAllManagerData(onManagersRequestFinished)'>Update All Managers Data</button>
+    <button type='button' class='btn btn-danger' ng-click='updateAllManagerData()'>Update All Managers Data</button>
     <button type='button' class='btn btn-danger' ng-click='saveRoster()'>Save Roster</button>
   </div>
 
@@ -15,13 +15,11 @@
 
   <hr>
 
-  <!--<div class="col-md-12">
+  <div class="col-md-12">
     <tabs data="tabData" type="tabs"/>
   </div>
   <div class="col-md-12">
     <ui-view></ui-view>
-  </div>-->
-
-  <custom-table table-body-template='managers-standard' list='selectedManager.players' sort-function="byPickNumber" table-header='tableHeader'></custom-table>
+  </div>
 
 </div>

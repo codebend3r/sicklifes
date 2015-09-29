@@ -144,13 +144,9 @@
 
               //console.log(manager.managerName, '|', player.playerName);
 
-              //var playerProfileRequest = $apiFactory.getPlayerProfile('soccer', player.id);
-              //$apiFactory.getPlayerProfile('soccer', player.id);
-
-              //allLeaguePromises.push(playerProfileRequest);
-
               $apiFactory.getPlayerProfile('soccer', player.id)
                 .then($arrayMappers.playerInfo.bind(this, player))
+                .then($arrayMappers.playerMapPersonalInfo)
                 .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }))
                 .then(function () {
                   current += 1;

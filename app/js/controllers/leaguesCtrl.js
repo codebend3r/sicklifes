@@ -21,7 +21,6 @@
        */
       $scope.changeLeague = function (league) {
         $state.go($state.current.name, { leagueName: league.slug });
-        $scope.loading = true;
       };
 
       /**

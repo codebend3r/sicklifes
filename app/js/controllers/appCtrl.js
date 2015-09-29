@@ -56,7 +56,7 @@
       $scope.dataKeyName = '';
 
       /**
-       * populates $rootScope.managersData
+       * populates $scope.managersData && $rootScope.managersData
        * @param data {object}
        */
       $scope.populateManagersData = function (data) {
@@ -87,23 +87,17 @@
       };
 
       /**
-       * saves current manager roster data to firebase
+       * saves current managersData to firebase
        */
       $scope.saveRoster = function () {
 
         var saveObject = {
           _lastSyncedOn: $momentService.syncDate(),
-          data: {
-            chester: $scope.managerData.chester,
-            frank: $scope.managerData.frank,
-            dan: $scope.managerData.dan,
-            justin: $scope.managerData.justin,
-            mike: $scope.managerData.mike,
-            joe: $scope.managerData.joe
-          }
+          data: $rootScope.managerData
         };
 
-        //console.log('saveObject', saveObject);
+        console.log('saveRoster --> saveObject', saveObject);
+
         $scope.saveToFireBase(saveObject, 'managersData');
 
       };
@@ -135,6 +129,7 @@
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
             $rootScope.firebaseData = fbData;
+            console.log('firebase object saved to $rootScope');
             callback(fbData);
           });
         }
