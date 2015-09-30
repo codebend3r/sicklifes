@@ -29,7 +29,7 @@
 
 <div class="container master-container">
 
-  <nav-menu></nav-menu>
+  <header></header>
   <div class="main-container container" ui-view></div>
   <footer class="ng-cloak" ng-if='loaded'>Build v{{version}}</footer>
 
@@ -54,10 +54,6 @@
 <script src="bower_components/userapp/userapp.client.js"></script>
 <script src="bower_components/userapp-angular/angularjs.userapp.js"></script>
 
-<!--<script src="https://app.userapp.io/js/userapp.client.js"></script>-->
-<!--<script src="https://app.userapp.io/js/angularjs.userapp.js"></script>-->
-
-<!-- <script src='bower_components/angular-modal-service/dst/angular-modal-service.js'></script> -->
 <script src='bower_components/angular-bootstrap/ui-bootstrap-tpls.js'></script>
 
 <script src="bower_components/firebase/firebase.js"></script>
@@ -77,12 +73,11 @@
 <script src="js/controllers/leadersCtrl.js"></script>
 <script src="js/controllers/standingsCtrl.js"></script>
 <script src="js/controllers/playersDetailsCtrl.js"></script>
-<script src="js/controllers/monthlyWinnersCtrl.js"></script>
 <script src="js/controllers/transfersCtrl.js"></script>
 <script src="js/controllers/adminCtrl.js"></script>
 <script src="js/modals/transferWindowCtrl.js"></script>
 <script src="js/directives/preloader.js"></script>
-<script src="js/directives/navMenu.js"></script>
+<script src="js/directives/header.js"></script>
 <script src="js/directives/customTable.js"></script>
 <script src="js/directives/managerJumbotron.js"></script>
 <script src="js/factory/textManipulator.js"></script>

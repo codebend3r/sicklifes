@@ -8,12 +8,12 @@
 
   angular.module('sicklifes')
 
-    .directive('navMenu', function ($location, user) {
+    .directive('header', function () {
 
       return {
         restrict: 'E',
         replace: false,
-        templateUrl: 'views/directives/nav.html',
+        templateUrl: 'views/directives/header.html',
         scope: true,
         controller: function ($scope) {
 

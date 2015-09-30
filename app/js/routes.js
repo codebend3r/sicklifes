@@ -13,21 +13,18 @@
       $urlRouterProvider.when('', '/leagues/liga/tables');
       $urlRouterProvider.when('/', '/leagues/liga/tables');
 
-      $urlRouterProvider.when('/leagues/:leagueName', '/leagues/:leagueName/tables');
       $urlRouterProvider.when('/leagues', '/leagues/liga/tables');
-      $urlRouterProvider.when('/leagues/liga', '/leagues/liga/tables');
-      $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
-      $urlRouterProvider.when('/leagues//leaders', '/leagues/liga/leaders');
 
+      // $urlRouterProvider.when('/leagues/:leagueName', '/leagues/:leagueName/tables');
+      // $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
+      // $urlRouterProvider.when('/leagues//leaders', '/leagues/liga/leaders');
+
+      $urlRouterProvider.when('/managers/', '/managers/chester/overview');
       $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
-      //$urlRouterProvider.when('/managers', '/managers/chester/overview');
-      //$urlRouterProvider.when('/managers', '/managers/chester/overview');
-      //$urlRouterProvider.when('/managers/', '/managers/chester/overview');
-      $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
-      $urlRouterProvider.when('/managers//gamelogs', '/managers/chester/gamelogs');
-
-      $urlRouterProvider.when('/transfers', '/transfers/chester');
-      $urlRouterProvider.when('/transfers/', '/transfers/chester');
+      
+      // $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
+      // $urlRouterProvider.when('/managers//gamelogs', '/managers/chester/gamelogs');
+      // $urlRouterProvider.when('/transfers', '/transfers/chester');
 
       $urlRouterProvider.otherwise('/standings');
 

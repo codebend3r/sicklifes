@@ -19,27 +19,6 @@
       $rootScope.loading = true;
 
       /**
-       * table headers
-       */
-      $scope.tableHeader = [
-        {
-          text: 'Opponent'
-        },
-        {
-          text: 'G'
-        },
-        {
-          text: 'Final Score'
-        },
-        {
-          text: 'League'
-        },
-        {
-          text: 'Date Played'
-        }
-      ];
-
-      /**
        * player
        */
       $scope.player = {};

@@ -153,7 +153,7 @@
       .pipe(templateCache('./', {
         module: 'sicklifes',
         standalone: false,
-        root: './views/'
+        root: 'views/'
       }))
       .pipe(gulp.dest(config.app + '/js/templates/templateCache.js'))
       .pipe($.size());
@@ -234,54 +234,6 @@
 
   });
 
-  //gulp.task('font-awesome', function () {
-  //
-  //  if (gutil.env.build === 'prod') {
-  //
-  //    return gulp.src(config.app + '/font-awesome/**/*')
-  //      .pipe(gulp.dest(config.prod + '/font-awesome/'))
-  //      .pipe($.size());
-  //
-  //  } else if (gutil.env.build === 'release') {
-  //
-  //    return gulp.src(config.app + '/font-awesome/**/*')
-  //      .pipe(gulp.dest(config.release + '/font-awesome/'))
-  //      .pipe($.size());
-  //
-  //  } else {
-  //
-  //    return gulp.src(config.app + '/font-awesome/**/*')
-  //      .pipe(gulp.dest(config.dev + '/font-awesome/'))
-  //      .pipe($.size());
-  //
-  //  }
-  //
-  //});
-  //
-  //gulp.task('ico', function () {
-  //
-  //  if (gutil.env.build === 'prod') {
-  //
-  //    return gulp.src(config.app + '/ico/**/*')
-  //      .pipe(gulp.dest(config.prod + '/ico/'))
-  //      .pipe($.size());
-  //
-  //  } else if (gutil.env.build === 'release') {
-  //
-  //    return gulp.src(config.app + '/ico/**/*')
-  //      .pipe(gulp.dest(config.release + '/ico/'))
-  //      .pipe($.size());
-  //
-  //  } else {
-  //
-  //    return gulp.src(config.app + '/ico/**/*')
-  //      .pipe(gulp.dest(config.dev + '/ico/'))
-  //      .pipe($.size());
-  //
-  //  }
-  //
-  //});
-
   // Images
   gulp.task('images', function () {
 
@@ -329,8 +281,6 @@
       'modal-views',
       'images',
       'fonts',
-      //'ico',
-      //'font-awesome',
       callback);
 
   });

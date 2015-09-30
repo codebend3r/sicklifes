@@ -1,4 +1,4 @@
-<table class='table table-hover table-responsive'>
+<table class='table table-hover table-responsive hidden-sm hidden-xs'>
   <thead>
   <tr>
     <th ng-repeat='header in tableHeader'>{{header.text}}</th>
@@ -19,6 +19,29 @@
     <td><div class="vertical-center">{{player.domesticGoals}}</div></td>
     <td><div class="vertical-center">{{player.clGoals}}</div></td>
     <td><div class="vertical-center">{{player.eGoals}}</div></td>
+    <td><div class="vertical-center">{{player.points}}</div></td>
+  </tr>
+  </tbody>
+</table>
+
+<table class='table table-hover table-responsive hidden-lg hidden-md'>
+  <thead>
+  <tr>
+    <th>Player</th>
+    <th>Team</th>
+    <th>Points</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="player in list | orderObjectBy:'pickNumber':false">
+    <td class="player-column" ng-class="{dropped: player.status === 'dropped', added: playerObj.status === 'added'}">
+      <div class="vertical-center">
+        <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+      </div>
+    </td>
+    <td class="bold small-text">
+      <div class="vertical-center">{{player.teamName}}</div>
+    </td>
     <td><div class="vertical-center">{{player.points}}</div></td>
   </tr>
   </tbody>

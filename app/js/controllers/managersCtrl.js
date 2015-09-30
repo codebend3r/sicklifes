@@ -66,6 +66,24 @@
         }
       ];
 
+      $scope.tableLogHeader = [
+        {
+          text: 'Player'
+        },
+        {
+          text: 'vs Team'
+        },
+        {
+          text: 'Goals'
+        },
+        {
+          text: 'Score'
+        },
+        {
+          text: 'Date'
+        },
+      ];
+
       /**
        *
        * @param selectedManager

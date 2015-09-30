@@ -240,8 +240,10 @@ p.info-text {
 
 }
 
-.panel-body {
-  padding: 0;
+@media (max-width: 700px) {
+  .panel-body {
+    padding: 0;
+  }
 }
 
 .fa-facebook-f:before,
