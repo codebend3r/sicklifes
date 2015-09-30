@@ -1,11 +1,18 @@
 <table class='table table-hover table-responsive hidden-sm hidden-xs'>
   <thead>
   <tr>
-    <th ng-repeat='header in tableHeader'>{{header.text}}</th>
+    <th title="player name"><a ng-click="setSortKey('playerName')">Player</a></th>
+    <th title="team name"><a ng-click="setSortKey('teamName')">Team</a></th>
+    <th title="league name"><a ng-click="setSortKey('leagueName')">League</a></th>
+    <th title="total goals"><a ng-click="setSortKey('goals')">TG</a></th>
+    <th title="domestic goals"><a ng-click="setSortKey('domesticGoals')">DG</a></th>
+    <th title="champions league goals"><a ng-click="setSortKey('clGoals')">CLG</a></th>
+    <th title="europa league goals"><a ng-click="setSortKey('eGoals')">ELG</a></th>
+    <th title="total points"><a ng-click="setSortKey('points')">TP</a></th>
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="player in list | orderObjectBy:'pickNumber':false">
+  <tr ng-repeat="player in list | orderObjectBy:sortKey:ascending">
     <td class="player-column" ng-class="{dropped: player.status === 'dropped', added: playerObj.status === 'added'}">
       <div class="vertical-center">
         <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
@@ -29,7 +36,7 @@
   <tr>
     <th>Player</th>
     <th>Team</th>
-    <th>Points</th>
+    <th title="total points">Points</th>
   </tr>
   </thead>
   <tbody>

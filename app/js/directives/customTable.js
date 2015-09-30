@@ -22,9 +22,20 @@
           tableName: '@',
           tableParams: '=',
           sortFunction: '&',
+          sortKey: '@',
           leagueImg: '='
         },
         controller: function ($scope) {
+
+          $scope.ascending = false;
+          
+          $scope.setSortKey = function(key) {
+            if ($scope.sortKey === key) {
+              $scope.ascending = !$scope.ascending;
+            } else {
+              $scope.sortKey = key;
+            }
+          };
 
           $scope.everyFourth = function(index) {
             return index % 4 === 0;
