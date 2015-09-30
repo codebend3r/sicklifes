@@ -29,6 +29,7 @@
   // TASKS
   //=============================================
 
+  // start
   gulp.task('start', function () {
 
     if (gutil.env.build === 'prod') {
@@ -53,7 +54,27 @@
 
   });
 
-  // HTML
+  // usemin
+  gulp.task('usemin', function() {
+
+    return gulp.src([config.app + '/index.html'])
+      .pipe($.usemin({
+        css: [
+          $.csso(),
+          $.rev()
+        ],
+        js: [
+          $.ngAnnotate(),
+          $.uglify(),
+          $.rev()
+        ]
+      }))
+      .pipe(gulp.dest(config.release))
+      .pipe($.size());
+
+  });
+
+  // html
   gulp.task('html', ['js', 'css'], function () {
 
     if (gutil.env.build === 'prod') {
@@ -97,7 +118,7 @@
 
   });
 
-  // PARTIALS
+  // partials
   gulp.task('partials', function () {
 
     if (gutil.env.build === 'prod') {
@@ -122,6 +143,7 @@
 
   });
 
+  // modal-views
   gulp.task('modal-views', function () {
 
     if (gutil.env.build === 'prod') {
@@ -146,7 +168,7 @@
 
   });
 
-  // TEMPLATE
+  // template
   gulp.task('template', function () {
 
     return gulp.src([config.app + '/views/**/*.html'])
@@ -160,7 +182,7 @@
 
   });
 
-  // SASS
+  // sass
   gulp.task('sass', function () {
 
     return gulp.src([config.app + '/sass/*.scss'])
@@ -172,7 +194,7 @@
 
   });
 
-  // CSS
+  // css
   gulp.task('css', ['sass'], function () {
 
     if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
@@ -186,7 +208,7 @@
 
   });
 
-  // JS (partials or template)
+  // js (partials or template)
   gulp.task('js', ['template'], function () {
 
     if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
@@ -197,7 +219,7 @@
 
   });
 
-  // Bower
+  // bower
   gulp.task('bower-all', function () {
 
     if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
@@ -209,7 +231,7 @@
 
   });
 
-  // Fonts
+  // fonts
   gulp.task('fonts', function () {
 
     if (gutil.env.build === 'prod') {
@@ -234,7 +256,7 @@
 
   });
 
-  // Images
+  // images
   gulp.task('images', function () {
 
     if (gutil.env.build === 'prod') {
@@ -259,19 +281,20 @@
 
   });
 
-  // Clean
+  // clean
   gulp.task('clean-templatecache', function () {
     return gulp.src([config.app + '/js/templates/templateCache.js'], { read: false }).pipe($.clean({ force: true }))
       .pipe($.size());
   });
 
+  // clean-all
   gulp.task('clean-all', function () {
     return gulp.src([config.target], { read: false }).pipe($.clean({ force: false }))
       .pipe($.size());
   });
 
   /**
-   * Builds GUI
+   * build-GUI
    */
   gulp.task('build-GUI', function (callback) {
 
@@ -286,7 +309,7 @@
   });
 
   /**
-   * Runs in sequence
+   * build
    */
   gulp.task('build', function (callback) {
     runSequence(
@@ -313,7 +336,9 @@
       callback);
   });
 
-  // Watch
+  /**
+   * watch
+   */
   gulp.task('watch', function () {
 
     // Watch all .html files
