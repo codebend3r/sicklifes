@@ -20,7 +20,7 @@
           $scope.menuOptions = [
             {
               name: 'Leagues',
-              url: 'leagues',
+              url: 'leagues.tables',
               active: true
             },
             {
@@ -29,7 +29,7 @@
               subMenu: [
                 {
                   name: 'Managers',
-                  url: 'managers',
+                  url: 'managers.overview',
                   active: true
                 },
                 {

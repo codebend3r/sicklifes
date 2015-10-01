@@ -1,18 +1,14 @@
 <div class='jumbotron manager-jumbotron'>
-  <div class='col-md-4'>
-    <h3 class='manager-name'>{{manager.managerName}}</h3>
-  </div>
-  <div class='col-md-8'>
-    <p ng-if='selectedMonth' class='info-title'>for {{selectedMonth.monthName}}</p>
-    <hr ng-if='selectedMonth'/>
-    <p class='info-text'><span>Goals: </span><span class='totals'>{{manager.totalGoals}}</span></p>
-    <p class='info-text'><span>Points: </span><span class='totals'>{{manager.totalPoints}}</span></p>
-    <hr/>
-    <p class='info-text'><span>Serie A Players: </span><span class='totals'>{{manager.seriCount}}</span></p>
-    <p class='info-text'><span>La Liga Players: </span><span class='totals'>{{manager.ligaCount}}</span></p>
-    <p class='info-text'><span>EPL Players: </span><span class='totals'>{{manager.eplCount}}</span></p>
-    <p class='info-text'><span>Champions League Players: </span><span class='totals'>{{manager.chlgCount}}</span></p>
-    <p class='info-text'><span>Europa League Players: </span><span class='totals'>{{manager.euroCount}}</span></p>
-    <p class='info-text'><span>Wildcard Players: </span><span class='totals'>{{manager.wildCardCount}}</span></p>
-  </div>
+  <h3 class='manager-name'>{{manager.managerName}}</h3>
+  <p ng-if='selectedMonth' class='info-title'>for {{selectedMonth.monthName}}</p>
+  <hr ng-if='selectedMonth'/>
+  <p class='info-text'><span>Goals: </span><span class='totals'>{{manager.totalGoals}}</span></p>
+  <p class='info-text'><span>Points: </span><span class='totals'>{{manager.totalPoints}}</span></p>
+  <hr/>
+  <p class='info-text'><span>Serie A Players: </span><span class='totals'>{{manager.seriCount}}</span></p>
+  <p class='info-text'><span>La Liga Players: </span><span class='totals'>{{manager.ligaCount}}</span></p>
+  <p class='info-text'><span>EPL Players: </span><span class='totals'>{{manager.eplCount}}</span></p>
+  <p class='info-text'><span>Champions League Players: </span><span class='totals'>{{manager.chlgCount}}</span></p>
+  <p class='info-text'><span>Europa League Players: </span><span class='totals'>{{manager.euroCount}}</span></p>
+  <p class='info-text'><span>Wildcard Players: </span><span class='totals'>{{manager.wildCardCount}}</span></p>
 </div>

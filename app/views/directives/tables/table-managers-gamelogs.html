@@ -11,7 +11,7 @@
   <tbody>
     <tr ng-repeat='player in list | orderBy: "-datePlayed"'>
       <td>
-        <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+        <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
       </td>
       <td>{{player.alignment}} {{player.vsTeam}}</td>
       <td>{{player.goalsScored}}</td>
@@ -33,11 +33,11 @@
   <tbody>
     <tr ng-repeat='player in list | orderBy: "-datePlayed"'>
       <td>
-        <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+        <a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
       </td>
-      <td>{{player.alignment}} {{player.vsTeam}}</td>
+      <td class="small-text">{{player.alignment}} {{player.vsTeam}}</td>
       <td>{{player.goalsScored}}</td>
-      <td>{{player.datePlayed}}</td>
+      <td class="small-text">{{player.datePlayed}}</td>
     </tr>
   </tbody>
 </table>

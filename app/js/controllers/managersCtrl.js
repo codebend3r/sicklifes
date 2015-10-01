@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $state, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams) {
+    .controller('managersCtrl', function ($scope, $rootScope, $state, $updateDataUtils, $objectUtils, $arrayFilter, $fireBaseService, $moment, $momentService, $localStorage, $stateParams) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -20,8 +20,110 @@
 
       $rootScope.loading = true;
 
+      var startYear = '2015';
+      var endYear = '2016';
+
       /**
-       *
+       * @description table headers
+       */
+      $scope.tableHeader = [
+        {
+          columnClass: 'col-md-3 col-sm-4 col-xs-4',
+          text: 'Player'
+        },
+        {
+          columnClass: 'col-md-2 hidden-sm hidden-xs',
+          text: 'Opponent'
+        },
+        {
+          columnClass: 'col-md-1 col-sm-2 col-xs-2 text-center',
+          text: 'Goals'
+        },
+        {
+          columnClass: 'col-md-2 col-sm-2 col-xs-3 text-center',
+          text: 'Score'
+        },
+        {
+          columnClass: 'col-md-2 col-sm-2 hidden-xs',
+          text: 'League'
+        },
+        {
+          columnClass: 'col-md-2 col-sm-2 col-xs-3',
+          text: 'Date'
+        }
+      ];
+
+      /**
+       * @description all months dropdown options
+       * @type {{monthName: string, range: string[]}[]}
+       */
+      $scope.allMonths = [
+        {
+          monthName: 'All Months',
+          range: ['August 1 ' + startYear, 'June 30 ' + endYear]
+        },
+        {
+          monthName: 'August ' + startYear,
+          range: ['August 1 ' + startYear, 'August 31 ' + startYear]
+        },
+        {
+          monthName: 'September ' + startYear,
+          range: ['September 1 ' + startYear, 'September 30 ' + startYear]
+        },
+        {
+          monthName: 'October ' + startYear,
+          range: ['October 1 ' + startYear, 'October 31 ' + startYear]
+        },
+        {
+          monthName: 'November ' + startYear,
+          range: ['November 1 ' + startYear, 'November 30 ' + startYear]
+        },
+        {
+          monthName: 'December ' + startYear,
+          range: ['December 1 ' + startYear, 'December 31 ' + startYear]
+        },
+        {
+          monthName: 'January ' + endYear,
+          range: ['January 1 ' + endYear, 'January 31 ' + endYear]
+        },
+        {
+          monthName: 'February ' + endYear,
+          range: ['February 1 ' + endYear, 'February 28 ' + endYear]
+        },
+        {
+          monthName: 'March ' + endYear,
+          range: ['March 1 ' + endYear, 'March 31 ' + endYear]
+        },
+        {
+          monthName: 'April ' + endYear,
+          range: ['April 1 ' + endYear, 'April 30 ' + endYear]
+        },
+        {
+          monthName: 'May ' + endYear,
+          range: ['May 1 ' + endYear, 'May 31 ' + endYear]
+        },
+        {
+          monthName: 'June ' + endYear,
+          range: ['June 1 ' + endYear, 'June 30 ' + endYear]
+        }
+      ];
+
+      /**
+       * @description the select box model
+       * @type {{monthName: string, range: string[]}}
+       */
+      $scope.selectedMonth = $scope.allMonths[0];
+
+      /**
+       * @description when month option is changed
+       */
+      $scope.changeMonth = function (month) {
+        $scope.selectedMonth = month;
+        updateFilter();
+      };
+
+      /**
+       * @description
        * @param selectedManager
        */
       $scope.changeManager = function (selectedManager) {
@@ -32,7 +134,7 @@
       };
 
       /**
-       * tabs data
+       * @description tabs data
        */
       $scope.tabData = [
         {
@@ -50,7 +152,7 @@
       ////////////////////////////////////////
 
       /**
-       * callback for when firebase is loaded
+       * @description callback for when firebase is loaded
        * @param result {object} - response
        */
       var loadData = function (result) {
@@ -108,7 +210,7 @@
       };
 
       /**
-       *
+       * @description
        * @param managerData
        */
       var onManagersRequestFinished = function (managerData) {
@@ -119,11 +221,33 @@
         $scope.saveRoster();
       };
 
-      $scope.updateAllManagerData = function() {
+      /**
+       * @description
+       */
+      $scope.updateAllManagerData = function () {
         $rootScope.loading = true;
         $updateDataUtils.updateAllManagerData(onManagersRequestFinished);
       };
 
+      /**
+       * @description filters game log by selected month
+       */
+      var updateFilter = function () {
+
+        console.log('monthlyWinnersCtrl --> updateFilter', $scope.selectedManager.managerName);
+
+        _.each($scope.selectedManager.players, function (player) {
+
+          $scope.selectedManager = $objectUtils.cleanManager($scope.selectedManager, false);
+          $scope.selectedManager.filteredMonthlyGoalsLog = _.filter($scope.selectedManager.monthlyGoalsLog, $arrayFilter.filterOnMonth.bind($scope, $scope.selectedManager, $scope.selectedMonth, player));
+
+        });
+
+      };
+
+      /**
+       * @description init
+       */
       var init = function () {
 
         if (angular.isDefined($rootScope[$scope.dataKeyName])) {
@@ -137,7 +261,6 @@
           loadData($localStorage[$scope.dataKeyName]);
 
         } else {
-
 
           $scope.startFireBase(function (firebaseData) {
 

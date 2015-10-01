@@ -5,6 +5,7 @@
   <h2>Managers</h2>
 
   <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managerData' ng-change='changeManager(selectedManager)'></select>
+  <select class='form-control' ng-model='selectedMonth' ng-options='option.monthName for option in allMonths' ng-change='changeMonth(selectedMonth)'></select>
 
   <div ng-if='admin' class='well'>
     <button type='button' class='btn btn-danger' ng-click='updateAllManagerData()'>Update All Managers Data</button>
@@ -15,11 +16,9 @@
 
   <hr>
 
-  <div class="col-md-12">
+  <div>
     <tabs data="tabData" type="tabs"/>
   </div>
-  <div class="col-md-12">
-    <ui-view></ui-view>
-  </div>
+  <ui-view/>
 
 </div>

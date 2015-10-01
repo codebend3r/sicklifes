@@ -61,6 +61,8 @@
        */
       $scope.populateManagersData = function (data) {
 
+        console.log('chester data:', data.chester);
+
         var managerData = {
           chester: data.chester,
           frank: data.frank,
@@ -133,7 +135,6 @@
             callback(fbData);
           });
         }
-
       };
 
       /**
@@ -159,13 +160,7 @@
           manager.transactions = [];
           manager.wildCardCount = 0;
 
-          //_.each(manager.players, function (eachPlayer) {
-          //
-          //});
-
         });
-
-        console.log('>> $rootScope.managersData', $rootScope.managersData);
 
       };
 
