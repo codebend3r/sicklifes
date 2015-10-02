@@ -13,13 +13,13 @@
       var arrayFilters = {};
 
       /**
-       * the date the league starts capturing data
+       * @description the date the league starts capturing data
        * @returns {string}
        */
       arrayFilters.leagueStartDate = 'August 1 2015';
 
       /**
-       * filters out any games after aug 1
+       * @description filters out any games after aug 1
        * @returns {boolean}
        */
       arrayFilters.filterAfterDate = function (game) {
@@ -28,7 +28,7 @@
       };
 
       /**
-       * filters out any games after from players added or dropped aug 1
+       * @description filters out any games after from players added or dropped aug 1
        * @returns {boolean}
        */
       arrayFilters.filterValidDate = function (player, game) {
@@ -43,7 +43,7 @@
       };
 
       /**
-       * filters out games with goals
+       * @description filters out games with goals
        * @returns {boolean}
        */
       arrayFilters.filterOnValidGoals = function (player, game) {
@@ -62,7 +62,7 @@
       };
 
       /**
-       *
+       * @description
        * @param selectedMonth
        * @param game
        * @returns {boolean}
@@ -75,7 +75,7 @@
       };
 
       /**
-       * filters on specific month and if 1 or more goals
+       * @description filters on specific month and if 1 or more goals
        * @param manager
        * @param selectedMonth
        * @param player
