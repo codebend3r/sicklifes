@@ -50,6 +50,53 @@
       ////////////////////////////////////////
 
       /**
+       * @description computed function to determine if manager wildcard count
+       * @param player
+       * @param manager
+       */
+      var checkForWildCard = function (player, manager) {
+
+        //console.log('managerName:', manager.managerName);
+        //console.log('playerName:', player.playerName);
+        //console.log('ligaGameLog:', player.ligaGameLog);
+        //console.log('eplGameLog:', player.eplGameLog);
+        //console.log('seriGameLog:', player.seriGameLog);
+
+        // logical definition for a wildcard player
+
+        // if player is not dropped then count on active roster
+        if (player.status !== 'dropped'
+          && angular.isDefined(manager)
+          || angular.isDefined(player.chlgGameLog) && player.chlgGameLog.length
+          || angular.isDefined(player.euroGameLog) && player.euroGameLog.length) {
+
+          //console.log('=========================');
+          //console.log('has league games logged:', player.playerName);
+
+          if (!player.playedInLigaGames
+            && !player.playedInEPLGames
+            && !player.playedInSeriGames) {
+
+            console.log('=========================');
+            console.log('no domestic games:', player.playerName);
+            //if (player.playerName === 'Iker MUNIAIN') {
+            //  debugger;
+            //}
+
+            if (player.ligaGameLog) console.log(player.playerName, 'ligaGameLog:', player.ligaGameLog.length);
+            if (player.eplGameLog) console.log(player.playerName, 'eplGameLog:', player.eplGameLog.length);
+            if (player.seriGameLog) console.log(player.playerName, 'seriGameLog:', player.seriGameLog.length);
+            if (player.chlgGameLog) console.log(player.playerName, 'chlgGameLog:', player.chlgGameLog.length);
+            if (player.euroGameLog) console.log(player.playerName, 'euroGameLog:', player.euroGameLog.length);
+
+            manager.wildCardCount += 1;
+
+          }
+        }
+
+      };
+
+      /**
        * @description callback for when firebase is loaded
        * @param result {object} - response
        */
@@ -83,6 +130,11 @@
             // define selectedManager by managerId
             $scope.selectedManager = $scope.managerData[$stateParams.managerId];
 
+            $scope.selectedManager.wildCardCount = 0;
+            _.each($scope.selectedManager.players, function (player) {
+              checkForWildCard(player, $scope.selectedManager);
+            });
+
             $updateDataUtils.updateAllManagerData(onManagersRequestFinished);
 
           });
@@ -102,6 +154,11 @@
 
           // define selectedManager by managerId
           $scope.selectedManager = $scope.managerData[$stateParams.managerId];
+
+          $scope.selectedManager.wildCardCount = 0;
+          _.each($scope.selectedManager.players, function (player) {
+            checkForWildCard(player, $scope.selectedManager);
+          });
 
         }
 

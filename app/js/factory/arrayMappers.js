@@ -102,6 +102,10 @@
 
         player.id = result.data.id;
 
+        player.playedInLigaGames = false;
+        player.playedInEPLGames = false;
+        player.playedInSeriGames = false;
+
         // url for player image
         player.playerImage = result.data.headshots.original;
 
@@ -120,9 +124,12 @@
 
       };
 
+      /**
+       * @description forEach function - loops through soccer roster
+       * @param dataObj - an object containing a reference to a player and a manager
+       * @param result
+       */
       arrayMaper.playerMapPersonalInfo = function (player, result) {
-
-        //console.log('playerMapPersonalInfo');
 
         player.playerPos = result.data.position;
         player.weight = result.data.weight;
@@ -133,7 +140,7 @@
       };
 
       /**
-       * forEach function - loops through soccer roster
+       * @description forEach function - loops through soccer roster
        * @param dataObj - an object containing a reference to a player and a manager
        * @param result
        */
@@ -164,9 +171,10 @@
         if (validLeagues.inLiga) {
 
           ligaGamesRequest = $apiFactory.getPlayerGameDetails('liga', player.id);
-          // if player is not dropped then count on active roster
 
           ligaGamesRequest.then(function (result) {
+
+            player.playedInLigaGames = true;
 
             ligaLogs = result.data
               .filter($arrayFilter.filterOnValidGoals.bind(this, player))
@@ -190,6 +198,7 @@
             }
 
           });
+
           allPromises.push(ligaGamesRequest);
 
         }
@@ -197,9 +206,10 @@
         if (validLeagues.inEPL) {
 
           eplGamesRequest = $apiFactory.getPlayerGameDetails('epl', player.id);
-          // if player is not dropped then count on active roster
 
           eplGamesRequest.then(function (result) {
+
+            player.playedInEPLGames = true;
 
             eplLogs = result.data
               .filter($arrayFilter.filterOnValidGoals.bind(this, player))
@@ -223,6 +233,7 @@
             }
 
           });
+
           allPromises.push(eplGamesRequest);
 
         }
@@ -230,8 +241,11 @@
         if (validLeagues.inSeri) {
 
           seriGamesRequest = $apiFactory.getPlayerGameDetails('seri', player.id);
-          // if player is not dropped then count on active roster
+
           seriGamesRequest.then(function (result) {
+
+            player.playedInSeriGames = true;
+
             seriLogs = result.data
               .filter($arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMaper.monthlyMapper.bind(this, {
@@ -254,6 +268,7 @@
             }
 
           });
+
           allPromises.push(seriGamesRequest);
 
         }
@@ -295,10 +310,12 @@
 
           euroGamesRequest = $apiFactory.getPlayerGameDetails('uefa', player.id);
           euroGamesRequest.then(function (result) {
-            euroLogs = result.data.filter($arrayFilter.filterOnValidGoals.bind(this, player)).map(arrayMaper.monthlyMapper.bind(this, {
-              player: player,
-              manager: manager || null
-            }));
+            euroLogs = result.data
+              .filter($arrayFilter.filterOnValidGoals.bind(this, player))
+              .map(arrayMaper.monthlyMapper.bind(this, {
+                player: player,
+                manager: manager || null
+              }));
 
             player.euroGameLog = result.data
               .filter($arrayFilter.filterAfterDate)
@@ -315,23 +332,9 @@
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(euroLogs);
             }
           });
+
           allPromises.push(euroGamesRequest);
 
-        }
-
-        // logical definition for a wildcard player
-        if (angular.isUndefinedOrNull(player.ligaGameLog)
-          && angular.isUndefinedOrNull(player.eplGameLog)
-          && angular.isUndefinedOrNull(player.seriGameLog)) {
-          // if player is not dropped then count on active roster
-          if (player.status !== 'dropped'
-            && angular.isDefined(manager)
-            && angular.isDefined(player.chlgGameLog)
-            && angular.isDefined(player.euroGameLog)
-            && player.chlgGameLog.length
-            && player.euroGameLog.length) {
-            manager.wildCardCount += 1;
-          }
         }
 
         $q.all(allPromises).then(function () {

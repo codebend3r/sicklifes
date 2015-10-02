@@ -28,8 +28,8 @@
         controller: function ($scope) {
 
           $scope.ascending = false;
-          
-          $scope.setSortKey = function(key) {
+
+          $scope.setSortKey = function (key) {
             if ($scope.sortKey === key) {
               $scope.ascending = !$scope.ascending;
             } else {
@@ -37,7 +37,7 @@
             }
           };
 
-          $scope.everyFourth = function(index) {
+          $scope.everyFourth = function (index) {
             return index % 4 === 0;
           };
 

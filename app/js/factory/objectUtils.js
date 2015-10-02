@@ -75,10 +75,11 @@
             p.domesticGoals = 0;
             p.clGoals = 0;
             p.eGoals = 0;
+            p.playedInLigaGames = false;
+            p.playedInEPLGames = false;
+            p.playedInSeriGames = false;
             _.each(p.player, function(playerData, key) {
-
               p[key] = playerData;
-
             });
             delete p.player;
             return p;
