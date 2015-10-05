@@ -8,14 +8,27 @@
 
   angular.module('sicklifes')
 
-    .directive('preloader', function () {
+    .directive('preloader', function ($rootScope) {
 
       return {
         restrict: 'E',
         replace: false,
         templateUrl: 'views/directives/preloader.html',
-        scope: {
-          loading: '='
+        scope: true,
+        controller: function ($scope, $element, $attrs) {
+
+          $scope.percentage = 0;
+
+          $rootScope.$watch('percentage', function (newValue) {
+            $scope.percentage = newValue;
+          });
+
+          $scope.loading = $scope.$eval($attrs.loading);
+
+          $rootScope.$watch('loading', function (newValue) {
+            $scope.loading = newValue;
+          });
+
         }
       };
 

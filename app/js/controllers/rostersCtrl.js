@@ -44,12 +44,16 @@
         return ['G', 'D', 'M', 'F'].indexOf(player.position);
       };
 
-      var fireBaseLoaded = function(firebaseData) {
+      /**
+       *
+       * @param firebaseData
+       */
+      var fireBaseLoaded = function (firebaseData) {
 
         if (!angular.isUndefinedOrNull(firebaseData[$scope.dataKeyName])) {
 
           console.log('defined in firebase');
-          loadFromLocal(firebaseData[$scope.dataKeyName]);
+          loadData(firebaseData[$scope.dataKeyName]);
 
         } else {
 
@@ -60,19 +64,22 @@
 
       };
 
-      var loadFromLocal = function(localData) {
+      /**
+       *
+       * @param data
+       */
+      var loadData = function (data) {
 
         console.log('///////////////////');
-        console.log('LOCAL --> localData:', localData);
-        console.log('syncDate:', localData._lastSyncedOn);
+        console.log('data:', data);
         console.log('///////////////////');
 
-        $scope.players = localData[$stateParams.teamId].roster;
+        $scope.players = data[$stateParams.teamId].roster;
 
-        $scope.teamName = localData[$stateParams.teamId].teamName;
-        $scope.largeLogo = localData[$stateParams.teamId].logo;
-        $scope.record = localData[$stateParams.teamId].record;
-        $scope.formattedRank = localData[$stateParams.teamId].formattedRank;
+        $scope.teamName = data[$stateParams.teamId].teamName;
+        $scope.largeLogo = data[$stateParams.teamId].logo;
+        $scope.record = data[$stateParams.teamId].record;
+        $scope.formattedRank = data[$stateParams.teamId].formattedRank;
 
         $scope.loading = false;
 
@@ -88,22 +95,32 @@
           $http({
             url: 'http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId,
             method: 'GET'
-          }).then(function (result) {
+          })
+            .then(function (result) {
 
-            console.log('>', result.data);
-            $scope.teamName = result.data.full_name;
-            $scope.largeLogo = result.data.logos.large;
-            $scope.record = result.data.standing.short_record;
-            $scope.formattedRank = result.data.standing.formatted_rank;
+              console.log('> 1', result.data);
+              $scope.teamName = result.data.full_name;
+              $scope.largeLogo = result.data.logos.large;
+              $scope.record = result.data.standing.short_record;
+              $scope.formattedRank = result.data.standing.formatted_rank;
 
-            $http({
-              url: 'http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId + '/players',
-              method: 'GET'
-            }).then(function (result) {
+              return $http({
+                url: 'http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId + '/players',
+                method: 'GET'
+              });
+
+            })
+            .then(function (result) {
+
+              console.log('> 2', result.data);
 
               $scope.loading = false;
 
               $scope.players = _.map(result.data, function (player) {
+
+                var indexedPlayer = $rootScope.firebaseData.allPlayersIndex.data[player.id];
+                console.log('indexedPlayer', indexedPlayer);
+
                 var playerMap = {
                   id: player.id,
                   position: player.position_abbreviation,
@@ -111,7 +128,7 @@
                   headshot: player.headshots.w192xh192,
                   goals: 0,
                   assists: 0,
-                  getGoals: function() {
+                  getGoals: function () {
                     $http({
                       url: 'http://origin-api.thescore.com/' + $stateParams.leagueName + '/players/' + player.id + '/player_records',
                       method: 'GET'
@@ -128,7 +145,7 @@
                 return playerMap;
               });
 
-              _.each($scope.players, function(d) {
+              _.each($scope.players, function (d) {
                 delete d.getGoals;
               });
 
@@ -153,8 +170,6 @@
 
             });
 
-          });
-
         }
 
       };
@@ -166,25 +181,28 @@
 
         $scope.dataKeyName = 'allTeamsPool';
 
-        httpRequest();
-        return;
+        $scope.startFireBase(function() {
 
-        if (angular.isDefined($rootScope[$scope.dataKeyName])) {
+          httpRequest();
 
-          console.log('load from $rootScope');
-          loadFromLocal($rootScope[$scope.dataKeyName]);
+        });
 
-        } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
-
-          console.log('load from local storage');
-          loadFromLocal($localStorage[$scope.dataKeyName]);
-
-        } else {
-
-          console.log('load from firebase');
-          $scope.startFireBase(fireBaseLoaded);
-
-        }
+        //if (angular.isDefined($rootScope[$scope.dataKeyName])) {
+        //
+        //  console.log('load from $rootScope');
+        //  loadData($rootScope[$scope.dataKeyName]);
+        //
+        //} else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
+        //
+        //  console.log('load from local storage');
+        //  loadData($localStorage[$scope.dataKeyName]);
+        //
+        //} else {
+        //
+        //  console.log('load from firebase');
+        //  $scope.startFireBase(fireBaseLoaded);
+        //
+        //}
 
       };
 

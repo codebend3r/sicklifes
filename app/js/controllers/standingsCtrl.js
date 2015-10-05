@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, $apiFactory, $stateParams, $fireBaseService, $updateDataUtils, $localStorage) {
+    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, $apiFactory, $stateParams, $fireBaseService, $updateDataUtils, $momentService, $localStorage) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -56,8 +56,7 @@
       ////////////////////////////////////////
 
       /**
-       * callback for when firebase is loaded
-       * @param firebaseData {object} - firebase data object
+       * callback for when data is loaded
        */
       var loadData = function (result) {
 
@@ -70,7 +69,7 @@
         $scope.managersData = $scope.populateManagersData(result.data);
         console.log('syncDate:', result._lastSyncedOn);
 
-        if ($scope.checkYesterday(result._lastSyncedOn)) {
+        if ($momentService.isHourAgo(result._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 

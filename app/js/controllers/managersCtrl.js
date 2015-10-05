@@ -16,8 +16,6 @@
 
       console.log('-- managersCtrl --');
 
-      $scope.dataKeyName = 'managersData';
-
       $rootScope.loading = true;
 
       /**
@@ -50,44 +48,19 @@
       ////////////////////////////////////////
 
       /**
-       * @description computed function to determine if manager wildcard count
+       * @description computed function to determine manager wildcard count
        * @param player
        * @param manager
        */
       var checkForWildCard = function (player, manager) {
 
-        //console.log('managerName:', manager.managerName);
-        //console.log('playerName:', player.playerName);
-        //console.log('ligaGameLog:', player.ligaGameLog);
-        //console.log('eplGameLog:', player.eplGameLog);
-        //console.log('seriGameLog:', player.seriGameLog);
-
-        // logical definition for a wildcard player
-
         // if player is not dropped then count on active roster
         if (player.status !== 'dropped'
           && angular.isDefined(manager)
-          || angular.isDefined(player.chlgGameLog) && player.chlgGameLog.length
-          || angular.isDefined(player.euroGameLog) && player.euroGameLog.length) {
+          || player.playedInChlgGames
+          || player.playedInEuroGames) {
 
-          //console.log('=========================');
-          //console.log('has league games logged:', player.playerName);
-
-          if (!player.playedInLigaGames
-            && !player.playedInEPLGames
-            && !player.playedInSeriGames) {
-
-            console.log('=========================');
-            console.log('no domestic games:', player.playerName);
-            //if (player.playerName === 'Iker MUNIAIN') {
-            //  debugger;
-            //}
-
-            if (player.ligaGameLog) console.log(player.playerName, 'ligaGameLog:', player.ligaGameLog.length);
-            if (player.eplGameLog) console.log(player.playerName, 'eplGameLog:', player.eplGameLog.length);
-            if (player.seriGameLog) console.log(player.playerName, 'seriGameLog:', player.seriGameLog.length);
-            if (player.chlgGameLog) console.log(player.playerName, 'chlgGameLog:', player.chlgGameLog.length);
-            if (player.euroGameLog) console.log(player.playerName, 'euroGameLog:', player.euroGameLog.length);
+          if (!player.playedInLigaGames && !player.playedInEPLGames && !player.playedInSeriGames) {
 
             manager.wildCardCount += 1;
 
@@ -110,11 +83,9 @@
 
         console.log('syncDate:', result._lastSyncedOn);
 
-        if ($scope.checkYesterday(result._lastSyncedOn)) {
+        if ($momentService.isHourAgo(result._lastSyncedOn)) {
 
           console.log('-- data is too old --');
-
-          $rootScope.loading = false;
 
           $scope.startFireBase(function () {
 
@@ -131,6 +102,7 @@
             $scope.selectedManager = $scope.managerData[$stateParams.managerId];
 
             $scope.selectedManager.wildCardCount = 0;
+
             _.each($scope.selectedManager.players, function (player) {
               checkForWildCard(player, $scope.selectedManager);
             });
@@ -153,9 +125,11 @@
           $scope.chooseManager($stateParams.managerId);
 
           // define selectedManager by managerId
-          $scope.selectedManager = $scope.managerData[$stateParams.managerId];
+          $scope.selectedManager = $scope.managerData[$stateParams.managerId ? $stateParams.managerId : 'chester'];
 
+          console.log('$scope.selectedManager.wildCardCount:', $scope.selectedManager.wildCardCount);
           $scope.selectedManager.wildCardCount = 0;
+
           _.each($scope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
           });
@@ -169,25 +143,34 @@
        * @param managerData
        */
       var onManagersRequestFinished = function (managerData) {
+
         console.log('onManagersRequestFinished');
         $rootScope.loading = false;
         $scope.managerData = $scope.populateManagersData(managerData);
-        $scope.chooseManager($stateParams.managerId);
+
         $scope.saveRoster();
+        init();
+
+        //$scope.chooseManager($stateParams.managerId);
+
       };
 
       /**
        * @description
        */
       $scope.updateAllManagerData = function () {
+
         $rootScope.loading = true;
         $updateDataUtils.updateAllManagerData(onManagersRequestFinished);
+
       };
 
       /**
        * @description init
        */
       var init = function () {
+
+        $scope.dataKeyName = 'managersData';
 
         if (angular.isDefined($rootScope[$scope.dataKeyName])) {
 

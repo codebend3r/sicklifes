@@ -25,7 +25,7 @@
       var endYear = '2016';
 
       /**
-       * @description filters game log by selected month for selectd manager
+       * @description filters game log by selected month for selected manager
        */
       var updateFilter = function () {
 
@@ -60,8 +60,6 @@
 
       };
 
-      console.log('--> appCtrl');
-
       user.getCurrent().then(function (currentUser) {
         console.log('currentUser:', currentUser);
         $rootScope.user = currentUser;
@@ -80,7 +78,7 @@
       $rootScope.fireBaseReady = false;
 
       /**
-       * TODO
+       * saved reference to firebase data once it's been loaded
        */
       $rootScope.firebaseData = null;
 
@@ -89,6 +87,10 @@
        * @type {boolean}
        */
       $scope.admin = $location.search().admin;
+
+      $scope.$watch('admin', function (newValue) {
+        $scope.admin = newValue;
+      });
 
       /**
        * if manually adding players to roster
@@ -247,14 +249,14 @@
       $scope.startFireBase = function (callback) {
         if (angular.isUndefinedOrNull(callback)) throw new Error('$scope.startFireBase: the callback parameter was not defined');
         if ($rootScope.fireBaseReady) {
-          console.log('firebase already started, returning now');
+          //console.log('firebase already started, returning now');
           callback($rootScope.firebaseData);
         } else {
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
             $rootScope.firebaseData = fbData;
-            console.log('firebase object saved to $rootScope');
+            console.log('firebase saved:', $rootScope.firebaseData);
             callback(fbData);
           });
         }
@@ -284,16 +286,6 @@
           manager.wildCardCount = 0;
 
         });
-
-      };
-
-      /**
-       * check to see if date is yesterday
-       * @param syncDate
-       */
-      $scope.checkYesterday = function (syncDate) {
-
-        return $momentService.isPastYesterday(syncDate);
 
       };
 

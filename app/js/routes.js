@@ -93,6 +93,17 @@
           controller: 'leadersCtrl'
 
         })
+        //.state('managersX', {
+        //
+        //  url: '/managersx/:managerId/overview',
+        //  parent: 'app',
+        //  templateUrl: 'views/managers.html',
+        //  controller: 'managersCtrl',
+        //  data: {
+        //    public: true
+        //  }
+        //
+        //})
         .state('managers', {
 
           url: '/managers/:managerId',

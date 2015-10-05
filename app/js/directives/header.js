@@ -24,20 +24,14 @@
               active: true
             },
             {
-              name: 'Fantasy',
-              active: true,
-              subMenu: [
-                {
-                  name: 'Managers',
-                  url: 'managers.overview',
-                  active: true
-                },
-                {
-                  name: 'Standings',
-                  url: 'standings',
-                  active: true
-                }
-              ]
+              name: 'Managers',
+              url: 'managers.overview',
+              active: true
+            },
+            {
+              name: 'Standings',
+              url: 'standings',
+              active: true
             },
             {
               name: 'Transfers',

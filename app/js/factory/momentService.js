@@ -17,19 +17,19 @@
         },
 
         leagueStartDate: function() {
-          return $moment(new Date('August 1 2015')).format('M/D/YYYY h:mm:ss a');
+          return $moment(new Date('August 1 2015')).format('MM/DD/YYYY h:mm:ss a');
         },
 
         syncDate: function () {
-          return $moment().format('M/D/YYYY h:mm:ss a');
+          return $moment().format('MM/DD/YYYY h:mm:ss a');
         },
 
         chartDate: function (date) {
-          return $moment(new Date(date)).format('M/D/YYYY');
+          return $moment(new Date(date)).format('MM/DD/YYYY');
         },
 
         goalDate: function () {
-          return $moment().format('M/D/YYYY');
+          return $moment().format('MM/DD/YYYY');
         },
 
         getUnixTime: function (date) {
@@ -41,12 +41,30 @@
           if (date) {
             return date;
           } else {
-            return $moment().format('M/D/YYYY');
+            return $moment().format('MM/DD/YYYY');
           }
         },
 
         goalLogDate: function (date) {
-          return $moment(new Date(date)).format('M/D/YYYY');
+          return $moment(new Date(date)).format('MM/DD/YYYY');
+        },
+
+        /**
+         *
+         * @param syncDate
+         * @returns {boolean}
+         */
+        isHourAgo: function (syncDate) {
+
+          //console.log('syncDate', syncDate);
+          var thenMoment = $moment(syncDate);
+          var nowMoment = $moment();
+          var diff = nowMoment.diff(thenMoment, 'minutes');
+
+          console.log(thenMoment.fromNow());
+
+          return diff > 60;
+
         },
 
         /**
@@ -57,11 +75,12 @@
         isPastYesterday: function (syncDate) {
 
           //console.log('syncDate', syncDate);
-          var thenMoment = $moment(new Date(syncDate.split(' ')[0]));
+          //var thenMoment = $moment(new Date(syncDate.split(' ')[0]));
+          var thenMoment = $moment(syncDate);
           var nowMoment = $moment();
           var diff = nowMoment.diff(thenMoment, 'hours');
 
-          //$log.log('sync time difference in hours:', diff, '-->', thenMoment.fromNow());
+          console.log(thenMoment.fromNow());
 
           return diff > 22;
 

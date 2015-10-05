@@ -88,11 +88,8 @@
 
         $rootScope.loading = false;
 
-        console.log('mapLeagueLeaders --> firebaseData', firebaseData);
+        $scope.startFireBase(function () {
 
-        $scope.startFireBase(function (firebaseObj) {
-
-          firebaseData = firebaseObj;
           $rootScope.fireBaseReady = true;
           prepareForFirebase();
 
@@ -113,9 +110,11 @@
           _lastSyncedOn: $momentService.syncDate()
         };
 
-        if (firebaseData[$scope.dataKeyName]) {
-          _.defaults(saveObject.leagues, firebaseData[$scope.dataKeyName].leagues);
+        if ($rootScope.firebaseData[$scope.dataKeyName]) {
+          _.defaults(saveObject.leagues, $rootScope.firebaseData[$scope.dataKeyName].leagues);
         }
+
+        //console.log('saveObject:', saveObject);
 
         $scope.saveToFireBase(saveObject, 'scoringLeaders');
 
@@ -147,7 +146,7 @@
 
         if (angular.isDefined(data.leagues)
           && angular.isDefined(data.leagues[$stateParams.leagueName])
-          && $scope.checkYesterday(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
+          && $momentService.isHourAgo(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
 
           console.log('-- data is too old --');
           $scope.updateLeadersFromHTTP(mapLeagueLeaders);
@@ -180,11 +179,6 @@
       /**
        * TODO
        */
-      var firebaseData = null;
-
-      /**
-       * TODO
-       */
       var init = function () {
 
         $scope.dataKeyName = 'scoringLeaders';
@@ -201,9 +195,7 @@
 
         } else {
 
-          $scope.startFireBase(function (firebaseObj) {
-
-            firebaseData = firebaseObj;
+          $scope.startFireBase(function (firebaseData) {
 
             console.log('load from firebase');
             loadData(firebaseData[$scope.dataKeyName]);
