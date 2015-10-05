@@ -96,7 +96,7 @@
        */
       arrayMaper.playerInfo = function (player, result) {
 
-        //console.log('playerInfo', player, result);
+        console.log('playerInfo:', player.playerName);
 
         var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
@@ -107,6 +107,8 @@
         player.playedInSeriGames = false;
         player.playedInChlgGames = false;
         player.playedInEuroGames = false;
+
+        player.assists = 0;
 
         // url for player image
         player.playerImage = result.data.headshots.original;
@@ -128,12 +130,15 @@
 
       /**
        * @description forEach function - loops through soccer roster
-       * @param dataObj - an object containing a reference to a player and a manager
+       * @param player - player object
        * @param result
        */
       arrayMaper.playerMapPersonalInfo = function (player, result) {
 
-        player.playerPos = result.data.position;
+        //console.log('playerMapPersonalInfo:', player.playerName);
+
+        player.position = result.data.position;
+        player.pos = result.data.position_abbreviation;
         player.weight = result.data.weight;
         player.height = result.data.height_feet + '\'' + result.data.height_inches;
         player.birthdate = result.data.birthdate;
@@ -148,7 +153,7 @@
        */
       arrayMaper.playerGamesLog = function (dataObj, result) {
 
-        //console.log('playerGamesLog');
+        //console.log('playerGamesLog:', dataObj.player.playerName);
 
         var deferred = $q.defer(),
           player = dataObj.player || null,
@@ -174,7 +179,7 @@
           ligaGamesRequest.then(function (result) {
 
             player.ligaCompleteLog = result.data
-              .filter($arrayFilter.filterOnValidGoals.bind(this, player))
+              //.filter($arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMaper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
@@ -183,6 +188,9 @@
             player.ligaGameLog = result.data
               .filter($arrayFilter.filterAfterDate)
               .map(arrayMaper.gameMapper);
+
+            //console.log(player.playerName, '|', player.ligaCompleteLog);
+            //console.log('LIGA ligaGameLog:', player.ligaGameLog);
 
             if (!angular.isUndefinedOrNull(manager)) {
               var foundTeam = _.where($rootScope.firebaseData.leagueTables.liga, { teamName: player.teamName });
@@ -212,7 +220,7 @@
           eplGamesRequest.then(function (result) {
 
             player.eplCompleteLog = result.data
-              .filter($arrayFilter.filterOnValidGoals.bind(this, player))
+              //.filter($arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMaper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
@@ -250,7 +258,7 @@
           seriGamesRequest.then(function (result) {
 
             player.seriCompleteLog = result.data
-              .filter($arrayFilter.filterOnValidGoals.bind(this, player))
+              //.filter($arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMaper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
@@ -287,7 +295,7 @@
           chlgGamesRequest.then(function (result) {
 
             player.chlgCompleteLogs = result.data
-              .filter($arrayFilter.filterOnValidGoals.bind(this, player))
+              //.filter($arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMaper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
@@ -325,7 +333,7 @@
           euroGamesRequest.then(function (result) {
 
             player.euroCompleteLogs = result.data
-              .filter($arrayFilter.filterOnValidGoals.bind(this, player))
+              //.filter($arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMaper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
@@ -392,12 +400,11 @@
           alignment: game.alignment === 'away' ? '@' : 'vs',
           vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
           goalsScored: game.goals || 0,
+          assists: game.assists || 0,
           teamName: dataObj.player.teamName,
           teamLogo: dataObj.player.teamLogo,
-          //leagueName: $textManipulator.formattedLeagueName(game.box_score.event.league.slug),
           leagueSlug: game.box_score.event.league.slug,
           datePlayed: $momentService.goalLogDate(game.box_score.event.game_date),
-          //rawDatePlayed: $moment(game.box_score.event.game_date),
           originalDate: game.box_score.event.game_date,
           playerName: $textManipulator.stripVowelAccent(dataObj.player.playerName),
           managerName: dataObj.player.managerName || 'N/A',
@@ -441,6 +448,15 @@
           if (dataObj.manager) dataObj.manager.totalPoints += computedPoints;
 
         }
+
+        //console.log('dataObj.player.assists:', dataObj.player.assists);
+        //console.log('game.assists:', game.assists);
+
+        //debugger;
+
+        dataObj.player.assists += game.assists;
+
+        //console.log(dataObj.player.playerName, '|', dataObj.player.assists);
 
         // gameMapsObj maps to a player
         return gameMapsObj;

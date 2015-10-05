@@ -6,7 +6,7 @@
   </thead>
   <tbody>
     <tr ng-repeat='player in list | orderBy:sortFunction()'>
-      <td>{{player.position}}</td>
+      <td>{{player.pos}}</td>
       <td><a class='bold' ui-sref='playerDetails({playerID: player.id})'>{{player.playerName}}</a></td>
       <td>{{player.goals}}</td>
       <td>{{player.assists}}</td>

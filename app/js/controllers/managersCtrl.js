@@ -79,8 +79,6 @@
         console.log('result:', result);
         console.log('///////////////////');
 
-        $rootScope.fireBaseReady = true;
-
         console.log('syncDate:', result._lastSyncedOn);
 
         if ($momentService.isHourAgo(result._lastSyncedOn)) {
@@ -90,7 +88,7 @@
           $scope.startFireBase(function () {
 
             // tell firebase it is ready to be updated
-            $rootScope.fireBaseReady = true;
+            //$rootScope.fireBaseReady = true;
 
             // define managerData on scope and $rootScope
             $scope.managerData = $scope.populateManagersData(result.data);
@@ -127,13 +125,19 @@
           // define selectedManager by managerId
           $scope.selectedManager = $scope.managerData[$stateParams.managerId ? $stateParams.managerId : 'chester'];
 
-          console.log('$scope.selectedManager.wildCardCount:', $scope.selectedManager.wildCardCount);
           $scope.selectedManager.wildCardCount = 0;
 
           _.each($scope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
           });
 
+        }
+
+        if (!$rootScope.fireBaseReady) {
+          console.log('start firebase');
+          $scope.startFireBase(function () {
+            //noop
+          });
         }
 
       };

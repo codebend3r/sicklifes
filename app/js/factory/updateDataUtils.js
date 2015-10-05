@@ -133,13 +133,15 @@
           manager.euroCount = 0;
           manager.wildCardCount = 0;
 
-          //console.log(manager.managerName, '|', player.playerName);
-
           $apiFactory.getPlayerProfile('soccer', player.id)
             .then($arrayMappers.playerInfo.bind(this, player))
             .then($arrayMappers.playerMapPersonalInfo.bind(this, player))
             .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }))
-            .then(function () {
+            .then(function (player) {
+
+              // TODO make function available in services
+              //console.log(result);
+              //$scope.saveToIndex(player.playerId, player);
 
               current += 1;
               $rootScope.percentage = Math.round((current / total) * 100);

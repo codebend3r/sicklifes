@@ -21,6 +21,9 @@
 
           $rootScope.$watch('percentage', function (newValue) {
             $scope.percentage = newValue;
+            if ($scope.percentage === 1) {
+              $scope.percentage = 0;
+            }
           });
 
           $scope.loading = $scope.$eval($attrs.loading);

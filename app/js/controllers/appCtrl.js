@@ -256,10 +256,28 @@
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
             $rootScope.firebaseData = fbData;
-            console.log('firebase saved:', $rootScope.firebaseData);
+            console.log('> firebase saved:', $rootScope.firebaseData);
+            $rootScope.fireBaseReady = true;
             callback(fbData);
           });
         }
+      };
+
+      /**
+       *
+       * @param playerId
+       * @param player
+       */
+      $scope.saveToIndex = function (playerId, player) {
+
+        var allPlayers = $rootScope.firebaseData.allPlayersIndex || {};
+        allPlayers.data[playerId] = player;
+        allPlayers._lastSyncedOn = $momentService.syncDate();
+
+        console.log('saving allPlayersIndex:', _.keys($scope.allPlayers.data).length);
+
+        $scope.saveToFireBase($scope.allPlayers, $scope.dataKeyName);
+
       };
 
       /**

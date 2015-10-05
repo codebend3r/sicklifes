@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, $momentService) {
+    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, $apiFactory, $arrayMappers, $momentService, $textManipulator, $objectUtils) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -36,6 +36,12 @@
        * TODO
        */
       $scope.loading = true;
+
+      /**
+       * TODO
+       * @type {Array}
+       */
+      $scope.players = [];
 
       /**
        * order by position
@@ -90,6 +96,8 @@
        */
       var httpRequest = function () {
 
+        var playersIndex = $rootScope.firebaseData.allPlayersIndex;
+
         if (angular.isDefined($stateParams.teamId) && angular.isDefined($stateParams.leagueName)) {
 
           $http({
@@ -98,7 +106,7 @@
           })
             .then(function (result) {
 
-              console.log('> 1', result.data);
+              //console.log('> initial data:', result.data);
               $scope.teamName = result.data.full_name;
               $scope.largeLogo = result.data.logos.large;
               $scope.record = result.data.standing.short_record;
@@ -112,61 +120,68 @@
             })
             .then(function (result) {
 
-              console.log('> 2', result.data);
-
+              //console.log('> start mapping:', result.data);
               $scope.loading = false;
+              var numberOfRequests = 0;
 
-              $scope.players = _.map(result.data, function (player) {
+              _.each(result.data, function (player) {
 
-                var indexedPlayer = $rootScope.firebaseData.allPlayersIndex.data[player.id];
-                console.log('indexedPlayer', indexedPlayer);
+                var indexPlayer = playersIndex.data[player.id];
 
-                var playerMap = {
-                  id: player.id,
-                  position: player.position_abbreviation,
-                  playerName: player.full_name,
-                  headshot: player.headshots.w192xh192,
-                  goals: 0,
-                  assists: 0,
-                  getGoals: function () {
-                    $http({
-                      url: 'http://origin-api.thescore.com/' + $stateParams.leagueName + '/players/' + player.id + '/player_records',
-                      method: 'GET'
-                    }).then(function (recordResult) {
-                      if (angular.isDefined(recordResult.data[0])) {
-                        playerMap.goals += recordResult.data[0].goals;
-                        playerMap.assists += recordResult.data[0].assists;
-                        console.log(playerMap.playerName, '|', playerMap.goals);
-                      }
+                if (angular.isDefined(indexPlayer) && !Array.isArray(playersIndex)) {
+
+                  //console.log('index player found:', indexPlayer.playerName, indexPlayer.goals, indexPlayer.assists);
+
+                  $scope.players.push(indexPlayer);
+
+                } else {
+
+                  numberOfRequests += 1;
+
+                  $apiFactory.getPlayerProfile('soccer', player.id)
+                    .then(function (result) {
+                      //player.playerName = $textManipulator.stripVowelAccent(result.data.full_name);
+                      player.playerName = $textManipulator.formattedFullName(player.first_name, player.last_name);
+                      return $arrayMappers.playerInfo(player, result);
+                    })
+                    .then($arrayMappers.playerMapPersonalInfo.bind(this, player))
+                    .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: null }))
+                    .then(function (result) {
+
+                      //console.log('new player:', result.playerName, result.goals, result.assists);
+
+                      result = $objectUtils.playerResetGoalPoints(result);
+
+                      $scope.players.push(result);
+
+                      $rootScope.loading = false;
+                      //saveToIndex();
+
                     });
 
-                  }.call($scope)
-                };
-                return playerMap;
+                }
+
               });
 
-              _.each($scope.players, function (d) {
-                delete d.getGoals;
-              });
+              //var loadedTeam = {};
+              //loadedTeam[$stateParams.teamId] = {
+              //  _lastSyncedOn: $momentService.syncDate(),
+              //  logo: $scope.largeLogo,
+              //  teamName: $scope.teamName,
+              //  formattedRank: $scope.formattedRank,
+              //  record: $scope.record,
+              //  leagueName: $stateParams.leagueName,
+              //  roster: $scope.players
+              //};
 
-              var loadedTeam = {};
-              loadedTeam[$stateParams.teamId] = {
-                _lastSyncedOn: $momentService.syncDate(),
-                logo: $scope.largeLogo,
-                teamName: $scope.teamName,
-                formattedRank: $scope.formattedRank,
-                record: $scope.record,
-                leagueName: $stateParams.leagueName,
-                roster: $scope.players
-              };
-
-              $scope.startFireBase(function (fbData) {
-                //console.log('loadedTeam', loadedTeam);
-                //console.log('fbData', fbData[$scope.dataKeyName]);
-                $rootScope.fireBaseReady = true;
-                _.defaults(loadedTeam, fbData[$scope.dataKeyName]);
-                $scope.saveToFireBase(loadedTeam, $scope.dataKeyName);
-              });
+              //$scope.startFireBase(function (fbData) {
+              //console.log('loadedTeam', loadedTeam);
+              //console.log('fbData', fbData[$scope.dataKeyName]);
+              //$rootScope.fireBaseReady = true;
+              //_.defaults(loadedTeam, fbData[$scope.dataKeyName]);
+              //console.log('loaded team:', loadedTeam);
+              //$scope.saveToFireBase(loadedTeam, $scope.dataKeyName);
+              //});
 
             });
 
@@ -181,7 +196,7 @@
 
         $scope.dataKeyName = 'allTeamsPool';
 
-        $scope.startFireBase(function() {
+        $scope.startFireBase(function () {
 
           httpRequest();
 

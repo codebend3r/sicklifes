@@ -174,11 +174,6 @@
       /**
        * TODO
        */
-      var saveObject = {};
-
-      /**
-       * TODO
-       */
       var init = function () {
 
         $scope.dataKeyName = 'scoringLeaders';

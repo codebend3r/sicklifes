@@ -14,8 +14,6 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $scope.dataKeyName = 'allPlayersIndex';
-
       $rootScope.loading = true;
 
       /**
@@ -62,7 +60,7 @@
 
           console.log('loaded allPlayersIndex:', _.keys($scope.allPlayers.data).length);
 
-          if (angular.isDefined($scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn)) && $scope.checkYesterday(firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
+          if (angular.isDefined(firebaseData[$scope.dataKeyName]._lastSyncedOn) && $momentService.isHourAgo(firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
 
             console.log('-- data is too old --');
 
@@ -111,7 +109,7 @@
 
           console.log('foundPlayer:', $scope.player.playerName);
           $rootScope.loading = false;
-          saveToIndex();
+          $scope.saveToIndex($stateParams.playerId, $scope.player);
 
         } else {
 
@@ -133,25 +131,10 @@
               console.log($scope.player);
               $scope.player = result;
               $rootScope.loading = false;
-              saveToIndex();
+              $scope.saveToIndex($stateParams.playerId, $scope.player);
             });
 
         }
-
-      };
-
-      var profileLeagueSlug;
-
-      var saveToIndex = function () {
-
-        $scope.allPlayers = $scope.allPlayers || {};
-        $scope.allPlayers.data[$stateParams.playerId] = $scope.player;
-
-        $scope.allPlayers._lastSyncedOn = $momentService.syncDate();
-
-        console.log('saving allPlayersIndex:', _.keys($scope.allPlayers.data).length);
-
-        $scope.saveToFireBase($scope.allPlayers, $scope.dataKeyName);
 
       };
 
@@ -159,6 +142,8 @@
        * init function
        */
       var init = function () {
+
+        $scope.dataKeyName = 'allPlayersIndex';
 
         $scope.startFireBase(fireBaseLoaded);
 
