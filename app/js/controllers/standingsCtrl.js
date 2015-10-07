@@ -87,14 +87,14 @@
 
         _.each($rootScope.managerData, function (manager) {
 
-          console.log('managerName:', manager.managerName);
-
           var managerGoals = [];
           var totalGoals = 0;
 
           _.each(manager.filteredMonthlyGoalsLog, function (game) {
 
             gameDates.push(game.datePlayed);
+
+            console.log('game:', game);
 
             if (game.goalsScored !== 0) {
               totalGoals += game.goalsScored;
@@ -114,8 +114,6 @@
         gameDates = gameDates.sort(function (a, b) {
           return new Date(a).getTime() - new Date(b).getTime();
         });
-
-        console.log('seriesData:', seriesData);
 
         new Chartist.Line('.ct-chart', {
             labels: gameDates,
@@ -141,7 +139,7 @@
               }
             },
             lineSmooth: true,
-            fullWidth: true,
+            fullWidth: false,
             showPoint: true,
             height: 600,
             classNames: {
@@ -179,7 +177,6 @@
             top: (event.offsetY || event.originalEvent.layerY) - $toolTip.height() - 40
           });
         });
-
 
 
       };

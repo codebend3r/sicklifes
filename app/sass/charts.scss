@@ -1,11 +1,13 @@
-$chartColor1: #ff333d;
+$chartColor1: #ff1de3;
 $chartColor2: #00b00d;
 $chartColor3: #7482ff;
-$chartColor4: #ff0cdc;
+$chartColor4: #00ffd9;
 $chartColor5: #fa6f12;
+$chartColor6: #692cb0;
 
 /////////////////////
 // FOR CHARTS
+/////////////////////
 
 .ct-tooltip {
   background: #FFE50C;
@@ -52,36 +54,91 @@ $chartColor5: #fa6f12;
   stroke-width: 2px;
 }
 
+.sick-series {
+  &:nth-child(1) {
+    // chester
+    .ct-line, .ct-point {
+      stroke: $chartColor1;
+    }
+  }
+  &:nth-child(2) {
+    // frank
+    .ct-line, .ct-point {
+      stroke: $chartColor2;
+    }
+  }
+  &:nth-child(3) {
+    // dan
+    .ct-line, .ct-point {
+      stroke: $chartColor3;
+    }
+  }
+  &:nth-child(6) {
+    // justin
+    .ct-line, .ct-point {
+      stroke: $chartColor4;
+    }
+  }
+  &:nth-child(5) {
+    // mike
+    .ct-line, .ct-point {
+      stroke: $chartColor5;
+    }
+  }
+  &:nth-child(6) {
+    // joe
+    .ct-line, .ct-point {
+      stroke: $chartColor6;
+    }
+  }
+}
+
 /////////////////////
 
 .table {
 
   .manager-row {
-    &:nth-child(1) {
-      .manager-name {
-        color: $chartColor1;
+
+    .manager-name {
+      font-weight: bold;
+    }
+
+    .manager-chester {
+      circle.manager-circle {
+        fill: $chartColor1;
       }
     }
-    &:nth-child(2) {
-      .manager-name {
-        color: $chartColor2;
+
+    .manager-frank {
+      circle.manager-circle {
+        fill: $chartColor2;
       }
     }
-    &:nth-child(3) {
-      .manager-name {
-        color: $chartColor3;
+
+    .manager-dan {
+      circle.manager-circle {
+        fill: $chartColor3;
       }
     }
-    &:nth-child(4) {
-      .manager-name {
-        color: $chartColor4;
+
+    .manager-justin {
+      circle.manager-circle {
+        fill: $chartColor4;
       }
     }
-    &:nth-child(5) {
-      .manager-name {
-        color: $chartColor5;
+
+    .manager-mike {
+      circle.manager-circle {
+        fill: $chartColor5;
       }
     }
+
+    .manager-joe {
+      circle.manager-circle {
+        fill: $chartColor6;
+      }
+    }
+
   }
 
 }

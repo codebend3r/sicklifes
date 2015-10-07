@@ -23,7 +23,15 @@
     </thead>
     <tbody>
     <tr class="manager-row" ng-repeat="manager in managersData | orderObjectBy:'totalPoints':true">
-      <td><a class="manager-name" ui-sref="managers({managerId: manager.managerName.toLowerCase()})">{{manager.managerName}}</a></td>
+      <td class="manager-{{manager.managerName | lowercase}}">
+        <div class="vertical-center">
+          <svg height="20" width="20">
+            <circle class="manager-circle" cx="10" cy="10" r="10"/>
+            Sorry, your browser does not support inline SVG.
+          </svg>
+          &nbsp;&nbsp;<a class="manager-name" ui-sref="managers({managerId: manager.managerName.toLowerCase()})">{{manager.managerName}}</a>
+        </div>
+      </td>
       <td>{{manager.domesticGoals}}</td>
       <td>{{manager.clGoals}}</td>
       <td>{{manager.eGoals}}</td>
