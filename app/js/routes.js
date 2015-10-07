@@ -127,7 +127,8 @@
         .state('managers.stats', {
 
           url: '/stats',
-          templateUrl: 'views/stats.html'
+          templateUrl: 'views/stats.html',
+          controller: 'statsCtrl'
 
         })
         .state('playerDetails', {

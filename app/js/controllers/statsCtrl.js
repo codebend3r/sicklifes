@@ -8,7 +8,10 @@
 
   angular.module('sicklifes')
 
-    .controller('statsCtrl', function ($scope) {
+    .controller('statsCtrl', function ($scope, $rootScope, $stateParams) {
+
+      console.log('-- statsCtrl --');
+
 
 
     });

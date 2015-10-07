@@ -68,10 +68,82 @@
           console.log('-- data is up to date --');
 
           $rootScope.loading = false;
+
+          // define managerData on scope and $rootScope
           $scope.managerData = $scope.populateManagersData(result.data);
-          console.log('$scope.managerData:', $scope.managerData);
 
         }
+
+        setTimeout(processChart, 500);
+      };
+
+      /**
+       *
+       */
+      var processChart = function () {
+
+        var gameDates = [];
+        var seriesData = [];
+
+        _.each($rootScope.managerData, function (manager) {
+
+          console.log('managerName:', manager.managerName);
+
+          var managerGoals = [];
+          var totalGoals = 0;
+
+          _.each(manager.filteredMonthlyGoalsLog, function (game) {
+
+            gameDates.push(game.datePlayed);
+
+            if (game.goalsScored !== 0) {
+              totalGoals += game.goalsScored;
+              managerGoals.push(totalGoals);
+            }
+
+          });
+
+          seriesData.push(managerGoals);
+
+        });
+
+        gameDates = _.unique(gameDates);
+        gameDates = gameDates.sort(function (a, b) {
+          return new Date(a).getTime() - new Date(b).getTime();
+        });
+
+        console.log($('.ct-chart'));
+
+
+        new Chartist.Line('.ct-chart', {
+            labels: gameDates,
+            series: seriesData
+          },
+          {
+            axisX: {
+              labelInterpolationFnc: function (value, index) {
+                if (index % 5 === 0) {
+                  return value;
+                } else {
+                  return '';
+                }
+              }
+            },
+            axisY: {
+              labelInterpolationFnc: function (value, index) {
+                if (index % 2 === 0) {
+                  return value;
+                } else {
+                  return '';
+                }
+              }
+            },
+            lineSmooth: true,
+            fullWidth: true,
+            showPoint: false,
+            height: 600
+          });
+
 
       };
 
@@ -114,6 +186,11 @@
         $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
       };
+
+      document.addEventListener('DOMContentLoaded', function () {
+        console.log('DOM loaded');
+        processChart();
+      });
 
       init();
 
