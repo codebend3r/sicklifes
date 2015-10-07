@@ -1,0 +1,87 @@
+$chartColor1: #ff333d;
+$chartColor2: #00b00d;
+$chartColor3: #7482ff;
+$chartColor4: #ff0cdc;
+$chartColor5: #fa6f12;
+
+/////////////////////
+// FOR CHARTS
+
+.ct-tooltip {
+  background: #FFE50C;
+  border: 2px solid #3B414B;
+  color: #3b414b;
+  font-size: 14px;
+  padding: 5px;
+  position: absolute;
+  width: 150px;
+  height: auto;
+  text-align: center;
+}
+
+.ct-tooltip:after, .ct-tooltip:before {
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.ct-tooltip:after {
+  border-color: rgba(255, 229, 12, 0);
+  border-top-color: #FFE50C;
+  border-width: 5px;
+  margin-left: -5px;
+}
+
+.ct-tooltip:before {
+  border-color: rgba(59, 65, 75, 0);
+  border-top-color: #3B414B;
+  border-width: 8px;
+  margin-left: -8px;
+}
+
+.ct-chart, .sick-line-chart {
+  position: relative;
+}
+
+.ct-line.sick-line {
+  stroke-width: 2px;
+}
+
+/////////////////////
+
+.table {
+
+  .manager-row {
+    &:nth-child(1) {
+      .manager-name {
+        color: $chartColor1;
+      }
+    }
+    &:nth-child(2) {
+      .manager-name {
+        color: $chartColor2;
+      }
+    }
+    &:nth-child(3) {
+      .manager-name {
+        color: $chartColor3;
+      }
+    }
+    &:nth-child(4) {
+      .manager-name {
+        color: $chartColor4;
+      }
+    }
+    &:nth-child(5) {
+      .manager-name {
+        color: $chartColor5;
+      }
+    }
+  }
+
+}

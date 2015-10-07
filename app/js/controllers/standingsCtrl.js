@@ -103,7 +103,10 @@
 
           });
 
-          seriesData.push(managerGoals);
+          seriesData.push({
+            name: manager.managerName,
+            data: managerGoals
+          });
 
         });
 
@@ -112,8 +115,7 @@
           return new Date(a).getTime() - new Date(b).getTime();
         });
 
-        console.log($('.ct-chart'));
-
+        console.log('seriesData:', seriesData);
 
         new Chartist.Line('.ct-chart', {
             labels: gameDates,
@@ -140,15 +142,50 @@
             },
             lineSmooth: true,
             fullWidth: true,
-            showPoint: false,
-            height: 600
+            showPoint: true,
+            height: 600,
+            classNames: {
+              chart: 'sick-chart-line ct-chart-line',
+              label: 'sick-label ct-label',
+              series: 'sick-series ct-series',
+              line: 'sick-line ct-line'
+            }
           });
+
+        var $chart = $('.ct-chart');
+
+        var $toolTip = $chart
+          .append('<div class="ct-tooltip"></div>')
+          .find('.ct-tooltip')
+          .hide();
+
+
+        $chart.on('mouseenter', '.ct-point', function () {
+          var $point = $(this),
+            value = $point.attr('ct:value'),
+            seriesName = $point.parent().attr('ct:series-name');
+
+          $toolTip.html('<b>' + seriesName + '</b> <br>' + value + ' goals');
+          $toolTip.show();
+        });
+
+        $chart.on('mouseleave', '.ct-point', function () {
+          $toolTip.hide();
+        });
+
+        $chart.on('mousemove', function (event) {
+          $toolTip.css({
+            left: (event.offsetX || event.originalEvent.layerX) - $toolTip.width() / 2 - 10,
+            top: (event.offsetY || event.originalEvent.layerY) - $toolTip.height() - 40
+          });
+        });
+
 
 
       };
 
       /**
-       * @description
+       * @description when managers http data is loaded
        * @param managerData
        */
       var onManagersRequestFinished = function (managerData) {
