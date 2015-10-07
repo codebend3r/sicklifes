@@ -11,14 +11,18 @@
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
-  <table class='table table-hover table-responsive'>
+  <!--<table class='table table-hover table-responsive'>
     <thead>
     <tr>
-      <th ng-repeat='header in tableHeader'>{{header.text}}</th>
+      <th>Team</th>
+      <th>DG</th>
+      <th>CLG</th>
+      <th>EG</th>
+      <th>PTS</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="manager in managersData | orderObjectBy:'totalPoints':true">
+    <tr ng-repeat="manager in managersData track by $index | orderObjectBy:'totalPoints':true">
       <td><a ui-sref="managers({managerId: manager.managerName.toLowerCase()})">{{manager.managerName}}</a></td>
       <td>{{manager.domesticGoals}}</td>
       <td>{{manager.clGoals}}</td>
@@ -26,6 +30,6 @@
       <td>{{manager.totalPoints}}</td>
     </tr>
     </tbody>
-  </table>
+  </table>-->
 
 </div>

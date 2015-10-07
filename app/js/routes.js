@@ -124,6 +124,12 @@
           templateUrl: 'views/gamelogs.html'
 
         })
+        .state('managers.stats', {
+
+          url: '/stats',
+          templateUrl: 'views/stats.html'
+
+        })
         .state('playerDetails', {
 
           url: '/player-details/:playerId',

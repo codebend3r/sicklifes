@@ -16,7 +16,7 @@
       var updateDataUtils = {};
 
       /**
-       * gets data from all of the players in all valid leagues
+       * @description gets data from all of the players in all valid leagues
        */
       updateDataUtils.updatePlayerPoolData = function (callback) {
 
@@ -68,7 +68,7 @@
       };
 
       /**
-       * gets all leagues in teams
+       * @description gets all leagues in teams
        */
       updateDataUtils.updateLeagueTables = function () {
 
@@ -111,11 +111,13 @@
       };
 
       /**
-       *
+       * @description
        * @param cb
        * @param manager
        */
       updateDataUtils.updateManagerData = function (cb, manager) {
+
+        console.log('manager:', manager.managerName);
 
         // reset goal counts
         manager = $objectUtils.cleanManager(manager, true);
@@ -149,7 +151,6 @@
               if (current === total) {
                 //defer.resolve(managerData);
                 if (typeof cb === 'function') {
-
                   cb(manager);
                 } else {
                   throw new Error('cb parameter is not type function');

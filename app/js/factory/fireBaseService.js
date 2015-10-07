@@ -53,7 +53,7 @@
             usersRef = ref.child(key);
 
           // save to local storage
-          $localStorage[key] = cleanedData;
+          //$localStorage[key] = cleanedData;
 
           // save to $rootScope
           $rootScope[key] = cleanedData;

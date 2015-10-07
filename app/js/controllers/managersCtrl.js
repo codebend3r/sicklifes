@@ -18,6 +18,10 @@
 
       $rootScope.loading = true;
 
+      var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
+
+      $scope.goalsOnlyFilterOn = true;
+
       /**
        * @description
        * @param selectedManager
@@ -40,6 +44,10 @@
         {
           heading: 'Game Logs',
           route: 'managers.gamelogs'
+        },
+        {
+          heading: 'Stats',
+          route: 'managers.stats'
         }
       ];
 
@@ -81,7 +89,7 @@
 
         console.log('syncDate:', result._lastSyncedOn);
 
-        if ($momentService.isHourAgo(result._lastSyncedOn)) {
+        if ($momentService.isHoursAgo(result._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
@@ -94,10 +102,10 @@
             $scope.managerData = $scope.populateManagersData(result.data);
 
             // define the current manager
-            $scope.chooseManager($stateParams.managerId);
+            $scope.chooseManager(managerId);
 
             // define selectedManager by managerId
-            $scope.selectedManager = $scope.managerData[$stateParams.managerId];
+            $scope.selectedManager = $scope.managerData[managerId];
 
             $scope.selectedManager.wildCardCount = 0;
 
@@ -105,7 +113,7 @@
               checkForWildCard(player, $scope.selectedManager);
             });
 
-            $updateDataUtils.updateAllManagerData(onManagersRequestFinished);
+            $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
 
           });
 
@@ -123,7 +131,10 @@
           $scope.chooseManager($stateParams.managerId);
 
           // define selectedManager by managerId
-          $scope.selectedManager = $scope.managerData[$stateParams.managerId ? $stateParams.managerId : 'chester'];
+          $scope.selectedManager = $scope.managerData[managerId];
+
+          //console.log('$stateParams.managerId', $stateParams.managerId);
+          //console.log('$scope.selectedManager', $scope.selectedManager);
 
           $scope.selectedManager.wildCardCount = 0;
 
@@ -148,12 +159,16 @@
        */
       var onManagersRequestFinished = function (managerData) {
 
-        console.log('onManagersRequestFinished');
+        console.log('onManagersRequestFinished', managerData);
         $rootScope.loading = false;
+
         $scope.managerData = $scope.populateManagersData(managerData);
 
+        $scope.managerData[managerId] = managerData;
+        $scope.selectedManager = managerData;
+
         $scope.saveRoster();
-        init();
+        //init();
 
         //$scope.chooseManager($stateParams.managerId);
 

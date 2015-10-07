@@ -17,24 +17,6 @@
       /**
        * TODO
        */
-      $scope.leagueTableHeader = [
-        {
-          text: 'Pos'
-        },
-        {
-          text: 'Player'
-        },
-        {
-          text: 'G'
-        },
-        {
-          text: 'A'
-        }
-      ];
-
-      /**
-       * TODO
-       */
       $scope.loading = true;
 
       /**
@@ -47,7 +29,7 @@
        * order by position
        */
       $scope.playerPosition = function (player) {
-        return ['G', 'D', 'M', 'F'].indexOf(player.position);
+        return ['F', 'M', 'D', 'G'].indexOf(player.pos);
       };
 
       /**
@@ -138,6 +120,7 @@
 
                   numberOfRequests += 1;
 
+                  /*
                   $apiFactory.getPlayerProfile('soccer', player.id)
                     .then(function (result) {
                       //player.playerName = $textManipulator.stripVowelAccent(result.data.full_name);
@@ -158,6 +141,7 @@
                       //saveToIndex();
 
                     });
+                    */
 
                 }
 

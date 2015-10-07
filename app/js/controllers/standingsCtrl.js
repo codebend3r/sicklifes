@@ -19,36 +19,13 @@
       $rootScope.loading = true;
 
       /**
-       * TODO
-       */
-      $scope.tableHeader = [
-        {
-          hoverTitle: 'Team',
-          text: 'Team'
-        },
-        {
-          hoverTitle: 'Domestic Goals',
-          text: 'DG'
-        },
-        {
-          hoverTitle: 'Champions League Goals',
-          text: 'CLG'
-        },
-        {
-          hoverTitle: 'Europa League Goals',
-          text: 'EG'
-        },
-        {
-          hoverTitle: 'Total Points',
-          text: 'PTS'
-        }
-      ];
-
-      /**
-       * consolidated list of all owned players by a manager
+       * @description consolidated list of all owned players by a manager
        */
       $scope.allLeagues = null;
 
+      /**
+       *
+       */
       $scope.updateAllManagerData = null;
 
       ////////////////////////////////////////
@@ -56,7 +33,7 @@
       ////////////////////////////////////////
 
       /**
-       * callback for when data is loaded
+       * @description callback for when data is loaded
        */
       var loadData = function (result) {
 
@@ -64,12 +41,10 @@
         console.log('result:', result);
         console.log('///////////////////');
 
-        $rootScope.fireBaseReady = true;
-
         $scope.managersData = $scope.populateManagersData(result.data);
         console.log('syncDate:', result._lastSyncedOn);
 
-        if ($momentService.isHourAgo(result._lastSyncedOn)) {
+        if ($momentService.isHoursAgo(result._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
@@ -77,15 +52,14 @@
 
           $scope.startFireBase(function () {
 
-            $rootScope.fireBaseReady = true;
-
             // define managerData on scope and $rootScope
             $scope.managerData = $scope.populateManagersData(result.data);
 
             // define selectedManager by managerId
             $scope.selectedManager = $scope.managerData[$stateParams.managerId];
 
-            $updateDataUtils.updateAllManagerData(onManagersRequestFinished);
+            // TODO - fix, takes too long
+            //$updateDataUtils.updateAllManagerData(onManagersRequestFinished);
 
           });
 
@@ -95,13 +69,14 @@
 
           $rootScope.loading = false;
           $scope.managerData = $scope.populateManagersData(result.data);
+          console.log('$scope.managerData:', $scope.managerData);
 
         }
 
       };
 
       /**
-       *
+       * @description
        * @param managerData
        */
       var onManagersRequestFinished = function (managerData) {

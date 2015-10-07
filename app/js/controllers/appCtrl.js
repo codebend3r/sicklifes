@@ -15,12 +15,12 @@
       ////////////////////////////////////////
 
       /**
-       * @description
+       * @description starting year
        */
       var startYear = '2015';
 
       /**
-       * @description
+       * @description ending year
        */
       var endYear = '2016';
 
@@ -61,19 +61,19 @@
       };
 
       user.getCurrent().then(function (currentUser) {
-        console.log('currentUser:', currentUser);
+        //console.log('currentUser:', currentUser);
         $rootScope.user = currentUser;
         console.log('WELCOME', $rootScope.user.first_name);
         //$scope.user = user;
       });
 
       /**
-       * whether data is still loading
+       * @description whether data is still loading
        */
       $rootScope.loading = true;
 
       /**
-       * if firebase has been initalized
+       * @description if firebase has been initalized
        */
       $rootScope.fireBaseReady = false;
 
@@ -83,23 +83,26 @@
       $rootScope.firebaseData = null;
 
       /**
-       * if admin buttons will show
+       * @description if admin buttons will show
        * @type {boolean}
        */
       $scope.admin = $location.search().admin;
 
-      $scope.$watch('admin', function (newValue) {
-        $scope.admin = newValue;
+      $scope.$watch(function () {
+        return $location.search().admin;
+      }, function (newValue, oldValue) {
+        //console.log(newValue, oldValue);
+        //$scope.admin = newValue;
       });
 
       /**
-       * if manually adding players to roster
+       * @description if manually adding players to roster
        * @type {boolean}
        */
       $scope.draftMode = $location.search().draftMode;
 
       /**
-       * key name
+       * @description key name
        */
       $scope.dataKeyName = '';
 
@@ -109,7 +112,7 @@
       /////////////////////////////
 
       /**
-       * populates $scope.managersData && $rootScope.managersData
+       * @description populates $scope.managersData && $rootScope.managersData
        * @param data {object}
        */
       $scope.populateManagersData = function (data) {
@@ -131,7 +134,7 @@
       };
 
       /**
-       * defines $scope.selectedManager
+       * @description defines $scope.selectedManager
        */
       $scope.chooseManager = function (managerId) {
 
@@ -140,7 +143,7 @@
       };
 
       /**
-       * saves current managersData to firebase
+       * @description saves current managersData to firebase
        */
       $scope.saveRoster = function () {
 
@@ -256,7 +259,7 @@
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
             $rootScope.firebaseData = fbData;
-            console.log('> firebase saved:', $rootScope.firebaseData);
+            //console.log('> firebase saved:', $rootScope.firebaseData);
             $rootScope.fireBaseReady = true;
             callback(fbData);
           });
