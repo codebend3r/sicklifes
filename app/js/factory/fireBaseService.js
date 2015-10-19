@@ -36,9 +36,10 @@
           var defer = $q.defer();
 
           ref.on('value', function (snapshot) {
+            //console.log('firebase connect:', snapshot.val());
             defer.resolve(snapshot.val());
           }, function (errorObject) {
-            console.log('The read failed: ' + errorObject.code);
+            console.log('The read failed:', errorObject.code);
           });
 
           return defer.promise;

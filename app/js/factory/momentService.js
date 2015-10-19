@@ -25,7 +25,11 @@
         },
 
         chartDate: function (date) {
-          return $moment(new Date(date)).format('MM/DD/YYYY');
+          if (date) {
+            return $moment(new Date(date)).format('MM/DD/YYYY');
+          } else {
+            return $moment().format('MM/DD/YYYY');
+          }
         },
 
         goalDate: function () {

@@ -16,6 +16,7 @@
       var updateDataUtils = {};
 
       /**
+       * @name updatePlayerPoolData
        * @description gets data from all of the players in all valid leagues
        */
       updateDataUtils.updatePlayerPoolData = function (callback) {
@@ -68,6 +69,7 @@
       };
 
       /**
+       * @name updateLeagueTables
        * @description gets all leagues in teams
        */
       updateDataUtils.updateLeagueTables = function () {
@@ -111,13 +113,14 @@
       };
 
       /**
-       * @description
+       * @name updateManagerData
+       * @description update only one manager
        * @param cb
        * @param manager
        */
       updateDataUtils.updateManagerData = function (cb, manager) {
 
-        console.log('manager:', manager.managerName);
+        console.log('updating -->', manager.managerName);
 
         // reset goal counts
         manager = $objectUtils.cleanManager(manager, true);
@@ -151,6 +154,7 @@
               if (current === total) {
                 //defer.resolve(managerData);
                 if (typeof cb === 'function') {
+                  console.log('sync date is', manager._lastSyncedOn);
                   cb(manager);
                 } else {
                   throw new Error('cb parameter is not type function');
@@ -163,7 +167,8 @@
       };
 
       /**
-       * gets data from all of the players in all valid leagues
+       * @name updateAllManagerData
+       * @description gets data from all of the players in all valid leagues
        */
       updateDataUtils.updateAllManagerData = function (cb) {
 
@@ -175,9 +180,6 @@
 
         _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
 
-          console.log('-----------------------------');
-          console.log('all managers data:', managers);
-          console.log('-----------------------------');
           cb(managers);
 
         }));
@@ -185,7 +187,8 @@
       };
 
       /**
-       * fetches all league leaders in goals
+       * @name updateLeagueLeadersData
+       * @description fetches all league leaders in goals
        */
       updateDataUtils.updateLeagueLeadersData = function () {
 

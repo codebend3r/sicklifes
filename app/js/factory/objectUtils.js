@@ -19,11 +19,14 @@
 
           cleanLogs = cleanLogs || false;
 
+          m._lastSyncedOn = $momentService.syncDate();
           m.totalGoals = 0;
           m.totalPoints = 0;
           m.domesticGoals = 0;
           m.clGoals = 0;
           m.eGoals = 0;
+          m.chartData = [];
+          m.gameDates = [];
           if (cleanLogs) {
             m.monthlyGoalsLog = [];
             m.filteredMonthlyGoalsLog = [];
@@ -59,6 +62,8 @@
           m.domesticGoals = 0;
           m.clGoals = 0;
           m.eGoals = 0;
+          m.chartData = [];
+          m.gameDates = [];
           return m;
 
         },

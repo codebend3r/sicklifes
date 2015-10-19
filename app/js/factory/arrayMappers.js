@@ -8,9 +8,9 @@
 
   angular.module('sicklifes')
 
-    .factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $arrayLoopers, $momentService, $arrayFilter, $apiFactory, $rootScope, $moment) {
+    .factory('$arrayMappers', function ($textManipulator, $q, $scoringLogic, $objectUtils, $momentService, $arrayLoopers, $arrayFilter, $apiFactory, $rootScope, $moment) {
 
-      var arrayMaper = {};
+      var arrayMapper = {};
 
       /**
        * maps each player's stats
@@ -18,7 +18,7 @@
        * @param url
        * @param i
        */
-      arrayMaper.goalsMap = function (managersData, url, i) {
+      arrayMapper.goalsMap = function (managersData, url, i) {
 
         var playerInLeague = {
           id: i.player.id,
@@ -44,7 +44,7 @@
        * @param teamData
        * @param index
        */
-      arrayMaper.tableMap = function (teamData, index) {
+      arrayMapper.tableMap = function (teamData, index) {
 
         return {
           index: index,
@@ -67,7 +67,7 @@
        * @param teamData
        * @param index
        */
-        arrayMaper.tableTournamentMap = function (teamData, index) {
+        arrayMapper.tableTournamentMap = function (teamData, index) {
 
           //console.log('group:', teamData.group);
 
@@ -94,9 +94,9 @@
        * @param player - the player object, used in the loop to get sub property
        * @param result - result data passed in from api call
        */
-      arrayMaper.playerInfo = function (player, result) {
+      arrayMapper.playerInfo = function (player, result) {
 
-        console.log('playerInfo:', player.playerName);
+        //console.log('playerInfo:', player.playerName);
 
         var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
@@ -133,7 +133,7 @@
        * @param player - player object
        * @param result
        */
-      arrayMaper.playerMapPersonalInfo = function (player, result) {
+      arrayMapper.playerMapPersonalInfo = function (player, result) {
 
         //console.log('playerMapPersonalInfo:', player.playerName);
 
@@ -151,9 +151,9 @@
        * @param dataObj - an object containing a reference to a player and a manager
        * @param result
        */
-      arrayMaper.playerGamesLog = function (dataObj, result) {
+      arrayMapper.playerGamesLog = function (dataObj, result) {
 
-        //console.log('playerGamesLog:', dataObj.player.playerName);
+        console.log('playerGamesLog:', dataObj.player.playerName);
 
         var deferred = $q.defer(),
           player = dataObj.player || null,
@@ -179,30 +179,29 @@
           ligaGamesRequest.then(function (result) {
 
             player.ligaCompleteLog = result.data
-              //.filter($arrayFilter.filterOnValidGoals.bind(this, player))
-              .map(arrayMaper.monthlyMapper.bind(this, {
+              .filter($arrayFilter.filterAfterDate)
+              .map(arrayMapper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
               }));
 
-            player.ligaGameLog = result.data
-              .filter($arrayFilter.filterAfterDate)
-              .map(arrayMaper.gameMapper);
+            player.ligaFilteredGameLog = player.ligaCompleteLog
+              .filter($arrayFilter.filterOnValidGoals.bind(this, player));
 
-            //console.log(player.playerName, '|', player.ligaCompleteLog);
-            //console.log('LIGA ligaGameLog:', player.ligaGameLog);
+            // TODO figure out where this goes.map(arrayMapper.gameMapper);
 
             if (!angular.isUndefinedOrNull(manager)) {
               var foundTeam = _.where($rootScope.firebaseData.leagueTables.liga, { teamName: player.teamName });
-              if (player.status !== 'dropped' && (foundTeam.length || player.ligaGameLog.length)) {
+              if (player.status !== 'dropped' && (foundTeam.length || player.ligaCompleteLog.length)) {
                 //console.log('LIGA:', player.playerName);
                 manager.ligaCount += 1;
                 player.playedInLigaGames = true;
                 player.leagueSlugs += player.leagueSlugs.length === 0 ? 'liga' : '/liga';
                 player.leagueName = 'LA LIGA';
               }
-              //manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.ligaCompleteLog);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.ligaCompleteLog);
+
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.ligaCompleteLog);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.ligaFilteredGameLog);
             }
 
           });
@@ -220,27 +219,28 @@
           eplGamesRequest.then(function (result) {
 
             player.eplCompleteLog = result.data
-              //.filter($arrayFilter.filterOnValidGoals.bind(this, player))
-              .map(arrayMaper.monthlyMapper.bind(this, {
+              .filter($arrayFilter.filterAfterDate)
+              .map(arrayMapper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
               }));
 
-            player.eplGameLog = result.data
-              .filter($arrayFilter.filterAfterDate)
-              .map(arrayMaper.gameMapper);
+            player.eplFilteredGameLog = player.eplCompleteLog
+              .filter($arrayFilter.filterOnValidGoals.bind(this, player));
+
+            // TODO figure out where this goes.map(arrayMapper.gameMapper);
 
             if (!angular.isUndefinedOrNull(manager)) {
               var foundTeam = _.where($rootScope.firebaseData.leagueTables.epl, { teamName: player.teamName });
-              if (player.status !== 'dropped' && (foundTeam.length || player.eplGameLog.length)) {
-                //console.log('EPL:', player.playerName);
+              if (player.status !== 'dropped' && (foundTeam.length || player.eplCompleteLog.length)) {
                 manager.eplCount += 1;
                 player.playedInEPLGames = true;
                 player.leagueSlugs += player.leagueSlugs.length === 0 ? 'epl' : '/epl';
                 player.leagueName = 'EPL';
               }
-              //manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.eplCompleteLog);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.eplCompleteLog);
+
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.eplCompleteLog);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.eplFilteredGameLog);
             }
 
           });
@@ -258,27 +258,28 @@
           seriGamesRequest.then(function (result) {
 
             player.seriCompleteLog = result.data
-              //.filter($arrayFilter.filterOnValidGoals.bind(this, player))
-              .map(arrayMaper.monthlyMapper.bind(this, {
+              .filter($arrayFilter.filterAfterDate)
+              .map(arrayMapper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
               }));
 
-            player.seriGameLog = result.data
-              .filter($arrayFilter.filterAfterDate)
-              .map(arrayMaper.gameMapper);
+            player.seriFilteredGameLog = player.seriCompleteLog
+              .filter($arrayFilter.filterOnValidGoals.bind(this, player));
+
+            // TODO figure out where this goes.map(arrayMapper.gameMapper);
 
             if (!angular.isUndefinedOrNull(manager)) {
               var foundTeam = _.where($rootScope.firebaseData.leagueTables.seri, { teamName: player.teamName });
-              if (player.status !== 'dropped' && (foundTeam.length || player.seriGameLog.length)) {
-                //console.log('SERI:', player.playerName);
+              if (player.status !== 'dropped' && (foundTeam.length || player.seriCompleteLog.length)) {
                 manager.seriCount += 1;
                 player.playedInSeriGames = true;
                 player.leagueSlugs += player.leagueSlugs.length === 0 ? 'seri' : '/seri';
                 player.leagueName = 'SERIE A';
               }
-              //manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.seriCompleteLog);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.seriCompleteLog);
+
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.seriCompleteLog);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.seriFilteredGameLog);
             }
 
           });
@@ -295,27 +296,26 @@
           chlgGamesRequest.then(function (result) {
 
             player.chlgCompleteLogs = result.data
-              //.filter($arrayFilter.filterOnValidGoals.bind(this, player))
-              .map(arrayMaper.monthlyMapper.bind(this, {
+              .filter($arrayFilter.filterAfterDate)
+              .map(arrayMapper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
               }));
 
-            player.chlgGameLog = result.data
-              .filter($arrayFilter.filterAfterDate)
-              .map(arrayMaper.gameMapper);
+            player.chlgFilteredGameLog = player.chlgCompleteLogs
+              .filter($arrayFilter.filterOnValidGoals.bind(this, player));
 
             if (!angular.isUndefinedOrNull(manager)) {
               var foundTeam = _.where($rootScope.firebaseData.leagueTables.chlg, { teamName: player.teamName });
-              //if (chlgLogs.length > 0 || $rootScope.firebaseData.leagueTables.chlg.indexOf(player.teamName) !== -1 || player.chlgGameLog.length > 0) {
-              if (player.status !== 'dropped' && (foundTeam.length || player.chlgGameLog.length)) {
+              if (player.status !== 'dropped' && (foundTeam.length || player.chlgCompleteLogs.length)) {
                 manager.chlgCount += 1;
                 player.playedInChlgGames = true;
                 player.leagueSlugs += player.leagueSlugs.length === 0 ? 'chlg' : '/chlg';
                 player.tournamentLeagueName = $textManipulator.formattedLeagueName('chlg');
               }
-              //manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.chlgCompleteLogs);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.chlgCompleteLogs);
+
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.chlgCompleteLogs);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.chlgFilteredGameLog);
             }
 
           });
@@ -333,26 +333,28 @@
           euroGamesRequest.then(function (result) {
 
             player.euroCompleteLogs = result.data
-              //.filter($arrayFilter.filterOnValidGoals.bind(this, player))
-              .map(arrayMaper.monthlyMapper.bind(this, {
+              .filter($arrayFilter.filterAfterDate)
+              .map(arrayMapper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
               }));
 
-            player.euroGameLog = result.data
-              .filter($arrayFilter.filterAfterDate)
-              .map(arrayMaper.gameMapper);
+            player.euroFilteredGameLog = player.euroCompleteLogs
+              .filter($arrayFilter.filterOnValidGoals.bind(this, player));
 
             if (!angular.isUndefinedOrNull(manager)) {
               //if (euroLogs.length > 0 || $rootScope.firebaseData.leagueTables.uefa.indexOf(player.teamName) !== -1 || player.euroGameLog.length > 0) {
               var foundTeam = _.where($rootScope.firebaseData.leagueTables.uefa, { teamName: player.teamName });
-              if (player.status !== 'dropped' && (foundTeam.length || player.euroGameLog.length > 0)) {
+              if (player.status !== 'dropped' && (foundTeam.length || player.euroCompleteLogs.length)) {
                 manager.euroCount += 1;
                 player.playedInEuroGames = true;
                 player.leagueSlugs += player.leagueSlugs.length === 0 ? 'euro' : '/euro';
                 player.tournamentLeagueName = $textManipulator.formattedLeagueName('uefa');
               }
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.euroCompleteLogs);
+
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.euroCompleteLogs);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.euroFilteredGameLog);
+
             }
           });
 
@@ -376,7 +378,7 @@
        * @param index
        * @returns {{index: *, id: *, playerName: *, managerName: *, teamName: string, leagueName: string}}
        */
-      arrayMaper.transferPlayersMap = function (leagueData, teamData, i, index) {
+      arrayMapper.transferPlayersMap = function (leagueData, teamData, i, index) {
 
         //console.log('transferPlayersMap');
 
@@ -392,29 +394,42 @@
 
       };
 
-      arrayMaper.monthlyMapper = function (dataObj, game, index) {
+      arrayMapper.monthlyMapper = function (dataObj, game, index) {
 
-        var gameMapsObj = {
-          index: index,
-          id: dataObj.player.id,
-          alignment: game.alignment === 'away' ? '@' : 'vs',
-          vsTeam: game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name,
-          goalsScored: game.goals || 0,
-          assists: game.assists || 0,
-          teamName: dataObj.player.teamName,
-          teamLogo: dataObj.player.teamLogo,
-          leagueSlug: game.box_score.event.league.slug,
-          datePlayed: $momentService.goalLogDate(game.box_score.event.game_date),
-          originalDate: game.box_score.event.game_date,
-          playerName: $textManipulator.stripVowelAccent(dataObj.player.playerName),
-          managerName: dataObj.player.managerName || 'N/A',
-          result: $textManipulator.result.call(gameMapsObj, game),
-          finalScore: $textManipulator.finalScore.call(gameMapsObj, game)
-        };
-
-        var gameGoals = gameMapsObj.goalsScored,
-          leagueSlug = gameMapsObj.leagueSlug,
+        var gameMapsObj = {},
+          gameGoals,
+          leagueSlug,
           computedPoints;
+
+        if (angular.isUndefinedOrNull(game.playerName) && angular.isUndefinedOrNull(game.managerName)) {
+
+          gameMapsObj.index = index;
+          gameMapsObj.id = dataObj.player.id;
+          gameMapsObj.alignment = game.alignment === 'away' ? '@' : 'vs';
+          gameMapsObj.vsTeam = game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name;
+          gameMapsObj.leagueSlug = game.box_score.event.league.slug;
+          gameMapsObj.goalsScored = game.goals || 0;
+          gameMapsObj.points = $scoringLogic.calculatePoints(gameMapsObj.goalsScored, gameMapsObj.leagueSlug) || $scoringLogic.calculatePoints(0, gameMapsObj.leagueSlug);
+          gameMapsObj.assists = game.assists || 0;
+          gameMapsObj.teamName = dataObj.player.teamName;
+          gameMapsObj.teamLogo = dataObj.player.teamLogo;
+          gameMapsObj.datePlayed = $momentService.goalLogDate(game.box_score.event.game_date);
+          gameMapsObj.originalDate = game.box_score.event.game_date;
+          gameMapsObj.playerName = $textManipulator.stripVowelAccent(dataObj.player.playerName);
+          gameMapsObj.managerName = dataObj.player.managerName || 'N/A';
+          gameMapsObj.result = $textManipulator.result.call(gameMapsObj, game);
+          gameMapsObj.finalScore = $textManipulator.finalScore.call(gameMapsObj, game);
+
+        } else {
+
+          gameMapsObj = game;
+
+        }
+
+        //console.log('on', gameMapsObj.datePlayed, gameMapsObj.playerName, 'scored', gameMapsObj.goalsScored);
+
+        gameGoals = gameMapsObj.goalsScored;
+        leagueSlug = gameMapsObj.leagueSlug;
 
         if ($textManipulator.acceptedLeague(leagueSlug)) {
 
@@ -422,41 +437,36 @@
 
           if ($textManipulator.isDomesticLeague(leagueSlug)) {
 
-            dataObj.player.domesticGoals += gameGoals;
+            if (dataObj.player) dataObj.player.domesticGoals += gameGoals;
             if (dataObj.manager) dataObj.manager.domesticGoals += gameGoals;
 
           } else if ($textManipulator.isChampionsLeague(leagueSlug)) {
 
-            dataObj.player.clGoals += gameGoals;
+            if (dataObj.player) dataObj.player.clGoals += gameGoals;
             if (dataObj.manager) dataObj.manager.clGoals += gameGoals;
 
           } else if ($textManipulator.isEuropaLeague(leagueSlug)) {
 
-            dataObj.player.eGoals += gameGoals;
+            if (dataObj.player) dataObj.player.eGoals += gameGoals;
             if (dataObj.manager) dataObj.manager.eGoals += gameGoals;
 
           }
 
           // increment goals for each player
-          dataObj.player.goals += gameGoals;
+          if (dataObj.player) dataObj.player.goals += gameGoals;
 
           // increment goals for the manager
           if (dataObj.manager) dataObj.manager.totalGoals += gameGoals;
 
           // increment points
-          dataObj.player.points += computedPoints;
+          if (dataObj.player) {
+            dataObj.player.points += computedPoints;
+          }
           if (dataObj.manager) dataObj.manager.totalPoints += computedPoints;
 
         }
 
-        //console.log('dataObj.player.assists:', dataObj.player.assists);
-        //console.log('game.assists:', game.assists);
-
-        //debugger;
-
-        dataObj.player.assists += game.assists;
-
-        //console.log(dataObj.player.playerName, '|', dataObj.player.assists);
+        if (dataObj.player) dataObj.player.assists += game.assists;
 
         // gameMapsObj maps to a player
         return gameMapsObj;
@@ -466,7 +476,7 @@
       /**
        * maps each game data in player details view
        */
-      arrayMaper.gameMapper = function (game) {
+      arrayMapper.gameMapper = function (game) {
 
         var gameMapsObj = {
           alignment: game.alignment === 'away' ? '@' : 'vs',
@@ -484,7 +494,7 @@
 
       };
 
-      return arrayMaper;
+      return arrayMapper;
 
     });
 

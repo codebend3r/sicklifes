@@ -1,4 +1,4 @@
-$chartColor1: #ff1de3;
+$chartColor1: #dd0000;
 $chartColor2: #00b00d;
 $chartColor3: #7482ff;
 $chartColor4: #00ffd9;
@@ -73,7 +73,7 @@ $chartColor6: #692cb0;
       stroke: $chartColor3;
     }
   }
-  &:nth-child(6) {
+  &:nth-child(4) {
     // justin
     .ct-line, .ct-point {
       stroke: $chartColor4;

@@ -28,7 +28,6 @@
        */
       $scope.changeManager = function (selectedManager) {
 
-        //$scope.selectedManager = selectedManager;
         $state.go($state.current.name, { managerId: selectedManager.managerName.toLowerCase() });
 
       };
@@ -44,10 +43,6 @@
         {
           heading: 'Game Logs',
           route: 'managers.gamelogs'
-        },
-        {
-          heading: 'Stats',
-          route: 'managers.stats'
         }
       ];
 
@@ -69,9 +64,7 @@
           || player.playedInEuroGames) {
 
           if (!player.playedInLigaGames && !player.playedInEPLGames && !player.playedInSeriGames) {
-
             manager.wildCardCount += 1;
-
           }
         }
 
@@ -87,25 +80,42 @@
         console.log('result:', result);
         console.log('///////////////////');
 
-        console.log('syncDate:', result._lastSyncedOn);
+        // define managerData on scope and $rootScope
+        $scope.managerData = $scope.populateManagersData(result.data);
 
-        if ($momentService.isHoursAgo(result._lastSyncedOn)) {
+        // define the current manager
+        $scope.chooseManager(managerId);
+
+        // define selectedManager by managerId
+        $scope.selectedManager = $scope.managerData[managerId];
+
+        if (angular.isDefined($scope.selectedManager._lastSyncedOn)) {
+          console.log('> sync time found for current manager', $scope.selectedManager.managerName, $scope.selectedManager._lastSyncedOn);
+        } else {
+          console.log('> no sync time found for manager', $scope.selectedManager.managerName);
+        }
+
+        if (angular.isDefined($scope.selectedManager._lastSyncedOn) && $momentService.isHoursAgo($scope.selectedManager._lastSyncedOn)) {
+
+          console.log('-- data for', $scope.selectedManager.managerName ,' is old --');
+
+          $scope.startFireBase(function () {
+
+            $scope.selectedManager.wildCardCount = 0;
+
+            _.each($scope.selectedManager.players, function (player) {
+              checkForWildCard(player, $scope.selectedManager);
+            });
+
+            $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
+
+          });
+
+        } else if ($momentService.isHoursAgo($scope.managerData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
           $scope.startFireBase(function () {
-
-            // tell firebase it is ready to be updated
-            //$rootScope.fireBaseReady = true;
-
-            // define managerData on scope and $rootScope
-            $scope.managerData = $scope.populateManagersData(result.data);
-
-            // define the current manager
-            $scope.chooseManager(managerId);
-
-            // define selectedManager by managerId
-            $scope.selectedManager = $scope.managerData[managerId];
 
             $scope.selectedManager.wildCardCount = 0;
 
@@ -123,18 +133,6 @@
 
           // tell firebase it is ready to be updated
           $rootScope.loading = false;
-
-          // define managerData on scope and $rootScope
-          $scope.managerData = $scope.populateManagersData(result.data);
-
-          // define the current manager
-          $scope.chooseManager($stateParams.managerId);
-
-          // define selectedManager by managerId
-          $scope.selectedManager = $scope.managerData[managerId];
-
-          //console.log('$stateParams.managerId', $stateParams.managerId);
-          //console.log('$scope.selectedManager', $scope.selectedManager);
 
           $scope.selectedManager.wildCardCount = 0;
 
@@ -159,28 +157,31 @@
        */
       var onManagersRequestFinished = function (managerData) {
 
-        console.log('onManagersRequestFinished', managerData);
+        console.log('onManagersRequestFinished');
         $rootScope.loading = false;
-
-        $scope.managerData = $scope.populateManagersData(managerData);
-
         $scope.managerData[managerId] = managerData;
         $scope.selectedManager = managerData;
-
         $scope.saveRoster();
-        //init();
 
-        //$scope.chooseManager($stateParams.managerId);
+      };
+
+      var onAllManagersRequestFinished = function(managersData) {
+
+        $rootScope.loading = false;
+        $scope.managerData = managersData;
+        $rootScope.managerData = managersData;
+        //$scope.saveRoster();
+        console.log('$scope.managerData:', $scope.managerData);
 
       };
 
       /**
-       * @description
+       * @description update only the current manager data
        */
       $scope.updateAllManagerData = function () {
 
         $rootScope.loading = true;
-        $updateDataUtils.updateAllManagerData(onManagersRequestFinished);
+        $updateDataUtils.updateAllManagerData(onAllManagersRequestFinished);
 
       };
 
@@ -203,11 +204,10 @@
 
         } else {
 
+          console.log('load from firebase');
+
           $scope.startFireBase(function (firebaseData) {
-
-            console.log('load from firebase');
             loadData(firebaseData[$scope.dataKeyName]);
-
           });
 
         }

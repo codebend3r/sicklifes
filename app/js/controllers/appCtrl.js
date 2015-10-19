@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $momentService, $location, $objectUtils, $arrayFilter, user) {
+    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $arrayMappers, $momentService, $location, $objectUtils, $arrayFilter, user) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -27,18 +27,18 @@
       /**
        * @description filters game log by selected month for selected manager
        */
-      var updateFilter = function () {
-
-        console.log('updateFilter:', $scope.selectedManager.managerName);
-
-        _.each($scope.selectedManager.players, function (player) {
-
-          $scope.selectedManager = $objectUtils.cleanManager($scope.selectedManager, false);
-          $scope.selectedManager.filteredMonthlyGoalsLog = _.filter($scope.selectedManager.monthlyGoalsLog, $arrayFilter.filterOnMonth.bind($scope, $scope.selectedManager, $scope.selectedMonth, player));
-
-        });
-
-      };
+      // var updateFilter = function () {
+      //
+      //   console.log('updateFilter:', $scope.selectedManager.managerName);
+      //
+      //   _.each($scope.selectedManager.players, function (player) {
+      //
+      //     $scope.selectedManager = $objectUtils.cleanManager($scope.selectedManager, false);
+      //     $scope.selectedManager.filteredMonthlyGoalsLog = _.filter($scope.selectedManager.monthlyGoalsLog, $arrayFilter.filterOnMonth.bind($scope, $scope.selectedManager, $scope.selectedMonth, player));
+      //
+      //   });
+      //
+      // };
 
       /**
        * @description filters game log by selected month for all managers
@@ -47,12 +47,46 @@
 
         _.each($rootScope.managerData, function (manager) {
 
-          console.log('updateAllManagersFilter:', manager.managerName);
+          //console.log('--------------------------');
+          //console.log('updateAllManagersFilter:', manager.managerName);
+          //manager = $objectUtils.managerResetGoalPoints(manager);
+
+          var filteredGames = _.chain(manager.filteredMonthlyGoalsLog)
+            .flatten(true)
+            .filter($arrayFilter.filterOnMonth.bind($scope, $scope.selectedMonth))
+            .value();
+
+          //console.log('filteredGames', filteredGames);
+
+          manager = $objectUtils.managerResetGoalPoints(manager);
+
+          _.map(filteredGames, function(data) {
+
+            manager.totalGoals += data.goalsScored;
+
+            manager.totalPoints += data.points;
+
+            manager.chartData.push({
+              points: manager.totalPoints,
+              goals: manager.goalsScored,
+              stepPoints: data.points,
+              stepGoals: data.goalsScored,
+              date: data.datePlayed
+            });
+
+          });
 
           _.each(manager.players, function (player) {
 
-            manager = $objectUtils.cleanManager(manager, false);
-            manager.filteredMonthlyGoalsLog = _.filter(manager.monthlyGoalsLog, $arrayFilter.filterOnMonth.bind($scope, manager, $scope.selectedMonth, player));
+            player = $objectUtils.playerResetGoalPoints(player);
+
+            _.forEach(filteredGames, function(data) {
+              if (player.playerName === data.playerName) {
+                //console.log('MATCH', data.playerName);
+                player.goals += data.goalsScored;
+                player.points += data.points;
+              }
+            });
 
           });
 
@@ -228,8 +262,8 @@
        */
       $scope.changeMonth = function (month) {
         $scope.selectedMonth = month;
-        //updateFilter();
         updateAllManagersFilter();
+        $rootScope.$emit('MONTH_CHANGED', month);
       };
 
       /**
@@ -277,9 +311,9 @@
         allPlayers.data[playerId] = player;
         allPlayers._lastSyncedOn = $momentService.syncDate();
 
-        console.log('saving allPlayersIndex:', _.keys($scope.allPlayers.data).length);
+        console.log('saving allPlayersIndex:', _.keys(allPlayers.data).length);
 
-        $scope.saveToFireBase($scope.allPlayers, $scope.dataKeyName);
+        $scope.saveToFireBase(allPlayers, 'allPlayersIndex');
 
       };
 

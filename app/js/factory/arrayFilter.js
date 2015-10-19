@@ -32,7 +32,7 @@
        * @returns {boolean}
        */
       arrayFilters.filterValidDate = function (player, game) {
-        var gameDate = $momentService.getDate(new Date(game.box_score.event.game_date));
+        var gameDate = $momentService.getDate(new Date(game.datePlayed));
         if (player.status === 'added') {
           return gameDate.isAfter(player.dateOfTransaction);
         } else if (player.status === 'dropped') {
@@ -43,12 +43,12 @@
       };
 
       /**
-       * @description filters out games with goals
+       * @description filters out games without goals
        * @returns {boolean}
        */
       arrayFilters.filterOnValidGoals = function (player, game) {
-        if (game.goals) {
-          var gameDate = $momentService.getDate(new Date(game.box_score.event.game_date));
+        if (player.goals) {
+          var gameDate = $momentService.getDate(new Date(game.datePlayed));
           if (player.status === 'added') {
             return gameDate.isAfter(player.dateOfTransaction);
           } else if (player.status === 'dropped') {
@@ -82,17 +82,11 @@
        * @param game
        * @returns {boolean}
        */
-      arrayFilters.filterOnMonth = function (manager, selectedMonth, player, game) {
-
+      arrayFilters.filterOnMonth = function (selectedMonth, game) {
         var gameDate = $momentService.getDate(game.originalDate),
           scoredAGoal = game.goalsScored ? true : false,
           isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
-
-        if (isBetween && scoredAGoal) {
-          manager.totalGoals += game.goalsScored;
-          manager.totalPoints += $scoringLogic.calculatePoints(game.goalsScored, game.leagueSlug);
-          return true;
-        }
+        return isBetween && scoredAGoal;
       };
 
       return arrayFilters;

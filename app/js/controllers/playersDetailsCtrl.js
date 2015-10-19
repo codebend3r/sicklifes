@@ -54,21 +54,12 @@
           joe: firebaseData.managersData.data.joe
         };
 
-        if (angular.isDefined(firebaseData[$scope.dataKeyName].data)) {
+        if (angular.isDefined($rootScope.firebaseData[$scope.dataKeyName].data)) {
 
-          $scope.allPlayers = firebaseData[$scope.dataKeyName];
+          $scope.allPlayers = $rootScope.firebaseData[$scope.dataKeyName];
 
           console.log('loaded allPlayersIndex:', _.keys($scope.allPlayers.data).length);
 
-          if (angular.isDefined(firebaseData[$scope.dataKeyName]._lastSyncedOn) && $momentService.isHourAgo(firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
-
-            console.log('-- data is too old --');
-
-          } else {
-
-            console.log('-- data is up to date --');
-
-          }
         }
 
         //////////////////
@@ -109,7 +100,13 @@
 
           console.log('foundPlayer:', $scope.player.playerName);
           $rootScope.loading = false;
-          $scope.saveToIndex($stateParams.playerId, $scope.player);
+          if (angular.isDefined($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn) && $momentService.isHoursAgo($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
+            console.log('-- data is too old --');
+            $scope.saveToIndex($stateParams.playerId, $scope.player);
+          } else {
+            console.log('-- data is up to date --');
+            $scope.saveToIndex($stateParams.playerId, $scope.player);
+          }
 
         } else {
 
@@ -128,10 +125,15 @@
             .then(function (result) {
               console.log('-- DONE --');
               console.log($scope.player.id, '|', $scope.player.playerName);
-              console.log($scope.player);
               $scope.player = result;
               $rootScope.loading = false;
-              $scope.saveToIndex($stateParams.playerId, $scope.player);
+              if (angular.isDefined($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn) && $momentService.isHoursAgo($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
+                console.log('-- data is too old --');
+                $scope.saveToIndex($stateParams.playerId, $scope.player);
+              } else {
+                console.log('-- data is up to date --');
+                $scope.saveToIndex($stateParams.playerId, $scope.player);
+              }
             });
 
         }

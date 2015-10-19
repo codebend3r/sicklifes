@@ -16,6 +16,9 @@
 
       $scope.dataKeyName = 'managersData';
 
+      /**
+       * @description
+       */
       $rootScope.loading = true;
 
       /**
@@ -24,13 +27,65 @@
       $scope.allLeagues = null;
 
       /**
-       *
+       * @description
        */
       $scope.updateAllManagerData = null;
+
+      /**
+       * @description
+       */
+      $scope.showLastAmount = 10;
+
+      /**
+       * @description
+       */
+      $scope.isCurrentMonth = function (selectedMonth, date) {
+        var gameDate = $momentService.getDate(date),
+          isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
+        return isBetween;
+      };
 
       ////////////////////////////////////////
       ////////////// private /////////////////
       ////////////////////////////////////////
+
+      /**
+       * @description options for chart
+       */
+      var chartOptions = {
+        axisX: {
+          labelInterpolationFnc: function (value, index, axis) {
+            var divider;
+            if (axis.length < 8) {
+              divider = 1;
+            } else {
+              divider = axis.length / 8;
+            }
+            if (index % divider === 0) {
+              return value;
+            } else {
+              return '';
+            }
+          }
+        },
+        axisY: {
+          onlyInteger: true
+        },
+        lineSmooth: true,
+        fullWidth: false,
+        chartPadding: {
+          right: 0
+        },
+        //low: 50,
+        showPoint: true,
+        height: 600,
+        classNames: {
+          chart: 'sick-chart-line ct-chart-line',
+          label: 'sick-label ct-label',
+          series: 'sick-series ct-series',
+          line: 'sick-line ct-line'
+        }
+      };
 
       /**
        * @description callback for when data is loaded
@@ -74,39 +129,54 @@
 
         }
 
-        setTimeout(processChart, 500);
+        setTimeout(function() {
+          console.log('timeout:', currentMonth.monthName);
+          $scope.changeMonth(currentMonth);
+        }.bind($scope), 500);
+
       };
 
+      $rootScope.$on('MONTH_CHANGED', function(e, month) {
+        console.log('month change detected:', month.monthName);
+        currentMonth = month;
+        processChart();
+      });
+
       /**
-       *
+       * @description current month
+       */
+      var currentMonth = $scope.selectedMonth;
+
+      /**
+       * @description populates chart
        */
       var processChart = function () {
 
+        console.log('processChart()');
+
+        $('.ct-chart').empty();
+
         var gameDates = [];
         var seriesData = [];
+        var chartKey = 'points';
 
         _.each($rootScope.managerData, function (manager) {
 
-          var managerGoals = [];
-          var totalGoals = 0;
+          var seriesDataObj = {};
+          seriesDataObj.name = manager.managerName;
+          seriesDataObj.data = [];
 
-          _.each(manager.filteredMonthlyGoalsLog, function (game) {
+          _.each(manager.chartData, function (data) {
 
-            gameDates.push(game.datePlayed);
-
-            console.log('game:', game);
-
-            if (game.goalsScored !== 0) {
-              totalGoals += game.goalsScored;
-              managerGoals.push(totalGoals);
+            if ($scope.isCurrentMonth(currentMonth, data.date)) {
+              seriesDataObj.data.push(data.points);
+              if (angular.isDefined(data.date)) gameDates.push(data.date);
             }
 
           });
 
-          seriesData.push({
-            name: manager.managerName,
-            data: managerGoals
-          });
+          seriesData.push(seriesDataObj);
+          gameDates = gameDates.concat(gameDates);
 
         });
 
@@ -115,40 +185,28 @@
           return new Date(a).getTime() - new Date(b).getTime();
         });
 
-        new Chartist.Line('.ct-chart', {
-            labels: gameDates,
-            series: seriesData
-          },
-          {
-            axisX: {
-              labelInterpolationFnc: function (value, index) {
-                if (index % 5 === 0) {
-                  return value;
-                } else {
-                  return '';
-                }
-              }
-            },
-            axisY: {
-              labelInterpolationFnc: function (value, index) {
-                if (index % 2 === 0) {
-                  return value;
-                } else {
-                  return '';
-                }
-              }
-            },
-            lineSmooth: true,
-            fullWidth: false,
-            showPoint: true,
-            height: 600,
-            classNames: {
-              chart: 'sick-chart-line ct-chart-line',
-              label: 'sick-label ct-label',
-              series: 'sick-series ct-series',
-              line: 'sick-line ct-line'
+        $scope.showLastAmount = gameDates.length;
+
+        seriesData = _.map(seriesData, function(d) {
+          if ($scope.showLastAmount < d.data.length) {
+            return {
+              name: d.name,
+              data: d.data.splice(d.data.length - $scope.showLastAmount, d.data.length)
             }
-          });
+          } else {
+            return {
+              name: d.name,
+              data: d.data
+            };
+          }
+        });
+
+        //console.log('> data length', d.data.length);
+
+        new Chartist.Line('.ct-chart', {
+          labels: gameDates,
+          series: seriesData
+        }, chartOptions);
 
         var $chart = $('.ct-chart');
 
@@ -157,13 +215,12 @@
           .find('.ct-tooltip')
           .hide();
 
-
         $chart.on('mouseenter', '.ct-point', function () {
           var $point = $(this),
             value = $point.attr('ct:value'),
             seriesName = $point.parent().attr('ct:series-name');
 
-          $toolTip.html('<b>' + seriesName + '</b> <br>' + value + ' goals');
+          $toolTip.html('<b>' + seriesName + '</b> <br>' + value + ' ' + chartKey);
           $toolTip.show();
         });
 
@@ -177,7 +234,6 @@
             top: (event.offsetY || event.originalEvent.layerY) - $toolTip.height() - 40
           });
         });
-
 
       };
 
@@ -220,11 +276,6 @@
         $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
       };
-
-      document.addEventListener('DOMContentLoaded', function () {
-        console.log('DOM loaded');
-        processChart();
-      });
 
       init();
 
