@@ -25,22 +25,6 @@
       var endYear = '2016';
 
       /**
-       * @description filters game log by selected month for selected manager
-       */
-      // var updateFilter = function () {
-      //
-      //   console.log('updateFilter:', $scope.selectedManager.managerName);
-      //
-      //   _.each($scope.selectedManager.players, function (player) {
-      //
-      //     $scope.selectedManager = $objectUtils.cleanManager($scope.selectedManager, false);
-      //     $scope.selectedManager.filteredMonthlyGoalsLog = _.filter($scope.selectedManager.monthlyGoalsLog, $arrayFilter.filterOnMonth.bind($scope, $scope.selectedManager, $scope.selectedMonth, player));
-      //
-      //   });
-      //
-      // };
-
-      /**
        * @description filters game log by selected month for all managers
        */
       var updateAllManagersFilter = function () {
@@ -146,7 +130,7 @@
       /////////////////////////////
 
       /**
-       * @description populates $scope.managersData && $rootScope.managersData
+       * @description populates $scope.managerData && $rootScope.managerData
        * @param data {object}
        */
       $scope.populateManagersData = function (data) {

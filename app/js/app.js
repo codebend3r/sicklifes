@@ -10,13 +10,13 @@
 
     'ui.router',
     'ui.router.tabs',
+    'ui.bootstrap',
     'ngResource',
     'ngSanitize',
     'ngStorage',
     'UserApp',
     'jsonFormatter',
     'firebase',
-    'ui.bootstrap',
     'angular.filter'
 
   ])

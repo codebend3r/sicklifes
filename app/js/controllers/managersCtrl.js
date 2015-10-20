@@ -81,7 +81,7 @@
         console.log('///////////////////');
 
         // define managerData on scope and $rootScope
-        $scope.managerData = $scope.populateManagersData(result.data);
+        $scope.populateManagersData(result.data);
 
         // define the current manager
         $scope.chooseManager(managerId);
@@ -89,11 +89,7 @@
         // define selectedManager by managerId
         $scope.selectedManager = $scope.managerData[managerId];
 
-        if (angular.isDefined($scope.selectedManager._lastSyncedOn)) {
-          console.log('> sync time found for current manager', $scope.selectedManager.managerName, $scope.selectedManager._lastSyncedOn);
-        } else {
-          console.log('> no sync time found for manager', $scope.selectedManager.managerName);
-        }
+        console.log('> managerData:', $scope.managerData);
 
         if (angular.isDefined($scope.selectedManager._lastSyncedOn) && $momentService.isHoursAgo($scope.selectedManager._lastSyncedOn)) {
 
@@ -107,7 +103,7 @@
               checkForWildCard(player, $scope.selectedManager);
             });
 
-            $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
+            //$updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
 
           });
 
@@ -123,7 +119,7 @@
               checkForWildCard(player, $scope.selectedManager);
             });
 
-            $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
+            //$updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
 
           });
 

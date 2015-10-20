@@ -57,7 +57,6 @@
         if (angular.isDefined($rootScope.firebaseData[$scope.dataKeyName].data)) {
 
           $scope.allPlayers = $rootScope.firebaseData[$scope.dataKeyName];
-
           console.log('loaded allPlayersIndex:', _.keys($scope.allPlayers.data).length);
 
         }
@@ -96,21 +95,21 @@
 
         }
 
-        if (foundPlayer) {
+        if (foundPlayer && angular.isDefined($scope.player._lastSyncedOn) && !$momentService.isHoursAgo($scope.player._lastSyncedOn)) {
 
-          console.log('foundPlayer:', $scope.player.playerName);
+          console.log('foundPlayer and is up to date', $scope.player.playerName);
           $rootScope.loading = false;
-          if (angular.isDefined($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn) && $momentService.isHoursAgo($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
-            console.log('-- data is too old --');
-            $scope.saveToIndex($stateParams.playerId, $scope.player);
-          } else {
-            console.log('-- data is up to date --');
-            $scope.saveToIndex($stateParams.playerId, $scope.player);
-          }
+          // if (angular.isDefined($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn) && $momentService.isHoursAgo($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
+          //   console.log('-- data is too old --');
+          //   $scope.saveToIndex($stateParams.playerId, $scope.player);
+          // } else {
+          //   console.log('-- data is up to date --');
+          //   $scope.saveToIndex($stateParams.playerId, $scope.player);
+          // }
 
         } else {
 
-          console.log('not found player, start searching');
+          console.log('not found player and/or is out of date');
 
           $scope.player.id = $stateParams.playerId;
           $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
@@ -123,17 +122,16 @@
             .then($arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
             .then($arrayMappers.playerGamesLog.bind(this, { player: $scope.player, manager: null }))
             .then(function (result) {
+
               console.log('-- DONE --');
-              console.log($scope.player.id, '|', $scope.player.playerName);
+              console.log('>', $scope.player);
+              console.log($scope.player.playerName);
               $scope.player = result;
+              $scope.player._lastSyncedOn = $momentService.syncDate();
               $rootScope.loading = false;
-              if (angular.isDefined($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn) && $momentService.isHoursAgo($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
-                console.log('-- data is too old --');
-                $scope.saveToIndex($stateParams.playerId, $scope.player);
-              } else {
-                console.log('-- data is up to date --');
-                $scope.saveToIndex($stateParams.playerId, $scope.player);
-              }
+
+              //$scope.saveToIndex($stateParams.playerId, $scope.player);
+
             });
 
         }
@@ -146,7 +144,6 @@
       var init = function () {
 
         $scope.dataKeyName = 'allPlayersIndex';
-
         $scope.startFireBase(fireBaseLoaded);
 
       };

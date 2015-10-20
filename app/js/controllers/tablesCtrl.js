@@ -130,11 +130,11 @@
           uefa: $scope.allLeagues[4].source
         };
 
-        if ($momentService.isHourAgo(data._lastSyncedOn, saveObject)) {
+        if ($momentService.isHoursAgo(data._lastSyncedOn, saveObject)) {
 
           console.log('-- data is too old --');
           $rootScope.loading = false;
-          $scope.updateTablesFromHTTP(httpDataLoaded);
+          //$scope.updateTablesFromHTTP(httpDataLoaded);
 
         } else {
 

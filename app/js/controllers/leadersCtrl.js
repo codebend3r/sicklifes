@@ -146,10 +146,13 @@
 
         if (angular.isDefined(data.leagues)
           && angular.isDefined(data.leagues[$stateParams.leagueName])
-          && $momentService.isHourAgo(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
+          && $momentService.isHoursAgo(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
 
           console.log('-- data is too old --');
           $scope.updateLeadersFromHTTP(mapLeagueLeaders);
+          //$scope.setSelectedLeague();
+          //$scope.leagueLeaders = data.leagues[$stateParams.leagueName].goalLeaders;
+          //$rootScope.loading = false;
 
         } else if (existsInFireBase(data)) {
 
