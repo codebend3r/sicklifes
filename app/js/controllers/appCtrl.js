@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $arrayMappers, $momentService, $location, $objectUtils, $arrayFilter, user) {
+    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $arrayMappers, $momentService, $location, $objectUtils, $arrayFilter, $textManipulator, user) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -49,6 +49,20 @@
             manager.totalGoals += data.goalsScored;
 
             manager.totalPoints += data.points;
+
+            if ($textManipulator.isDomesticLeague(data.leagueSlug)) {
+
+              manager.domesticGoals += data.goalsScored;
+
+            } else if ($textManipulator.isChampionsLeague(data.leagueSlug)) {
+
+              manager.clGoals += data.goalsScored;
+
+            } else if ($textManipulator.isEuropaLeague(data.leagueSlug)) {
+
+              manager.eGoals += data.goalsScored;
+
+            }
 
             manager.chartData.push({
               points: manager.totalPoints,

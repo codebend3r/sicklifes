@@ -59,8 +59,9 @@
             if (axis.length < 8) {
               divider = 1;
             } else {
-              divider = axis.length / 8;
+              divider = Math.ceil(axis.length / 16);
             }
+            console.log('divider:', divider);
             if (index % divider === 0) {
               return value;
             } else {
@@ -169,7 +170,7 @@
           _.each(manager.chartData, function (data) {
 
             if ($scope.isCurrentMonth(currentMonth, data.date)) {
-              seriesDataObj.data.push(data.points);
+              seriesDataObj.data.push(data[chartKey]);
               if (angular.isDefined(data.date)) gameDates.push(data.date);
             }
 
