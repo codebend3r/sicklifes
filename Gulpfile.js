@@ -19,6 +19,7 @@
     },
     port = 8880,
     gutil = require('gulp-util'),
+    del = require('del'),
     browserSync = require('browser-sync'),
     reload = browserSync.reload,
     runSequence = require('run-sequence'),
@@ -71,6 +72,13 @@
       }))
       .pipe(gulp.dest(config.release))
       .pipe($.size());
+
+  });
+
+  // clean
+  gulp.task('clean', function(cb) {
+
+    return del(['builds'], cb);
 
   });
 
