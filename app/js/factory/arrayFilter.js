@@ -84,9 +84,8 @@
        */
       arrayFilters.filterOnMonth = function (selectedMonth, game) {
         var gameDate = $momentService.getDate(game.originalDate),
-          scoredAGoal = game.goalsScored ? true : false,
           isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
-        return isBetween && scoredAGoal;
+        return isBetween;
       };
 
       return arrayFilters;

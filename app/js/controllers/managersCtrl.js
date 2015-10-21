@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $state, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams) {
+    .controller('managersCtrl', function ($scope, $rootScope, $arrayFilter, $state, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -89,11 +89,11 @@
         // define selectedManager by managerId
         $scope.selectedManager = $scope.managerData[managerId];
 
-        console.log('> managerData:', $scope.managerData);
+        $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog;
 
         if (angular.isDefined($scope.selectedManager._lastSyncedOn) && $momentService.isHoursAgo($scope.selectedManager._lastSyncedOn)) {
 
-          console.log('-- data for', $scope.selectedManager.managerName ,' is old --');
+          console.log('-- data for', $scope.selectedManager.managerName, 'is old --');
 
           $scope.startFireBase(function () {
 
@@ -102,6 +102,8 @@
             _.each($scope.selectedManager.players, function (player) {
               checkForWildCard(player, $scope.selectedManager);
             });
+
+            $rootScope.loading = false;
 
             //$updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
 
@@ -118,6 +120,8 @@
             _.each($scope.selectedManager.players, function (player) {
               checkForWildCard(player, $scope.selectedManager);
             });
+
+            $rootScope.loading = false;
 
             //$updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
 
@@ -180,6 +184,15 @@
         $updateDataUtils.updateAllManagerData(onAllManagersRequestFinished);
 
       };
+
+
+      $rootScope.$on('MONTH_CHANGED', function(e, month) {
+        console.log('month change detected:', month.monthName);
+        $scope.currentMonthLog = _.chain($scope.selectedManager.filteredMonthlyGoalsLog)
+          .flatten(true)
+          .filter($arrayFilter.filterOnMonth.bind($scope, month))
+          .value();
+      });
 
       /**
        * @description init

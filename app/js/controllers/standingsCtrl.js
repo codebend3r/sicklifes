@@ -61,7 +61,6 @@
             } else {
               divider = Math.ceil(axis.length / 16);
             }
-            console.log('divider:', divider);
             if (index % divider === 0) {
               return value;
             } else {
@@ -87,6 +86,45 @@
           line: 'sick-line ct-line'
         }
       };
+
+      var responsiveOptions = [
+        ['screen and (min-width: 641px) and (max-width: 1024px)', {
+          lineSmooth: true,
+          showPoint: false,
+          fullWidth: true,
+          height: 400,
+          axisX: {
+            showLabel: true,
+            labelInterpolationFnc: function (value, index, axis) {
+              if (index % 4 === 0) {
+                return value;
+              } else {
+                return '';
+              }
+            }
+          },
+        }],
+        ['screen and (max-width: 640px)', {
+          lineSmooth: true,
+          showPoint: false,
+          fullWidth: true,
+          height: 400,
+          axisX: {
+            showLabel: true,
+            offsetX: 20,
+            labelInterpolationFnc: function (value, index, axis) {
+              if (index % 12 === 0) {
+                return value;
+              } else {
+                return '';
+              }
+            }
+          },
+          axisY: {
+            showLabel: true
+          }
+        }]
+      ];
 
       /**
        * @description callback for when data is loaded
@@ -130,7 +168,7 @@
 
         }
 
-        setTimeout(function() {
+        $timeout(function() {
           console.log('timeout:', currentMonth.monthName);
           $scope.changeMonth(currentMonth);
         }.bind($scope), 500);
@@ -207,7 +245,7 @@
         new Chartist.Line('.ct-chart', {
           labels: gameDates,
           series: seriesData
-        }, chartOptions);
+        }, chartOptions, responsiveOptions);
 
         var $chart = $('.ct-chart');
 

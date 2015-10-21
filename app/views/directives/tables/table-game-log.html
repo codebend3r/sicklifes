@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat='game in list'>
+    <tr ng-repeat='game in list | limitTo: 30'>
       <td>{{game.alignment}} {{game.vsTeam}}</td>
       <td>{{game.goalsScored}}</td>
       <td>{{game.result}} {{game.finalScore}}</td>
@@ -29,7 +29,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat='game in list'>
+    <tr ng-repeat='game in list | limitTo: 30'>
       <td>{{game.alignment}} {{game.vsTeam}}</td>
       <td>{{game.goalsScored}}</td>
       <td>{{game.datePlayed}}</td>

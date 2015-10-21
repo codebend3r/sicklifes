@@ -34,14 +34,14 @@
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
-  <custom-table ng-if='player.ligaGameLog.length > 0' table-body-template='game-log' list='player.ligaCompleteLog' table-header='tableHeader' league-img='leagueImages.liga' table-name='La Liga Game Logs'></custom-table>
+  <custom-table ng-if='player.ligaCompleteLog.length > 0' table-body-template='game-log' list='player.ligaCompleteLog' table-header='tableHeader' league-img='leagueImages.liga' table-name='La Liga Game Logs'></custom-table>
 
-  <custom-table ng-if='player.eplGameLog.length > 0' table-body-template='game-log' list='player.eplCompleteLog' table-header='tableHeader' league-img='leagueImages.epl' table-name='EPL Game Logs'></custom-table>
+  <custom-table ng-if='player.eplCompleteLog.length > 0' table-body-template='game-log' list='player.eplCompleteLog' table-header='tableHeader' league-img='leagueImages.epl' table-name='EPL Game Logs'></custom-table>
 
-  <custom-table ng-if='player.seriGameLog.length > 0' table-body-template='game-log' list='player.seriCompleteLog' table-header='tableHeader' league-img='leagueImages.seri' table-name='Seri A Game Logs'></custom-table>
+  <custom-table ng-if='player.seriCompleteLog.length > 0' table-body-template='game-log' list='player.seriCompleteLog' table-header='tableHeader' league-img='leagueImages.seri' table-name='Seri A Game Logs'></custom-table>
 
-  <custom-table ng-if='player.chlgGameLog.length > 0' table-body-template='game-log' list='player.chlgCompleteLog' table-header='tableHeader' league-img='leagueImages.chlg' table-name='Champions League Game Logs'></custom-table>
+  <custom-table ng-if='player.chlgCompleteLogs.length > 0' table-body-template='game-log' list='player.chlgCompleteLogs' table-header='tableHeader' league-img='leagueImages.chlg' table-name='Champions League Game Logs'></custom-table>
 
-  <custom-table ng-if='player.euroGameLog.length > 0' table-body-template='game-log' list='player.euroCompleteLog' table-header='tableHeader' league-img='leagueImages.euro' table-name='Euro League Game Logs'></custom-table>
+  <custom-table ng-if='player.euroCompleteLogs.length > 0' table-body-template='game-log' list='player.euroCompleteLogs' table-header='tableHeader' league-img='leagueImages.euro' table-name='Euro League Game Logs'></custom-table>
 
 </div>

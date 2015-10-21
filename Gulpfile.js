@@ -55,31 +55,9 @@
 
   });
 
-  // usemin
-  gulp.task('usemin', function() {
-
-    return gulp.src([config.app + '/index.html'])
-      .pipe($.usemin({
-        css: [
-          $.csso(),
-          $.rev()
-        ],
-        js: [
-          $.ngAnnotate(),
-          $.uglify(),
-          $.rev()
-        ]
-      }))
-      .pipe(gulp.dest(config.release))
-      .pipe($.size());
-
-  });
-
   // clean
   gulp.task('clean', function(cb) {
-
     return del(['builds'], cb);
-
   });
 
   // html
@@ -90,10 +68,19 @@
       return gulp.src([config.app + '/index.html'])
         .pipe($.usemin({
           css: [
-            $.rev()
+            $.rev(),
+            $.size({
+              title: 'css file',
+              showFiles: true
+            })
           ],
           js: [
-            $.rev()
+            $.ngAnnotate(),
+            $.rev(),
+            $.size({
+              title: 'js file',
+              showFiles: true
+            })
           ]
         }))
         .pipe(gulp.dest(config.prod))
@@ -105,12 +92,20 @@
         .pipe($.usemin({
           css: [
             $.csso(),
-            $.rev()
+            $.rev(),
+            $.size({
+              title: 'css file',
+              showFiles: true
+            })
           ],
           js: [
             $.ngAnnotate(),
             $.uglify(),
-            $.rev()
+            $.rev(),
+            $.size({
+              title: 'js file',
+              showFiles: true
+            })
           ]
         }))
         .pipe(gulp.dest(config.release))
@@ -154,25 +149,12 @@
   // modal-views
   gulp.task('modal-views', function () {
 
-    if (gutil.env.build === 'prod') {
-
-      return gulp.src([config.app + '/views/modal/*.html'])
-        .pipe(gulp.dest(config.prod + '/views/modal'))
-        .pipe($.size());
-
-    } else if (gutil.env.build === 'release') {
-
-      return gulp.src([config.app + '/views/modal/*.html'])
-        .pipe(gulp.dest(config.release + '/views/modal'))
-        .pipe($.size());
-
-    } else {
-
-      return gulp.src([config.app + '/views/modal/*.html'])
-        .pipe(gulp.dest(config.dev + '/views/modal'))
-        .pipe($.size());
-
-    }
+    return gulp.src([config.app + '/views/modal/*.html'])
+      .pipe(gulp.dest('builds/' + gutil.env.build + '/views/modal/'))
+      .pipe($.size({
+        title: 'modal views',
+        showFiles: false
+      }));
 
   });
 
@@ -209,8 +191,11 @@
 
       return gulp.src([config.app + '/css/**/*.css'])
         .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-        .pipe(gulp.dest(config.dev + '/css/'))
-        .pipe($.size());
+        .pipe(gulp.dest('builds/' + gutil.env.build + '/css/'))
+        .pipe($.size({
+          title: 'css',
+          showFiles: true
+        }));
 
     }
 
@@ -221,8 +206,11 @@
 
     if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
       return gulp.src([config.app + '/js/**/*.js'])
-        .pipe(gulp.dest(config.dev + '/js/'))
-        .pipe($.size());
+        .pipe(gulp.dest('builds/' + gutil.env.build + '/js/'))
+        .pipe($.size({
+          title: 'js',
+          showFiles: false
+        }));
     }
 
   });
@@ -230,10 +218,13 @@
   // bower
   gulp.task('bower-all', function () {
 
-    if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
+    if (gutil.env.build !== 'release') {
       return gulp.src([config.app + '/bower_components/**/*.{js,css}'])
-        .pipe(gulp.dest(config.dev + '/bower_components/'))
-        .pipe($.size());
+        .pipe(gulp.dest('builds/' + gutil.env.build + '/bower_components/'))
+        .pipe($.size({
+          title: 'bower',
+          showFiles: false
+        }));
 
     }
 
@@ -242,62 +233,30 @@
   // fonts
   gulp.task('fonts', function () {
 
-    if (gutil.env.build === 'prod') {
-
-      return gulp.src(config.app + '/bower_components/**/*.{woff,ttf,svg,eot}')
-        .pipe(gulp.dest(config.prod + '/fonts/'))
-        .pipe($.size());
-
-    } else if (gutil.env.build === 'release') {
-
-      return gulp.src(config.app + '/bower_components/**/*.{woff,ttf,svg,eot}')
-        .pipe(gulp.dest(config.release + '/fonts/'))
-        .pipe($.size());
-
-    } else {
-
-      return gulp.src(config.app + '/bower_components/**/*.{woff,ttf,svg,eot}')
-        .pipe(gulp.dest(config.dev + '/fonts/'))
-        .pipe($.size());
-
-    }
+    return gulp.src(config.app + '/bower_components/**/*.{woff,ttf,svg,eot}')
+      .pipe(gulp.dest('builds/' + gutil.env.build + '/fonts/'))
+      .pipe($.size({
+        title: 'fonts',
+        showFiles: false
+      }));
 
   });
 
   // images
   gulp.task('images', function () {
 
-    if (gutil.env.build === 'prod') {
-
-      return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
-        .pipe(gulp.dest(config.prod + '/images/'))
-        .pipe($.size());
-
-    } else if (gutil.env.build === 'release') {
-
-      return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
-        .pipe(gulp.dest(config.release + '/images/'))
-        .pipe($.size());
-
-    } else {
-
-      return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
-        .pipe(gulp.dest(config.dev + '/images/'))
-        .pipe($.size());
-
-    }
+    return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
+      .pipe(gulp.dest('builds/' + gutil.env.build + '/images/'))
+      .pipe($.size({
+        title: 'images',
+        showFiles: false
+      }));
 
   });
 
   // clean
   gulp.task('clean-templatecache', function () {
     return gulp.src([config.app + '/js/templates/templateCache.js'], { read: false }).pipe($.clean({ force: true }))
-      .pipe($.size());
-  });
-
-  // clean-all
-  gulp.task('clean-all', function () {
-    return gulp.src([config.target], { read: false }).pipe($.clean({ force: false }))
       .pipe($.size());
   });
 
@@ -321,6 +280,7 @@
    */
   gulp.task('build', function (callback) {
     runSequence(
+      'clean',
       'start',
       'build-GUI',
       'watch',

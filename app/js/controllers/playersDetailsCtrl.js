@@ -99,12 +99,11 @@
 
           console.log('foundPlayer and is up to date', $scope.player.playerName);
           $rootScope.loading = false;
-          // if (angular.isDefined($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn) && $momentService.isHoursAgo($rootScope.firebaseData[$scope.dataKeyName]._lastSyncedOn)) {
-          //   console.log('-- data is too old --');
-          //   $scope.saveToIndex($stateParams.playerId, $scope.player);
-          // } else {
-          //   console.log('-- data is up to date --');
-          //   $scope.saveToIndex($stateParams.playerId, $scope.player);
+
+          console.log($scope.player);
+
+          // if (angular.isDefined($scope.player.chlgCompleteLog)) {
+          //   console.log('$scope.player.chlgCompleteLog', $scope.player.chlgCompleteLog);
           // }
 
         } else {
@@ -126,11 +125,14 @@
               console.log('-- DONE --');
               console.log('>', $scope.player);
               console.log($scope.player.playerName);
+              if (angular.isDefined($scope.player.chlgCompleteLog)) {
+                console.log('$scope.player.chlgCompleteLog', $scope.player.chlgCompleteLog);
+              }
               $scope.player = result;
               $scope.player._lastSyncedOn = $momentService.syncDate();
               $rootScope.loading = false;
 
-              //$scope.saveToIndex($stateParams.playerId, $scope.player);
+              $scope.saveToIndex($stateParams.playerId, $scope.player);
 
             });
 
