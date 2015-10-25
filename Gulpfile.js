@@ -33,6 +33,8 @@
   // start
   gulp.task('start', function () {
 
+    if (typeof gutil.env.build === 'undefined') gutil.env.build = 'dev';
+
     if (gutil.env.build === 'prod') {
 
       gutil.log(gutil.colors.yellow('--------------------------'));
@@ -45,11 +47,15 @@
       gutil.log(gutil.colors.green('RELEASE BUILD'));
       gutil.log(gutil.colors.green('--------------------------'));
 
-    } else {
+    } else if (gutil.env.build === 'dev') {
 
       gutil.log(gutil.colors.cyan('--------------------------'));
       gutil.log(gutil.colors.cyan('DEV BUILD'));
       gutil.log(gutil.colors.cyan('--------------------------'));
+
+    } else {
+
+      gutil.error('--build option undefined or invalid');
 
     }
 
@@ -124,25 +130,9 @@
   // partials
   gulp.task('partials', function () {
 
-    if (gutil.env.build === 'prod') {
-
-      return gulp.src([config.app + '/views/**/*.html'])
-        .pipe(gulp.dest(config.prod + '/views'))
-        .pipe($.size());
-
-    } else if (gutil.env.build === 'release') {
-
-      return gulp.src([config.app + '/views/**/*.html'])
-        .pipe(gulp.dest(config.release + '/views'))
-        .pipe($.size());
-
-    } else {
-
-      return gulp.src([config.app + '/views/**/*.html'])
-        .pipe(gulp.dest(config.dev + '/views'))
-        .pipe($.size());
-
-    }
+    return gulp.src([config.app + '/views/**/*.html'])
+      .pipe(gulp.dest('builds/' + gutil.env.build + '/views/'))
+      .pipe($.size());
 
   });
 
@@ -194,7 +184,7 @@
         .pipe(gulp.dest('builds/' + gutil.env.build + '/css/'))
         .pipe($.size({
           title: 'css',
-          showFiles: true
+          showFiles: false
         }));
 
     }

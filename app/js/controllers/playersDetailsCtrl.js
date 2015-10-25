@@ -99,7 +99,6 @@
 
           console.log('foundPlayer and is up to date', $scope.player.playerName);
           $rootScope.loading = false;
-
           console.log($scope.player);
 
           // if (angular.isDefined($scope.player.chlgCompleteLog)) {
@@ -109,34 +108,38 @@
         } else {
 
           console.log('not found player and/or is out of date');
-
-          $scope.player.id = $stateParams.playerId;
-          $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
-
-          $apiFactory.getPlayerProfile('soccer', $scope.player.id)
-            .then(function (result) {
-              $scope.player.playerName = result.data.full_name;
-              return $arrayMappers.playerInfo($scope.player, result);
-            })
-            .then($arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
-            .then($arrayMappers.playerGamesLog.bind(this, { player: $scope.player, manager: null }))
-            .then(function (result) {
-
-              console.log('-- DONE --');
-              console.log('>', $scope.player);
-              console.log($scope.player.playerName);
-              if (angular.isDefined($scope.player.chlgCompleteLog)) {
-                console.log('$scope.player.chlgCompleteLog', $scope.player.chlgCompleteLog);
-              }
-              $scope.player = result;
-              $scope.player._lastSyncedOn = $momentService.syncDate();
-              $rootScope.loading = false;
-
-              $scope.saveToIndex($stateParams.playerId, $scope.player);
-
-            });
+          requestUpdateOnPlayer();
 
         }
+
+      };
+
+      var requestUpdateOnPlayer = function() {
+
+        $scope.player.id = $stateParams.playerId;
+        $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
+
+        $apiFactory.getPlayerProfile('soccer', $scope.player.id)
+          .then(function (result) {
+            $scope.player.playerName = result.data.full_name;
+            return $arrayMappers.playerInfo($scope.player, result);
+          })
+          .then($arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
+          .then($arrayMappers.playerGamesLog.bind(this, { player: $scope.player, manager: null }))
+          .then(function (result) {
+
+            $scope.player = result;
+            $scope.player._lastSyncedOn = $momentService.syncDate();
+
+            console.log('-- DONE --');
+            console.log('>', $scope.player);
+            //console.log($scope.player.playerName);
+
+            $scope.saveToIndex($stateParams.playerId, $scope.player);
+
+            $rootScope.loading = false;
+
+          });
 
       };
 

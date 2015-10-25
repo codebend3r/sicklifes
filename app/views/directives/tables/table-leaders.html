@@ -1,11 +1,14 @@
 <table class="table table-hover table-responsive">
   <thead>
   <tr>
-    <th ng-repeat="header in tableHeader">{{header.text}}</th>
+    <th>Rank</th>
+    <th>Player</th>
+    <th>Owner</th>
+    <th>Goals</th>
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="player in list | limitTo: 20">
+  <tr ng-repeat="player in list | limitTo: 30">
     <td class="big-text">
       <div class="vertical-center">{{player.rank}}</div>
     </td>

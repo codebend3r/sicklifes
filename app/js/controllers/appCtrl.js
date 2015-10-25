@@ -14,7 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.version = 5.1;
+      $rootScope.version = 5.2;
 
       /**
        * @description starting year
@@ -65,6 +65,8 @@
               manager.eGoals += data.goalsScored;
 
             }
+
+            //console.log(manager.managerName, 'totalPoints', manager.totalPoints);
 
             manager.chartData.push({
               points: manager.totalPoints,
@@ -188,6 +190,16 @@
 
         console.log('saveRoster --> saveObject', saveObject);
 
+        _.each(saveObject.data, function(manager) {
+
+          _.each(manager.filteredMonthlyGoalsLog, function(log){
+
+            console.log(manager.managerName, '>', log.datePlayed);
+
+          });
+
+        });
+
         $scope.saveToFireBase(saveObject, 'managersData');
 
       };
@@ -286,14 +298,14 @@
       $scope.startFireBase = function (callback) {
         if (angular.isUndefinedOrNull(callback)) throw new Error('$scope.startFireBase: the callback parameter was not defined');
         if ($rootScope.fireBaseReady) {
-          //console.log('firebase already started, returning now');
+          console.log('firebase already started, returning now');
           callback($rootScope.firebaseData);
         } else {
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
             $rootScope.firebaseData = fbData;
-            //console.log('> firebase saved:', $rootScope.firebaseData);
+            console.log('> firebase saved:', $rootScope.firebaseData);
             $rootScope.fireBaseReady = true;
             callback(fbData);
           });
@@ -301,7 +313,8 @@
       };
 
       /**
-       *
+       * @name saveToIndex
+       * @description saves 1 player to allPlayersIndex
        * @param playerId
        * @param player
        */
@@ -313,6 +326,38 @@
 
         console.log('saving allPlayersIndex:', _.keys(allPlayers.data).length);
 
+        $scope.saveToFireBase(allPlayers, 'allPlayersIndex');
+
+      };
+
+      /**
+       * @name saveTeamToIndex
+       * @description pushes an entire team to allPlayersIndex
+       * @param teamArray
+       */
+      $scope.saveTeamToIndex = function(teamArray) {
+
+        var allPlayers = $rootScope.firebaseData.allPlayersIndex || {};
+        var teamObj = {};
+
+        _.each(teamArray, function(player) {
+
+          teamObj[player.id] = player;
+
+        });
+
+        console.log('teamObj', teamObj);
+
+        console.log('teamObj length:', _.keys(teamObj).length);
+        console.log('BEFORE allPlayers length:', _.keys(allPlayers.data).length);
+
+        var combinedObj = _.defaults(allPlayers.data, teamObj, {});
+
+        console.log('AFTER allPlayers length:', _.keys(allPlayers.data).length);
+
+        console.log('combinedObj length:', _.keys(combinedObj).length);
+
+        console.log('allPlayers', allPlayers);
         $scope.saveToFireBase(allPlayers, 'allPlayersIndex');
 
       };

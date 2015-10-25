@@ -19,6 +19,13 @@
 
   <div>
     <tabs data="tabData" type="tabs"/>
+
+    <uib-tabset>
+      <uib-tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disable="tab.disabled">
+        {{tab.content}}
+      </uib-tab>
+    </uib-tabset>
+
   </div>
   <ui-view/>
 

@@ -16,23 +16,6 @@
 
       console.log('--> leadersCtrl');
 
-      /**
-       * TODO
-       */
-      $scope.tableHeader = [
-        {
-          text: 'Rank'
-        },
-        {
-          text: 'Player'
-        },
-        {
-          text: 'Owner'
-        },
-        {
-          text: 'Goals'
-        }
-      ];
 
       /**
        * TODO
@@ -44,7 +27,7 @@
 
       };
 
-      var findOwner = function(playerId) {
+      var findOwner = function (playerId) {
 
         var managerName = 'Free Agent';
 
@@ -115,6 +98,7 @@
         }
 
         //console.log('saveObject:', saveObject);
+        console.log('updating', $stateParams.leagueName);
 
         $scope.saveToFireBase(saveObject, 'scoringLeaders');
 
@@ -149,10 +133,10 @@
           && $momentService.isHoursAgo(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
 
           console.log('-- data is too old --');
-          $scope.updateLeadersFromHTTP(mapLeagueLeaders);
-          //$scope.setSelectedLeague();
-          //$scope.leagueLeaders = data.leagues[$stateParams.leagueName].goalLeaders;
-          //$rootScope.loading = false;
+          //$scope.updateLeadersFromHTTP(mapLeagueLeaders);
+          $scope.setSelectedLeague();
+          $scope.leagueLeaders = data.leagues[$stateParams.leagueName].goalLeaders;
+          $rootScope.loading = false;
 
         } else if (existsInFireBase(data)) {
 

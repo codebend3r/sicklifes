@@ -36,6 +36,8 @@
        */
       $scope.showLastAmount = 10;
 
+      $scope.loadingChart = true;
+
       /**
        * @description
        */
@@ -69,14 +71,14 @@
           }
         },
         axisY: {
-          onlyInteger: true
+          onlyInteger: true,
+          low: 0
         },
         lineSmooth: true,
         fullWidth: false,
         chartPadding: {
           right: 0
         },
-        //low: 50,
         showPoint: true,
         height: 600,
         classNames: {
@@ -103,6 +105,10 @@
               }
             }
           },
+          axisY: {
+            onlyInteger: true,
+            showLabel: true
+          }
         }],
         ['screen and (max-width: 640px)', {
           lineSmooth: true,
@@ -121,6 +127,7 @@
             }
           },
           axisY: {
+            onlyInteger: true,
             showLabel: true
           }
         }]
@@ -178,7 +185,7 @@
       $rootScope.$on('MONTH_CHANGED', function(e, month) {
         console.log('month change detected:', month.monthName);
         currentMonth = month;
-        processChart();
+        //processChart();
       });
 
       /**
@@ -193,14 +200,17 @@
 
         console.log('processChart()');
 
+        $scope.loadingChart = false;
+
         $('.ct-chart').empty();
 
         var gameDates = [];
         var seriesData = [];
-        var chartKey = 'points';
+        var chartKey = 'stepPoints';
 
         _.each($rootScope.managerData, function (manager) {
 
+          var seriesHashTable = {};
           var seriesDataObj = {};
           seriesDataObj.name = manager.managerName;
           seriesDataObj.data = [];
@@ -208,9 +218,28 @@
           _.each(manager.chartData, function (data) {
 
             if ($scope.isCurrentMonth(currentMonth, data.date)) {
-              seriesDataObj.data.push(data[chartKey]);
+              if (angular.isDefined(seriesHashTable[data.date])) {
+                seriesHashTable[data.date] += data[chartKey];
+                //console.log(manager.managerName, 'exists, add', data[chartKey], _.keys(seriesHashTable).length);
+              } else {
+                seriesHashTable[data.date] = data[chartKey];
+                //console.log(manager.managerName, 'new, add', data[chartKey], _.keys(seriesHashTable).length);
+              }
+              //console.log(manager.managerName, '| pushing >', data[chartKey]);
               if (angular.isDefined(data.date)) gameDates.push(data.date);
             }
+
+          });
+
+          //console.log(manager.managerName, 'seriesHashTable', seriesHashTable);
+          //console.log(manager.managerName, 'seriesHashTable', _.keys(seriesHashTable).length);
+
+          var chartStartValue = 0;
+
+          _.each(seriesHashTable, function(obj) {
+
+            seriesDataObj.data.push(chartStartValue);
+            chartStartValue += obj
 
           });
 
@@ -224,23 +253,24 @@
           return new Date(a).getTime() - new Date(b).getTime();
         });
 
+        console.log('date length', gameDates.length);
+
         $scope.showLastAmount = gameDates.length;
 
-        seriesData = _.map(seriesData, function(d) {
-          if ($scope.showLastAmount < d.data.length) {
-            return {
-              name: d.name,
-              data: d.data.splice(d.data.length - $scope.showLastAmount, d.data.length)
-            }
-          } else {
-            return {
-              name: d.name,
-              data: d.data
-            };
-          }
-        });
-
-        //console.log('> data length', d.data.length);
+        // seriesData = _.map(seriesData, function(d) {
+        //   if ($scope.showLastAmount < d.data.length) {
+        //     console.log('cutting off', Math.abs($scope.showLastAmount - d.data.length));
+        //     return {
+        //       name: d.name,
+        //       data: d.data.splice(d.data.length - $scope.showLastAmount, d.data.length)
+        //     }
+        //   } else {
+        //     return {
+        //       name: d.name,
+        //       data: d.data
+        //     };
+        //   }
+        // });
 
         new Chartist.Line('.ct-chart', {
           labels: gameDates,
@@ -259,7 +289,7 @@
             value = $point.attr('ct:value'),
             seriesName = $point.parent().attr('ct:series-name');
 
-          $toolTip.html('<b>' + seriesName + '</b> <br>' + value + ' ' + chartKey);
+          $toolTip.html('<b>' + seriesName + '</b> <br>' + value + ' ' + 'POINTS');
           $toolTip.show();
         });
 

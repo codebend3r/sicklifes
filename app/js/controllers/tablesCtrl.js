@@ -19,30 +19,6 @@
       $rootScope.loading = true;
 
       /**
-       * header for custom-table directive
-       */
-      $scope.leagueTableHeader = [
-        {
-          text: 'Team'
-        },
-        {
-          text: 'Record'
-        },
-        {
-          text: 'GP'
-        },
-        {
-          text: 'F'
-        },
-        {
-          text: 'A'
-        },
-        {
-          text: 'Points'
-        }
-      ];
-
-      /**
        * table sort function
        */
       $scope.groupPosition = function (team) {
@@ -120,7 +96,7 @@
 
         $scope.setSelectedLeague();
 
-        saveObject = {
+        var saveObject = {
           _syncedFrom: 'leagusCtrl',
           _lastSyncedOn: $momentService.syncDate(),
           liga: $scope.allLeagues[0].source,
@@ -143,16 +119,17 @@
 
         }
 
+        if ($scope.selectedLeague === 'uefa' || $scope.selectedLeague === 'chlg') {
+
+          debugger;
+
+        }
+
       };
 
       ////////////////////////////////////////
       ////////////// private /////////////////
       ////////////////////////////////////////
-
-      /**
-       * init
-       */
-      var saveObject;
 
       /**
        * init
@@ -173,18 +150,16 @@
 
         } else {
 
+          console.log('load from firebase');
+
           if ($rootScope.fireBaseReady) {
 
-            //console.log('$rootScope.firebaseData', $rootScope.firebaseData);
-            console.log('load from firebase - OLD');
             loadData($rootScope.firebaseData[$scope.dataKeyName]);
 
           } else {
 
             $scope.startFireBase(function () {
 
-              console.log('load from firebase - NEW');
-              //console.log('$rootScope.firebaseData', $rootScope.firebaseData);
               loadData($rootScope.firebaseData[$scope.dataKeyName]);
 
             });

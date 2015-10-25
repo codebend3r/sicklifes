@@ -16,6 +16,14 @@
 
       console.log('--> leaguesCtrl');
 
+      $scope.totalItems = 10;
+      $scope.currentPage = 1;
+
+      $scope.pageChanged = function () {
+        console.log('Page changed to: ' + $scope.currentPage);
+      };
+
+
       /**
        * select box changes function
        */
