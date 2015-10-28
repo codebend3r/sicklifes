@@ -62,7 +62,7 @@
   });
 
   // clean
-  gulp.task('clean', function(cb) {
+  gulp.task('clean', function (cb) {
     return del(['builds'], cb);
   });
 
@@ -81,7 +81,6 @@
             })
           ],
           js: [
-            $.ngAnnotate(),
             $.rev(),
             $.size({
               title: 'js file',
@@ -195,14 +194,12 @@
   // js (partials or template)
   gulp.task('js', ['template'], function () {
 
-    if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
-      return gulp.src([config.app + '/js/**/*.js'])
-        .pipe(gulp.dest('builds/' + gutil.env.build + '/js/'))
-        .pipe($.size({
-          title: 'js',
-          showFiles: false
-        }));
-    }
+    return gulp.src([config.app + '/js/**/*.js'])
+      .pipe(gulp.dest('builds/' + gutil.env.build + '/js/'))
+      .pipe($.size({
+        title: 'js',
+        showFiles: false
+      }));
 
   });
 
