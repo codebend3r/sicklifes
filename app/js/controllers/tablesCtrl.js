@@ -97,7 +97,7 @@
         $scope.setSelectedLeague();
 
         var saveObject = {
-          _syncedFrom: 'leagusCtrl',
+          _syncedFrom: 'tablesCtrl',
           _lastSyncedOn: $momentService.syncDate(),
           liga: $scope.allLeagues[0].source,
           epl: $scope.allLeagues[1].source,
@@ -119,9 +119,41 @@
 
         }
 
-        if ($scope.selectedLeague === 'uefa' || $scope.selectedLeague === 'chlg') {
+        console.log('$scope.selectedLeague', $scope.selectedLeague.slug);
+        if ($scope.selectedLeague.slug === 'uefa') {
 
-          debugger;
+          $scope.groupA = _.filter(saveObject.uefa, function(team) {
+            return team.group === 'Group A';
+          });
+
+          $scope.groupB = _.filter(saveObject.uefa, function(team) {
+            return team.group === 'Group B';
+          });
+
+          $scope.groupC = _.filter(saveObject.uefa, function(team) {
+            return team.group === 'Group C';
+          });
+
+          $scope.groupD = _.filter(saveObject.uefa, function(team) {
+            return team.group === 'Group D';
+          });
+
+          $scope.groupE = _.filter(saveObject.uefa, function(team) {
+            return team.group === 'Group E';
+          });
+
+          $scope.groupF = _.filter(saveObject.uefa, function(team) {
+            return team.group === 'Group F';
+          });
+
+          $scope.groupG = _.filter(saveObject.uefa, function(team) {
+            return team.group === 'Group G';
+          });
+
+          $scope.groupH = _.filter(saveObject.uefa, function(team) {
+            return team.group === 'Group H';
+          });
+
 
         }
 

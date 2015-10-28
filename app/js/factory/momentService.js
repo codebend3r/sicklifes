@@ -60,11 +60,9 @@
          */
         isHoursAgo: function (syncDate) {
 
-          var thenMoment = $moment(syncDate);
+          var thenMoment = $moment(new Date(syncDate));
           var nowMoment = $moment();
           var diff = nowMoment.diff(thenMoment, 'minutes');
-
-          console.log(thenMoment.fromNow());
 
           return diff > 240;
 
@@ -77,11 +75,9 @@
          */
         isPastYesterday: function (syncDate) {
 
-          var thenMoment = $moment(syncDate);
+          var thenMoment = $moment(new Date(syncDate));
           var nowMoment = $moment();
           var diff = nowMoment.diff(thenMoment, 'hours');
-
-          console.log(thenMoment.fromNow());
 
           return diff > 22;
 

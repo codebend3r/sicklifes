@@ -14,7 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.version = 5.2;
+      $rootScope.version = 5.3;
 
       /**
        * @description starting year
@@ -49,21 +49,14 @@
           _.map(filteredGames, function(data) {
 
             manager.totalGoals += data.goalsScored;
-
             manager.totalPoints += data.points;
 
             if ($textManipulator.isDomesticLeague(data.leagueSlug)) {
-
               manager.domesticGoals += data.goalsScored;
-
             } else if ($textManipulator.isChampionsLeague(data.leagueSlug)) {
-
               manager.clGoals += data.goalsScored;
-
             } else if ($textManipulator.isEuropaLeague(data.leagueSlug)) {
-
               manager.eGoals += data.goalsScored;
-
             }
 
             //console.log(manager.managerName, 'totalPoints', manager.totalPoints);
@@ -82,9 +75,8 @@
 
             player = $objectUtils.playerResetGoalPoints(player);
 
-            _.forEach(filteredGames, function(data) {
+            _.each(filteredGames, function(data) {
               if (player.playerName === data.playerName) {
-                //console.log('MATCH', data.playerName);
                 player.goals += data.goalsScored;
                 player.points += data.points;
               }
@@ -173,9 +165,7 @@
        * @description defines $scope.selectedManager
        */
       $scope.chooseManager = function (managerId) {
-
         $rootScope.selectedManager = $scope.managerData[managerId.toLowerCase()];
-
       };
 
       /**
@@ -191,13 +181,9 @@
         console.log('saveRoster --> saveObject', saveObject);
 
         _.each(saveObject.data, function(manager) {
-
           _.each(manager.filteredMonthlyGoalsLog, function(log){
-
             console.log(manager.managerName, '>', log.datePlayed);
-
           });
-
         });
 
         $scope.saveToFireBase(saveObject, 'managersData');
@@ -298,15 +284,14 @@
       $scope.startFireBase = function (callback) {
         if (angular.isUndefinedOrNull(callback)) throw new Error('$scope.startFireBase: the callback parameter was not defined');
         if ($rootScope.fireBaseReady) {
-          console.log('firebase already started, returning now');
           callback($rootScope.firebaseData);
         } else {
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
             $rootScope.firebaseData = fbData;
-            console.log('> firebase saved:', $rootScope.firebaseData);
             $rootScope.fireBaseReady = true;
+            $rootScope.lastSyncDate = $rootScope.firebaseData.managersData._lastSyncedOn;
             callback(fbData);
           });
         }

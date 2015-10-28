@@ -99,13 +99,14 @@
        */
       $scope.tabData = [
         {
-          heading: 'Tables',
+          title: 'Tables',
           route: 'leagues.tables',
           active: true
         },
         {
-          heading: 'Leaders',
-          route: 'leagues.leaders'
+          title: 'Leaders',
+          route: 'leagues.leaders',
+          active: false
         }
       ];
 

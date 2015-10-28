@@ -192,7 +192,7 @@
             }
 
             if (!angular.isUndefinedOrNull(manager)) {
-              manager.ligaCount += 1;
+              if (player.playedInLigaGames) manager.ligaCount += 1;
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.ligaCompleteLog);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.ligaFilteredGameLog);
             }
@@ -230,7 +230,7 @@
             }
 
             if (!angular.isUndefinedOrNull(manager)) {
-              manager.eplCount += 1;
+              if (player.playedInEPLGames) manager.eplCount += 1;
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.eplCompleteLog);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.eplFilteredGameLog);
             }
@@ -268,7 +268,7 @@
             }
 
             if (!angular.isUndefinedOrNull(manager)) {
-              manager.seriCount += 1;
+              if (player.playedInSeriGames) manager.seriCount += 1;
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.seriCompleteLog);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.seriFilteredGameLog);
             }
@@ -304,7 +304,7 @@
               player.tournamentLeagueName = $textManipulator.formattedLeagueName('chlg');
             }
             if (!angular.isUndefinedOrNull(manager)) {
-              manager.chlgCount += 1;
+              if (player.playedInChlgGames) manager.chlgCount += 1;
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.chlgCompleteLogs);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.chlgFilteredGameLog);
             }
@@ -341,10 +341,9 @@
               player.tournamentLeagueName = $textManipulator.formattedLeagueName('uefa');
             }
             if (!angular.isUndefinedOrNull(manager)) {
-              manager.euroCount += 1;
+              if (player.playedInEuroGames) manager.euroCount += 1;
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.euroCompleteLogs);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.euroFilteredGameLog);
-              console.log(manager.managerName, 'euro log', manager.filteredMonthlyGoalsLog.length);
             }
 
           });
@@ -371,10 +370,6 @@
        */
       arrayMapper.transferPlayersMap = function (leagueData, teamData, i, index) {
 
-        //console.log('transferPlayersMap');
-        //console.log('teamName', teamData.full_name);
-        //console.log('teamLogo', teamData.logos.small);
-
         return {
           index: index,
           id: i.id,
@@ -397,8 +392,6 @@
           leagueSlug,
           computedPoints;
 
-        //if (angular.isUndefinedOrNull(game.id) && angular.isUndefinedOrNull(game.playerName) && angular.isUndefinedOrNull(game.managerName)) {
-
         gameMapsObj.index = index;
         gameMapsObj.id = dataObj.player.id;
         gameMapsObj.playerName = $textManipulator.stripVowelAccent(dataObj.player.playerName);
@@ -410,22 +403,11 @@
         gameMapsObj.assists = game.assists || 0;
         gameMapsObj.teamName = dataObj.player.teamName;
         gameMapsObj.teamLogo = dataObj.player.teamLogo;
-        // console.log(gameMapsObj.playerName, 'team logo and team name mapped for');
         gameMapsObj.datePlayed = $momentService.goalLogDate(game.box_score.event.game_date);
         gameMapsObj.originalDate = game.box_score.event.game_date;
         gameMapsObj.managerName = dataObj.player.managerName || 'N/A';
         gameMapsObj.result = $textManipulator.result.call(gameMapsObj, game);
         gameMapsObj.finalScore = $textManipulator.finalScore.call(gameMapsObj, game);
-
-        // } else {
-        //
-        //   console.log('map 2');
-        //   gameMapsObj = game;
-        //   debugger;
-        //
-        // }
-
-        //console.log('on', gameMapsObj.datePlayed, gameMapsObj.playerName, 'scored', gameMapsObj.goalsScored);
 
         gameGoals = gameMapsObj.goalsScored;
         leagueSlug = gameMapsObj.leagueSlug;

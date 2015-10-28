@@ -37,12 +37,14 @@
        */
       $scope.tabData = [
         {
-          heading: 'Overview',
-          route: 'managers.overview'
+          title: 'Overview',
+          route: 'managers.overview',
+          active: true
         },
         {
-          heading: 'Game Logs',
-          route: 'managers.gamelogs'
+          title: 'Game Logs',
+          route: 'managers.gamelogs',
+          active: false
         }
       ];
 
@@ -95,36 +97,32 @@
 
           console.log('-- data for', $scope.selectedManager.managerName, 'is old --');
 
+          $rootScope.loading = false;
+
+          $scope.selectedManager.wildCardCount = 0;
+
+          _.each($scope.selectedManager.players, function (player) {
+            checkForWildCard(player, $scope.selectedManager);
+          });
+
           $scope.startFireBase(function () {
-
-            $scope.selectedManager.wildCardCount = 0;
-
-            _.each($scope.selectedManager.players, function (player) {
-              checkForWildCard(player, $scope.selectedManager);
-            });
-
-            $rootScope.loading = false;
-
             //$updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
-
           });
 
         } else if ($momentService.isHoursAgo($scope.managerData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
+          $rootScope.loading = false;
+
+          $scope.selectedManager.wildCardCount = 0;
+
+          _.each($scope.selectedManager.players, function (player) {
+            checkForWildCard(player, $scope.selectedManager);
+          });
+
           $scope.startFireBase(function () {
-
-            $scope.selectedManager.wildCardCount = 0;
-
-            _.each($scope.selectedManager.players, function (player) {
-              checkForWildCard(player, $scope.selectedManager);
-            });
-
-            $rootScope.loading = false;
-
             //$updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
-
           });
 
         } else {
@@ -165,7 +163,7 @@
 
       };
 
-      var onAllManagersRequestFinished = function(managersData) {
+      var onAllManagersRequestFinished = function (managersData) {
 
         $rootScope.loading = false;
         $scope.managerData = managersData;
@@ -186,7 +184,7 @@
       };
 
 
-      $rootScope.$on('MONTH_CHANGED', function(e, month) {
+      $rootScope.$on('MONTH_CHANGED', function (e, month) {
         console.log('month change detected:', month.monthName);
         $scope.currentMonthLog = _.chain($scope.selectedManager.filteredMonthlyGoalsLog)
           .flatten(true)

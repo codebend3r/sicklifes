@@ -89,7 +89,7 @@
             })
           ]
         }))
-        .pipe(gulp.dest(config.prod))
+        .pipe(gulp.dest('builds/' + gutil.env.build))
         .pipe($.size());
 
     } else if (gutil.env.build === 'release') {
@@ -106,6 +106,7 @@
           ],
           js: [
             $.ngAnnotate(),
+            $.stripDebug(),
             $.uglify(),
             $.rev(),
             $.size({
@@ -114,13 +115,13 @@
             })
           ]
         }))
-        .pipe(gulp.dest(config.release))
+        .pipe(gulp.dest('builds/' + gutil.env.build))
         .pipe($.size());
 
     } else {
 
       return gulp.src([config.app + '/index.html'])
-        .pipe(gulp.dest(config.dev))
+        .pipe(gulp.dest('builds/' + gutil.env.build))
         .pipe($.size());
 
     }
@@ -208,15 +209,12 @@
   // bower
   gulp.task('bower-all', function () {
 
-    if (gutil.env.build !== 'release') {
-      return gulp.src([config.app + '/bower_components/**/*.{js,css}'])
-        .pipe(gulp.dest('builds/' + gutil.env.build + '/bower_components/'))
-        .pipe($.size({
-          title: 'bower',
-          showFiles: false
-        }));
-
-    }
+    return gulp.src([config.app + '/bower_components/**/*.{js,css}'])
+      .pipe(gulp.dest('builds/' + gutil.env.build + '/bower_components/'))
+      .pipe($.size({
+        title: 'bower',
+        showFiles: false
+      }));
 
   });
 
@@ -237,6 +235,9 @@
 
     return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
       .pipe(gulp.dest('builds/' + gutil.env.build + '/images/'))
+      .pipe($.imagemin({
+        optimizationLevel: 1
+      }))
       .pipe($.size({
         title: 'images',
         showFiles: false
@@ -288,7 +289,7 @@
 
   gulp.task('deploy', function (callback) {
     runSequence(
-      'clean-all',
+      'clean',
       'start',
       'build-GUI',
       callback);
