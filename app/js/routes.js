@@ -37,40 +37,40 @@
           controller: 'appCtrl'
 
         })
-        .state('signIn', {
-
-          url: '/login',
-          parent: 'app',
-          templateUrl: 'views/login.html',
-          controller: 'loginCtrl',
-          data: {
-            public: true,
-            login: true
-          }
-
-        })
-        .state('signUp', {
-
-          url: '/signup',
-          parent: 'app',
-          templateUrl: 'views/signup.html',
-          controller: 'loginCtrl',
-          data: {
-            public: true
-          }
-
-        })
-        .state('resetPassword', {
-
-          url: '/reset-password',
-          parent: 'app',
-          templateUrl: 'views/reset-password.html',
-          controller: 'loginCtrl',
-          data: {
-            public: true
-          }
-
-        })
+        //.state('signIn', {
+        //
+        //  url: '/login',
+        //  parent: 'app',
+        //  templateUrl: 'views/login.html',
+        //  controller: 'loginCtrl',
+        //  data: {
+        //    public: true,
+        //    login: true
+        //  }
+        //
+        //})
+        //.state('signUp', {
+        //
+        //  url: '/signup',
+        //  parent: 'app',
+        //  templateUrl: 'views/signup.html',
+        //  controller: 'loginCtrl',
+        //  data: {
+        //    public: true
+        //  }
+        //
+        //})
+        //.state('resetPassword', {
+        //
+        //  url: '/reset-password',
+        //  parent: 'app',
+        //  templateUrl: 'views/reset-password.html',
+        //  controller: 'loginCtrl',
+        //  data: {
+        //    public: true
+        //  }
+        //
+        //})
         .state('leagues', {
 
           url: '/leagues/:leagueName',
@@ -147,14 +147,6 @@
           controller: 'standingsCtrl'
 
         })
-        //.state('monthlyWinners', {
-        //
-        //  url: '/monthlywinners/:managerId',
-        //  parent: 'app',
-        //  templateUrl: 'views/monthly-winners.html',
-        //  controller: 'monthlyWinnersCtrl'
-        //
-        //})
         .state('admin', {
 
           url: '/admin',

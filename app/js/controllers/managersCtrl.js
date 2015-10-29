@@ -97,55 +97,65 @@
 
           console.log('-- data for', $scope.selectedManager.managerName, 'is old --');
 
-          $rootScope.loading = false;
-
           $scope.selectedManager.wildCardCount = 0;
 
           _.each($scope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
           });
 
-          $scope.startFireBase(function () {
-            //$updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
-          });
+          $rootScope.loading = false;
+
+          //$scope.startFireBase(function () {
+          //  $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
+          //});
 
         } else if ($momentService.isHoursAgo($scope.managerData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
-          $rootScope.loading = false;
-
           $scope.selectedManager.wildCardCount = 0;
 
           _.each($scope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
           });
 
-          $scope.startFireBase(function () {
-            //$updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
-          });
+          $rootScope.loading = false;
+
+          //$scope.startFireBase(function () {
+          //  $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
+          //});
 
         } else {
 
           console.log('-- data is up to date --');
 
-          // tell firebase it is ready to be updated
-          $rootScope.loading = false;
-
           $scope.selectedManager.wildCardCount = 0;
 
           _.each($scope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
           });
 
+          $rootScope.loading = false;
+
         }
 
-        if (!$rootScope.fireBaseReady) {
-          console.log('start firebase');
-          $scope.startFireBase(function () {
-            //noop
-          });
+        if (angular.isUndefinedOrNull($localStorage[$scope.dataKeyName])) {
+
+          var saveObject = {
+            _lastSyncedOn: $momentService.syncDate(),
+            data: $rootScope.managerData
+          };
+
+          $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
+
         }
+
+        //if (!$rootScope.fireBaseReady) {
+        //  console.log('start firebase if not already initiated');
+        //  $scope.startFireBase(function () {
+        //    //noop
+        //  });
+        //}
 
       };
 
@@ -182,7 +192,6 @@
         $updateDataUtils.updateAllManagerData(onAllManagersRequestFinished);
 
       };
-
 
       $rootScope.$on('MONTH_CHANGED', function (e, month) {
         console.log('month change detected:', month.monthName);

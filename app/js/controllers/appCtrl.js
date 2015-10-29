@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $arrayMappers, $momentService, $location, $objectUtils, $arrayFilter, $textManipulator, user) {
+    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $arrayMappers, $momentService, $location, $objectUtils, $arrayFilter, $textManipulator) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -88,12 +88,12 @@
 
       };
 
-      user.getCurrent().then(function (currentUser) {
+      /*user.getCurrent().then(function (currentUser) {
         //console.log('currentUser:', currentUser);
         $rootScope.user = currentUser;
         console.log('WELCOME', $rootScope.user.first_name);
         //$scope.user = user;
-      });
+      });*/
 
       /**
        * @description whether data is still loading
@@ -180,11 +180,11 @@
 
         console.log('saveRoster --> saveObject', saveObject);
 
-        _.each(saveObject.data, function(manager) {
-          _.each(manager.filteredMonthlyGoalsLog, function(log){
-            console.log(manager.managerName, '>', log.datePlayed);
-          });
-        });
+        //_.each(saveObject.data, function(manager) {
+        //  _.each(manager.filteredMonthlyGoalsLog, function(log){
+        //    console.log(manager.managerName, '>', log.datePlayed);
+        //  });
+        //});
 
         $scope.saveToFireBase(saveObject, 'managersData');
 
@@ -292,6 +292,7 @@
             $rootScope.firebaseData = fbData;
             $rootScope.fireBaseReady = true;
             $rootScope.lastSyncDate = $rootScope.firebaseData.managersData._lastSyncedOn;
+            $rootScope.source = 'firebase';
             callback(fbData);
           });
         }

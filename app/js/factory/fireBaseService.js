@@ -46,6 +46,23 @@
 
         },
 
+        saveToLocalStorage: function (saveObject, key) {
+
+          console.log('saveToLocalStorage -- START | key:', key);
+
+          var cleanedData = angular.copy(saveObject);
+
+          // save to local storage
+          $localStorage[key] = cleanedData;
+
+          $rootScope.lastSyncDate = saveObject._lastSyncedOn;
+          $rootScope.source = 'local storage';
+
+          console.log('saveToLocalStorage -- COMPLETE');
+
+
+        },
+
         saveToFireBase: function (saveObject, key) {
 
           console.log('saveToFireBase -- START | key:', key);

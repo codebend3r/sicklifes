@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 09/01/2015
+ * Created by Bouse on 10/29/2015
  */
 
 (function () {
@@ -14,38 +14,36 @@
     'ngResource',
     'ngSanitize',
     'ngStorage',
-    'UserApp',
+    //'UserApp',
     'jsonFormatter',
     'firebase',
     'angular.filter'
 
   ])
 
-  .constant('$moment', moment)
+    .constant('$moment', moment)
 
-  .run(function(user) {
-    user.init({ appId: '5482b3c1ebdc7' });
-  })
+    //.run(function (user) {
+    //  user.init({ appId: '5482b3c1ebdc7' });
+    //})
 
-  .filter('orderObjectBy', function() {
-    return function(items, field, reverse) {
-      var filtered = [];
-      angular.forEach(items, function(item) {
-        filtered.push(item);
-      });
-      filtered.sort(function (a, b) {
-        return (a[field] > b[field] ? 1 : -1);
-      });
-      if(reverse) filtered.reverse();
-      return filtered;
-    };
-  });
+    .filter('orderObjectBy', function () {
+      return function (items, field, reverse) {
+        var filtered = [];
+        _.each(items, function (item) {
+          filtered.push(item);
+        });
+        filtered.sort(function (a, b) {
+          return (a[field] > b[field] ? 1 : -1);
+        });
+        if (reverse) filtered.reverse();
+        return filtered;
+      };
+    });
 
-  $(function(){
+  $(function () {
     var navMain = $("#navbar");
-    navMain.on("click", "a", null, function () {
-      //navMain.collapse('hide');
-      console.log('collapse nav');
+    navMain.on('click', 'a', null, function () {
       $('#navbar').removeClass('in')
     });
   });

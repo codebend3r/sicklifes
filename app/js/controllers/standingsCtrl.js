@@ -29,22 +29,32 @@
       /**
        * @description
        */
-      $scope.updateAllManagerData = null;
-
-      /**
-       * @description
-       */
       $scope.showLastAmount = 10;
 
       $scope.loadingChart = true;
 
       /**
-       * @description
+       * @description function to check
        */
       $scope.isCurrentMonth = function (selectedMonth, date) {
         var gameDate = $momentService.getDate(date),
           isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
         return isBetween;
+      };
+
+      /**
+       * @description update only the current manager data
+       */
+      $scope.updateAllManagerData = function () {
+
+        $rootScope.loading = true;
+        $updateDataUtils.updateAllManagerData(function(data) {
+
+          $rootScope.loading = false;
+          console.log('managers updated', data);
+
+        });
+
       };
 
       ////////////////////////////////////////
@@ -151,16 +161,18 @@
 
           $rootScope.loading = false;
 
+          // define managerData on scope and $rootScope
+          $scope.managerData = $scope.populateManagersData(result.data);
+
+          // define selectedManager by managerId
+          $scope.selectedManager = $scope.managerData[$stateParams.managerId];
+
+          // TODO - fix, takes too long
+          //$updateDataUtils.updateAllManagerData(onManagersRequestFinished);
+
           $scope.startFireBase(function () {
 
-            // define managerData on scope and $rootScope
-            $scope.managerData = $scope.populateManagersData(result.data);
-
-            // define selectedManager by managerId
-            $scope.selectedManager = $scope.managerData[$stateParams.managerId];
-
-            // TODO - fix, takes too long
-            //$updateDataUtils.updateAllManagerData(onManagersRequestFinished);
+            console.log('firebase ready');
 
           });
 
@@ -175,18 +187,27 @@
 
         }
 
-        $timeout(function() {
-          console.log('timeout:', currentMonth.monthName);
-          $scope.changeMonth(currentMonth);
-        }.bind($scope), 500);
+        var saveObject = {
+          _lastSyncedOn: $momentService.syncDate(),
+          data: $rootScope.managerData
+        };
+
+        $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
+
+        /////////////////////////////
+
+        // $timeout(function() {
+        //   console.log('timeout:', currentMonth.monthName);
+        //   $scope.changeMonth(currentMonth);
+        // }.bind($scope), 500);
 
       };
 
-      $rootScope.$on('MONTH_CHANGED', function(e, month) {
-        console.log('month change detected:', month.monthName);
-        currentMonth = month;
-        //processChart();
-      });
+      // $rootScope.$on('MONTH_CHANGED', function(e, month) {
+      //   console.log('month change detected:', month.monthName);
+      //   currentMonth = month;
+      //   processChart();
+      // });
 
       /**
        * @description current month
@@ -322,27 +343,22 @@
 
         if (angular.isDefined($rootScope[$scope.dataKeyName])) {
 
-          console.log('load from $rootScope');
+          console.log('read from $rootScope');
           loadData($rootScope[$scope.dataKeyName]);
 
         } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
 
-          console.log('load from local storage');
+          console.log('read from local storage');
           loadData($localStorage[$scope.dataKeyName]);
 
         } else {
 
-
           $scope.startFireBase(function (firebaseData) {
-
-            console.log('load from firebase');
+            console.log('read from firebase');
             loadData(firebaseData[$scope.dataKeyName]);
-
           });
 
         }
-
-        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData;
 
       };
 
