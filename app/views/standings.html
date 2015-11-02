@@ -40,6 +40,60 @@
     </tbody>
   </table>
 
+  <h3>Latest Goals by All Managers</h3>
+
+  <!-- desktop table -->
+  <table class='table table-hover table-responsive hidden-sm hidden-xs'>
+    <thead>
+    <tr>
+      <th>Player</th>
+      <th>Manager</th>
+      <th>G</th>
+      <th>S</th>
+      <th>Score</th>
+      <th>Date Played</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr ng-repeat="player in combinedLogs | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 15">
+      <td>
+        <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+      </td>
+      <td>{{player.managerName}}</td>
+      <td>{{player.goalsScored}}</td>
+      <td>{{player.shots}}</td>
+      <td>{{player.result}} {{player.finalScore}}</td>
+      <td>{{player.datePlayed}}</td>
+    </tr>
+    </tbody>
+
+  </table>
+
+  <!-- mobile table -->
+  <table class='table table-hover table-responsive hidden-lg hidden-md'>
+    <thead>
+    <tr>
+      <th>Player</th>
+      <th>Manager</th>
+      <th>G</th>
+      <th>Date</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr ng-repeat="player in combinedLogs | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 15">
+      <td>
+        <a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+      </td>
+      <td>{{player.managerName}}</td>
+      <td>{{player.goalsScored}}</td>
+      <td class="small-text">{{player.datePlayed}}</td>
+    </tr>
+    </tbody>
+
+  </table>
+
   <!-- <h3>Showing last {{showLastAmount}} data points.</h3> -->
 
   <!--<div ng-if="loadingChart" class="spinner">

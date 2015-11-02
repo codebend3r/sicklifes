@@ -170,12 +170,6 @@
           // TODO - fix, takes too long
           //$updateDataUtils.updateAllManagerData(onManagersRequestFinished);
 
-          $scope.startFireBase(function () {
-
-            console.log('firebase ready');
-
-          });
-
         } else {
 
           console.log('-- data is up to date --');
@@ -187,12 +181,23 @@
 
         }
 
-        var saveObject = {
-          _lastSyncedOn: $momentService.syncDate(),
-          data: $rootScope.managerData
-        };
+        $scope.combinedLogs = [];
 
-        $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
+        _.each($scope.managerData, function(manager) {
+          $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog);
+        });
+
+
+        // $scope.startFireBase(function () {
+        //   console.log('firebase ready');
+        // });
+
+        // var saveObject = {
+        //   _lastSyncedOn: $momentService.syncDate(),
+        //   data: $rootScope.managerData
+        // };
+        //
+        // $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
 
         /////////////////////////////
 

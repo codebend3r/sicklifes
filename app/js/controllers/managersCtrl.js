@@ -38,13 +38,11 @@
       $scope.tabData = [
         {
           title: 'Overview',
-          route: 'managers.overview',
-          active: true
+          route: 'managers.overview'
         },
         {
           title: 'Game Logs',
-          route: 'managers.gamelogs',
-          active: false
+          route: 'managers.gamelogs'
         }
       ];
 
@@ -139,16 +137,16 @@
 
         }
 
-        if (angular.isUndefinedOrNull($localStorage[$scope.dataKeyName])) {
-
-          var saveObject = {
-            _lastSyncedOn: $momentService.syncDate(),
-            data: $rootScope.managerData
-          };
-
-          $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
-
-        }
+        // if (angular.isUndefinedOrNull($localStorage[$scope.dataKeyName])) {
+        //
+        //   var saveObject = {
+        //     _lastSyncedOn: $momentService.syncDate(),
+        //     data: $rootScope.managerData
+        //   };
+        //
+        //   $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
+        //
+        // }
 
         //if (!$rootScope.fireBaseReady) {
         //  console.log('start firebase if not already initiated');

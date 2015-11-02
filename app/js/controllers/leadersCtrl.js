@@ -16,7 +16,6 @@
 
       console.log('--> leadersCtrl');
 
-
       /**
        * TODO
        */
@@ -71,12 +70,17 @@
 
         $rootScope.loading = false;
 
-        $scope.startFireBase(function () {
+        // imageTool.convertImgToBase64URL($scope.selectedLeague.img, function(base64Img) {
+        //   console.log('image converted', base64Img);
+        //   $scope.leagueImage = base64Img
+        // });
 
-          $rootScope.fireBaseReady = true;
-          prepareForFirebase();
-
-        });
+        // $scope.startFireBase(function () {
+        //
+        //   $rootScope.fireBaseReady = true;
+        //   prepareForFirebase();
+        //
+        // });
 
       };
 

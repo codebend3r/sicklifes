@@ -401,6 +401,9 @@
         gameMapsObj.goalsScored = game.goals || 0;
         gameMapsObj.points = $scoringLogic.calculatePoints(gameMapsObj.goalsScored, gameMapsObj.leagueSlug) || $scoringLogic.calculatePoints(0, gameMapsObj.leagueSlug);
         gameMapsObj.assists = game.assists || 0;
+        gameMapsObj.shots = game.shots || 0;
+        gameMapsObj.shotsOnGoal = game.shots_on_goal || 0;
+        gameMapsObj.minutesPlayed = game.minutes_played || 0;
         gameMapsObj.teamName = dataObj.player.teamName;
         gameMapsObj.teamLogo = dataObj.player.teamLogo;
         gameMapsObj.datePlayed = $momentService.goalLogDate(game.box_score.event.game_date);
@@ -408,6 +411,15 @@
         gameMapsObj.managerName = dataObj.player.managerName || 'N/A';
         gameMapsObj.result = $textManipulator.result.call(gameMapsObj, game);
         gameMapsObj.finalScore = $textManipulator.finalScore.call(gameMapsObj, game);
+
+        console.log('================================');
+        console.log(gameMapsObj.playerName, 'goals', gameMapsObj.goalsScored);
+        console.log(gameMapsObj.playerName, 'assists', gameMapsObj.assists);
+        console.log(gameMapsObj.playerName, 'shots', gameMapsObj.shots);
+        console.log(gameMapsObj.playerName, 'shots on goals', gameMapsObj.shotsOnGoal);
+        console.log(gameMapsObj.playerName, 'minutes played', gameMapsObj.minutesPlayed);
+        console.log(gameMapsObj.playerName, 'datePlayed', gameMapsObj.datePlayed);
+        console.log(gameMapsObj.playerName, 'vsTeam', gameMapsObj.vsTeam);
 
         gameGoals = gameMapsObj.goalsScored;
         leagueSlug = gameMapsObj.leagueSlug;

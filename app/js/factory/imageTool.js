@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$imageTool', function () {
+    .factory('imageTool', function () {
 
       return {
 

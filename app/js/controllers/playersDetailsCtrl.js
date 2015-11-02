@@ -98,8 +98,7 @@
         if (foundPlayer && angular.isDefined($scope.player._lastSyncedOn) && !$momentService.isHoursAgo($scope.player._lastSyncedOn)) {
 
           console.log('foundPlayer and is up to date', $scope.player.playerName);
-          $rootScope.loading = false;
-          console.log($scope.player);
+          requestUpdateOnPlayer();
 
           // if (angular.isDefined($scope.player.chlgCompleteLog)) {
           //   console.log('$scope.player.chlgCompleteLog', $scope.player.chlgCompleteLog);
@@ -134,8 +133,7 @@
             console.log('-- DONE --');
             console.log('>', $scope.player);
             //console.log($scope.player.playerName);
-
-            $scope.saveToIndex($stateParams.playerId, $scope.player);
+            //$scope.saveToIndex($stateParams.playerId, $scope.player);
 
             $rootScope.loading = false;
 

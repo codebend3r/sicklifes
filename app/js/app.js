@@ -41,12 +41,12 @@
       };
     });
 
-  $(function () {
-    var navMain = $("#navbar");
-    navMain.on('click', 'a', null, function () {
-      $('#navbar').removeClass('in')
-    });
-  });
+  // $(function () {
+  //   var navMain = $("#navbar");
+  //   navMain.on('click', 'a', null, function () {
+  //     $('#navbar').removeClass('in')
+  //   });
+  // });
 
 
 })();

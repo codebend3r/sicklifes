@@ -4,8 +4,11 @@
   <tr>
     <th>Player</th>
     <th>vs Team</th>
-    <th>Goals</th>
-    <th>Final Score</th>
+    <th>G</th>
+    <th>S</th>
+    <th>SOG</th>
+    <th>Mins</th>
+    <th>Score</th>
     <th>Date Played</th>
   </tr>
   </thead>
@@ -17,6 +20,9 @@
     </td>
     <td>{{player.alignment}} {{player.vsTeam}}</td>
     <td>{{player.goalsScored}}</td>
+    <td>{{player.shots}}</td>
+    <td>{{player.shotsOnGoals}}</td>
+    <td>{{player.minutesPlayed}}mins</td>
     <td>{{player.result}} {{player.finalScore}}</td>
     <td>{{player.datePlayed}}</td>
   </tr>
@@ -29,6 +35,9 @@
     </td>
     <td>{{player.alignment}} {{player.vsTeam}}</td>
     <td>{{player.goalsScored}}</td>
+    <td>{{player.shots}}</td>
+    <td>{{player.shotsOnGoals}}</td>
+    <td>{{player.minutesPlayed}}mins</td>
     <td>{{player.result}} {{player.finalScore}}</td>
     <td>{{player.datePlayed}}</td>
   </tr>
@@ -41,8 +50,8 @@
   <thead>
   <tr>
     <th>Player</th>
-    <th>vs Team</th>
-    <th>Goals</th>
+    <th>vs</th>
+    <th>G</th>
     <th>Date</th>
   </tr>
   </thead>
