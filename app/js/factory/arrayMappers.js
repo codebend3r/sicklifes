@@ -69,8 +69,6 @@
        */
       arrayMapper.tableTournamentMap = function (teamData, index) {
 
-        //console.log('group:', teamData.group);
-
         return {
           index: index,
           id: teamData.id,
@@ -98,8 +96,6 @@
 
         var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
-        //console.log('playerInfo:', player.playerName, profileLeagueSlug);
-
         player.id = result.data.id;
 
         player.playedInLigaGames = false;
@@ -118,7 +114,6 @@
 
         // based on player result data return an object with the valid leagues for this player
         player.validLeagues = $textManipulator.getPlayerValidLeagues(result);
-
 
         ///////////////////////////////////
 
@@ -412,14 +407,14 @@
         gameMapsObj.result = $textManipulator.result.call(gameMapsObj, game);
         gameMapsObj.finalScore = $textManipulator.finalScore.call(gameMapsObj, game);
 
-        console.log('================================');
-        console.log(gameMapsObj.playerName, 'goals', gameMapsObj.goalsScored);
-        console.log(gameMapsObj.playerName, 'assists', gameMapsObj.assists);
-        console.log(gameMapsObj.playerName, 'shots', gameMapsObj.shots);
-        console.log(gameMapsObj.playerName, 'shots on goals', gameMapsObj.shotsOnGoal);
-        console.log(gameMapsObj.playerName, 'minutes played', gameMapsObj.minutesPlayed);
-        console.log(gameMapsObj.playerName, 'datePlayed', gameMapsObj.datePlayed);
-        console.log(gameMapsObj.playerName, 'vsTeam', gameMapsObj.vsTeam);
+        // console.log('================================');
+        // console.log(gameMapsObj.playerName, 'goals', gameMapsObj.goalsScored);
+        // console.log(gameMapsObj.playerName, 'assists', gameMapsObj.assists);
+        // console.log(gameMapsObj.playerName, 'shots', gameMapsObj.shots);
+        // console.log(gameMapsObj.playerName, 'shots on goals', gameMapsObj.shotsOnGoal);
+        // console.log(gameMapsObj.playerName, 'minutes played', gameMapsObj.minutesPlayed);
+        // console.log(gameMapsObj.playerName, 'datePlayed', gameMapsObj.datePlayed);
+        // console.log(gameMapsObj.playerName, 'vsTeam', gameMapsObj.vsTeam);
 
         gameGoals = gameMapsObj.goalsScored;
         leagueSlug = gameMapsObj.leagueSlug;

@@ -16,7 +16,7 @@
 
       console.log('--> tablesCtrl');
 
-      $rootScope.loading = true;
+      //$rootScope.loading = true;
 
       /**
        * table sort function

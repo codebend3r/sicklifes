@@ -67,7 +67,7 @@
   });
 
   // html
-  gulp.task('html', ['js', 'css'], function () {
+  gulp.task('html', function () {
 
     if (gutil.env.build === 'prod') {
 
@@ -191,27 +191,42 @@
 
   });
 
+  gulp.task('vendor-css', function () {
+
+    return gulp.src([config.app + '/vendor-css/**/*.css'])
+      .pipe(gulp.dest('builds/' + gutil.env.build + '/css/'))
+      .pipe($.size({
+        title: 'css',
+        showFiles: false
+      }));
+
+  });
+
   // js (partials or template)
   gulp.task('js', ['template'], function () {
 
-    return gulp.src([config.app + '/js/**/*.js'])
-      .pipe(gulp.dest('builds/' + gutil.env.build + '/js/'))
-      .pipe($.size({
-        title: 'js',
-        showFiles: false
-      }));
+    if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
+      return gulp.src([config.app + '/js/**/*.js'])
+        .pipe(gulp.dest('builds/' + gutil.env.build + '/js/'))
+        .pipe($.size({
+          title: 'js',
+          showFiles: false
+        }));
+    }
 
   });
 
   // bower
   gulp.task('bower-all', function () {
 
-    return gulp.src([config.app + '/bower_components/**/*.{js,css}'])
-      .pipe(gulp.dest('builds/' + gutil.env.build + '/bower_components/'))
-      .pipe($.size({
-        title: 'bower',
-        showFiles: false
-      }));
+    if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
+      return gulp.src([config.app + '/bower_components/**/*.{js,css}'])
+        .pipe(gulp.dest('builds/' + gutil.env.build + '/bower_components/'))
+        .pipe($.size({
+          title: 'bower',
+          showFiles: false
+        }));
+    }
 
   });
 
@@ -254,6 +269,9 @@
   gulp.task('build-GUI', function (callback) {
 
     runSequence(
+      'js',
+      'css',
+      //'vendor-css',
       'html',
       'bower-all',
       'modal-views',
