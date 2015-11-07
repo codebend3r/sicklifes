@@ -89,7 +89,8 @@
           ]
         }))
         .pipe(gulp.dest('builds/' + gutil.env.build))
-        .pipe($.size());
+        .pipe($.size())
+        .on('error', gutil.log);
 
     } else if (gutil.env.build === 'release') {
 
@@ -115,13 +116,15 @@
           ]
         }))
         .pipe(gulp.dest('builds/' + gutil.env.build))
-        .pipe($.size());
+        .pipe($.size())
+        .on('error', gutil.log);
 
     } else {
 
       return gulp.src([config.app + '/index.html'])
         .pipe(gulp.dest('builds/' + gutil.env.build))
-        .pipe($.size());
+        .pipe($.size())
+        .on('error', gutil.log);
 
     }
 
@@ -132,7 +135,8 @@
 
     return gulp.src([config.app + '/views/**/*.html'])
       .pipe(gulp.dest('builds/' + gutil.env.build + '/views/'))
-      .pipe($.size());
+      .pipe($.size())
+      .on('error', gutil.log);
 
   });
 
@@ -144,7 +148,8 @@
       .pipe($.size({
         title: 'modal views',
         showFiles: false
-      }));
+      }))
+      .on('error', gutil.log);
 
   });
 
@@ -158,7 +163,8 @@
         root: 'views/'
       }))
       .pipe(gulp.dest(config.app + '/js/templates/templateCache.js'))
-      .pipe($.size());
+      .pipe($.size())
+      .on('error', gutil.log);
 
   });
 
@@ -198,7 +204,8 @@
       .pipe($.size({
         title: 'css',
         showFiles: false
-      }));
+      }))
+      .on('error', gutil.log);
 
   });
 
@@ -210,8 +217,9 @@
         .pipe(gulp.dest('builds/' + gutil.env.build + '/js/'))
         .pipe($.size({
           title: 'js',
-          showFiles: false
-        }));
+          showFiles: true
+        }))
+        .on('error', gutil.log);
     }
 
   });
@@ -225,7 +233,8 @@
         .pipe($.size({
           title: 'bower',
           showFiles: false
-        }));
+        }))
+        .on('error', gutil.log);
     }
 
   });
@@ -238,7 +247,8 @@
       .pipe($.size({
         title: 'fonts',
         showFiles: false
-      }));
+      }))
+      .on('error', gutil.log);
 
   });
 
@@ -253,14 +263,16 @@
       .pipe($.size({
         title: 'images',
         showFiles: false
-      }));
+      }))
+      .on('error', gutil.log);
 
   });
 
   // clean
   gulp.task('clean-templatecache', function () {
     return gulp.src([config.app + '/js/templates/templateCache.js'], { read: false }).pipe($.clean({ force: true }))
-      .pipe($.size());
+      .pipe($.size())
+      .on('error', gutil.log);
   });
 
   /**

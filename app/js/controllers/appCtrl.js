@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $arrayMappers, $momentService, $location, $objectUtils, $arrayFilter, $textManipulator) {
+    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $arrayMappers, $momentService, $location, $objectUtils, $arrayFilter, $textManipulator, $http) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -262,6 +262,12 @@
         $scope.selectedMonth = month;
         updateAllManagersFilter();
         $rootScope.$emit('MONTH_CHANGED', month);
+      };
+
+      $scope.getManagersJson = function() {
+
+        return $http.get('https://glaring-fire-9383.firebaseio.com/managersData.json');
+
       };
 
       /**

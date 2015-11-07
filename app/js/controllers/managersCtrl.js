@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $arrayFilter, $state, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $stateParams) {
+    .controller('managersCtrl', function ($scope, $rootScope, $arrayFilter, $state, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $http, $stateParams) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -88,6 +88,8 @@
 
         // define selectedManager by managerId
         $scope.selectedManager = $scope.managerData[managerId];
+
+        console.log('selectedManager is:', $scope.selectedManager);
 
         $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog;
 
@@ -220,9 +222,13 @@
 
           console.log('load from firebase');
 
-          $scope.startFireBase(function (firebaseData) {
-            loadData(firebaseData[$scope.dataKeyName]);
+          $scope.getManagersJson().then(function(result) {
+            loadData(result.data);
           });
+
+          // $scope.startFireBase(function (firebaseData) {
+          //   loadData(firebaseData[$scope.dataKeyName]);
+          // });
 
         }
 
