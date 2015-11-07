@@ -34,6 +34,24 @@
       $scope.loadingChart = true;
 
       /**
+       * @description tabs data
+       */
+      $scope.tabData = [
+        {
+          title: 'Overview',
+          route: 'standings.overview'
+        },
+        {
+          title: 'Game Logs',
+          route: 'standings.latestgoals'
+        },
+        {
+          title: 'Graphs',
+          route: 'standings.graphs'
+        }
+      ];
+
+      /**
        * @description function to check
        */
       $scope.isCurrentMonth = function (selectedMonth, date) {

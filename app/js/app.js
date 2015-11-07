@@ -27,6 +27,12 @@
     //  user.init({ appId: '5482b3c1ebdc7' });
     //})
 
+    .run(function($rootScope) {
+
+      $rootScope.websiteTitle = 'Geeves';
+
+    })
+
     .filter('orderObjectBy', function () {
       return function (items, field, reverse) {
         var filtered = [];

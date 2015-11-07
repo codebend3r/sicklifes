@@ -16,7 +16,7 @@
 
       console.log('--> tablesCtrl');
 
-      //$rootScope.loading = true;
+      $rootScope.loading = true;
 
       /**
        * table sort function
@@ -74,8 +74,6 @@
             uefa: $scope.allLeagues[4].source
           };
 
-          console.log('saveObject', saveObject);
-
           $scope.saveToFireBase(saveObject, 'leagueTables');
 
         });
@@ -83,6 +81,10 @@
       };
 
       var loadData = function (data) {
+
+        $rootScope.loading = false;
+
+        return;
 
         console.log('///////////////////');
         console.log('data:', data);
@@ -109,51 +111,85 @@
         if ($momentService.isHoursAgo(data._lastSyncedOn, saveObject)) {
 
           console.log('-- data is too old --');
-          $rootScope.loading = false;
           //$scope.updateTablesFromHTTP(httpDataLoaded);
 
         } else {
 
           console.log('-- data is up to date --');
-          $rootScope.loading = false;
 
         }
 
-        console.log('$scope.selectedLeague', $scope.selectedLeague.slug);
+        $rootScope.loading = false;
+
+        // map groups
+
         if ($scope.selectedLeague.slug === 'uefa') {
 
-          $scope.groupA = _.filter(saveObject.uefa, function(team) {
+          $scope.groupA = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group A';
           });
 
-          $scope.groupB = _.filter(saveObject.uefa, function(team) {
+          $scope.groupB = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group B';
           });
 
-          $scope.groupC = _.filter(saveObject.uefa, function(team) {
+          $scope.groupC = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group C';
           });
 
-          $scope.groupD = _.filter(saveObject.uefa, function(team) {
+          $scope.groupD = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group D';
           });
 
-          $scope.groupE = _.filter(saveObject.uefa, function(team) {
+          $scope.groupE = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group E';
           });
 
-          $scope.groupF = _.filter(saveObject.uefa, function(team) {
+          $scope.groupF = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group F';
           });
 
-          $scope.groupG = _.filter(saveObject.uefa, function(team) {
+          $scope.groupG = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group G';
           });
 
-          $scope.groupH = _.filter(saveObject.uefa, function(team) {
+          $scope.groupH = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group H';
           });
 
+        } else if ($scope.selectedLeague.slug === 'chlg') {
+
+          $scope.groupA = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group A';
+          });
+
+          $scope.groupB = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group B';
+          });
+
+          $scope.groupC = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group C';
+          });
+
+          $scope.groupD = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group D';
+          });
+
+          $scope.groupE = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group E';
+          });
+
+          $scope.groupF = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group F';
+          });
+
+          $scope.groupG = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group G';
+          });
+
+          $scope.groupH = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group H';
+          });
 
         }
 

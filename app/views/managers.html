@@ -24,7 +24,7 @@
   </div>
 
   <uib-tabset>
-    <uib-tab ng-repeat="tab in tabData" heading="{{tab.title}}" active="tab.active" ui-sref="{{tab.route}}">
+    <uib-tab ng-repeat="tab in tabData" heading="{{tab.title}}" ui-sref="{{tab.route}}" ui-sref-active="active">
     </uib-tab>
   </uib-tabset>
   <ui-view/>
