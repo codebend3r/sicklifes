@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('tablesCtrl', function ($scope, $http, $rootScope, $stateParams, $updateDataUtils, $textManipulator, $momentService, $localStorage) {
+    .controller('tablesCtrl', function ($scope, $apiFactory, $rootScope, $stateParams, $updateDataUtils, $textManipulator, $momentService, $localStorage) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -41,6 +41,10 @@
 
       };
 
+      /**
+       *
+       * @param httpData
+       */
       var httpDataLoaded = function (httpData) {
 
         console.log('///////////////////');
@@ -80,11 +84,11 @@
 
       };
 
+      /**
+       *
+       * @param data
+       */
       var loadData = function (data) {
-
-        $rootScope.loading = false;
-
-        return;
 
         console.log('///////////////////');
         console.log('data:', data);
@@ -120,6 +124,10 @@
         }
 
         $rootScope.loading = false;
+
+        $rootScope.lastSyncDate = data._lastSyncedOn;
+
+        $rootScope.source = 'firebase';
 
         // map groups
 
@@ -220,19 +228,8 @@
 
           console.log('load from firebase');
 
-          if ($rootScope.fireBaseReady) {
-
-            loadData($rootScope.firebaseData[$scope.dataKeyName]);
-
-          } else {
-
-            $scope.startFireBase(function () {
-
-              loadData($rootScope.firebaseData[$scope.dataKeyName]);
-
-            });
-
-          }
+          $apiFactory.getLeagueData()
+            .then(loadData);
 
         }
 

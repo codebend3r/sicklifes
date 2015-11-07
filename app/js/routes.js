@@ -10,8 +10,10 @@
 
     .config(function ($stateProvider, $urlRouterProvider) {
 
-      $urlRouterProvider.when('', '/leagues/liga/tables');
-      $urlRouterProvider.when('/', '/leagues/liga/tables');
+      $urlRouterProvider.when('', '/standings');
+      $urlRouterProvider.when('/', '/standings');
+
+      $urlRouterProvider.when('/standings', '/standings/overview');
 
       $urlRouterProvider.when('/leagues', '/leagues/liga/tables');
       $urlRouterProvider.when('/leagues/', '/leagues/liga/tables');
@@ -82,14 +84,14 @@
         .state('leagues.tables', {
 
           url: '/tables',
-          templateUrl: 'views/tables.html',
+          templateUrl: 'views/leagues-tables.html',
           controller: 'tablesCtrl'
 
         })
         .state('leagues.leaders', {
 
           url: '/leaders',
-          templateUrl: 'views/leaders.html',
+          templateUrl: 'views/leagues-leaders.html',
           controller: 'leadersCtrl'
 
         })
@@ -115,13 +117,13 @@
         .state('managers.overview', {
 
           url: '/overview',
-          templateUrl: 'views/overview.html'
+          templateUrl: 'views/managers-overview.html'
 
         })
         .state('managers.gamelogs', {
 
           url: '/gamelog',
-          templateUrl: 'views/gamelogs.html'
+          templateUrl: 'views/managers-gamelogs.html'
 
         })
         .state('managers.stats', {
@@ -145,6 +147,24 @@
           parent: 'app',
           templateUrl: 'views/standings.html',
           controller: 'standingsCtrl'
+
+        })
+        .state('standings.overview', {
+
+          url: '/overview',
+          templateUrl: 'views/standings-overview.html'
+
+        })
+        .state('standings.latestgoals', {
+
+          url: '/latestgoals',
+          templateUrl: 'views/standings-latestgoals.html'
+
+        })
+        .state('standings.charts', {
+
+          url: '/charts',
+          templateUrl: 'views/standings-charts.html'
 
         })
         .state('admin', {

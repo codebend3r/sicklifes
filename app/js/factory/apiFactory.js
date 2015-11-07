@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$apiFactory', function ($http, $q, $localStorage, $moment, $textManipulator) {
+    .factory('$apiFactory', function ($http, $q, $localStorage, $moment, $rootScope, $textManipulator) {
 
       var apiFactory = {};
 
@@ -29,6 +29,46 @@
           if (angular.isDefined(endPoint.qCallBack)) endPoint.qCallBack(result);
 
         });
+
+        return defer.promise;
+
+      };
+
+      /**
+       *
+       * @returns {Promise}
+       */
+      apiFactory.getManagersJson = function () {
+
+        var defer = $q.defer();
+
+        $http.get('https://glaring-fire-9383.firebaseio.com/managersData.json')
+          .then(function (result) {
+
+            $rootScope.managersData = result.data;
+            defer.resolve(result.data);
+
+          });
+
+        return defer.promise;
+
+      };
+
+      /**
+       *
+       * @returns {Promise}
+       */
+      apiFactory.getLeagueData = function () {
+
+        var defer = $q.defer();
+
+        $http.get('https://glaring-fire-9383.firebaseio.com/leagueTables.json')
+          .then(function (result) {
+
+            $rootScope.leagueTables = result.data;
+            defer.resolve(result.data);
+
+          });
 
         return defer.promise;
 

@@ -14,7 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.version = 5.3;
+      $rootScope.version = 5.4;
 
       /**
        * @description starting year
@@ -46,7 +46,7 @@
 
           manager = $objectUtils.managerResetGoalPoints(manager);
 
-          _.map(filteredGames, function(data) {
+          _.map(filteredGames, function (data) {
 
             manager.totalGoals += data.goalsScored;
             manager.totalPoints += data.points;
@@ -75,7 +75,7 @@
 
             player = $objectUtils.playerResetGoalPoints(player);
 
-            _.each(filteredGames, function(data) {
+            _.each(filteredGames, function (data) {
               if (player.playerName === data.playerName) {
                 player.goals += data.goalsScored;
                 player.points += data.points;
@@ -89,11 +89,11 @@
       };
 
       /*user.getCurrent().then(function (currentUser) {
-        //console.log('currentUser:', currentUser);
-        $rootScope.user = currentUser;
-        console.log('WELCOME', $rootScope.user.first_name);
-        //$scope.user = user;
-      });*/
+       //console.log('currentUser:', currentUser);
+       $rootScope.user = currentUser;
+       console.log('WELCOME', $rootScope.user.first_name);
+       //$scope.user = user;
+       });*/
 
       /**
        * @description whether data is still loading
@@ -134,6 +134,13 @@
        */
       $scope.dataKeyName = '';
 
+      /**
+       *
+       */
+      $scope.isActive = function (title) {
+        console.log('title', title);
+        return false;
+      };
 
       /////////////////////////////
       // ROSTER
@@ -264,12 +271,6 @@
         $rootScope.$emit('MONTH_CHANGED', month);
       };
 
-      $scope.getManagersJson = function() {
-
-        return $http.get('https://glaring-fire-9383.firebaseio.com/managersData.json');
-
-      };
-
       /**
        * sets data in the initialized firebase service
        * @param saveObject
@@ -327,12 +328,12 @@
        * @description pushes an entire team to allPlayersIndex
        * @param teamArray
        */
-      $scope.saveTeamToIndex = function(teamArray) {
+      $scope.saveTeamToIndex = function (teamArray) {
 
         var allPlayers = $rootScope.firebaseData.allPlayersIndex || {};
         var teamObj = {};
 
-        _.each(teamArray, function(player) {
+        _.each(teamArray, function (player) {
           teamObj[player.id] = player;
         });
 
@@ -344,7 +345,7 @@
 
         //console.log('AFTER allPlayers length:', _.keys(allPlayers.data).length);
 
-        //console.log('combinedObj length:', _.keys(combinedObj).length);
+        console.log('combinedObj length:', _.keys(combinedObj).length);
 
         //console.log('allPlayers', allPlayers);
         $scope.saveToFireBase(allPlayers, 'allPlayersIndex');

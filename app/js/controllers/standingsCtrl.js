@@ -42,13 +42,13 @@
           route: 'standings.overview'
         },
         {
-          title: 'Game Logs',
+          title: 'Latest Goals',
           route: 'standings.latestgoals'
-        },
+        }/*,
         {
-          title: 'Graphs',
-          route: 'standings.graphs'
-        }
+          title: 'Charts',
+          route: 'standings.charts'
+        }*/
       ];
 
       /**
@@ -66,7 +66,7 @@
       $scope.updateAllManagerData = function () {
 
         $rootScope.loading = true;
-        $updateDataUtils.updateAllManagerData(function(data) {
+        $updateDataUtils.updateAllManagerData(function (data) {
 
           $rootScope.loading = false;
           console.log('managers updated', data);
@@ -171,7 +171,9 @@
         console.log('///////////////////');
 
         $scope.managersData = $scope.populateManagersData(result.data);
-        console.log('syncDate:', result._lastSyncedOn);
+
+        $rootScope.lastSyncDate = result._lastSyncedOn;
+        $rootScope.source = 'firebase';
 
         if ($momentService.isHoursAgo(result._lastSyncedOn)) {
 
@@ -201,7 +203,7 @@
 
         $scope.combinedLogs = [];
 
-        _.each($scope.managerData, function(manager) {
+        _.each($scope.managerData, function (manager) {
           $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog);
         });
 
@@ -280,7 +282,7 @@
 
           var chartStartValue = 0;
 
-          _.each(seriesHashTable, function(obj) {
+          _.each(seriesHashTable, function (obj) {
 
             seriesDataObj.data.push(chartStartValue);
             chartStartValue += obj
@@ -376,10 +378,8 @@
 
         } else {
 
-          $scope.startFireBase(function (firebaseData) {
-            console.log('read from firebase');
-            loadData(firebaseData[$scope.dataKeyName]);
-          });
+          $apiFactory.getManagersJson()
+            .then(loadData);
 
         }
 

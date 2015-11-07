@@ -179,7 +179,7 @@
             player.ligaFilteredGameLog = player.ligaCompleteLog
               .filter($arrayFilter.filterOnValidGoals.bind(this, player));
 
-            var foundTeam = _.where($rootScope.firebaseData.leagueTables.liga, { teamName: player.teamName });
+            var foundTeam = _.where($rootScope.leagueTables.liga, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.ligaCompleteLog.length)) {
               player.playedInLigaGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'liga' : '/liga';
@@ -217,7 +217,7 @@
             player.eplFilteredGameLog = player.eplCompleteLog
               .filter($arrayFilter.filterOnValidGoals.bind(this, player));
 
-            var foundTeam = _.where($rootScope.firebaseData.leagueTables.epl, { teamName: player.teamName });
+            var foundTeam = _.where($rootScope.leagueTables.epl, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.eplCompleteLog.length)) {
               player.playedInEPLGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'epl' : '/epl';
@@ -255,7 +255,7 @@
             player.seriFilteredGameLog = player.seriCompleteLog
               .filter($arrayFilter.filterOnValidGoals.bind(this, player));
 
-            var foundTeam = _.where($rootScope.firebaseData.leagueTables.seri, { teamName: player.teamName });
+            var foundTeam = _.where($rootScope.leagueTables.seri, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.seriCompleteLog.length)) {
               player.playedInSeriGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'seri' : '/seri';
@@ -292,7 +292,7 @@
             player.chlgFilteredGameLog = player.chlgCompleteLogs
               .filter($arrayFilter.filterOnValidGoals.bind(this, player));
 
-            var foundTeam = _.where($rootScope.firebaseData.leagueTables.chlg, { teamName: player.teamName });
+            var foundTeam = _.where($rootScope.leagueTables.chlg, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.chlgCompleteLogs.length)) {
               player.playedInChlgGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'chlg' : '/chlg';
@@ -329,7 +329,7 @@
             player.euroFilteredGameLog = player.euroCompleteLogs
               .filter($arrayFilter.filterOnValidGoals.bind(this, player));
 
-            var foundTeam = _.where($rootScope.firebaseData.leagueTables.uefa, { teamName: player.teamName });
+            var foundTeam = _.where($rootScope.leagueTables.uefa, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.euroCompleteLogs.length)) {
               player.playedInEuroGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'euro' : '/euro';

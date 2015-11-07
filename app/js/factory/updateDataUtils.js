@@ -176,13 +176,15 @@
 
         if (angular.isUndefinedOrNull($rootScope.managerData)) throw new Error('$rootScope.managerData is not defined');
 
-        var managers = angular.copy($rootScope.managerData);
+        // $q.all(list).then(callbackFunc);
 
-        _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
-
-          cb(managers);
-
-        }));
+        $q.all([$apiFactory.getManagersJson(), $apiFactory.getLeagueData()])
+          .then(function () {
+            var managers = angular.copy($rootScope.managerData);
+            _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
+              cb(managers);
+            }));
+          });
 
       };
 
@@ -196,7 +198,7 @@
 
         var allLeagues = [],
           defer = $q.defer(),
-        // list of all goal scorers in all leagues
+        // list of all goal s corers in all leagues
           consolidatedGoalScorers = [],
         // makes a request for all leagues in a loop returns a list of promises
           allPromises = $apiFactory.getAllGoalLeaders();
