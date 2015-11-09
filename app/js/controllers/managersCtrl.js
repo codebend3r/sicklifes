@@ -223,7 +223,7 @@
 
           console.log('load from firebase');
 
-          $apiFactory.getManagersJson()
+          $apiFactory.getApiData('managersData')
             .then(loadData);
 
         }

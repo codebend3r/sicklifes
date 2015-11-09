@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leadersCtrl', function ($scope, $state, $stateParams, $localStorage, $rootScope, $momentService, $textManipulator) {
+    .controller('leadersCtrl', function ($scope, $state, $stateParams, $localStorage, $updateDataUtils, $rootScope, $momentService, $apiFactory, $textManipulator) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -21,8 +21,9 @@
        */
       $scope.updateLeaders = function () {
 
-        console.log('updateLeaders()');
-        $scope.updateLeadersFromHTTP(mapLeagueLeaders);
+        $updateDataUtils.updateCoreData(function () {
+          $scope.updateLeadersFromHTTP(mapLeagueLeaders);
+        });
 
       };
 
@@ -30,7 +31,7 @@
 
         var managerName = 'Free Agent';
 
-        _.some($rootScope.firebaseData.managersData.data, function (manager) {
+        _.some($rootScope.managersData.data, function (manager) {
 
           if (angular.isDefined(manager.players[playerId])) {
 
@@ -49,6 +50,8 @@
        * map the http response to leagueLeaders array
        */
       var mapLeagueLeaders = function (result) {
+
+        console.log('mapLeagueLeaders');
 
         var self = this;
 
@@ -75,12 +78,11 @@
         //   $scope.leagueImage = base64Img
         // });
 
-        // $scope.startFireBase(function () {
-        //
-        //   $rootScope.fireBaseReady = true;
-        //   prepareForFirebase();
-        //
-        // });
+        $scope.startFireBase(function () {
+
+          prepareForFirebase();
+
+        });
 
       };
 
@@ -97,11 +99,11 @@
           _lastSyncedOn: $momentService.syncDate()
         };
 
-        if ($rootScope.firebaseData[$scope.dataKeyName]) {
-          _.defaults(saveObject.leagues, $rootScope.firebaseData[$scope.dataKeyName].leagues);
+        if ($rootScope.scoringLeaders) {
+          _.defaults(saveObject.leagues, $rootScope.scoringLeaders.leagues);
         }
 
-        //console.log('saveObject:', saveObject);
+        console.log('saveObject:', saveObject);
         console.log('updating', $stateParams.leagueName);
 
         $scope.saveToFireBase(saveObject, 'scoringLeaders');
@@ -129,8 +131,6 @@
         console.log('///////////////////');
         console.log('data:', data);
         console.log('///////////////////');
-
-        $rootScope.fireBaseReady = true;
 
         if (angular.isDefined(data.leagues)
           && angular.isDefined(data.leagues[$stateParams.leagueName])
@@ -181,12 +181,8 @@
 
         } else {
 
-          $scope.startFireBase(function (firebaseData) {
-
-            console.log('load from firebase');
-            loadData(firebaseData[$scope.dataKeyName]);
-
-          });
+          $apiFactory.getApiData('scoringLeaders')
+            .then(loadData);
 
         }
 

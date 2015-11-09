@@ -252,7 +252,7 @@
         },
         {
           monthName: 'June ' + endYear,
-          range: ['June 1 ' + endYear, 'July 1 ' + endYear]
+          range: ['June 1 ' + endYear, 'July 1  ' + endYear]
         }
       ];
 
@@ -291,11 +291,13 @@
       $scope.startFireBase = function (callback) {
         if (angular.isUndefinedOrNull(callback)) throw new Error('$scope.startFireBase: the callback parameter was not defined');
         if ($rootScope.fireBaseReady) {
+          console.log('firebase previously inited');
           callback($rootScope.firebaseData);
         } else {
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
+            console.log('firebase inited');
             $rootScope.firebaseData = fbData;
             $rootScope.fireBaseReady = true;
             $rootScope.lastSyncDate = $rootScope.firebaseData.managersData._lastSyncedOn;

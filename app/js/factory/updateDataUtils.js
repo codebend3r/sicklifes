@@ -167,6 +167,21 @@
       };
 
       /**
+       * @name updateCoreData
+       * @description
+       */
+      updateDataUtils.updateCoreData = function (cb) {
+
+        console.log('$updateDataUtils --> updateCoreData');
+
+        $q.all([$apiFactory.getApiData('managersData'), $apiFactory.getApiData('leagueTables')])
+          .then(function () {
+            cb();
+          });
+
+      };
+
+      /**
        * @name updateAllManagerData
        * @description gets data from all of the players in all valid leagues
        */
@@ -176,10 +191,7 @@
 
         if (angular.isUndefinedOrNull($rootScope.managerData)) throw new Error('$rootScope.managerData is not defined');
 
-        // $q.all(list).then(callbackFunc);
-
-        $q.all([$apiFactory.getManagersJson(), $apiFactory.getLeagueData()])
-          .then(function () {
+        updateDataUtils.updateCoreData(function () {
             var managers = angular.copy($rootScope.managerData);
             _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
               cb(managers);

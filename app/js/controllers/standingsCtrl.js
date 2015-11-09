@@ -378,7 +378,7 @@
 
         } else {
 
-          $apiFactory.getManagersJson()
+          $apiFactory.getApiData('managersData')
             .then(loadData);
 
         }

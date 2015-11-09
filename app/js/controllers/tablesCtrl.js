@@ -228,7 +228,7 @@
 
           console.log('load from firebase');
 
-          $apiFactory.getLeagueData()
+          $apiFactory.getApiData('leagueTables')
             .then(loadData);
 
         }

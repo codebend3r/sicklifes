@@ -3,9 +3,9 @@
   background-repeat: no-repeat;
   background-size: cover;
   display: block;
-
   width: 200px;
   height: 200px;
+  margin: 0 auto;
 
   &.sprite-chlg {
     background-position: -5px -5px;
@@ -15,7 +15,7 @@
     background-position: -5px -200px;
   }
 
-  &.sprite-europa {
+  &.sprite-uefa {
     background-position: -5px -400px;
   }
 

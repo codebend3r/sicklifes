@@ -13,7 +13,8 @@
       var apiFactory = {};
 
       /**
-       * TODO
+       * @description
+       * @returns {Promise}
        */
       apiFactory.getData = function (endPoint) {
 
@@ -35,17 +36,17 @@
       };
 
       /**
-       *
+       * @description
        * @returns {Promise}
        */
-      apiFactory.getManagersJson = function () {
+      apiFactory.getApiData = function (namespace) {
 
         var defer = $q.defer();
 
-        $http.get('https://glaring-fire-9383.firebaseio.com/managersData.json')
+        $http.get('https://glaring-fire-9383.firebaseio.com/' + namespace + '.json')
           .then(function (result) {
 
-            $rootScope.managersData = result.data;
+            $rootScope[namespace] = result.data;
             defer.resolve(result.data);
 
           });
@@ -55,27 +56,7 @@
       };
 
       /**
-       *
-       * @returns {Promise}
-       */
-      apiFactory.getLeagueData = function () {
-
-        var defer = $q.defer();
-
-        $http.get('https://glaring-fire-9383.firebaseio.com/leagueTables.json')
-          .then(function (result) {
-
-            $rootScope.leagueTables = result.data;
-            defer.resolve(result.data);
-
-          });
-
-        return defer.promise;
-
-      };
-
-      /**
-       * gets players game log and goal per game details
+       * @description gets players game log and goal per game details
        */
       apiFactory.getPlayerGameDetails = function (league, id) {
 
