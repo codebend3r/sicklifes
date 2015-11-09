@@ -212,47 +212,47 @@
         },
         {
           monthName: 'August ' + startYear,
-          range: ['August 1 ' + startYear, 'August 31 ' + startYear]
+          range: ['August 1 ' + startYear, 'September 1 ' + startYear]
         },
         {
           monthName: 'September ' + startYear,
-          range: ['September 1 ' + startYear, 'September 30 ' + startYear]
+          range: ['September 1 ' + startYear, 'October 1 ' + startYear]
         },
         {
           monthName: 'October ' + startYear,
-          range: ['October 1 ' + startYear, 'October 31 ' + startYear]
+          range: ['October 1 ' + startYear, 'November 1 ' + startYear]
         },
         {
           monthName: 'November ' + startYear,
-          range: ['November 1 ' + startYear, 'November 30 ' + startYear]
+          range: ['November 1 ' + startYear, 'December 1 ' + startYear]
         },
         {
           monthName: 'December ' + startYear,
-          range: ['December 1 ' + startYear, 'December 31 ' + startYear]
+          range: ['December 1 ' + startYear, 'January 1 ' + startYear]
         },
         {
           monthName: 'January ' + endYear,
-          range: ['January 1 ' + endYear, 'January 31 ' + endYear]
+          range: ['January 1 ' + endYear, 'February 1 ' + endYear]
         },
         {
           monthName: 'February ' + endYear,
-          range: ['February 1 ' + endYear, 'February 28 ' + endYear]
+          range: ['February 1 ' + endYear, 'March 1 ' + endYear]
         },
         {
           monthName: 'March ' + endYear,
-          range: ['March 1 ' + endYear, 'March 31 ' + endYear]
+          range: ['March 1 ' + endYear, 'April 1 ' + endYear]
         },
         {
           monthName: 'April ' + endYear,
-          range: ['April 1 ' + endYear, 'April 30 ' + endYear]
+          range: ['April 1 ' + endYear, 'May 1 ' + endYear]
         },
         {
           monthName: 'May ' + endYear,
-          range: ['May 1 ' + endYear, 'May 31 ' + endYear]
+          range: ['May 1 ' + endYear, 'June 1 ' + endYear]
         },
         {
           monthName: 'June ' + endYear,
-          range: ['June 1 ' + endYear, 'June 30 ' + endYear]
+          range: ['June 1 ' + endYear, 'July 1 ' + endYear]
         }
       ];
 

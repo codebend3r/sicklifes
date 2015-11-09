@@ -14,7 +14,7 @@
   </thead>
 
   <tbody>
-  <tr ng-repeat="player in combinedLogs | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 15">
+  <tr ng-repeat="player in combinedLogs | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 30">
     <td>
       <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
     </td>
@@ -41,7 +41,7 @@
   </thead>
 
   <tbody>
-  <tr ng-repeat="player in combinedLogs | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 15">
+  <tr ng-repeat="player in combinedLogs | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 30">
     <td>
       <a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
     </td>

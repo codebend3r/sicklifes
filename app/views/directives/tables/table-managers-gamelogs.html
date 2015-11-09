@@ -14,7 +14,7 @@
   </thead>
 
   <tbody ng-if="tableParams.goalsOnlyFilterOn">
-  <tr ng-repeat="player in list | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 30">
+  <tr ng-repeat="player in list | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 50">
     <td>
       <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
     </td>
@@ -57,7 +57,7 @@
   </thead>
 
   <tbody ng-if="tableParams.goalsOnlyFilterOn">
-  <tr ng-repeat="player in list | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 30">
+  <tr ng-repeat="player in list | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 50">
     <td>
       <a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
     </td>
