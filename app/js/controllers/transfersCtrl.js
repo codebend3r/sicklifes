@@ -16,66 +16,68 @@
 
       var dataKeyName = 'playerPoolData';
 
+      var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
+
       $rootScope.loading = true;
 
       /**
        * header for table
        * @type {{columnClass: string, text: string}[]}
        */
-      $scope.tableHeader = [
-        {
-          text: 'ID'
-        },
-        {
-          text: 'Player'
-        },
-        {
-          text: 'Owned By'
-        },
-        {
-          text: 'League'
-        },
-        {
-          text: 'Team'
-        }
-      ];
+      //$scope.tableHeader = [
+      //  {
+      //    text: 'ID'
+      //  },
+      //  {
+      //    text: 'Player'
+      //  },
+      //  {
+      //    text: 'Owned By'
+      //  },
+      //  {
+      //    text: 'League'
+      //  },
+      //  {
+      //    text: 'Team'
+      //  }
+      //];
 
       /**
        * TODO
        * @type {*[]}
        */
-      $scope.managersTableHeader = [
-        {
-          text: 'Player',
-          hoverText: 'Player',
-          orderCriteria: 'player'
-        },
-        {
-          text: 'Team',
-          hoverText: 'Team',
-          orderCriteria: 'team'
-        },
-        {
-          text: 'League',
-          hoverText: 'League Goals',
-          orderCriteria: 'league'
-        },
-        {
-          text: 'DG',
-          hoverText: 'Domestic Goals',
-          orderCriteria: 'domestic'
-        },
-        {
-          text: 'LG',
-          hoverText: 'Champions League Goals',
-          orderCriteria: 'champions'
-        },
-        {
-          text: 'P',
-          hoverText: 'Total Points',
-          orderCriteria: 'points()'
-        }
-      ];
+      //$scope.managersTableHeader = [
+      //  {
+      //    text: 'Player',
+      //    hoverText: 'Player',
+      //    orderCriteria: 'player'
+      //  },
+      //  {
+      //    text: 'Team',
+      //    hoverText: 'Team',
+      //    orderCriteria: 'team'
+      //  },
+      //  {
+      //    text: 'League',
+      //    hoverText: 'League Goals',
+      //    orderCriteria: 'league'
+      //  },
+      //  {
+      //    text: 'DG',
+      //    hoverText: 'Domestic Goals',
+      //    orderCriteria: 'domestic'
+      //  },
+      //  {
+      //    text: 'LG',
+      //    hoverText: 'Champions League Goals',
+      //    orderCriteria: 'champions'
+      //  },
+      //  {
+      //    text: 'P',
+      //    hoverText: 'Total Points',
+      //    orderCriteria: 'points()'
+      //  }
+      //];
 
       /**
        * TODO
@@ -266,48 +268,53 @@
        * read data from local storage
        * @param localData
        */
-      var loadFromLocal = function (localData) {
-
-        console.log('///////////////////');
-        console.log('LOCAL --> localData:', localData);
-        console.log('///////////////////');
-
-        $rootScope.loading = false;
-
-        $scope.managerData = $scope.populateManagersData(localData);
-
-        $rootScope.allPlayers = localData.allPlayers;
-
-        $scope.startFireBase(function (firebaseData) {
-
-          $scope.fireBaseReady = true;
-          //$scope.managerData = $scope.populateManagersData(firebaseData);
-          $scope.chooseManager($stateParams.managerId);
-          $scope.selectedManager = $scope.managersData[$stateParams.managerId];
-          console.log('> managersData', $scope.managersData);
-          console.log('> selectedManager', $scope.selectedManager);
-
-        });
-
-      };
+      //var loadFromLocal = function (localData) {
+      //
+      //  console.log('///////////////////');
+      //  console.log('LOCAL --> localData:', localData);
+      //  console.log('///////////////////');
+      //
+      //  $rootScope.loading = false;
+      //
+      //  $scope.managerData = $scope.populateManagersData(localData);
+      //
+      //  $rootScope.allPlayers = localData.allPlayers;
+      //
+      //  $scope.startFireBase(function (firebaseData) {
+      //
+      //    $scope.fireBaseReady = true;
+      //    //$scope.managerData = $scope.populateManagersData(firebaseData);
+      //    $scope.chooseManager($stateParams.managerId);
+      //    $scope.selectedManager = $scope.managersData[$stateParams.managerId];
+      //    console.log('> managersData', $scope.managersData);
+      //    console.log('> selectedManager', $scope.selectedManager);
+      //
+      //  });
+      //
+      //};
 
       /**
        * read data from firebase
-       * @param firebaseData
+       * @param result
        */
-      var fireBaseLoaded = function (firebaseData) {
+      var loadData = function (result) {
 
         console.log('///////////////////');
-        console.log('FIREBASE --> firebaseData:', firebaseData);
+        console.log('result:', result);
         console.log('///////////////////');
 
-        $scope.managersData = $scope.populateManagersData(firebaseData.managersData);
+        // define managerData on scope and $rootScope
+        $scope.populateManagersData($rootScope.managersData.data);
 
-        $rootScope.fireBaseReady = true;
+        // define the current manager
+        $scope.chooseManager(managerId);
+
+        // define selectedManager by managerId
+        $scope.selectedManager = $scope.managerData[managerId];
+
+        $scope.allPlayers = $rootScope.playerPoolData;
+
         $rootScope.loading = false;
-        $scope.allPlayers = firebaseData[dataKeyName].allPlayers;
-        $scope.chooseManager($stateParams.managerId);
-        $scope.selectedManager = $scope.managersData[$stateParams.managerId];
 
       };
 
@@ -362,24 +369,12 @@
        */
       var init = function () {
 
-        console.log('transfersCtrl - init', dataKeyName);
+        $updateDataUtils.updateCoreData(function () {
 
-        if (angular.isDefined($rootScope[dataKeyName])) {
+          $apiFactory.getApiData('playerPoolData')
+            .then(loadData);
 
-          console.log('load from $rootScope');
-          loadFromLocal($rootScope[dataKeyName]);
-
-        } else if (angular.isDefined($localStorage[dataKeyName])) {
-
-          console.log('load from local storage');
-          loadFromLocal($localStorage[dataKeyName]);
-
-        } else {
-
-          console.log('load from firebase');
-          $scope.startFireBase(fireBaseLoaded);
-
-        }
+        });
 
       };
 

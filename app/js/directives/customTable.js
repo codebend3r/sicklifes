@@ -18,12 +18,10 @@
         },
         scope: {
           list: '=',
-          tableHeader: '=',
           tableName: '@',
           tableParams: '=',
           sortFunction: '&',
-          sortKey: '@',
-          leagueImg: '='
+          sortKey: '@'
         },
         controller: function ($scope) {
 
@@ -35,10 +33,6 @@
             } else {
               $scope.sortKey = key;
             }
-          };
-
-          $scope.everyFourth = function (index) {
-            return index % 4 === 0;
           };
 
           $scope.playerSearch = {

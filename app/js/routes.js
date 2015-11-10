@@ -18,16 +18,12 @@
       $urlRouterProvider.when('/leagues', '/leagues/liga/tables');
       $urlRouterProvider.when('/leagues/', '/leagues/liga/tables');
 
-      // $urlRouterProvider.when('/leagues/:leagueName', '/leagues/:leagueName/tables');
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
-      // $urlRouterProvider.when('/leagues//leaders', '/leagues/liga/leaders');
 
       $urlRouterProvider.when('/managers/', '/managers/chester/overview');
       $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
       
       $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
-      // $urlRouterProvider.when('/managers//gamelogs', '/managers/chester/gamelogs');
-      // $urlRouterProvider.when('/transfers', '/transfers/chester');
 
       $urlRouterProvider.otherwise('/standings');
 
@@ -95,17 +91,6 @@
           controller: 'leadersCtrl'
 
         })
-        //.state('managersX', {
-        //
-        //  url: '/managersx/:managerId/overview',
-        //  parent: 'app',
-        //  templateUrl: 'views/managers.html',
-        //  controller: 'managersCtrl',
-        //  data: {
-        //    public: true
-        //  }
-        //
-        //})
         .state('managers', {
 
           url: '/managers/:managerId',
