@@ -3,8 +3,9 @@
     <tr>
       <th>Opponent</th>
       <th>G</th>
+      <th>S</th>
+      <th>SOG</th>
       <th>Final Score</th>
-      <th>League</th>
       <th>Date</th>
     </tr>
   </thead>
@@ -12,8 +13,9 @@
     <tr ng-repeat='game in list | limitTo: 30'>
       <td>{{game.alignment}} {{game.vsTeam}}</td>
       <td>{{game.goalsScored}}</td>
+      <td>{{game.shots}}</td>
+      <td>{{game.shotsOnGoal}}</td>
       <td>{{game.result}} {{game.finalScore}}</td>
-      <td>{{game.leagueName}}</td>
       <td>{{game.datePlayed}}</td>
     </tr>
   </tbody>

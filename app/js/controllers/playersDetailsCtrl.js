@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, $apiFactory, $location, $stateParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $momentService) {
+    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, $apiFactory, $location, $stateParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $updateDataUtils, $momentService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -31,33 +31,22 @@
       ////////////////////////////////////////
 
       /**
-       *
-       * @type {{}}
-       */
-      var managersData = {};
-
-      /**
        * call when firebase data has loaded
        * defines $scope.managersData
-       * @param firebaseData
+       * @param result
        */
-      var fireBaseLoaded = function (firebaseData) {
+      var loadData = function (result) {
 
-        $rootScope.fireBaseReady = true;
+        console.log('///////////////////');
+        console.log('result:', result);
+        console.log('///////////////////');
 
-        managersData = {
-          chester: firebaseData.managersData.data.chester,
-          frank: firebaseData.managersData.data.frank,
-          dan: firebaseData.managersData.data.dan,
-          justin: firebaseData.managersData.data.justin,
-          mike: firebaseData.managersData.data.mike,
-          joe: firebaseData.managersData.data.joe
-        };
+        // define managerData on scope and $rootScope
+        $scope.populateManagersData(result.data);
 
-        if (angular.isDefined($rootScope.firebaseData[$scope.dataKeyName].data)) {
+        if (angular.isDefined($rootScope.allPlayersIndex.data)) {
 
-          $scope.allPlayers = $rootScope.firebaseData[$scope.dataKeyName];
-          console.log('loaded allPlayersIndex:', _.keys($scope.allPlayers.data).length);
+          $scope.allPlayers = $rootScope.allPlayersIndex;
 
         }
 
@@ -100,10 +89,6 @@
           console.log('foundPlayer and is up to date', $scope.player.playerName);
           requestUpdateOnPlayer();
 
-          // if (angular.isDefined($scope.player.chlgCompleteLog)) {
-          //   console.log('$scope.player.chlgCompleteLog', $scope.player.chlgCompleteLog);
-          // }
-
         } else {
 
           console.log('not found player and/or is out of date');
@@ -113,7 +98,7 @@
 
       };
 
-      var requestUpdateOnPlayer = function() {
+      var requestUpdateOnPlayer = function () {
 
         $scope.player.id = $stateParams.playerId;
         $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
@@ -124,7 +109,7 @@
             return $arrayMappers.playerInfo($scope.player, result);
           })
           .then($arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
-          .then($arrayMappers.playerGamesLog.bind(this, { player: $scope.player, manager: null }))
+          .then($arrayMappers.playerGamesLog.bind(this, {player: $scope.player, manager: null}))
           .then(function (result) {
 
             $scope.player = result;
@@ -146,8 +131,12 @@
        */
       var init = function () {
 
-        $scope.dataKeyName = 'allPlayersIndex';
-        $scope.startFireBase(fireBaseLoaded);
+        $updateDataUtils.updateCoreData(function () {
+
+          $apiFactory.getApiData('allPlayersIndex')
+            .then(loadData);
+
+        });
 
       };
 

@@ -63,7 +63,6 @@
             callback(allPlayers);
           });
 
-
         });
 
       };
