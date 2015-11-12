@@ -22,8 +22,11 @@
 
       $urlRouterProvider.when('/managers/', '/managers/chester/overview');
       $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
-      
+
       $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
+
+      $urlRouterProvider.when('/transfers', '/transfers/chester');
+      $urlRouterProvider.when('/transfers/', '/transfers/chester');
 
       $urlRouterProvider.otherwise('/standings');
 

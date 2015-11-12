@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$apiFactory', function ($http, $q, $localStorage, $moment, $rootScope, $textManipulator) {
+    .factory('$apiFactory', function ($http, $q, $localStorage, $moment, $rootScope, $textManipulator, $stateParams) {
 
       var apiFactory = {};
 
@@ -47,7 +47,15 @@
           .then(function (result) {
 
             $rootScope[namespace] = result.data;
-            console.log('rootScope variable saved:', namespace, $rootScope[namespace]);
+            //console.log('rootScope variable saved:', namespace, $rootScope[namespace]);
+            console.log('rootScope variable saved:', namespace);
+            if (namespace === 'managersData') {
+
+              var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
+
+              $rootScope.selectedManager = $rootScope.managersData.data[managerId.toLowerCase()];
+
+            }
             defer.resolve(result.data);
 
           });
@@ -106,10 +114,8 @@
           });
 
           leagueRequest.then(function (result) {
-
             result.data.leagueURL = url;
             result.data.leagueSlug = leagueSlugs[index];
-
           });
 
           listOrPromises.push(leagueRequest);
@@ -156,10 +162,8 @@
           });
 
           leagueRequest.then(function (result) {
-
             result.leagueURL = urlObj.url;
             result.leagueName = urlObj.leagueName;
-
           });
 
           listOrPromises.push(leagueRequest);
@@ -184,9 +188,7 @@
           });
 
           rosterRequest.promise.then(function () {
-
             listOrPromises.push(rosterRequest.promise);
-
           });
 
         });
@@ -212,8 +214,6 @@
           listOfResults = [];
 
         _.each(allLeaguesURL, function (url, index) {
-
-          console.log('url:', url);
 
           var leagueRequest = apiFactory.getData({
             endPointURL: url

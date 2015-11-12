@@ -185,7 +185,7 @@
 
         var saveObject = {
           _lastSyncedOn: $momentService.syncDate(),
-          data: $rootScope.managersData.data.data
+          data: $rootScope.managersData.data
         };
 
         console.log('saveObject:', saveObject);

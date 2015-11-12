@@ -41,7 +41,7 @@
   </thead>
   <tbody>
   <tr ng-repeat="player in list | orderObjectBy:'pickNumber':false">
-    <td class="player-column" ng-class="{dropped: player.status === 'dropped', added: playerObj.status === 'added'}">
+    <td class="player-column" ng-class="{dropped: player.status === 'dropped', added: player.status === 'added'}">
       <div class="vertical-center">
         <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
       </div>

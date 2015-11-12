@@ -8,13 +8,13 @@
 
   angular.module('sicklifes')
 
-    .controller('transfersCtrl', function ($scope, $rootScope, $q, $timeout, $arrayMappers, $apiFactory, $objectUtils, $modal, $updateDataUtils, $momentService, $localStorage, $stateParams) {
+    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, $arrayMappers, $apiFactory, $objectUtils, $modal, $updateDataUtils, $momentService, $localStorage, $stateParams) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
+      //var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
 
       $rootScope.loading = true;
 
@@ -49,11 +49,7 @@
        * {ng-click} - when manager option changes
        */
       $scope.changeManager = function (selectedManager) {
-
-        $scope.selectedManager = selectedManager;
-        $scope.selectedPlayers = selectedManager.players;
-        console.log('$scope.selectedPlayers', $scope.selectedPlayers);
-
+        $state.go($state.current.name, { managerId: selectedManager.managerName.toLowerCase() });
       };
 
       /**
@@ -99,14 +95,11 @@
           saveObject._lastSyncedOn = $momentService.syncDate();
 
           $scope.startFireBase(function () {
-
             $scope.saveToFireBase(saveObject, 'managersData');
-
           });
 
         } else {
 
-          //var addedPlayer = player;
           var addedPlayer = $objectUtils.playerResetGoalPoints(player);
 
           $apiFactory.getPlayerProfile('soccer', addedPlayer.id)
@@ -129,12 +122,14 @@
       $scope.dropPlayer = function (player) {
 
         $scope.droppedPlayerObject = $scope.getManagersPlayerById(player.id);
+        var pickNumber = _.keys($scope.selectedManager.players).length + 1;
+        $scope.droppedPlayerObject.pickNumber = pickNumber;
         $scope.transactionPlayerRemoved = true;
 
       };
 
       /**
-       * @name TODO
+       * @name playersTableParams
        * @description
        * @type {{addPlayer: (Function|*), dropPlayer: (Function|*), draftMode: boolean}}
        */
@@ -145,28 +140,28 @@
       };
 
       /**
-       * @name TODO
+       * @name addedPlayerImage
        * @description
        * @type {string}
        */
       $scope.addedPlayerImage = '';
 
       /**
-       * @name TODO
+       * @name droppedPlayerImage
        * @description
        * @type {string}
        */
       $scope.droppedPlayerImage = '';
 
       /**
-       * @name TODO
+       * @name transactionPlayerAdded
        * @description whether a player has been added to a roster
        * @type {boolean}
        */
       $scope.transactionPlayerAdded = false;
 
       /**
-       * @name TODO
+       * @name transactionPlayerRemoved
        * @description whether a player has been removed from a roster
        * @type {boolean}
        */
@@ -188,6 +183,8 @@
             drop: $scope.droppedPlayerObject,
             add: $scope.addedPlayerObject
           });
+
+          $scope.addedPlayerObject.status = 'added';
 
           // add
           $scope.selectedManager.players[$scope.addedPlayerObject.id] = $objectUtils.cleanPlayer($scope.addedPlayerObject);
@@ -222,15 +219,11 @@
        */
       var loadData = function (result) {
 
-        console.log('///////////////////');
-        console.log('result:', result);
-        console.log('///////////////////');
+        // console.log('///////////////////');
+        // console.log('result:', result);
+        // console.log('///////////////////');
 
-        // set managersData locally
         $scope.managersData = $rootScope.managersData.data;
-
-        // define the current manager
-        $scope.chooseManager(managerId);
 
         $scope.allPlayers = $rootScope.playerPoolData.allPlayers;
 
