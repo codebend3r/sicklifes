@@ -34,7 +34,7 @@
 
             _.each(leagueData.data, function (teamData) {
 
-              //console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
+              console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
 
               // returns a promise with the end point for each team
               var rosterRequest = $apiFactory.getData({

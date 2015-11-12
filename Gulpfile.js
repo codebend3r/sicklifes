@@ -243,11 +243,12 @@
   gulp.task('fonts', function () {
 
     return gulp.src(config.app + '/bower_components/**/*.{woff,ttf,svg,eot}')
-      .pipe(gulp.dest('builds/' + gutil.env.build + '/fonts/'))
       .pipe($.size({
         title: 'fonts',
-        showFiles: false
+        showFiles: true
       }))
+      .pipe(gulp.dest('builds/' + gutil.env.build + '/bower_components/'))
+      //.pipe(gulp.dest('builds/' + gutil.env.build + '/fonts/'))
       .on('error', gutil.log);
 
   });

@@ -47,6 +47,7 @@
           .then(function (result) {
 
             $rootScope[namespace] = result.data;
+            console.log('rootScope variable saved:', namespace, $rootScope[namespace]);
             defer.resolve(result.data);
 
           });

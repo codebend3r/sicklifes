@@ -16,39 +16,48 @@
 
   <div ng-if='admin' class='well'>
     <button type='button' class='btn btn-danger' ng-click='updatePlayerPoolData()'>Update Player Pool Data</button>
-    <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save to Firebase</button>
-    <button type='button' class='btn btn-danger' ng-click='resetAllPlayers()'>Reset All Players</button>
-    <button type='button' class='btn btn-danger' ng-click='saveRoster()'>Save Roster</button>
+    <button type='button' class='btn btn-danger' ng-click='savePlayerPoolData()'>Save to Firebase</button>
+    <!-- <button type='button' class='btn btn-danger' ng-click='resetAllPlayers()'>Reset All Players</button> -->
+    <button type='button' class='btn btn-danger' ng-click='saveTransaction()'>Save Roster</button>
   </div>
 
-  <div class='transfer-container' ng-if='transactionPlayerAdded || transactionPlayerRemoved'>
-    <div class='col-md-6' ng-if='transactionPlayerAdded'>
-      <div class='col-md-4'>
-        <img class='profile-pic' ng-src='{{addedPlayerObject.playerImage}}'/>
+  <div class='transfer-container'>
+    <div class='col-xs-6' ng-if='droppedPlayerObject'>
+      <div class='col-xs-4'>
+        <img class='img-responsive profile-pic' ng-src='{{droppedPlayerObject.playerImage}}'/>
       </div>
-      <div class='col-md-8'>
-        <p class='bold green'>ADDS PLAYER</p>
-        <p>Player ID: <b>{{ addedPlayerObject.id }}</b></p>
-        <p>Player Name: <b>{{ addedPlayerObject.playerName }}</b></p>
-        <p>Team: <b>{{ addedPlayerObject.teamName }}</b></p>
-        <p>League: <b>{{ addedPlayerObject.leagueName }}</b></p>
-      </div>
-    </div>
-    <div class='col-md-6' ng-if='transactionPlayerRemoved'>
-      <div class='col-md-4'>
-        <img class='profile-pic' ng-src='{{droppedPlayerObject.playerImage}}'/>
-      </div>
-      <div class='col-md-8'>
+      <div class='col-xs-8'>
         <p class='bold red'>DROPS PLAYER</p>
-        <p>Player ID: <b>{{ droppedPlayerObject.id }}</b></p>
-        <p>Player Name: <b>{{ droppedPlayerObject.playerName }}</b></p>
-        <p>Team: <b>{{ droppedPlayerObject.teamName }}</b></p>
-        <p>League: <b>{{ droppedPlayerObject.leagueName }}</b></p>
+        <p><b>{{ droppedPlayerObject.playerName }}</b></p>
+        <p class="small-text">{{ droppedPlayerObject.teamName }}</p>
+        <p class="small-text">{{ droppedPlayerObject.leagueName }}</p>
+      </div>
+    </div>
+    <div class='col-xs-6' ng-if='addedPlayerObject'>
+      <div class='col-xs-4'>
+        <img class='img-responsive profile-pic' ng-src='{{addedPlayerObject.playerImage}}'/>
+      </div>
+      <div class='col-xs-8'>
+        <p class='bold green'>ADDS PLAYER</p>
+        <p><b>{{ addedPlayerObject.playerName }}</b></p>
+        <p class="small-text">{{ addedPlayerObject.teamName }}</p>
+        <p class="small-text">{{ addedPlayerObject.leagueName }}</p>
       </div>
     </div>
   </div>
 
-  <custom-table ng-if="selectedManager.players.length > 0 && transactionPlayerAdded || draftMode" table-body-template="managers-players" sort-function="byPickNumber" table-params="playersTableParams" list="selectedManager.players"></custom-table>
+  <div ng-if="transactionPlayerAdded">
+    <!--<pre>Selected date is: <em>{{dt | date:'fullDate' }}</em></pre>-->
+    <!--<uib-datepicker ng-model="dt" show-weeks="false"></uib-datepicker>-->
+    <p class="input-group">
+      <input type="date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+      </span>
+    </p>
+  </div>
+
+  <custom-table ng-if="(transactionPlayerAdded || draftMode)" table-body-template="managers-players" sort-function="byPickNumber" table-params="playersTableParams" list="selectedManager.players"></custom-table>
   <custom-table ng-if="!transactionPlayerAdded" table-body-template="all-players" table-params="playersTableParams" list="allPlayers"></custom-table>
 
 </div>

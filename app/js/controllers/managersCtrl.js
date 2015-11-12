@@ -27,9 +27,7 @@
        * @param selectedManager
        */
       $scope.changeManager = function (selectedManager) {
-
         $state.go($state.current.name, { managerId: selectedManager.managerName.toLowerCase() });
-
       };
 
       /**
@@ -76,32 +74,40 @@
        */
       var loadData = function (result) {
 
-        console.log('///////////////////');
-        console.log('result:', result);
-        console.log('///////////////////');
-
-        // define managerData on scope and $rootScope
         $scope.populateManagersData(result.data);
+
+        // set managersData locally
+        $scope.managersData = $rootScope.managersData;
 
         // define the current manager
         $scope.chooseManager(managerId);
 
+        _.each($scope.managersData, function (m) {
+          console.log('managerName:', m.managerName);
+        });
+
+        console.log('selected managerName:', $scope.selectedManager.managerName);
+
         // define selectedManager by managerId
-        $scope.selectedManager = $scope.managerData[managerId];
+        // $scope.selectedManager = $scope.managesrData[managerId];
 
-        $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog;
+        $scope.currentMonthLog = $rootScope.selectedManager.filteredMonthlyGoalsLog;
 
-        $rootScope.lastSyncDate = $scope.selectedManager._lastSyncedOn;
+        $rootScope.lastSyncDate = $rootScope.selectedManager._lastSyncedOn;
+
         $rootScope.source = 'firebase';
 
-        if (angular.isDefined($scope.selectedManager._lastSyncedOn) && $momentService.isHoursAgo($scope.selectedManager._lastSyncedOn)) {
+        if (angular.isDefined($rootScope.selectedManager._lastSyncedOn) && $momentService.isHoursAgo($rootScope.selectedManager._lastSyncedOn)) {
 
-          console.log('-- data for', $scope.selectedManager.managerName, 'is old --');
+          console.log('-- data for', $rootScope.selectedManager.managerName, 'is old --');
 
           $scope.selectedManager.wildCardCount = 0;
 
-          _.each($scope.selectedManager.players, function (player) {
+          _.each($rootScope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
+            if (angular.isDefined(player.status)) {
+              console.log('status -->', player.playerName, player.status);
+            }
           });
 
           $rootScope.loading = false;
@@ -110,14 +116,17 @@
           //  $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
           //});
 
-        } else if ($momentService.isHoursAgo($scope.managerData._lastSyncedOn)) {
+        } else if ($momentService.isHoursAgo($rootScope.managerData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
           $scope.selectedManager.wildCardCount = 0;
 
-          _.each($scope.selectedManager.players, function (player) {
+          _.each($rootScope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
+            if (angular.isDefined(player.status)) {
+              console.log('status -->', player.playerName, player.status);
+            }
           });
 
           $rootScope.loading = false;
@@ -132,8 +141,11 @@
 
           $scope.selectedManager.wildCardCount = 0;
 
-          _.each($scope.selectedManager.players, function (player) {
+          _.each($rootScope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
+            if (angular.isDefined(player.status)) {
+              console.log('status -->', player.playerName, player.status);
+            }
           });
 
           $rootScope.loading = false;

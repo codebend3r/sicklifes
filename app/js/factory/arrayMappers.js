@@ -96,7 +96,7 @@
 
         var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
-        player.id = result.data.id;
+        //player.id = result.data.id;
 
         player.playedInLigaGames = false;
         player.playedInEPLGames = false;
@@ -356,7 +356,28 @@
       };
 
       /**
-       * maps each player in the whole player pool
+       * @name getOwnerByID
+       * @description loops through all managers roster and finds owner by player id
+       */
+      arrayMapper.getOwnerByID = function (id) {
+
+        var owner = 'Free Agent';
+
+        _.some($rootScope.managersData.data, function (manager) {
+          _.some(manager.players, function (p) {
+            if (p.id === id) {
+              owner = manager.managerName;
+              return true;
+            }
+          });
+        });
+
+        return owner;
+
+      };
+
+      /**
+       * @description maps each player in the whole player pool
        * @param leagueData
        * @param teamData
        * @param i
@@ -369,7 +390,7 @@
           index: index,
           id: i.id,
           playerName: $textManipulator.formattedFullName(i.first_name, i.last_name),
-          managerName: $rootScope.draftMode ? 'Free Agent' : $arrayLoopers.getOwnerByID(i.id),
+          managerName: $rootScope.draftMode ? 'Free Agent' : arrayMapper.getOwnerByID(i.id),
           teamName: $textManipulator.teamNameFormatted(teamData.full_name),
           teamLogo: teamData.logos.small,
           leagueName: $textManipulator.getLeagueByURL(leagueData.leagueURL).toUpperCase()

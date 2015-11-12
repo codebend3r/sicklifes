@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $arrayMappers, $momentService, $location, $objectUtils, $arrayFilter, $textManipulator, $http) {
+    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $arrayMappers, $momentService, $location, $objectUtils, $arrayFilter, $textManipulator) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -96,17 +96,20 @@
        });*/
 
       /**
+       * @name loading
        * @description whether data is still loading
        */
       $rootScope.loading = true;
 
       /**
+       * @name fireBaseReady
        * @description if firebase has been initalized
        */
       $rootScope.fireBaseReady = false;
 
       /**
-       * saved reference to firebase data once it's been loaded
+       * @name firebaseData
+       * @description saved reference to firebase data once it's been loaded
        */
       $rootScope.firebaseData = null;
 
@@ -124,12 +127,14 @@
       });
 
       /**
+       * @name draftMode
        * @description if manually adding players to roster
        * @type {boolean}
        */
       $scope.draftMode = $location.search().draftMode;
 
       /**
+       * @name dataKeyName
        * @description key name
        */
       $scope.dataKeyName = '';
@@ -147,12 +152,13 @@
       /////////////////////////////
 
       /**
+       * @name populateManagersData
        * @description populates $scope.managerData && $rootScope.managerData
        * @param data {object}
        */
       $scope.populateManagersData = function (data) {
 
-        var managerData = {
+        $rootScope.managersData = {
           chester: data.chester,
           frank: data.frank,
           dan: data.dan,
@@ -161,37 +167,28 @@
           joe: data.joe
         };
 
-        $scope.managerData = managerData;
-        $rootScope.managerData = managerData;
-
-        return managerData;
-
       };
 
       /**
+       * @name chooseManager
        * @description defines $scope.selectedManager
        */
       $scope.chooseManager = function (managerId) {
-        $rootScope.selectedManager = $scope.managerData[managerId.toLowerCase()];
+        $rootScope.selectedManager = $rootScope.managersData[managerId.toLowerCase()];
       };
 
       /**
+       * @name saveRoster
        * @description saves current managersData to firebase
        */
       $scope.saveRoster = function () {
 
         var saveObject = {
           _lastSyncedOn: $momentService.syncDate(),
-          data: $rootScope.managerData
+          data: $rootScope.managersData.data.data
         };
 
-        console.log('saveRoster --> saveObject', saveObject);
-
-        //_.each(saveObject.data, function(manager) {
-        //  _.each(manager.filteredMonthlyGoalsLog, function(log){
-        //    console.log(manager.managerName, '>', log.datePlayed);
-        //  });
-        //});
+        console.log('saveObject:', saveObject);
 
         $scope.saveToFireBase(saveObject, 'managersData');
 
@@ -202,6 +199,7 @@
       /////////////////////////////
 
       /**
+       * @name allMonths
        * @description all months dropdown options
        * @type {{monthName: string, range: string[]}[]}
        */
@@ -257,12 +255,14 @@
       ];
 
       /**
+       * @name selectedMonth
        * @description the select box model
        * @type {{monthName: string, range: string[]}}
        */
       $scope.selectedMonth = $scope.allMonths[0];
 
       /**
+       * @name changeMonth
        * @description when month option is changed
        */
       $scope.changeMonth = function (month) {
@@ -272,7 +272,7 @@
       };
 
       /**
-       * sets data in the initialized firebase service
+       * @description sets data in the initialized firebase service
        * @param saveObject
        * @param dataKey
        */
@@ -285,19 +285,17 @@
       };
 
       /**
-       * starts the process of getting data from firebase
+       * @description starts the process of getting data from firebase
        * @param callback
        */
       $scope.startFireBase = function (callback) {
         if (angular.isUndefinedOrNull(callback)) throw new Error('$scope.startFireBase: the callback parameter was not defined');
         if ($rootScope.fireBaseReady) {
-          console.log('firebase previously inited');
           callback($rootScope.firebaseData);
         } else {
           $fireBaseService.initialize($scope);
           var firePromise = $fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
-            console.log('firebase inited');
             $rootScope.firebaseData = fbData;
             $rootScope.fireBaseReady = true;
             $rootScope.lastSyncDate = $rootScope.firebaseData.managersData._lastSyncedOn;

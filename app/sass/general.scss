@@ -92,6 +92,10 @@ p.info-text {
   }
 }
 
+.btn-plus {
+  padding: 5px 10px;
+}
+
 //////////////////////////////////
 
 .form-control {
@@ -131,8 +135,7 @@ p.info-text {
 ///////////////////////////////////////
 
 .transfer-container {
-  //background-color: #9bc4ff;
-  background-color: #B4D3FF;
+  //background-color: #B4D3FF;
   padding: 10px;
   overflow: auto;
 }
@@ -181,6 +184,7 @@ p.info-text {
 }
 
 .added {
+  color: #1f8613;
   a {
     color: #1f8613;
   }

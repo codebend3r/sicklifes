@@ -1,20 +1,40 @@
 <table class='table table-hover table-responsive'>
+  <thead>
+  <tr>
+    <th title="player name"><a ng-click="setSortKey('playerName')">Player</a></th>
+    <th title="team name"><a ng-click="setSortKey('teamName')">Team</a></th>
+    <th title="league name"><a ng-click="setSortKey('leagueName')">League</a></th>
+    <th title="total goals"><a ng-click="setSortKey('goals')">TG</a></th>
+    <th title="domestic goals"><a ng-click="setSortKey('domesticGoals')">DG</a></th>
+    <th title="champions league goals"><a ng-click="setSortKey('clGoals')">CLG</a></th>
+  </tr>
+  </thead>
   <tbody>
   <tr ng-repeat="player in list | orderObjectBy:'pickNumber':false">
     <td class="player-column">
-      <button ng-show="!tableParams.draftMode" type='button' ng-if='player.status !== "dropped"' ng-click='dropPlayer({player:player})' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-minus'></span></button>
-      <button ng-show="!tableParams.draftMode" type='button' ng-if='player.status === "dropped"' class='btn btn-warning btn-xs'><span class='glyphicon glyphicon-asterisk'>&nbsp;</span></button>
-      <div class="vertical-center">
-        <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
-      </div>
+      <button ng-show="!tableParams.draftMode" type='button' ng-if='player.status !== "dropped"' ng-click='tableParams.dropPlayer(player)' class='btn btn-danger btn-xs btn-plus'>
+        <span class='glyphicon glyphicon-minus'></span>
+      </button>
+      <button ng-show="!tableParams.draftMode" type='button' ng-if='player.status === "dropped"' class='btn btn-warning btn-xs'>
+        <span class='glyphicon glyphicon-asterisk'>&nbsp;</span>
+      </button>&nbsp;
+      <a ui-sref="playerDetails({playerID: player.id})">{{player.playerName}}</a>
     </td>
     <td class="bold small-text">
       <div class="vertical-center"><img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;{{player.teamName}}</div>
     </td>
-    <td class="small-text"><div class="vertical-center">{{player.leagueName}}</div></td>
-    <td><div class="vertical-center">{{player.domesticGoals}}</div></td>
-    <td><div class="vertical-center">{{player.clGoals + player.eGoals}}</div></td>
-    <td><div class="vertical-center">{{player.points}}</div></td>
+    <td class="small-text">
+      {{player.leagueName}}
+    </td>
+    <td>
+      {{player.domesticGoals}}
+    </td>
+    <td>
+      {{player.clGoals + player.eGoals}}
+    </td>
+    <td>
+      {{player.points}}
+    </td>
   </tr>
   </tbody>
 </table>
