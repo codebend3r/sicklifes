@@ -18,8 +18,6 @@
 
       $rootScope.loading = true;
 
-      var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
-
       $scope.goalsOnlyFilterOn = true;
 
       /**
@@ -27,6 +25,7 @@
        * @param selectedManager
        */
       $scope.changeManager = function (selectedManager) {
+        console.log('changeManager to', selectedManager.managerName);
         $state.go($state.current.name, { managerId: selectedManager.managerName.toLowerCase() });
       };
 
@@ -76,6 +75,8 @@
 
         $scope.managersData = $rootScope.managersData.data;
 
+        $rootScope.loading = false;
+
         _.each($scope.managersData, function (m) {
           console.log('managerName:', m.managerName);
         });
@@ -102,8 +103,6 @@
             }
           });
 
-          $rootScope.loading = false;
-
           //$scope.startFireBase(function () {
           //  $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
           //});
@@ -121,8 +120,6 @@
             }
           });
 
-          $rootScope.loading = false;
-
           //$scope.startFireBase(function () {
           //  $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
           //});
@@ -139,8 +136,6 @@
               console.log('status -->', player.playerName, player.status);
             }
           });
-
-          $rootScope.loading = false;
 
         }
 

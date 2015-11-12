@@ -199,9 +199,7 @@
           console.log('///////////////////////////////////////////');
 
           $scope.startFireBase(function () {
-
             $scope.saveRoster();
-
           });
 
         } else {
@@ -219,10 +217,6 @@
        */
       var loadData = function (result) {
 
-        // console.log('///////////////////');
-        // console.log('result:', result);
-        // console.log('///////////////////');
-
         $scope.managersData = $rootScope.managersData.data;
 
         $scope.allPlayers = $rootScope.playerPoolData.allPlayers;
@@ -238,9 +232,7 @@
       $scope.updatePlayerPoolData = function () {
 
         $updateDataUtils.updatePlayerPoolData(function (result) {
-
           $scope.allPlayers = result;
-
         });
 
       };
