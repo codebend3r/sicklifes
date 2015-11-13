@@ -20,6 +20,10 @@
 
       $scope.goalsOnlyFilterOn = true;
 
+      $scope.isActive = function() {
+        console.log('> isActive');
+      };
+
       /**
        * @description
        * @param selectedManager
@@ -76,10 +80,6 @@
         $scope.managersData = $rootScope.managersData.data;
 
         $rootScope.loading = false;
-
-        _.each($scope.managersData, function (m) {
-          console.log('managerName:', m.managerName);
-        });
 
         // define selectedManager by managerId
         $scope.selectedManager = $rootScope.selectedManager;
@@ -206,8 +206,6 @@
        */
       var init = function () {
 
-        $scope.dataKeyName = 'managersData';
-
         if (angular.isDefined($rootScope[$scope.dataKeyName])) {
 
           console.log('load from $rootScope');
@@ -221,7 +219,6 @@
         } else {
 
           console.log('load from firebase');
-
           $apiFactory.getApiData('managersData')
             .then(loadData);
 

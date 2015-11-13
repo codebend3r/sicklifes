@@ -14,8 +14,6 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $scope.dataKeyName = 'managersData';
-
       /**
        * @description
        */
@@ -166,26 +164,17 @@
        */
       var loadData = function (result) {
 
-        console.log('///////////////////');
-        console.log('result:', result);
-        console.log('///////////////////');
+        $rootScope.loading = false;
 
-        $scope.managersData = $scope.populateManagersData(result.data);
+        $scope.managersData = $rootScope.managersData.data;
 
         $rootScope.lastSyncDate = result._lastSyncedOn;
+
         $rootScope.source = 'firebase';
 
-        if ($momentService.isHoursAgo(result._lastSyncedOn)) {
+        if ($momentService.isHoursAgo($rootScope.managersData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
-
-          $rootScope.loading = false;
-
-          // define managerData on scope and $rootScope
-          $scope.managerData = $scope.populateManagersData(result.data);
-
-          // define selectedManager by managerId
-          $scope.selectedManager = $scope.managerData[$stateParams.managerId];
 
           // TODO - fix, takes too long
           //$updateDataUtils.updateAllManagerData(onManagersRequestFinished);
@@ -194,19 +183,13 @@
 
           console.log('-- data is up to date --');
 
-          $rootScope.loading = false;
-
-          // define managerData on scope and $rootScope
-          $scope.managerData = $scope.populateManagersData(result.data);
-
         }
 
         $scope.combinedLogs = [];
 
-        _.each($scope.managerData, function (manager) {
+        _.each($scope.managersData, function (manager) {
           $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog);
         });
-
 
         // $scope.startFireBase(function () {
         //   console.log('firebase ready');
@@ -221,18 +204,13 @@
 
         /////////////////////////////
 
-        // $timeout(function() {
-        //   console.log('timeout:', currentMonth.monthName);
-        //   $scope.changeMonth(currentMonth);
-        // }.bind($scope), 500);
-
       };
 
-      // $rootScope.$on('MONTH_CHANGED', function(e, month) {
-      //   console.log('month change detected:', month.monthName);
-      //   currentMonth = month;
-      //   processChart();
-      // });
+       //$rootScope.$on('MONTH_CHANGED', function(e, month) {
+       //  console.log('month change detected:', month.monthName);
+       //  currentMonth = month;
+       //  processChart();
+       //});
 
       /**
        * @description current month
@@ -378,6 +356,7 @@
 
         } else {
 
+          console.log('load from firebase');
           $apiFactory.getApiData('managersData')
             .then(loadData);
 
