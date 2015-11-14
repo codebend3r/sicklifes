@@ -77,11 +77,10 @@
        */
       var loadData = function (result) {
 
-        $scope.managersData = $rootScope.managersData.data;
-
         $rootScope.loading = false;
 
-        // define selectedManager by managerId
+        $scope.managersData = $rootScope.managersData.data;
+
         $scope.selectedManager = $rootScope.selectedManager;
 
         $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog;

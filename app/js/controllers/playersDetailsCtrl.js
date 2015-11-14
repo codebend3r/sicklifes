@@ -17,12 +17,12 @@
       $rootScope.loading = true;
 
       /**
-       * player
+       * @description player
        */
       $scope.player = {};
 
       /**
-       * league images
+       * @description league images
        */
       $scope.leagueImages = $textManipulator.leagueImages;
 
@@ -32,22 +32,15 @@
 
       /**
        * call when firebase data has loaded
-       * defines $scope.managersData
+       * @description defines $scope.managersData
        * @param result
        */
       var loadData = function (result) {
 
-        console.log('///////////////////');
-        console.log('result:', result);
-        console.log('///////////////////');
-
-        // define managerData on scope and $rootScope
-        $scope.populateManagersData(result.data);
+        $scope.managersData = $rootScope.managersData.data;
 
         if (angular.isDefined($rootScope.allPlayersIndex.data)) {
-
           $scope.allPlayers = $rootScope.allPlayersIndex;
-
         }
 
         //////////////////
@@ -57,12 +50,13 @@
       };
 
       /**
-       * find more data on a player by id in the route
+       * @description find more data on a player by id in the route
        */
       var findPlayerByID = function () {
 
         var foundPlayer = false;
 
+        // check source
         if (angular.isDefined($scope.allPlayers) && angular.isDefined($scope.allPlayers.data) && angular.isDefined($scope.allPlayers.data[$stateParams.playerId]) && !Array.isArray($scope.allPlayers)) {
 
           $scope.player = $scope.allPlayers.data[$stateParams.playerId];
@@ -70,20 +64,19 @@
 
         } else {
 
-          _.some(managersData, function (manager) {
+          _.some($scope.managersData, function (manager) {
 
             if (angular.isDefined(manager.players[$stateParams.playerId])) {
-
               $scope.player = manager.players[$stateParams.playerId];
               foundPlayer = true;
               return true;
-
             }
 
           });
 
         }
 
+        // check the data of the source data
         if (foundPlayer && angular.isDefined($scope.player._lastSyncedOn) && !$momentService.isHoursAgo($scope.player._lastSyncedOn)) {
 
           console.log('foundPlayer and is up to date', $scope.player.playerName);
@@ -98,14 +91,19 @@
 
       };
 
+      /**
+       * @description
+       */
       var requestUpdateOnPlayer = function () {
 
-        $scope.player.id = $stateParams.playerId;
         $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
+        $scope.player.id = $stateParams.playerId;
 
         $apiFactory.getPlayerProfile('soccer', $scope.player.id)
           .then(function (result) {
             $scope.player.playerName = result.data.full_name;
+            //$scope.player.teamName = result.data.full_name;
+            //console.log('>', result.data);
             return $arrayMappers.playerInfo($scope.player, result);
           })
           .then($arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
@@ -116,7 +114,7 @@
             $scope.player._lastSyncedOn = $momentService.syncDate();
 
             console.log('-- DONE --');
-            console.log('>', $scope.player);
+            //console.log('>', $scope.player);
             //console.log($scope.player.playerName);
             //$scope.saveToIndex($stateParams.playerId, $scope.player);
 
@@ -127,7 +125,7 @@
       };
 
       /**
-       * init function
+       * @description init function
        */
       var init = function () {
 

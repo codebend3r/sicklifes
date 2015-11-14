@@ -14,8 +14,6 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      //var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
-
       $rootScope.loading = true;
 
       $scope.today = function () {

@@ -96,14 +96,13 @@
 
         var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
-        //player.id = result.data.id;
-
         player.playedInLigaGames = false;
         player.playedInEPLGames = false;
         player.playedInSeriGames = false;
         player.playedInChlgGames = false;
         player.playedInEuroGames = false;
 
+        // reset assists
         player.assists = 0;
 
         // url for player image
@@ -114,8 +113,6 @@
 
         // based on player result data return an object with the valid leagues for this player
         player.validLeagues = $textManipulator.getPlayerValidLeagues(result);
-
-        ///////////////////////////////////
 
         return $apiFactory.getPlayerProfile(profileLeagueSlug, player.id);
 
@@ -128,7 +125,7 @@
        */
       arrayMapper.playerMapPersonalInfo = function (player, result) {
 
-        //console.log('playerMapPersonalInfo:', player.playerName);
+        console.log('playerMapPersonalInfo > result', result);
 
         player.position = result.data.position;
         player.pos = result.data.position_abbreviation;
@@ -136,6 +133,8 @@
         player.height = result.data.height_feet + '\'' + result.data.height_inches;
         player.birthdate = result.data.birthdate;
         player.birthplace = result.data.birth_city + ', ' + result.data.birth_country;
+        player.teamName = result.data.team.full_name;
+        player.teamLogo = result.data.team.logos.large;
 
       };
 

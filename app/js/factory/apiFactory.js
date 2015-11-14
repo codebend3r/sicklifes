@@ -80,8 +80,6 @@
        */
       apiFactory.getPlayerProfile = function (league, id) {
 
-        //league === 'soccer' ? console.log('1. getPlayerProfile') : console.log('3. getPlayerProfile');
-
         if (angular.isUndefinedOrNull(league) || league === '') {
           league = 'soccer';
         }
