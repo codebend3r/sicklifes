@@ -138,6 +138,10 @@
 
         }
 
+        // _.each($scope.selectedManager.players.sortBy('pickNumber'), function(p) {
+        //   console.log(p.playerName, p.pickNumber);
+        // });
+
         // if (angular.isUndefinedOrNull($localStorage[$scope.dataKeyName])) {
         //
         //   var saveObject = {

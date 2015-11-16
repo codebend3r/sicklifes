@@ -75,14 +75,14 @@
        */
       $scope.addPlayer = function (player) {
 
+        var pickNumber = _.keys($scope.selectedManager.players).length + 1;
+
         if ($scope.draftMode) {
 
           var draftedPlayer = $objectUtils.cleanPlayer(player, $scope.draftMode);
           draftedPlayer.managerName = $scope.selectedManager.managerName;
 
           $scope.selectedManager.players = $scope.selectedManager.players || {};
-
-          var pickNumber = _.keys($scope.selectedManager.players).length + 1;
 
           draftedPlayer.pickNumber = pickNumber;
 
@@ -106,6 +106,7 @@
             })
             .then(function () {
               $scope.addedPlayerObject = addedPlayer;
+              $scope.addedPlayerObject.pickNumber = pickNumber;
               $scope.transactionPlayerAdded = true;
             })
 
@@ -194,11 +195,12 @@
 
           console.log('///////////////////////////////////////////');
           console.log('transactions', $scope.selectedManager.transactions);
+          console.log($scope.addedPlayerObject, '|', $scope.droppedPlayerObject);
           console.log('///////////////////////////////////////////');
 
-          $scope.startFireBase(function () {
-            $scope.saveRoster();
-          });
+          // $scope.startFireBase(function () {
+          //   $scope.saveRoster();
+          // });
 
         } else {
 
@@ -220,6 +222,10 @@
         $scope.allPlayers = $rootScope.playerPoolData.allPlayers;
 
         $rootScope.loading = false;
+
+        _.each($scope.selectedManager.players, function(p) {
+          console.log(p.playerName, p.pickNumber);
+        });
 
       };
 

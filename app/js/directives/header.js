@@ -36,7 +36,7 @@
             {
               name: 'Transfers',
               url: 'transfers',
-              active: false
+              active: true
             },
             {
               name: 'Admin',

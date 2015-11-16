@@ -29,7 +29,7 @@
 
     .run(function($rootScope) {
 
-      $rootScope.websiteTitle = 'Geeves';
+      $rootScope.websiteTitle = 'Sicklifes';
 
     })
 
