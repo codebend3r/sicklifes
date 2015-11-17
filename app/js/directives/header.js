@@ -19,18 +19,18 @@
 
           $scope.menuOptions = [
             {
+              name: 'Standings',
+              url: 'standings',
+              active: true
+            },
+            {
               name: 'Leagues',
-              url: 'leagues.tables',
+              url: 'leagues',
               active: true
             },
             {
               name: 'Managers',
-              url: 'managers.overview',
-              active: true
-            },
-            {
-              name: 'Standings',
-              url: 'standings',
+              url: 'managers',
               active: true
             },
             {

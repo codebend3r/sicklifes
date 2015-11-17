@@ -194,13 +194,13 @@
           droppedPlayer.dateOfTransaction = $momentService.transactionDate();
 
           console.log('///////////////////////////////////////////');
-          console.log('transactions', $scope.selectedManager.transactions);
-          console.log($scope.addedPlayerObject, '|', $scope.droppedPlayerObject);
+          console.log('addedPlayerObject: ', $scope.addedPlayerObject);
+          console.log('droppedPlayerObject: ', $scope.droppedPlayerObject);
           console.log('///////////////////////////////////////////');
 
-          // $scope.startFireBase(function () {
-          //   $scope.saveRoster();
-          // });
+          $scope.startFireBase(function () {
+            $scope.saveRoster();
+          });
 
         } else {
 
@@ -221,11 +221,9 @@
 
         $scope.allPlayers = $rootScope.playerPoolData.allPlayers;
 
-        $rootScope.loading = false;
-
-        _.each($scope.selectedManager.players, function(p) {
-          console.log(p.playerName, p.pickNumber);
-        });
+        $timeout(function() {
+          $rootScope.loading = false;
+        }, 500);
 
       };
 

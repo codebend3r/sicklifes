@@ -97,14 +97,12 @@
 
           _.each($scope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
-            if (angular.isDefined(player.status)) {
+            if (angular.isDefined(player.status) && player.status !== 'drafted') {
               console.log('status -->', player.playerName, player.status);
+            } else {
+              player.status = 'drafted';
             }
           });
-
-          //$scope.startFireBase(function () {
-          //  $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
-          //});
 
         } else if ($momentService.isHoursAgo($scope.managerData._lastSyncedOn)) {
 
@@ -114,8 +112,10 @@
 
           _.each($scope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
-            if (angular.isDefined(player.status)) {
+            if (angular.isDefined(player.status) && player.status !== 'drafted') {
               console.log('status -->', player.playerName, player.status);
+            } else {
+              player.status = 'drafted';
             }
           });
 
@@ -131,16 +131,39 @@
 
           _.each($rootScope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
-            if (angular.isDefined(player.status)) {
+            if (angular.isDefined(player.status) && player.status !== 'drafted') {
               console.log('status -->', player.playerName, player.status);
+            } else {
+              player.status = 'drafted';
             }
           });
 
         }
 
-        // _.each($scope.selectedManager.players.sortBy('pickNumber'), function(p) {
-        //   console.log(p.playerName, p.pickNumber);
-        // });
+        //console.log('> players', $scope.selectedManager.players);
+
+        var fixPickNumber = false;
+
+        if (fixPickNumber) {
+
+          var indexPick = 1;
+          var sortedArray = []
+
+          _.each($scope.selectedManager.players, function(p) {
+            sortedArray.push(p);
+          });
+
+          sortedArray.sort(function(a, b) {
+            return a.pickNumber - b.pickNumber;
+          });
+
+          _.each(sortedArray, function(p) {
+            console.log(p.playerName, p.pickNumber, 'to', indexPick);
+            $scope.selectedManager.players[p.id].pickNumber = indexPick;
+            indexPick += 1;
+          });
+
+        }
 
         // if (angular.isUndefinedOrNull($localStorage[$scope.dataKeyName])) {
         //

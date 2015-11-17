@@ -1,4 +1,4 @@
-<table class='table table-hover hidden-sm hidden-xs'>
+<table class='table table-hover table-responsive hidden-sm hidden-xs'>
   <thead>
     <tr>
       <th>Opponent</th>
@@ -6,6 +6,7 @@
       <th>S</th>
       <th>SOG</th>
       <th>Final Score</th>
+      <th>Mins</th>
       <th>Date</th>
     </tr>
   </thead>
@@ -16,13 +17,14 @@
       <td>{{game.shots}}</td>
       <td>{{game.shotsOnGoal}}</td>
       <td>{{game.result}} {{game.finalScore}}</td>
+      <td>{{game.minutesPlayed}}mins</td>
       <td>{{game.datePlayed}}</td>
     </tr>
   </tbody>
 </table>
 
 
-<table class='table table-hover hidden-lg hidden-md'>
+<table class='table table-hover table-responsive hidden-lg hidden-md'>
   <thead>
     <tr>
       <th>Opponent</th>
