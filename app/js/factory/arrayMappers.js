@@ -125,8 +125,6 @@
        */
       arrayMapper.playerMapPersonalInfo = function (player, result) {
 
-        console.log('playerMapPersonalInfo > result', result);
-
         player.position = result.data.position;
         player.pos = result.data.position_abbreviation;
         player.weight = result.data.weight;

@@ -147,7 +147,7 @@
         if (fixPickNumber) {
 
           var indexPick = 1;
-          var sortedArray = []
+          var sortedArray = [];
 
           _.each($scope.selectedManager.players, function(p) {
             sortedArray.push(p);
@@ -170,7 +170,7 @@
         //   var saveObject = {
         //     _lastSyncedOn: $momentService.syncDate(),
         //     data: $rootScope.managerData
-        //   };
+        //   };O
         //
         //   $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
         //
@@ -187,25 +187,23 @@
 
       /**
        * @description
-       * @param managerData
        */
-      var onManagersRequestFinished = function (managerData) {
+      var onManagersRequestFinished = function (data) {
 
         console.log('onManagersRequestFinished');
         $rootScope.loading = false;
-        $scope.managerData[managerId] = managerData;
-        $scope.selectedManager = managerData;
-        $scope.saveRoster();
+        $scope.managerData[managerId] = data;
+        $scope.selectedManager = data;
 
       };
 
-      var onAllManagersRequestFinished = function (managersData) {
+      var onAllManagersRequestFinished = function (data) {
+
+        console.log('onAllManagersRequestFinished --> data', data);
 
         $rootScope.loading = false;
-        $scope.managerData = managersData;
-        $rootScope.managerData = managersData;
-        //$scope.saveRoster();
-        console.log('$scope.managerData:', $scope.managerData);
+        $scope.managersData = data;
+        $rootScope.managersData = data;
 
       };
 

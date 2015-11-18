@@ -123,6 +123,7 @@
 
         // reset goal counts
         manager = $objectUtils.cleanManager(manager, true);
+        manager._lastSyncedOn = $momentService.syncDate();
 
         total += _.keys(manager.players).length;
 
@@ -188,10 +189,10 @@
 
         console.log('$updateDataUtils --> updateAllManagerData');
 
-        if (angular.isUndefinedOrNull($rootScope.managerData)) throw new Error('$rootScope.managerData is not defined');
+        if (angular.isUndefinedOrNull($rootScope.managersData)) throw new Error('$rootScope.managerData is not defined');
 
         updateDataUtils.updateCoreData(function () {
-            var managers = angular.copy($rootScope.managerData);
+            var managers = angular.copy($rootScope.managersData.data);
             _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
               cb(managers);
             }));
