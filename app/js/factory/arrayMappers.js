@@ -20,7 +20,7 @@
        */
       arrayMapper.goalsMap = function (managersData, url, i) {
 
-        var playerInLeague = {
+        return {
           id: i.player.id,
           url: url || '',
           rank: i.ranking,
@@ -34,8 +34,6 @@
           transactionsLog: [],
           historyLog: []
         };
-
-        return playerInLeague;
 
       };
 
@@ -125,6 +123,8 @@
        */
       arrayMapper.playerMapPersonalInfo = function (player, result) {
 
+        //console.log('playerMapPersonalInfo > result', result);
+
         player.position = result.data.position;
         player.pos = result.data.position_abbreviation;
         player.weight = result.data.weight;
@@ -158,6 +158,8 @@
 
         player.leagueSlugs = '';
 
+        // console.log('playerGamesLog:', player.playerName, validLeagues);
+
         if (validLeagues.inLiga) {
 
           // LA LIGA
@@ -167,7 +169,8 @@
           ligaGamesRequest.then(function (result) {
 
             player.ligaCompleteLog = result.data
-              .filter($arrayFilter.filterAfterDate)
+              //.filter($arrayFilter.filterAfterDate)
+              .filter($arrayFilter.filterValidDate.bind(this, player))
               .map(arrayMapper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
@@ -180,7 +183,7 @@
             if (player.status !== 'dropped' && (foundTeam.length || player.ligaCompleteLog.length)) {
               player.playedInLigaGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'liga' : '/liga';
-              player.leagueName = 'LA LIGA';
+              player.leagueName = 'LIGA';
             }
 
             if (!angular.isUndefinedOrNull(manager)) {
@@ -205,7 +208,8 @@
           eplGamesRequest.then(function (result) {
 
             player.eplCompleteLog = result.data
-              .filter($arrayFilter.filterAfterDate)
+              //.filter($arrayFilter.filterAfterDate)
+              .filter($arrayFilter.filterValidDate.bind(this, player))
               .map(arrayMapper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
@@ -243,7 +247,8 @@
           seriGamesRequest.then(function (result) {
 
             player.seriCompleteLog = result.data
-              .filter($arrayFilter.filterAfterDate)
+              //.filter($arrayFilter.filterAfterDate)
+              .filter($arrayFilter.filterValidDate.bind(this, player))
               .map(arrayMapper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
@@ -256,7 +261,7 @@
             if (player.status !== 'dropped' && (foundTeam.length || player.seriCompleteLog.length)) {
               player.playedInSeriGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'seri' : '/seri';
-              player.leagueName = 'SERIE A';
+              player.leagueName = 'SERI';
             }
 
             if (!angular.isUndefinedOrNull(manager)) {
@@ -280,7 +285,8 @@
           chlgGamesRequest.then(function (result) {
 
             player.chlgCompleteLogs = result.data
-              .filter($arrayFilter.filterAfterDate)
+              //.filter($arrayFilter.filterAfterDate)
+              .filter($arrayFilter.filterValidDate.bind(this, player))
               .map(arrayMapper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
@@ -294,6 +300,7 @@
               player.playedInChlgGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'chlg' : '/chlg';
               player.tournamentLeagueName = $textManipulator.formattedLeagueName('chlg');
+              //player.leagueName = 'CHLG';
             }
             if (!angular.isUndefinedOrNull(manager)) {
               if (player.playedInChlgGames) manager.chlgCount += 1;
@@ -317,7 +324,8 @@
           euroGamesRequest.then(function (result) {
 
             player.euroCompleteLogs = result.data
-              .filter($arrayFilter.filterAfterDate)
+              //.filter($arrayFilter.filterAfterDate)
+              .filter($arrayFilter.filterValidDate.bind(this, player))
               .map(arrayMapper.monthlyMapper.bind(this, {
                 player: player,
                 manager: manager || null
@@ -331,6 +339,7 @@
               player.playedInEuroGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'euro' : '/euro';
               player.tournamentLeagueName = $textManipulator.formattedLeagueName('uefa');
+              //player.leagueName = 'EURO';
             }
             if (!angular.isUndefinedOrNull(manager)) {
               if (player.playedInEuroGames) manager.euroCount += 1;

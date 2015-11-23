@@ -189,6 +189,7 @@
 
         _.each($scope.managersData, function (manager) {
           $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog);
+          //$scope.combinedLogs = $scope.combinedLogs.concat(manager.monthlyGoalsLog);
         });
 
         // $scope.startFireBase(function () {
@@ -206,11 +207,11 @@
 
       };
 
-       //$rootScope.$on('MONTH_CHANGED', function(e, month) {
-       //  console.log('month change detected:', month.monthName);
-       //  currentMonth = month;
-       //  processChart();
-       //});
+       $rootScope.$on('MONTH_CHANGED', function(e, month) {
+         console.log('month change detected:', month.monthName);
+         currentMonth = month;
+         //processChart();
+       });
 
       /**
        * @description current month

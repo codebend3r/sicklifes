@@ -20,7 +20,7 @@
 
       $scope.goalsOnlyFilterOn = true;
 
-      $scope.isActive = function() {
+      $scope.isActive = function () {
         console.log('> isActive');
       };
 
@@ -97,14 +97,9 @@
 
           _.each($scope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
-            if (angular.isDefined(player.status) && player.status !== 'drafted') {
-              console.log('status -->', player.playerName, player.status);
-            } else {
-              player.status = 'drafted';
-            }
           });
 
-        } else if ($momentService.isHoursAgo($scope.managerData._lastSyncedOn)) {
+        } else if ($momentService.isHoursAgo($scope.managersData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
@@ -112,16 +107,7 @@
 
           _.each($scope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
-            if (angular.isDefined(player.status) && player.status !== 'drafted') {
-              console.log('status -->', player.playerName, player.status);
-            } else {
-              player.status = 'drafted';
-            }
           });
-
-          //$scope.startFireBase(function () {
-          //  $updateDataUtils.updateManagerData(onManagersRequestFinished, $scope.selectedManager);
-          //});
 
         } else {
 
@@ -131,16 +117,20 @@
 
           _.each($rootScope.selectedManager.players, function (player) {
             checkForWildCard(player, $scope.selectedManager);
-            if (angular.isDefined(player.status) && player.status !== 'drafted') {
-              console.log('status -->', player.playerName, player.status);
-            } else {
-              player.status = 'drafted';
-            }
           });
 
         }
 
-        //console.log('> players', $scope.selectedManager.players);
+        //_.each($scope.managersData, function (manager) {
+        //  _.each(manager.players, function (player) {
+        //    if (angular.isDefined(player.status) && player.status === 'drafted' || player.status === 'dropped') {
+        //      player.dateOfTransaction = '8/1/2015';
+        //    } else {
+        //      console.log('> players', player.playerName);
+        //      player.dateOfTransaction = '11/9/2015';
+        //    }
+        //  });
+        //});
 
         var fixPickNumber = false;
 
@@ -149,15 +139,15 @@
           var indexPick = 1;
           var sortedArray = [];
 
-          _.each($scope.selectedManager.players, function(p) {
+          _.each($scope.selectedManager.players, function (p) {
             sortedArray.push(p);
           });
 
-          sortedArray.sort(function(a, b) {
+          sortedArray.sort(function (a, b) {
             return a.pickNumber - b.pickNumber;
           });
 
-          _.each(sortedArray, function(p) {
+          _.each(sortedArray, function (p) {
             console.log(p.playerName, p.pickNumber, 'to', indexPick);
             $scope.selectedManager.players[p.id].pickNumber = indexPick;
             indexPick += 1;
@@ -170,7 +160,7 @@
         //   var saveObject = {
         //     _lastSyncedOn: $momentService.syncDate(),
         //     data: $rootScope.managerData
-        //   };O
+        //   };
         //
         //   $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
         //
@@ -187,23 +177,34 @@
 
       /**
        * @description
+       * @param managerData
        */
-      var onManagersRequestFinished = function (data) {
+      var onManagersRequestFinished = function (managerData) {
 
         console.log('onManagersRequestFinished');
         $rootScope.loading = false;
-        $scope.managerData[managerId] = data;
-        $scope.selectedManager = data;
+        $scope.managerData[managerId] = managerData;
+        $scope.selectedManager = managerData;
+        $scope.saveRoster();
 
       };
 
-      var onAllManagersRequestFinished = function (data) {
+      /**
+       *
+       * @param managersData
+       */
+      var onAllManagersRequestFinished = function (managersData) {
 
-        console.log('onAllManagersRequestFinished --> data', data);
+        _.each(managersData.chester.filteredMonthlyGoalsLog, function (log) {
+          if (log.datePlayed === '11/21/2015') {
+            console.log('1 found today', log.datePlayed)
+          }
+        });
 
         $rootScope.loading = false;
-        $scope.managersData = data;
-        $rootScope.managersData = data;
+        $scope.managersData = managersData;
+        $rootScope.managersData = managersData;
+        $scope.saveRoster();
 
       };
 

@@ -31,18 +31,14 @@
        */
       var updateAllManagersFilter = function () {
 
-        _.each($rootScope.managerData, function (manager) {
-
-          //console.log('--------------------------');
-          //console.log('updateAllManagersFilter:', manager.managerName);
+        _.each($rootScope.managersData.data, function (manager) {
+          
           //manager = $objectUtils.managerResetGoalPoints(manager);
 
           var filteredGames = _.chain(manager.filteredMonthlyGoalsLog)
             .flatten(true)
             .filter($arrayFilter.filterOnMonth.bind($scope, $scope.selectedMonth))
             .value();
-
-          //console.log('filteredGames', filteredGames);
 
           manager = $objectUtils.managerResetGoalPoints(manager);
 
@@ -190,6 +186,12 @@
 
         console.log('saveObject:', saveObject);
 
+        //_.each(saveObject.data.chester.filteredMonthlyGoalsLog, function (log) {
+        //  if (log.datePlayed === '11/21/2015') {
+        //    console.log('4 found today', log.datePlayed)
+        //  }
+        //});
+
         $scope.saveToFireBase(saveObject, 'managersData');
 
       };
@@ -267,9 +269,12 @@
        */
       $scope.changeMonth = function (month) {
         $scope.selectedMonth = month;
-        updateAllManagersFilter();
         $rootScope.$emit('MONTH_CHANGED', month);
       };
+
+      $rootScope.$on('MONTH_CHANGED', function() {
+        updateAllManagersFilter();
+      });
 
       /**
        * @description sets data in the initialized firebase service

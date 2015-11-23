@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, $arrayMappers, $apiFactory, $objectUtils, $modal, $updateDataUtils, $momentService, $localStorage, $stateParams) {
+    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, $arrayMappers, $apiFactory, $objectUtils, $updateDataUtils, $momentService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -16,13 +16,7 @@
 
       $rootScope.loading = true;
 
-      $scope.today = function () {
-        $scope.dt = new Date();
-      };
-
-      $scope.clear = function () {
-        $scope.dt = null;
-      };
+      $scope.dt = new Date();
 
       /**
        * @name allPlayers
@@ -84,6 +78,8 @@
 
           $scope.selectedManager.players = $scope.selectedManager.players || {};
 
+          //TODO make sure date doesn't include time
+
           draftedPlayer.pickNumber = pickNumber;
 
           console.log('pick #', pickNumber);
@@ -107,6 +103,7 @@
             .then(function () {
               $scope.addedPlayerObject = addedPlayer;
               $scope.addedPlayerObject.pickNumber = pickNumber;
+              console.log('pickNumber', pickNumber);
               $scope.transactionPlayerAdded = true;
             })
 
@@ -121,8 +118,8 @@
       $scope.dropPlayer = function (player) {
 
         $scope.droppedPlayerObject = $scope.getManagersPlayerById(player.id);
-        var pickNumber = _.keys($scope.selectedManager.players).length + 1;
-        $scope.droppedPlayerObject.pickNumber = pickNumber;
+        //var pickNumber = _.keys($scope.selectedManager.players).length + 1;
+        //$scope.droppedPlayerObject.pickNumber = pickNumber;
         $scope.transactionPlayerRemoved = true;
 
       };
@@ -166,11 +163,17 @@
        */
       $scope.transactionPlayerRemoved = false;
 
+      $scope.$watch('dt', function(nv, ov) {
+        console.log('nv:', nv);
+      });
+
       /**
        * @name saveTransaction
        * @description saves the added and dropped players to the current manager's roster
        */
       $scope.saveTransaction = function () {
+
+        console.log('$scope.dt:', $scope.dt);
 
         if (angular.isDefined($scope.addedPlayerObject) && angular.isDefined($scope.droppedPlayerObject)) {
 
@@ -264,8 +267,6 @@
        * @description init function
        */
       var init = function () {
-
-        $scope.today();
 
         $updateDataUtils.updateCoreData(function () {
 

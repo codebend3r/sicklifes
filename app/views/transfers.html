@@ -47,8 +47,6 @@
   </div>
 
   <div ng-if="transactionPlayerAdded">
-    <!--<pre>Selected date is: <em>{{dt | date:'fullDate' }}</em></pre>-->
-    <!--<uib-datepicker ng-model="dt" show-weeks="false"></uib-datepicker>-->
     <p class="input-group">
       <input type="date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
       <span class="input-group-btn">

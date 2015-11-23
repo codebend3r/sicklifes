@@ -36,19 +36,19 @@
         },
         dan: {
           managerName: 'Dan',
-          teamName: '-'
+          teamName: 'Dan'
         },
         justin: {
           managerName: 'Justin',
-          teamName: '-'
+          teamName: 'Justin'
         },
         mike: {
           managerName: 'Mike',
-          teamName: '-'
+          teamName: 'Mike'
         },
         joe: {
           managerName: 'Joe',
-          teamName: '-'
+          teamName: 'Joe'
         },
 
         /**

@@ -142,19 +142,22 @@
             .then($arrayMappers.playerInfo.bind(this, player))
             .then($arrayMappers.playerMapPersonalInfo.bind(this, player))
             .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }))
-            .then(function (player) {
+            .then(function (result) {
 
               // TODO make function available in services
               //console.log(result);
               //$scope.saveToIndex(player.playerId, player);
 
               current += 1;
-              $rootScope.percentage = Math.round((current / total) * 100);
+              //$rootScope.percentage = Math.round((current / total) * 100);
 
               if (current === total) {
-                //defer.resolve(managerData);
                 if (typeof cb === 'function') {
-                  console.log('sync date is', manager._lastSyncedOn);
+                  _.each(manager.filteredMonthlyGoalsLog, function (log) {
+                    if (log.datePlayed === '11/21/2015') {
+                      console.log('2 found today', log.datePlayed)
+                    }
+                  });
                   cb(manager);
                 } else {
                   throw new Error('cb parameter is not type function');
@@ -162,6 +165,30 @@
               }
             });
 
+        });
+
+      };
+
+      /**
+       * @name updateAllManagerData
+       * @description gets data from all of the players in all valid leagues
+       */
+      updateDataUtils.updateAllManagerData = function (cb) {
+
+        console.log('$updateDataUtils --> updateAllManagerData');
+
+        if (angular.isUndefinedOrNull($rootScope.managersData)) throw new Error('$rootScope.managersData is not defined');
+
+        updateDataUtils.updateCoreData(function () {
+          var managers = angular.copy($rootScope.managersData.data);
+          _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
+            _.each(managers.chester.filteredMonthlyGoalsLog, function (log) {
+              if (log.datePlayed === '11/21/2015') {
+                console.log('3 found today', log.datePlayed)
+              }
+            });
+            cb(managers);
+          }));
         });
 
       };
@@ -177,25 +204,6 @@
         $q.all([$apiFactory.getApiData('managersData'), $apiFactory.getApiData('leagueTables')])
           .then(function () {
             cb();
-          });
-
-      };
-
-      /**
-       * @name updateAllManagerData
-       * @description gets data from all of the players in all valid leagues
-       */
-      updateDataUtils.updateAllManagerData = function (cb) {
-
-        console.log('$updateDataUtils --> updateAllManagerData');
-
-        if (angular.isUndefinedOrNull($rootScope.managersData)) throw new Error('$rootScope.managerData is not defined');
-
-        updateDataUtils.updateCoreData(function () {
-            var managers = angular.copy($rootScope.managersData.data);
-            _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
-              cb(managers);
-            }));
           });
 
       };

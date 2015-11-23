@@ -42,8 +42,8 @@
         },
 
         transactionDate: function (date) {
-          if (date) {
-            return date;
+          if (angular.isDefined(date)) {
+            return $moment(date).format('MM/DD/YYYY');
           } else {
             return $moment().format('MM/DD/YYYY');
           }
