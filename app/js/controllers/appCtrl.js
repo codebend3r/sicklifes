@@ -152,18 +152,18 @@
        * @description populates $scope.managerData && $rootScope.managerData
        * @param data {object}
        */
-      $scope.populateManagersData = function (data) {
-
-        $rootScope.managersData = {
-          chester: data.chester,
-          frank: data.frank,
-          dan: data.dan,
-          justin: data.justin,
-          mike: data.mike,
-          joe: data.joe
-        };
-
-      };
+      // $scope.populateManagersData = function (data) {
+      //
+      //   $rootScope.managersData = {
+      //     chester: data.chester,
+      //     frank: data.frank,
+      //     dan: data.dan,
+      //     justin: data.justin,
+      //     mike: data.mike,
+      //     joe: data.joe
+      //   };
+      //
+      // };
 
       /**
        * @name chooseManager

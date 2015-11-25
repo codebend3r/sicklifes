@@ -39,9 +39,9 @@
 
         $scope.managersData = $rootScope.managersData.data;
 
-        if (angular.isDefined($rootScope.allPlayersIndex.data)) {
-          $scope.allPlayers = $rootScope.allPlayersIndex;
-        }
+        // if (angular.isDefined($rootScope.allPlayersIndex)) {
+        //   $scope.allPlayers = $rootScope.allPlayersIndex;
+        // }
 
         //////////////////
 
@@ -102,19 +102,21 @@
         $apiFactory.getPlayerProfile('soccer', $scope.player.id)
           .then(function (result) {
             $scope.player.playerName = result.data.full_name;
-            //$scope.player.teamName = result.data.full_name;
-            //console.log('>', result.data);
+            //$scope.player.id = player.id;
             return $arrayMappers.playerInfo($scope.player, result);
           })
           .then($arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
-          .then($arrayMappers.playerGamesLog.bind(this, {player: $scope.player, manager: null}))
+          .then($arrayMappers.playerGamesLog.bind(this, {
+            player: $scope.player,
+            manager: null
+          }))
           .then(function (result) {
 
             $scope.player = result;
             $scope.player._lastSyncedOn = $momentService.syncDate();
 
             console.log('-- DONE --');
-            //console.log('>', $scope.player);
+            console.log('>', $scope.player);
             //console.log($scope.player.playerName);
             //$scope.saveToIndex($stateParams.playerId, $scope.player);
 
@@ -129,12 +131,7 @@
        */
       var init = function () {
 
-        $updateDataUtils.updateCoreData(function () {
-
-          $apiFactory.getApiData('allPlayersIndex')
-            .then(loadData);
-
-        });
+        $updateDataUtils.updateCoreData(loadData);
 
       };
 

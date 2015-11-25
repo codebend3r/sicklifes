@@ -43,6 +43,7 @@
         playerResetGoalPoints: function (p) {
 
           p.goals = 0;
+          p.assists = 0;
           p.points = 0;
           p.domesticGoals = 0;
           p.clGoals = 0;

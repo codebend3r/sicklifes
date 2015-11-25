@@ -55,7 +55,7 @@
        */
       var loadData = function (data) {
 
-        $scope.players = data[$stateParams.teamId].roster;
+        //$scope.players = data[$stateParams.teamId].roster;
 
         $scope.teamName = data[$stateParams.teamId].teamName;
         $scope.largeLogo = data[$stateParams.teamId].logo;
@@ -125,7 +125,6 @@
 
                     $apiFactory.getPlayerProfile('soccer', player.id)
                       .then(function (result) {
-                        //console.log('> player name:', result.data);
                         currentPlayer.playerName = result.data.full_name;
                         currentPlayer.id = player.id;
                         return $arrayMappers.playerInfo(currentPlayer, result);
@@ -140,18 +139,15 @@
                         currentPlayer = result;
                         currentPlayer._lastSyncedOn = $momentService.syncDate();
 
-                        // if (currentPlayer.playerName.toLowerCase().indexOf('Messi') === 1){
-                        //   console.log('-- ROSTER PLAYER DONE --');
-                        //   console.log('>', currentPlayer);
-                        // }
+                        console.log('>', currentPlayer);
 
                         $scope.players.push(currentPlayer);
 
                         numberOfRequests += 1;
 
-                        if (numberOfRequests === numberOfPlayers) {
-                          $scope.saveTeamToIndex($scope.players);
-                        }
+                        // if (numberOfRequests === numberOfPlayers) {
+                        //   $scope.saveTeamToIndex($scope.players);
+                        // }
 
                       });
 
