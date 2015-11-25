@@ -237,6 +237,7 @@
       $scope.updatePlayerPoolData = function () {
 
         $updateDataUtils.updatePlayerPoolData(function (result) {
+          console.log('PLAYER POOL DATA UPDATED');
           $scope.allPlayers = result;
         });
 

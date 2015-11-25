@@ -19,6 +19,11 @@
 
           $scope.menuOptions = [
             {
+              name: 'Managers',
+              url: 'managers',
+              active: true
+            },
+            {
               name: 'Standings',
               url: 'standings',
               active: true
@@ -26,11 +31,6 @@
             {
               name: 'Leagues',
               url: 'leagues',
-              active: true
-            },
-            {
-              name: 'Managers',
-              url: 'managers',
               active: true
             },
             {

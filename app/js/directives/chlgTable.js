@@ -13,7 +13,7 @@
       return {
         restrict: 'E',
         replace: false,
-        templateUrl: 'views/directives/chlg-tables.html',
+        templateUrl: 'views/directives/chlg-table.html',
         scope: true
       };
 

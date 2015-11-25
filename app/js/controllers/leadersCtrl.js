@@ -73,40 +73,25 @@
 
         $rootScope.loading = false;
 
-        // imageTool.convertImgToBase64URL($scope.selectedLeague.img, function(base64Img) {
-        //   console.log('image converted', base64Img);
-        //   $scope.leagueImage = base64Img
-        // });
-
         $scope.startFireBase(function () {
 
-          prepareForFirebase();
+          var saveObject = {};
+          saveObject._syncedFrom = 'leadersCtrl';
+          saveObject.leagues = {};
+          saveObject.leagues[$stateParams.leagueName] = {
+            goalLeaders: $scope.leagueLeaders,
+            _lastSyncedOn: $momentService.syncDate()
+          };
+
+          if ($rootScope.scoringLeaders) {
+            _.defaults(saveObject.leagues, $rootScope.scoringLeaders.leagues);
+          }
+
+          console.log('updating league leaders for', $stateParams.leagueName);
+
+          $scope.saveToFireBase(saveObject, 'scoringLeaders');
 
         });
-
-      };
-
-      /**
-       * extends league object and makes the call to firebase
-       */
-      var prepareForFirebase = function () {
-
-        var saveObject = {};
-        saveObject._syncedFrom = 'leadersCtrl';
-        saveObject.leagues = {};
-        saveObject.leagues[$stateParams.leagueName] = {
-          goalLeaders: $scope.leagueLeaders,
-          _lastSyncedOn: $momentService.syncDate()
-        };
-
-        if ($rootScope.scoringLeaders) {
-          _.defaults(saveObject.leagues, $rootScope.scoringLeaders.leagues);
-        }
-
-        console.log('saveObject:', saveObject);
-        console.log('updating', $stateParams.leagueName);
-
-        $scope.saveToFireBase(saveObject, 'scoringLeaders');
 
       };
 
@@ -127,10 +112,6 @@
        * @param firebaseObj
        */
       var loadData = function (data) {
-
-        console.log('///////////////////');
-        console.log('data:', data);
-        console.log('///////////////////');
 
         if (angular.isDefined(data.leagues)
           && angular.isDefined(data.leagues[$stateParams.leagueName])

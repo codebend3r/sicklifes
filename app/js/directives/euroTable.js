@@ -13,7 +13,7 @@
       return {
         restrict: 'E',
         replace: false,
-        templateUrl: 'views/directives/euro-tables.html',
+        templateUrl: 'views/directives/euro-table.html',
         scope: true
       };
 

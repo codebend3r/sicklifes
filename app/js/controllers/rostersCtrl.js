@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, $apiFactory, $arrayMappers, $momentService, $textManipulator, $objectUtils) {
+    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, $apiFactory, $arrayMappers, $momentService, $textManipulator, $objectUtils, $updateDataUtils) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -33,31 +33,27 @@
        *
        * @param firebaseData
        */
-      var fireBaseLoaded = function (firebaseData) {
-
-        if (!angular.isUndefinedOrNull(firebaseData[$scope.dataKeyName])) {
-
-          console.log('defined in firebase');
-          loadData(firebaseData[$scope.dataKeyName]);
-
-        } else {
-
-          console.log('not defined in firebase');
-          httpRequest();
-
-        }
-
-      };
+      // var fireBaseLoaded = function (firebaseData) {
+      //
+      //   if (!angular.isUndefinedOrNull(firebaseData[$scope.dataKeyName])) {
+      //
+      //     console.log('defined in firebase');
+      //     loadData(firebaseData[$scope.dataKeyName]);
+      //
+      //   } else {
+      //
+      //     console.log('not defined in firebase');
+      //     httpRequest();
+      //
+      //   }
+      //
+      // };
 
       /**
        *
        * @param data
        */
       var loadData = function (data) {
-
-        console.log('///////////////////');
-        console.log('data:', data);
-        console.log('///////////////////');
 
         $scope.players = data[$stateParams.teamId].roster;
 
@@ -66,7 +62,7 @@
         $scope.record = data[$stateParams.teamId].record;
         $scope.formattedRank = data[$stateParams.teamId].formattedRank;
 
-        $scope.loading = false;
+        httpRequest();
 
       };
 
@@ -77,7 +73,7 @@
 
         console.log('rostersCtrl --> httpRequest');
 
-        var playersIndex = $rootScope.firebaseData.allPlayersIndex;
+        var playersIndex = $rootScope.allPlayersIndex;
 
         console.log('$stateParams.teamId:', $stateParams.teamId);
         console.log('$stateParams.leagueName:', $stateParams.leagueName);
@@ -129,7 +125,9 @@
 
                     $apiFactory.getPlayerProfile('soccer', player.id)
                       .then(function (result) {
+                        //console.log('> player name:', result.data);
                         currentPlayer.playerName = result.data.full_name;
+                        currentPlayer.id = player.id;
                         return $arrayMappers.playerInfo(currentPlayer, result);
                       })
                       .then($arrayMappers.playerMapPersonalInfo.bind(this, currentPlayer))
@@ -146,7 +144,7 @@
                         //   console.log('-- ROSTER PLAYER DONE --');
                         //   console.log('>', currentPlayer);
                         // }
-                        
+
                         $scope.players.push(currentPlayer);
 
                         numberOfRequests += 1;
@@ -196,11 +194,10 @@
        */
       var init = function () {
 
-        $scope.dataKeyName = 'allTeamsPool';
+        $updateDataUtils.updateCoreData(function () {
 
-        $scope.startFireBase(function () {
-
-          httpRequest();
+          $apiFactory.getApiData('allTeamsPool')
+            .then(loadData);
 
         });
 
@@ -216,8 +213,8 @@
         //
         //} else {
         //
-        //  console.log('load from firebase');
-        //  $scope.startFireBase(fireBaseLoaded);
+        //  $apiFactory.getApiData('allTeamsPool')
+        //    .then(loadData);
         //
         //}
 

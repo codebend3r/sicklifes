@@ -14,7 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.version = 5.4;
+      $rootScope.version = 5.6;
 
       /**
        * @description starting year
@@ -32,7 +32,7 @@
       var updateAllManagersFilter = function () {
 
         _.each($rootScope.managersData.data, function (manager) {
-          
+
           //manager = $objectUtils.managerResetGoalPoints(manager);
 
           var filteredGames = _.chain(manager.filteredMonthlyGoalsLog)
@@ -186,12 +186,6 @@
 
         console.log('saveObject:', saveObject);
 
-        //_.each(saveObject.data.chester.filteredMonthlyGoalsLog, function (log) {
-        //  if (log.datePlayed === '11/21/2015') {
-        //    console.log('4 found today', log.datePlayed)
-        //  }
-        //});
-
         $scope.saveToFireBase(saveObject, 'managersData');
 
       };
@@ -318,7 +312,7 @@
        */
       $scope.saveToIndex = function (playerId, player) {
 
-        var allPlayers = $rootScope.firebaseData.allPlayersIndex || {};
+        var allPlayers = $rootScope.allPlayersIndex || {};
         allPlayers.data[playerId] = player;
         allPlayers._lastSyncedOn = $momentService.syncDate();
 
@@ -335,7 +329,7 @@
        */
       $scope.saveTeamToIndex = function (teamArray) {
 
-        var allPlayers = $rootScope.firebaseData.allPlayersIndex || {};
+        var allPlayers = $rootScope.allPlayersIndex || {};
         var teamObj = {};
 
         _.each(teamArray, function (player) {

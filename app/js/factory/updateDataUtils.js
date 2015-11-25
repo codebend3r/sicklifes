@@ -153,11 +153,6 @@
 
               if (current === total) {
                 if (typeof cb === 'function') {
-                  _.each(manager.filteredMonthlyGoalsLog, function (log) {
-                    if (log.datePlayed === '11/21/2015') {
-                      console.log('2 found today', log.datePlayed)
-                    }
-                  });
                   cb(manager);
                 } else {
                   throw new Error('cb parameter is not type function');
@@ -182,11 +177,6 @@
         updateDataUtils.updateCoreData(function () {
           var managers = angular.copy($rootScope.managersData.data);
           _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
-            _.each(managers.chester.filteredMonthlyGoalsLog, function (log) {
-              if (log.datePlayed === '11/21/2015') {
-                console.log('3 found today', log.datePlayed)
-              }
-            });
             cb(managers);
           }));
         });

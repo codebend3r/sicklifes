@@ -121,17 +121,6 @@
 
         }
 
-        //_.each($scope.managersData, function (manager) {
-        //  _.each(manager.players, function (player) {
-        //    if (angular.isDefined(player.status) && player.status === 'drafted' || player.status === 'dropped') {
-        //      player.dateOfTransaction = '8/1/2015';
-        //    } else {
-        //      console.log('> players', player.playerName);
-        //      player.dateOfTransaction = '11/9/2015';
-        //    }
-        //  });
-        //});
-
         var fixPickNumber = false;
 
         if (fixPickNumber) {
@@ -155,11 +144,11 @@
 
         }
 
-        // if (angular.isUndefinedOrNull($localStorage[$scope.dataKeyName])) {
+        // if (angular.isUndefinedOrNull($localStorage['managersData'])) {
         //
         //   var saveObject = {
         //     _lastSyncedOn: $momentService.syncDate(),
-        //     data: $rootScope.managerData
+        //     data: $rootScope.managersData.data
         //   };
         //
         //   $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
@@ -176,45 +165,20 @@
       };
 
       /**
-       * @description
-       * @param managerData
-       */
-      var onManagersRequestFinished = function (managerData) {
-
-        console.log('onManagersRequestFinished');
-        $rootScope.loading = false;
-        $scope.managerData[managerId] = managerData;
-        $scope.selectedManager = managerData;
-        $scope.saveRoster();
-
-      };
-
-      /**
-       *
-       * @param managersData
-       */
-      var onAllManagersRequestFinished = function (managersData) {
-
-        _.each(managersData.chester.filteredMonthlyGoalsLog, function (log) {
-          if (log.datePlayed === '11/21/2015') {
-            console.log('1 found today', log.datePlayed)
-          }
-        });
-
-        $rootScope.loading = false;
-        $scope.managersData = managersData;
-        $rootScope.managersData = managersData;
-        $scope.saveRoster();
-
-      };
-
-      /**
-       * @description update only the current manager data
+       * @description update all managers data
        */
       $scope.updateAllManagerData = function () {
 
         $rootScope.loading = true;
-        $updateDataUtils.updateAllManagerData(onAllManagersRequestFinished);
+        
+        $updateDataUtils.updateAllManagerData(function (result) {
+
+          $rootScope.loading = false;
+          $scope.managersData = result;
+          $rootScope.managersData.data = result;
+          $scope.saveRoster();
+
+        });
 
       };
 
@@ -231,15 +195,16 @@
        */
       var init = function () {
 
-        if (angular.isDefined($rootScope[$scope.dataKeyName])) {
+        if (angular.isDefined($rootScope.managersData)) {
 
           console.log('load from $rootScope');
-          loadData($rootScope[$scope.dataKeyName]);
+          loadData($rootScope.managersData);
 
-        } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
+        } else if (angular.isDefined($localStorage.managersData)) {
 
           console.log('load from local storage');
-          loadData($localStorage[$scope.dataKeyName]);
+          $rootScope.managersData = $localStorage.managersData;
+          loadData($localStorage.managersData);
 
         } else {
 

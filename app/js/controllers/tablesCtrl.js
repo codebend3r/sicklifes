@@ -64,8 +64,6 @@
         // after http request start firebase so we can save later
         $scope.startFireBase(function (firebaseData) {
 
-          $rootScope.fireBaseReady = true;
-
           $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
 
           var saveObject = {
@@ -89,10 +87,6 @@
        * @param data
        */
       var loadData = function (data) {
-
-        console.log('///////////////////');
-        console.log('data:', data);
-        console.log('///////////////////');
 
         $scope.allLeagues[0].source = data.liga;
         $scope.allLeagues[1].source = data.epl;
@@ -133,71 +127,177 @@
 
         if ($scope.selectedLeague.slug === 'uefa') {
 
-          $scope.groupA = _.filter(saveObject.uefa, function (team) {
+          console.log('EURO LEAGUE');
+
+          var groupA = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group A';
           });
 
-          $scope.groupB = _.filter(saveObject.uefa, function (team) {
+          var groupB = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group B';
           });
 
-          $scope.groupC = _.filter(saveObject.uefa, function (team) {
+          var groupC = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group C';
           });
 
-          $scope.groupD = _.filter(saveObject.uefa, function (team) {
+          var groupD = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group D';
           });
 
-          $scope.groupE = _.filter(saveObject.uefa, function (team) {
+          var groupE = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group E';
           });
 
-          $scope.groupF = _.filter(saveObject.uefa, function (team) {
+          var groupF = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group F';
           });
 
-          $scope.groupG = _.filter(saveObject.uefa, function (team) {
+          var groupG = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group G';
           });
 
-          $scope.groupH = _.filter(saveObject.uefa, function (team) {
+          var groupH = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group H';
           });
+
+          var groupI = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group I';
+          });
+
+          var groupJ = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group J';
+          });
+
+          var groupK = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group K';
+          });
+
+          var groupL = _.filter(saveObject.uefa, function (team) {
+            return team.group === 'Group L';
+          });
+
+          $scope.groupTables = [
+            {
+              groupName: 'Group A',
+              teams: groupA
+            },
+            {
+              groupName: 'Group B',
+              teams: groupB
+            },
+            {
+              groupName: 'Group C',
+              teams: groupC
+            },
+            {
+              groupName: 'Group D',
+              teams: groupD
+            },
+            {
+              groupName: 'Group E',
+              teams: groupE
+            },
+            {
+              groupName: 'Group F',
+              teams: groupF
+            },
+            {
+              groupName: 'Group G',
+              teams: groupG
+            },
+            {
+              groupName: 'Group H',
+              teams: groupH
+            },
+            {
+              groupName: 'Group I',
+              teams: groupI
+            },
+            {
+              groupName: 'Group J',
+              teams: groupJ
+            },
+            {
+              groupName: 'Group K',
+              teams: groupK
+            },
+            {
+              groupName: 'Group L',
+              teams: groupL
+            }
+          ];
 
         } else if ($scope.selectedLeague.slug === 'chlg') {
 
-          $scope.groupA = _.filter(saveObject.uefa, function (team) {
+          console.log('CHAMPIONS LEAGUE');
+
+          var groupA = _.filter(saveObject.chlg, function (team) {
             return team.group === 'Group A';
           });
 
-          $scope.groupB = _.filter(saveObject.uefa, function (team) {
+          var groupB = _.filter(saveObject.chlg, function (team) {
             return team.group === 'Group B';
           });
 
-          $scope.groupC = _.filter(saveObject.uefa, function (team) {
+          var groupC = _.filter(saveObject.chlg, function (team) {
             return team.group === 'Group C';
           });
 
-          $scope.groupD = _.filter(saveObject.uefa, function (team) {
+          var groupD = _.filter(saveObject.chlg, function (team) {
             return team.group === 'Group D';
           });
 
-          $scope.groupE = _.filter(saveObject.uefa, function (team) {
+          var groupE = _.filter(saveObject.chlg, function (team) {
             return team.group === 'Group E';
           });
 
-          $scope.groupF = _.filter(saveObject.uefa, function (team) {
+          var groupF = _.filter(saveObject.chlg, function (team) {
             return team.group === 'Group F';
           });
 
-          $scope.groupG = _.filter(saveObject.uefa, function (team) {
+          var groupG = _.filter(saveObject.chlg, function (team) {
             return team.group === 'Group G';
           });
 
-          $scope.groupH = _.filter(saveObject.uefa, function (team) {
+          var groupH = _.filter(saveObject.chlg, function (team) {
             return team.group === 'Group H';
           });
+
+          $scope.groupTables = [
+            {
+              groupName: 'Group A',
+              teams: groupA
+            },
+            {
+              groupName: 'Group B',
+              teams: groupB
+            },
+            {
+              groupName: 'Group C',
+              teams: groupC
+            },
+            {
+              groupName: 'Group D',
+              teams: groupD
+            },
+            {
+              groupName: 'Group E',
+              teams: groupE
+            },
+            {
+              groupName: 'Group F',
+              teams: groupF
+            },
+            {
+              groupName: 'Group G',
+              teams: groupG
+            },
+            {
+              groupName: 'Group H',
+              teams: groupH
+            }
+          ];
 
         }
 

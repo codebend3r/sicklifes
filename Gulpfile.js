@@ -287,7 +287,7 @@
       //'vendor-css',
       'html',
       'bower-all',
-      'modal-views',
+      //'modal-views',
       'images',
       'fonts',
       callback);

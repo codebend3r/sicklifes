@@ -112,6 +112,8 @@
         // based on player result data return an object with the valid leagues for this player
         player.validLeagues = $textManipulator.getPlayerValidLeagues(result);
 
+        console.log('>', player.playerName, player.id);
+
         return $apiFactory.getPlayerProfile(profileLeagueSlug, player.id);
 
       };
@@ -187,7 +189,7 @@
             }
 
             if (!angular.isUndefinedOrNull(manager)) {
-              if (player.playedInLigaGames) manager.ligaCount += 1;
+              if (player.playedInLigaGames && player.status !== 'dropped') manager.ligaCount += 1;
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.ligaCompleteLog);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.ligaFilteredGameLog);
             }
@@ -226,7 +228,7 @@
             }
 
             if (!angular.isUndefinedOrNull(manager)) {
-              if (player.playedInEPLGames) manager.eplCount += 1;
+              if (player.playedInEPLGames && player.status !== 'dropped') manager.eplCount += 1;
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.eplCompleteLog);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.eplFilteredGameLog);
             }
@@ -265,7 +267,7 @@
             }
 
             if (!angular.isUndefinedOrNull(manager)) {
-              if (player.playedInSeriGames) manager.seriCount += 1;
+              if (player.playedInSeriGames && player.status !== 'dropped') manager.seriCount += 1;
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.seriCompleteLog);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.seriFilteredGameLog);
             }
@@ -416,7 +418,7 @@
 
         gameMapsObj.index = index;
         gameMapsObj.id = dataObj.player.id;
-        gameMapsObj.playerName = $textManipulator.stripVowelAccent(dataObj.player.playerName);
+        gameMapsObj.playerName = dataObj.player.playerName;
         gameMapsObj.alignment = game.alignment === 'away' ? '@' : 'vs';
         gameMapsObj.vsTeam = game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name;
         gameMapsObj.leagueSlug = game.box_score.event.league.slug;
