@@ -72,17 +72,17 @@
 
       };
 
+      apiFactory.getPlayerProfileURL = function (leagueSlug, id) {
+        return 'http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id;
+      };
+
       /**
        * gets player's league related data
        */
       apiFactory.getPlayerProfile = function (league, id) {
 
-        if (angular.isUndefinedOrNull(league) || league === '') {
-          league = 'soccer';
-        }
-
         return apiFactory.getData({
-          endPointURL: $textManipulator.getPlayerProfileURL(league, id)
+          endPointURL: apiFactory.getPlayerProfileURL(league, id)
         });
 
       };

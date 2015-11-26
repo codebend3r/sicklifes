@@ -55,12 +55,19 @@
        */
       var loadData = function (data) {
 
-        //$scope.players = data[$stateParams.teamId].roster;
+        if (angular.isDefined(data[$stateParams.teamId])) {
 
-        $scope.teamName = data[$stateParams.teamId].teamName;
-        $scope.largeLogo = data[$stateParams.teamId].logo;
-        $scope.record = data[$stateParams.teamId].record;
-        $scope.formattedRank = data[$stateParams.teamId].formattedRank;
+          $scope.players = data[$stateParams.teamId].roster;
+          $scope.teamName = data[$stateParams.teamId].teamName;
+          $scope.largeLogo = data[$stateParams.teamId].logo;
+          $scope.record = data[$stateParams.teamId].record;
+          $scope.formattedRank = data[$stateParams.teamId].formattedRank;
+
+        } else {
+
+          $scope.players = [];
+
+        }
 
         httpRequest();
 
@@ -102,12 +109,10 @@
             })
             .then(function (result) {
 
-              $rootScope.loading = false;
+              $scope.players = [];
 
               var numberOfPlayers = _.keys(result.data).length
               var numberOfRequests = 0;
-
-              console.log('numberOfPlayers', numberOfPlayers);
 
               _.each(result.data, function (player) {
 
@@ -124,10 +129,10 @@
                     var currentPlayer = $objectUtils.playerResetGoalPoints({});
 
                     $apiFactory.getPlayerProfile('soccer', player.id)
-                      .then(function (result) {
-                        currentPlayer.playerName = result.data.full_name;
+                      .then(function (playerResult) {
+                        currentPlayer.playerName = playerResult.data.full_name;
                         currentPlayer.id = player.id;
-                        return $arrayMappers.playerInfo(currentPlayer, result);
+                        return $arrayMappers.playerInfo(currentPlayer, playerResult);
                       })
                       .then($arrayMappers.playerMapPersonalInfo.bind(this, currentPlayer))
                       .then($arrayMappers.playerGamesLog.bind(this, {
@@ -139,15 +144,15 @@
                         currentPlayer = result;
                         currentPlayer._lastSyncedOn = $momentService.syncDate();
 
-                        console.log('>', currentPlayer);
-
                         $scope.players.push(currentPlayer);
 
                         numberOfRequests += 1;
 
-                        // if (numberOfRequests === numberOfPlayers) {
-                        //   $scope.saveTeamToIndex($scope.players);
-                        // }
+                        if (numberOfRequests === numberOfPlayers) {
+                          //$scope.saveTeamToIndex($scope.players);
+                          console.log('DONE');
+                          $rootScope.loading = false;
+                        }
 
                       });
 

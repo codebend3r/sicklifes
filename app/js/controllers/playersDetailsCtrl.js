@@ -99,10 +99,9 @@
         $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
         $scope.player.id = $stateParams.playerId;
 
-        $apiFactory.getPlayerProfile('soccer', $scope.player.id)
+        $apiFactory.getPlayerProfile('soccer', $stateParams.playerId)
           .then(function (result) {
             $scope.player.playerName = result.data.full_name;
-            //$scope.player.id = player.id;
             return $arrayMappers.playerInfo($scope.player, result);
           })
           .then($arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
@@ -112,11 +111,11 @@
           }))
           .then(function (result) {
 
+            console.log('> result', result);
+
             $scope.player = result;
             $scope.player._lastSyncedOn = $momentService.syncDate();
 
-            console.log('-- DONE --');
-            console.log('>', $scope.player);
             //console.log($scope.player.playerName);
             //$scope.saveToIndex($stateParams.playerId, $scope.player);
 

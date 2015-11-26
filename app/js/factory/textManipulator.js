@@ -294,10 +294,6 @@
           return 'http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id + '/summary';
         },
 
-        getPlayerProfileURL: function (leagueSlug, id) {
-          return 'http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id;
-        },
-
         getTeamInfoURL: function (id) {
           return 'http://origin-api.thescore.com/soccer/teams/' + id;
         },
