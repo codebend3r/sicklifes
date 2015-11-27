@@ -92,10 +92,6 @@
        */
       arrayMapper.playerInfo = function (player, result) {
 
-        console.log('-----------------------');
-        console.log('player', player);
-        console.log('result', result);
-
         var profileLeagueSlug = $textManipulator.getLeagueSlug(result);
 
         player.playedInLigaGames = false;

@@ -305,29 +305,27 @@
       };
 
       /**
-       * @name saveToIndex
+       * @name saveToPlayerIndex
        * @description saves 1 player to allPlayersIndex
        * @param playerId
        * @param player
        */
-      $scope.saveToIndex = function (playerId, player) {
+      $scope.saveToPlayerIndex = function (playerId, player) {
 
         var allPlayers = $rootScope.allPlayersIndex || {};
         allPlayers.data[playerId] = player;
         allPlayers._lastSyncedOn = $momentService.syncDate();
-
-        console.log('saving allPlayersIndex:', _.keys(allPlayers.data).length);
 
         $scope.saveToFireBase(allPlayers, 'allPlayersIndex');
 
       };
 
       /**
-       * @name saveTeamToIndex
+       * @name saveTeamToPlayerIndex
        * @description pushes an entire team to allPlayersIndex
        * @param teamArray
        */
-      $scope.saveTeamToIndex = function (teamArray) {
+      $scope.saveTeamToPlayerIndex = function (teamArray) {
 
         var allPlayers = $rootScope.allPlayersIndex || {};
         var teamObj = {};
@@ -336,18 +334,9 @@
           teamObj[player.id] = player;
         });
 
-        //console.log('teamObj', teamObj);
-        //console.log('teamObj length:', _.keys(teamObj).length);
-        //console.log('BEFORE allPlayers length:', _.keys(allPlayers.data).length);
+        var combinedPlayers = _.defaults({}, allPlayers, teamObj);
 
-        var combinedObj = _.defaults(allPlayers.data, teamObj, {});
-
-        //console.log('AFTER allPlayers length:', _.keys(allPlayers.data).length);
-
-        console.log('combinedObj length:', _.keys(combinedObj).length);
-
-        //console.log('allPlayers', allPlayers);
-        $scope.saveToFireBase(allPlayers, 'allPlayersIndex');
+        $scope.saveToFireBase(combinedPlayers, 'allPlayersIndex');
 
       };
 

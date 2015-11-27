@@ -170,7 +170,7 @@
       $scope.updateAllManagerData = function () {
 
         $rootScope.loading = true;
-        
+
         $updateDataUtils.updateAllManagerData(function (result) {
 
           $rootScope.loading = false;

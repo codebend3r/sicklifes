@@ -17,40 +17,20 @@
       $rootScope.loading = true;
 
       /**
-       * TODO
+       * @description
        * @type {Array}
        */
       $scope.players = [];
 
       /**
-       * order by position
+       * @description order by position
        */
       $scope.playerPosition = function (player) {
         return ['F', 'M', 'D', 'G'].indexOf(player.pos);
       };
 
       /**
-       *
-       * @param firebaseData
-       */
-      // var fireBaseLoaded = function (firebaseData) {
-      //
-      //   if (!angular.isUndefinedOrNull(firebaseData[$scope.dataKeyName])) {
-      //
-      //     console.log('defined in firebase');
-      //     loadData(firebaseData[$scope.dataKeyName]);
-      //
-      //   } else {
-      //
-      //     console.log('not defined in firebase');
-      //     httpRequest();
-      //
-      //   }
-      //
-      // };
-
-      /**
-       *
+       * @description
        * @param data
        */
       var loadData = function (data) {
@@ -74,7 +54,7 @@
       };
 
       /**
-       * httpRequest
+       * @description httpRequest
        */
       var httpRequest = function () {
 
@@ -84,6 +64,7 @@
 
         console.log('$stateParams.teamId:', $stateParams.teamId);
         console.log('$stateParams.leagueName:', $stateParams.leagueName);
+        console.log('playersIndex:', playersIndex);
 
         if (angular.isDefined($stateParams.teamId) && angular.isDefined($stateParams.leagueName)) {
 
@@ -95,7 +76,8 @@
           })
             .then(function (result) {
 
-              console.log('> initial data:', result.data);
+              // first get team logo, name and record
+
               $scope.teamName = result.data.full_name;
               $scope.largeLogo = result.data.logos.large;
               $scope.record = result.data.standing.short_record;
@@ -109,95 +91,82 @@
             })
             .then(function (result) {
 
+              // then get team roster and map it accordingly
+
               $scope.players = [];
 
-              var numberOfPlayers = _.keys(result.data).length
-              var numberOfRequests = 0;
+              var numberOfPlayers = _.size(result.data),
+                numberOfRequests = 0;
+
+              console.log('player pool index size:', _.size(playersIndex));
 
               _.each(result.data, function (player) {
 
-                // if (angular.isDefined(indexPlayer) && !Array.isArray(playersIndex)) {
-                // var indexPlayer = playersIndex.data[player.id];
-                //
-                //   console.log('index player found:', indexPlayer.playerName, indexPlayer.goals, indexPlayer.assists);
-                //   $scope.players.push(indexPlayer);
-                //
-                // } else {
+                if (angular.isDefined(playersIndex) && angular.isDefined(playersIndex[player.id]) && !Array.isArray(playersIndex)) {
 
-                    /////////////////////
+                  var indexPlayer = playersIndex[player.id];
 
-                    var currentPlayer = $objectUtils.playerResetGoalPoints({});
+                  $scope.players.push(indexPlayer);
 
-                    $apiFactory.getPlayerProfile('soccer', player.id)
-                      .then(function (playerResult) {
-                        currentPlayer.playerName = playerResult.data.full_name;
-                        currentPlayer.id = player.id;
-                        return $arrayMappers.playerInfo(currentPlayer, playerResult);
-                      })
-                      .then($arrayMappers.playerMapPersonalInfo.bind(this, currentPlayer))
-                      .then($arrayMappers.playerGamesLog.bind(this, {
-                        player: currentPlayer,
-                        manager: null
-                      }))
-                      .then(function (result) {
+                  numberOfRequests += 1;
 
-                        currentPlayer = result;
-                        currentPlayer._lastSyncedOn = $momentService.syncDate();
+                  if (numberOfRequests === numberOfPlayers) {
+                    $rootScope.loading = false;
+                  }
 
-                        $scope.players.push(currentPlayer);
+                } else {
 
-                        numberOfRequests += 1;
+                  var currentPlayer = $objectUtils.playerResetGoalPoints({});
 
-                        if (numberOfRequests === numberOfPlayers) {
-                          //$scope.saveTeamToIndex($scope.players);
-                          console.log('DONE');
-                          $rootScope.loading = false;
-                        }
+                  $apiFactory.getPlayerProfile('soccer', player.id)
+                    .then(function (playerResult) {
+                      currentPlayer.playerName = playerResult.data.full_name;
+                      currentPlayer.id = player.id;
+                      return $arrayMappers.playerInfo(currentPlayer, playerResult);
+                    })
+                    .then($arrayMappers.playerMapPersonalInfo.bind(this, currentPlayer))
+                    .then($arrayMappers.playerGamesLog.bind(this, {
+                      player: currentPlayer,
+                      manager: null
+                    }))
+                    .then(function (result) {
 
-                      });
+                      currentPlayer = result;
+                      currentPlayer._lastSyncedOn = $momentService.syncDate();
 
-                //}
+                      $scope.players.push(currentPlayer);
+
+                      numberOfRequests += 1;
+
+                      if (numberOfRequests === numberOfPlayers) {
+                        $rootScope.loading = false;
+                        $scope.saveTeamToPlayerIndex($scope.players);
+                      }
+
+                    });
+
+                }
 
               });
-
-              //var loadedTeam = {};
-              //loadedTeam[$stateParams.teamId] = {
-              //  _lastSyncedOn: $momentService.syncDate(),
-              //  logo: $scope.largeLogo,
-              //  teamName: $scope.teamName,
-              //  formattedRank: $scope.formattedRank,
-              //  record: $scope.record,
-              //  leagueName: $stateParams.leagueName,
-              //  roster: $scope.players
-              //};
-
-              //$scope.startFireBase(function (fbData) {
-              //console.log('loadedTeam', loadedTeam);
-              //console.log('fbData', fbData[$scope.dataKeyName]);
-              //$rootScope.fireBaseReady = true;
-              //_.defaults(loadedTeam, fbData[$scope.dataKeyName]);
-              //console.log('loaded team:', loadedTeam);
-              //$scope.saveToFireBase(loadedTeam, $scope.dataKeyName);
-              //});
 
             });
 
         } else {
 
-          console.warn('ERROR not defined');
+          console.warn('no teamId or leagueId specified');
 
         }
 
       };
 
       /**
-       * init
+       * @description init
        */
       var init = function () {
 
         $updateDataUtils.updateCoreData(function () {
 
-          $apiFactory.getApiData('allTeamsPool')
+          $apiFactory.getApiData('allPlayersIndex')
             .then(loadData);
 
         });

@@ -96,6 +96,10 @@
        */
       var requestUpdateOnPlayer = function () {
 
+        if (angular.isUndefinedOrNull($stateParams.playerId)) {
+          throw new Error('$stateParams.playerId was not defined, don\'t do that');
+        }
+
         $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
         $scope.player.id = $stateParams.playerId;
 
@@ -111,13 +115,10 @@
           }))
           .then(function (result) {
 
-            console.log('> result', result);
-
             $scope.player = result;
             $scope.player._lastSyncedOn = $momentService.syncDate();
 
-            //console.log($scope.player.playerName);
-            //$scope.saveToIndex($stateParams.playerId, $scope.player);
+            $scope.saveToPlayerIndex($stateParams.playerId, $scope.player);
 
             $rootScope.loading = false;
 
