@@ -61,24 +61,17 @@
 
         $scope.setSelectedLeague();
 
-        // after http request start firebase so we can save later
-        $scope.startFireBase(function (firebaseData) {
+        var saveObject = {
+          _syncedFrom: 'tablesCtrl',
+          _lastSyncedOn: $momentService.syncDate(),
+          liga: $scope.allLeagues[0].source,
+          epl: $scope.allLeagues[1].source,
+          seri: $scope.allLeagues[2].source,
+          chlg: $scope.allLeagues[3].source,
+          uefa: $scope.allLeagues[4].source
+        };
 
-          $scope.managerData = $scope.populateManagersData(firebaseData.managersData);
-
-          var saveObject = {
-            _syncedFrom: 'tablesCtrl',
-            _lastSyncedOn: $momentService.syncDate(),
-            liga: $scope.allLeagues[0].source,
-            epl: $scope.allLeagues[1].source,
-            seri: $scope.allLeagues[2].source,
-            chlg: $scope.allLeagues[3].source,
-            uefa: $scope.allLeagues[4].source
-          };
-
-          $scope.saveToFireBase(saveObject, 'leagueTables');
-
-        });
+        $scope.saveToFireBase(saveObject, 'leagueTables');
 
       };
 

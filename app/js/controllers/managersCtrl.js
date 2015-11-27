@@ -79,7 +79,7 @@
 
         $rootScope.loading = false;
 
-        $scope.managersData = $rootScope.managersData.data;
+        $scope.managersData['chester'] = $rootScope.managersData.data['chester'];
 
         $scope.selectedManager = $rootScope.selectedManager;
 
@@ -209,7 +209,7 @@
         } else {
 
           console.log('load from firebase');
-          $apiFactory.getApiData('managersData')
+          $apiFactory.getApiData('managersData/data/chester')
             .then(loadData);
 
         }
