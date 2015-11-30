@@ -4,7 +4,7 @@
 
   <h2>Managers</h2>
 
-  <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managersData' ng-change='changeManager(selectedManager)'></select>
+  <select class='form-control' ng-model='selectedManagerName' ng-options='option for option in managersList' ng-change='changeManager(selectedManagerName)'></select>
   <select class='form-control' ng-model='selectedMonth' ng-options='option.monthName for option in allMonths' ng-change='changeMonth(selectedMonth)'></select>
 
   <div ng-if='admin' class='well'>
@@ -27,6 +27,6 @@
     <uib-tab ng-repeat="tab in tabData" heading="{{tab.title}}" ui-sref="{{tab.route}}" ui-sref-active="current">
     </uib-tab>
   </uib-tabset>
-  <ui-view/>
+  <ui-view/>\
 
 </div>

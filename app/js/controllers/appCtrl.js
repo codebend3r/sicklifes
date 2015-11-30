@@ -14,7 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.version = 5.6;
+      $rootScope.version = 5.7;
 
       /**
        * @description starting year
@@ -146,24 +146,6 @@
       /////////////////////////////
       // ROSTER
       /////////////////////////////
-
-      /**
-       * @name populateManagersData
-       * @description populates $scope.managerData && $rootScope.managerData
-       * @param data {object}
-       */
-      // $scope.populateManagersData = function (data) {
-      //
-      //   $rootScope.managersData = {
-      //     chester: data.chester,
-      //     frank: data.frank,
-      //     dan: data.dan,
-      //     justin: data.justin,
-      //     mike: data.mike,
-      //     joe: data.joe
-      //   };
-      //
-      // };
 
       /**
        * @name chooseManager

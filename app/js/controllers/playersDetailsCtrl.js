@@ -118,9 +118,9 @@
             $scope.player = result;
             $scope.player._lastSyncedOn = $momentService.syncDate();
 
-            $scope.saveToPlayerIndex($stateParams.playerId, $scope.player);
-
             $rootScope.loading = false;
+
+            //$scope.saveToPlayerIndex($stateParams.playerId, $scope.player);
 
           });
 

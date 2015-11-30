@@ -46,13 +46,20 @@
         $http.get('https://glaring-fire-9383.firebaseio.com/' + namespace + '.json')
           .then(function (result) {
 
-            $rootScope[namespace] = result.data;
             //console.log('rootScope variable saved:', namespace, $rootScope[namespace]);
-            console.log('rootScope variable saved:', namespace);
             if (namespace === 'managersData') {
               var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
+              $rootScope[namespace] = result.data;
               $rootScope.selectedManager = $rootScope.managersData.data[managerId.toLowerCase()];
+            } else if (namespace.contains('managersData')) {
+              var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
+              $rootScope['managersData'] = $rootScope[namespace] || {};
+              $rootScope['managersData'][managerId] = result.data;
+              $rootScope.selectedManager = result.data;
+            } else {
+              $rootScope[namespace] = result.data;
             }
+            console.log('rootScope variable saved:', namespace);
             defer.resolve(result.data);
 
           });

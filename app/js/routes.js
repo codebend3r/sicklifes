@@ -20,10 +20,8 @@
 
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
-      $urlRouterProvider.when('/managers/', '/managers/chester/overview');
-      $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
-
-      $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
+      $urlRouterProvider.when('/managers/', '/managers/chester/overview/');
+      $urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview/');
 
       $urlRouterProvider.when('/transfers', '/transfers/chester');
       $urlRouterProvider.when('/transfers/', '/transfers/chester');
@@ -99,7 +97,12 @@
           url: '/managers/:managerId',
           parent: 'app',
           templateUrl: 'views/managers.html',
-          controller: 'managersCtrl'
+          controller: 'managersCtrl',
+          resolve: {
+            managerId: function($stateParams) {
+              return $stateParams.managerId
+            }
+          }
 
         })
         .state('managers.overview', {
@@ -107,11 +110,17 @@
           url: '/overview',
           templateUrl: 'views/managers-overview.html'
 
+
         })
         .state('managers.gamelogs', {
 
           url: '/gamelog',
           templateUrl: 'views/managers-gamelogs.html'
+          // resolve: {
+          //   managerId: function($stateParams) {
+          //     return $stateParams.managerId ? $stateParams.managerId : 'Chester';
+          //   }
+          // }
 
         })
         .state('managers.stats', {

@@ -8,17 +8,19 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $arrayFilter, $state, $updateDataUtils, $fireBaseService, $moment, $momentService, $localStorage, $apiFactory, $stateParams) {
+    .controller('managersCtrl', function ($scope, $rootScope, $arrayFilter, $state, $updateDataUtils, $moment, $momentService, $localStorage, $apiFactory, $stateParams) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      console.log('-- managersCtrl --');
+      console.log('-- managersCtrl --', $stateParams.managerId);
 
       $rootScope.loading = true;
 
       $scope.goalsOnlyFilterOn = true;
+
+      $scope.managersList = [ 'Chester', 'Frank', 'Joe', 'Justin', 'Dan', 'Mike' ];
 
       $scope.isActive = function () {
         console.log('> isActive');
@@ -28,10 +30,19 @@
        * @description
        * @param selectedManager
        */
-      $scope.changeManager = function (selectedManager) {
-        console.log('changeManager to', selectedManager.managerName);
-        $state.go($state.current.name, { managerId: selectedManager.managerName.toLowerCase() });
+      $scope.changeManager = function (selectedManagerName) {
+        console.log('changeManager to', selectedManagerName);
+        $state.go($state.current.name, {
+          managerId: selectedManagerName.toLowerCase()
+        }, false);
       };
+
+      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+
+        console.log('$stateChangeSuccess', toState);
+        //console.log('$stateChangeSuccess', event, toState, toParams, fromState, fromParams);
+
+      });
 
       /**
        * @description tabs data
@@ -79,14 +90,14 @@
 
         $rootScope.loading = false;
 
-        $scope.managersData['chester'] = $rootScope.managersData.data['chester'];
-
         $scope.selectedManager = $rootScope.selectedManager;
+        $scope.selectedManagerName = $rootScope.selectedManager.managerName;
+
+        console.log('> selectedManagerName', $scope.selectedManagerName);
 
         $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog;
 
         $rootScope.lastSyncDate = $scope.selectedManager._lastSyncedOn;
-
         $rootScope.source = 'firebase';
 
         if (angular.isDefined($scope.selectedManager._lastSyncedOn) && $momentService.isHoursAgo($scope.selectedManager._lastSyncedOn)) {
@@ -195,6 +206,8 @@
        */
       var init = function () {
 
+        console.log('init');
+
         if (angular.isDefined($rootScope.managersData)) {
 
           console.log('load from $rootScope');
@@ -208,8 +221,11 @@
 
         } else {
 
-          console.log('load from firebase');
-          $apiFactory.getApiData('managersData/data/chester')
+          var request = 'managersData/data/' + $stateParams.managerId;
+
+          console.log('load from firebase', request);
+
+          $apiFactory.getApiData(request)
             .then(loadData);
 
         }
