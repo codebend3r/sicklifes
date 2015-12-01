@@ -14,7 +14,8 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      console.log('-- managersCtrl --', $stateParams.managerId);
+      console.log('-- managersCtrl --');
+      console.log('managerId:', $stateParams.managerId);
 
       $rootScope.loading = true;
 
@@ -27,24 +28,34 @@
       };
 
       /**
+       * @name changeManager
        * @description
        * @param selectedManager
        */
       $scope.changeManager = function (selectedManagerName) {
-        console.log('changeManager to', selectedManagerName);
-        $state.go($state.current.name, {
+        console.log('changeManager to', selectedManagerName, $state.$current.name);
+        $state.go($state.$current.name, {
           managerId: selectedManagerName.toLowerCase()
-        }, false);
+        });
       };
 
-      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+      //$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
 
-        console.log('$stateChangeSuccess', toState);
+        //console.log('$stateChangeStart', event, toState, toParams, fromState, fromParams);
+        //console.log('$stateChangeStart', fromParams, toParams);
+
+      //});
+
+      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+
         //console.log('$stateChangeSuccess', event, toState, toParams, fromState, fromParams);
+        //console.log('$stateChangeSuccess', fromParams, toParams);
+        init();
 
       });
 
       /**
+       * @name tabData
        * @description tabs data
        */
       $scope.tabData = [
@@ -63,6 +74,7 @@
       ////////////////////////////////////////
 
       /**
+       * @name checkForWildCard
        * @description computed function to determine manager wildcard count
        * @param player
        * @param manager
@@ -83,6 +95,7 @@
       };
 
       /**
+       * @name loadData
        * @description callback for when firebase is loaded
        * @param result {object} - response
        */
@@ -176,6 +189,7 @@
       };
 
       /**
+       * @name updateAllManagerData
        * @description update all managers data
        */
       $scope.updateAllManagerData = function () {
@@ -202,11 +216,12 @@
       });
 
       /**
+       * @name init
        * @description init
        */
       var init = function () {
 
-        console.log('init');
+        console.log('> init');
 
         if (angular.isDefined($rootScope.managersData)) {
 
@@ -223,7 +238,7 @@
 
           var request = 'managersData/data/' + $stateParams.managerId;
 
-          console.log('load from firebase', request);
+          console.log('$stateParams.managerId:', $stateParams.managerId);
 
           $apiFactory.getApiData(request)
             .then(loadData);

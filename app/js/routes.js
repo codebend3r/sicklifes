@@ -20,8 +20,9 @@
 
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
-      $urlRouterProvider.when('/managers/', '/managers/chester/overview/');
-      $urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview/');
+      $urlRouterProvider.when('/managers', '/managers/chester/overview');
+      $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
+      //$urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview');
 
       $urlRouterProvider.when('/transfers', '/transfers/chester');
       $urlRouterProvider.when('/transfers/', '/transfers/chester');
