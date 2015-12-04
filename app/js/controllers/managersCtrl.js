@@ -23,9 +23,9 @@
 
       $scope.managersList = [ 'Chester', 'Frank', 'Joe', 'Justin', 'Dan', 'Mike' ];
 
-      $scope.isActive = function () {
-        console.log('> isActive');
-      };
+      // $scope.isActive = function () {
+      //   console.log('> isActive');
+      // };
 
       /**
        * @name changeManager
@@ -33,26 +33,14 @@
        * @param selectedManager
        */
       $scope.changeManager = function (selectedManagerName) {
-        console.log('changeManager to', selectedManagerName, $state.$current.name);
-        $state.go($state.$current.name, {
+        var params = {
           managerId: selectedManagerName.toLowerCase()
+        };
+        $rootScope.selectedManager = $rootScope.managersData.data[params.managerId];
+        $state.go($state.current, params, {
+          reload: true
         });
       };
-
-      //$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-
-        //console.log('$stateChangeStart', event, toState, toParams, fromState, fromParams);
-        //console.log('$stateChangeStart', fromParams, toParams);
-
-      //});
-
-      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-
-        //console.log('$stateChangeSuccess', event, toState, toParams, fromState, fromParams);
-        //console.log('$stateChangeSuccess', fromParams, toParams);
-        init();
-
-      });
 
       /**
        * @name tabData
@@ -236,8 +224,10 @@
 
         } else {
 
-          var request = 'managersData/data/' + $stateParams.managerId;
+          //var request = 'managersData/data/' + $stateParams.managerId;
+          var request = 'managersData';
 
+          console.log('request:', request);
           console.log('$stateParams.managerId:', $stateParams.managerId);
 
           $apiFactory.getApiData(request)

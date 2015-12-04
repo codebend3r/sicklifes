@@ -49,6 +49,7 @@
             //console.log('rootScope variable saved:', namespace, $rootScope[namespace]);
             if (namespace === 'managersData') {
               var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
+              console.log('managerId:', managerId);
               $rootScope[namespace] = result.data;
               $rootScope.selectedManager = $rootScope.managersData.data[managerId.toLowerCase()];
             } else if (namespace.contains('managersData')) {
