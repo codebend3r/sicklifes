@@ -204,7 +204,7 @@
         },
         {
           monthName: 'December ' + startYear,
-          range: ['December 1 ' + startYear, 'January 1 ' + startYear]
+          range: ['December 1 ' + startYear, 'January 1 ' + endYear]
         },
         {
           monthName: 'January ' + endYear,

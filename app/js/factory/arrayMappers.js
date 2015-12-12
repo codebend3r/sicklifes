@@ -209,6 +209,10 @@
 
           eplGamesRequest.then(function (result) {
 
+            if (dataObj.player.id === 10877) {
+              console.log('player:', player.playerName, 'manager:', manager.managerName, 'id:', player.id);
+            }
+
             player.eplCompleteLog = result.data
               //.filter($arrayFilter.filterAfterDate)
               .filter($arrayFilter.filterValidDate.bind(this, player))
@@ -416,6 +420,10 @@
           leagueSlug,
           computedPoints;
 
+        if (dataObj.player.id === 10877) {
+          console.log('player:', dataObj.player.playerName, 'manager:', dataObj.manager.managerName, 'id:', dataObj.player.id);
+        }
+
         gameMapsObj.index = index;
         gameMapsObj.id = dataObj.player.id;
         gameMapsObj.playerName = dataObj.player.playerName;
@@ -432,11 +440,13 @@
         gameMapsObj.teamLogo = dataObj.player.teamLogo;
         gameMapsObj.datePlayed = $momentService.goalLogDate(game.box_score.event.game_date);
         gameMapsObj.originalDate = game.box_score.event.game_date;
-        gameMapsObj.managerName = dataObj.player.managerName || 'N/A';
+        gameMapsObj.managerName = dataObj.manager ? dataObj.manager.managerName : 'N/A';
         gameMapsObj.result = $textManipulator.result.call(gameMapsObj, game);
         gameMapsObj.finalScore = $textManipulator.finalScore.call(gameMapsObj, game);
 
         // console.log('================================');
+        //console.log('playerName', gameMapsObj.playerName, ', id:', gameMapsObj.id);
+        // console.log('playerName', gameMapsObj.playerName, ', managerName:', gameMapsObj.managerName);
         // console.log(gameMapsObj.playerName, 'goals', gameMapsObj.goalsScored);
         // console.log(gameMapsObj.playerName, 'assists', gameMapsObj.assists);
         // console.log(gameMapsObj.playerName, 'shots', gameMapsObj.shots);
