@@ -91,11 +91,8 @@
 
         $rootScope.loading = false;
 
-        $scope.selectedManager = $rootScope.selectedManager;
+        $scope.selectedManager = $rootScope.managersData.data[$stateParams.managerId];
         $scope.selectedManagerName = $rootScope.selectedManager.managerName;
-
-        console.log('> selectedManagerName', $scope.selectedManagerName);
-
         $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog;
 
         $rootScope.lastSyncDate = $scope.selectedManager._lastSyncedOn;
@@ -105,33 +102,21 @@
 
           console.log('-- data for', $scope.selectedManager.managerName, 'is old --');
 
-          $scope.selectedManager.wildCardCount = 0;
-
-          _.each($scope.selectedManager.players, function (player) {
-            checkForWildCard(player, $scope.selectedManager);
-          });
-
         } else if ($momentService.isHoursAgo($scope.managersData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
-
-          $scope.selectedManager.wildCardCount = 0;
-
-          _.each($scope.selectedManager.players, function (player) {
-            checkForWildCard(player, $scope.selectedManager);
-          });
 
         } else {
 
           console.log('-- data is up to date --');
 
-          $scope.selectedManager.wildCardCount = 0;
-
-          _.each($rootScope.selectedManager.players, function (player) {
-            checkForWildCard(player, $scope.selectedManager);
-          });
-
         }
+
+        $scope.selectedManager.wildCardCount = 0;
+
+        _.each($scope.selectedManager.players, function (player) {
+          checkForWildCard(player, $scope.selectedManager);
+        });
 
         var fixPickNumber = false;
 
@@ -211,9 +196,12 @@
 
         console.log('> init');
 
+        console.log('$stateParams.managerId:', $stateParams.managerId);
+
         if (angular.isDefined($rootScope.managersData)) {
 
           console.log('load from $rootScope');
+
           loadData($rootScope.managersData);
 
         } else if (angular.isDefined($localStorage.managersData)) {
@@ -226,9 +214,6 @@
 
           //var request = 'managersData/data/' + $stateParams.managerId;
           var request = 'managersData';
-
-          console.log('request:', request);
-          console.log('$stateParams.managerId:', $stateParams.managerId);
 
           $apiFactory.getApiData(request)
             .then(loadData);

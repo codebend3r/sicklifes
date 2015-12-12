@@ -31,14 +31,11 @@
 
       $stateProvider
         .state('app', {
-
           abstract: true,
           template: '<ui-view />',
           controller: 'appCtrl'
-
         })
         //.state('signIn', {
-        //
         //  url: '/login',
         //  parent: 'app',
         //  templateUrl: 'views/login.html',
@@ -47,10 +44,8 @@
         //    public: true,
         //    login: true
         //  }
-        //
         //})
         //.state('signUp', {
-        //
         //  url: '/signup',
         //  parent: 'app',
         //  templateUrl: 'views/signup.html',
@@ -58,10 +53,8 @@
         //  data: {
         //    public: true
         //  }
-        //
         //})
         //.state('resetPassword', {
-        //
         //  url: '/reset-password',
         //  parent: 'app',
         //  templateUrl: 'views/reset-password.html',
@@ -69,29 +62,23 @@
         //  data: {
         //    public: true
         //  }
-        //
         //})
         .state('leagues', {
-
           url: '/leagues/:leagueName',
           parent: 'app',
           templateUrl: 'views/leagues.html',
           controller: 'leaguesCtrl'
-
         })
         .state('leagues.tables', {
-
           url: '/tables',
           templateUrl: 'views/leagues-tables.html',
           controller: 'tablesCtrl'
 
         })
         .state('leagues.leaders', {
-
           url: '/leaders',
           templateUrl: 'views/leagues-leaders.html',
           controller: 'leadersCtrl'
-
         })
         .state('managers', {
 
@@ -104,17 +91,12 @@
               return $stateParams.managerId
             }
           }
-
         })
         .state('managers.overview', {
-
           url: '/overview',
           templateUrl: 'views/managers-overview.html'
-
-
         })
         .state('managers.gamelogs', {
-
           url: '/gamelog',
           templateUrl: 'views/managers-gamelogs.html'
           // resolve: {
@@ -122,72 +104,53 @@
           //     return $stateParams.managerId ? $stateParams.managerId : 'Chester';
           //   }
           // }
-
         })
         .state('managers.stats', {
-
           url: '/stats',
           templateUrl: 'views/stats.html',
           controller: 'statsCtrl'
-
         })
         .state('playerDetails', {
-
           url: '/player-details/:playerId',
           parent: 'app',
           templateUrl: 'views/player-details.html',
           controller: 'playersDetailsCtrl'
-
         })
         .state('standings', {
-
           url: '/standings',
           parent: 'app',
           templateUrl: 'views/standings.html',
           controller: 'standingsCtrl'
-
         })
         .state('standings.overview', {
-
           url: '/overview',
           templateUrl: 'views/standings-overview.html'
-
         })
         .state('standings.latestgoals', {
-
           url: '/latestgoals',
           templateUrl: 'views/standings-latestgoals.html'
-
         })
         .state('standings.charts', {
-
           url: '/charts',
           templateUrl: 'views/standings-charts.html'
-
         })
         .state('admin', {
-
           url: '/admin',
           parent: 'app',
           templateUrl: 'views/admin.html',
           controller: 'adminCtrl'
-
         })
         .state('transfers', {
-
           url: '/transfers/:managerId',
           parent: 'app',
           templateUrl: 'views/transfers.html',
           controller: 'transfersCtrl'
-
         })
         .state('roster', {
-
           url: '/roster/:leagueName/:teamId',
           parent: 'app',
           templateUrl: 'views/rosters.html',
           controller: 'rostersCtrl'
-
         });
 
     });

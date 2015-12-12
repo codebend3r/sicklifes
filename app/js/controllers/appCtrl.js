@@ -14,7 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.version = 5.7;
+      $rootScope.version = 5.8;
 
       /**
        * @description starting year
