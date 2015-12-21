@@ -209,10 +209,6 @@
 
           eplGamesRequest.then(function (result) {
 
-            if (dataObj.player.id === 10877) {
-              console.log('player:', player.playerName, 'manager:', manager.managerName, 'id:', player.id);
-            }
-
             player.eplCompleteLog = result.data
               //.filter($arrayFilter.filterAfterDate)
               .filter($arrayFilter.filterValidDate.bind(this, player))
@@ -419,10 +415,6 @@
           gameGoals,
           leagueSlug,
           computedPoints;
-
-        if (dataObj.player.id === 10877) {
-          console.log('player:', dataObj.player.playerName, 'manager:', dataObj.manager.managerName, 'id:', dataObj.player.id);
-        }
 
         gameMapsObj.index = index;
         gameMapsObj.id = dataObj.player.id;
