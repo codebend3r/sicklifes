@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$updateDataUtils', function ($apiFactory, $objectUtils, $q, $managersService, $momentService, $fireBaseService, $textManipulator, $arrayMappers, $rootScope) {
+    .factory('updateDataUtils', function ($rootScope, $q, apiFactory, objectUtils, managersService, momentService, fireBaseService, textManipulator, arrayMappers) {
 
       var current = 0,
         total = 0;
@@ -23,12 +23,12 @@
 
         console.log('$updateDataUtils -- updatePlayerPoolData');
 
-        var allTeams = $apiFactory.getAllTeams(),
+        var allTeams = apiFactory.getAllTeams(),
           allTeamsPromise = [],
           allPlayers = [];
 
         // returns a list of promise with the end point for each league
-        $apiFactory.listOfPromises(allTeams, function (result) {
+        apiFactory.listOfPromises(allTeams, function (result) {
 
           _.each(result, function (leagueData) {
 
@@ -37,8 +37,8 @@
               console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
 
               // returns a promise with the end point for each team
-              var rosterRequest = $apiFactory.getData({
-                endPointURL: $textManipulator.getTeamRosterURL(leagueData.leagueName, teamData.id)
+              var rosterRequest = apiFactory.getData({
+                endPointURL: textManipulator.getTeamRosterURL(leagueData.leagueName, teamData.id)
               });
 
               allTeamsPromise.push(rosterRequest);
@@ -50,7 +50,7 @@
                 });
 
                 // each player on each team
-                var rosterArray = _.map(playerData.data, $arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
+                var rosterArray = _.map(playerData.data, arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
                 allPlayers = allPlayers.concat(rosterArray);
 
               });
@@ -75,28 +75,28 @@
 
         console.log('$updateDataUtils -- updateLeagueTables');
 
-        var leagueTables = $apiFactory.getLeagueTables(),
+        var leagueTables = apiFactory.getLeagueTables(),
           defer = $q.defer(),
           leagueTablesData = [],
           allLeagues = {
-            _lastSyncedOn: $momentService.syncDate()
+            _lastSyncedOn: momentService.syncDate()
           };
 
         // returns a list of promise with the end point for each league
-        $apiFactory.listOfPromises(leagueTables, function (promiseData) {
+        apiFactory.listOfPromises(leagueTables, function (promiseData) {
 
           leagueTablesData = _.map(promiseData, function (result, index) {
 
             if (index <= 2) {
 
               return {
-                data: _.map(result.data, $arrayMappers.tableMap)
+                data: _.map(result.data, arrayMappers.tableMap)
               };
 
             } else {
 
               return {
-                data: _.map(result.data, $arrayMappers.tableTournamentMap)
+                data: _.map(result.data, arrayMappers.tableTournamentMap)
               };
 
             }
@@ -122,14 +122,14 @@
         console.log('updating -->', manager.managerName);
 
         // reset goal counts
-        manager = $objectUtils.cleanManager(manager, true);
-        manager._lastSyncedOn = $momentService.syncDate();
+        manager = objectUtils.cleanManager(manager, true);
+        manager._lastSyncedOn = momentService.syncDate();
 
         total += _.keys(manager.players).length;
 
         _.each(manager.players, function (player) {
 
-          player = $objectUtils.playerResetGoalPoints(player);
+          player = objectUtils.playerResetGoalPoints(player);
 
           manager.seriCount = 0;
           manager.ligaCount = 0;
@@ -138,10 +138,10 @@
           manager.euroCount = 0;
           manager.wildCardCount = 0;
 
-          $apiFactory.getPlayerProfile('soccer', player.id)
-            .then($arrayMappers.playerInfo.bind(this, player))
-            .then($arrayMappers.playerMapPersonalInfo.bind(this, player))
-            .then($arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }))
+          apiFactory.getPlayerProfile('soccer', player.id)
+            .then(arrayMappers.playerInfo.bind(this, player))
+            .then(arrayMappers.playerMapPersonalInfo.bind(this, player))
+            .then(arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }))
             .then(function (result) {
 
               // TODO make function available in services
@@ -191,7 +191,7 @@
 
         console.log('$updateDataUtils --> updateCoreData');
 
-        $q.all([$apiFactory.getApiData('managersData'), $apiFactory.getApiData('leagueTables')])
+        $q.all([apiFactory.getApiData('managersData'), apiFactory.getApiData('leagueTables')])
           .then(function () {
             cb();
           });
@@ -211,20 +211,20 @@
         // list of all goal scorers in all leagues
           consolidatedGoalScorers = [],
         // makes a request for all leagues in a loop returns a list of promises
-          allPromises = $apiFactory.getAllGoalLeaders();
+          allPromises = apiFactory.getAllGoalLeaders();
 
         // waits for an array of promises to resolve, sets allLeagues data
-        $apiFactory.listOfPromises(allPromises, function (result) {
+        apiFactory.listOfPromises(allPromises, function (result) {
 
           allLeagues = [];
 
           _.each(result, function (league) {
-            var goalsMap = league.data.goals.map($arrayMappers.goalsMap.bind($arrayMappers, $rootScope.managersData, league.leagueURL));
+            var goalsMap = league.data.goals.map(arrayMappers.goalsMap.bind(arrayMappers, $rootScope.managersData, league.leagueURL));
             allLeagues.push({
-              name: $textManipulator.properLeagueName(league.leagueName),
+              name: textManipulator.properLeagueName(league.leagueName),
               source: goalsMap,
               className: league.leagueName,
-              img: $textManipulator.leagueImages[league.leagueName]
+              img: textManipulator.leagueImages[league.leagueName]
             });
             consolidatedGoalScorers = consolidatedGoalScorers.concat(goalsMap);
           });

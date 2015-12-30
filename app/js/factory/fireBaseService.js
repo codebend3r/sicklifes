@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$fireBaseService', function ($q, $firebase, $rootScope, $localStorage) {
+    .factory('fireBaseService', function ($q, $firebase, $rootScope, $localStorage) {
 
       var ref,
         sync,

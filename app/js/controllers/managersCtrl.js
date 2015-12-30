@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $arrayFilter, $state, $updateDataUtils, $moment, $momentService, $localStorage, $apiFactory, $stateParams) {
+    .controller('managersCtrl', function ($scope, $rootScope, $stateParams, $state, arrayFilter, updateDataUtils, $moment, momentService, $localStorage, apiFactory) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -98,11 +98,11 @@
         $rootScope.lastSyncDate = $scope.selectedManager._lastSyncedOn;
         $rootScope.source = 'firebase';
 
-        if (angular.isDefined($scope.selectedManager._lastSyncedOn) && $momentService.isHoursAgo($scope.selectedManager._lastSyncedOn)) {
+        if (angular.isDefined($scope.selectedManager._lastSyncedOn) && momentService.isHoursAgo($scope.selectedManager._lastSyncedOn)) {
 
           console.log('-- data for', $scope.selectedManager.managerName, 'is old --');
 
-        } else if ($momentService.isHoursAgo($scope.managersData._lastSyncedOn)) {
+        } else if (momentService.isHoursAgo($scope.managersData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
@@ -141,24 +141,6 @@
 
         }
 
-        // if (angular.isUndefinedOrNull($localStorage['managersData'])) {
-        //
-        //   var saveObject = {
-        //     _lastSyncedOn: $momentService.syncDate(),
-        //     data: $rootScope.managersData.data
-        //   };
-        //
-        //   $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
-        //
-        // }
-
-        //if (!$rootScope.fireBaseReady) {
-        //  console.log('start firebase if not already initiated');
-        //  $scope.startFireBase(function () {
-        //    //noop
-        //  });
-        //}
-
       };
 
       /**
@@ -169,7 +151,7 @@
 
         $rootScope.loading = true;
 
-        $updateDataUtils.updateAllManagerData(function (result) {
+        updateDataUtils.updateAllManagerData(function (result) {
 
           $rootScope.loading = false;
           $scope.managersData = result;
@@ -184,7 +166,7 @@
         console.log('month change detected:', month.monthName);
         $scope.currentMonthLog = _.chain($scope.selectedManager.filteredMonthlyGoalsLog)
           .flatten(true)
-          .filter($arrayFilter.filterOnMonth.bind($scope, month))
+          .filter(arrayFilter.filterOnMonth.bind($scope, month))
           .value();
       });
 
@@ -215,7 +197,7 @@
           //var request = 'managersData/data/' + $stateParams.managerId;
           var request = 'managersData';
 
-          $apiFactory.getApiData(request)
+          apiFactory.getApiData(request)
             .then(loadData);
 
         }

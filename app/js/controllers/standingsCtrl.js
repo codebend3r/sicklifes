@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 09/01/2015
+ * Created by Bouse on 12/30/2015
  */
 
 (function () {
@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, $apiFactory, $stateParams, $fireBaseService, $updateDataUtils, $momentService, $localStorage) {
+    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $stateParams, fireBaseService, updateDataUtils, momentService, $localStorage) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -53,7 +53,7 @@
        * @description function to check
        */
       $scope.isCurrentMonth = function (selectedMonth, date) {
-        var gameDate = $momentService.getDate(date),
+        var gameDate = momentService.getDate(date),
           isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
         return isBetween;
       };
@@ -64,7 +64,7 @@
       $scope.updateAllManagerData = function () {
 
         $rootScope.loading = true;
-        $updateDataUtils.updateAllManagerData(function (data) {
+        updateDataUtils.updateAllManagerData(function (data) {
 
           $rootScope.loading = false;
           console.log('managers updated', data);
@@ -172,12 +172,12 @@
 
         $rootScope.source = 'firebase';
 
-        if ($momentService.isHoursAgo($rootScope.managersData._lastSyncedOn)) {
+        if (momentService.isHoursAgo($rootScope.managersData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
           // TODO - fix, takes too long
-          //$updateDataUtils.updateAllManagerData(onManagersRequestFinished);
+          //updateDataUtils.updateAllManagerData(onManagersRequestFinished);
 
         } else {
 
@@ -197,11 +197,11 @@
         // });
 
         // var saveObject = {
-        //   _lastSyncedOn: $momentService.syncDate(),
+        //   _lastSyncedOn: momentService.syncDate(),
         //   data: $rootScope.managerData
         // };
         //
-        // $fireBaseService.saveToLocalStorage(saveObject, 'managersData');
+        // fireBaseService.saveToLocalStorage(saveObject, 'managersData');
 
         /////////////////////////////
 
@@ -358,7 +358,7 @@
         } else {
 
           console.log('load from firebase');
-          $apiFactory.getApiData('managersData')
+          apiFactory.getApiData('managersData')
             .then(loadData);
 
         }

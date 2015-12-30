@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$momentService', function ($moment, $log) {
+    .factory('momentService', function ($moment, $log) {
 
       return {
 

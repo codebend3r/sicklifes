@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$objectUtils', function ($momentService) {
+    .factory('objectUtils', function (momentService) {
 
       return {
 
@@ -19,7 +19,7 @@
 
           cleanLogs = cleanLogs || false;
 
-          m._lastSyncedOn = $momentService.syncDate();
+          m._lastSyncedOn = momentService.syncDate();
           m.totalGoals = 0;
           m.totalPoints = 0;
           m.domesticGoals = 0;
@@ -75,7 +75,7 @@
         cleanPlayer: function (p, draftMode) {
 
           if (p) {
-            p.dateOfTransaction = draftMode ? $momentService.leagueStartDate() : $momentService.transactionDate();
+            p.dateOfTransaction = draftMode ? momentService.leagueStartDate() : momentService.transactionDate();
             p.goals = 0;
             p.assists = 0;
             p.points = 0;

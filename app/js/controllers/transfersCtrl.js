@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, $arrayMappers, $apiFactory, $objectUtils, $updateDataUtils, $momentService) {
+    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, arrayMappers, apiFactory, objectUtils, updateDataUtils, momentService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -73,7 +73,7 @@
 
         if ($scope.draftMode) {
 
-          var draftedPlayer = $objectUtils.cleanPlayer(player, $scope.draftMode);
+          var draftedPlayer = objectUtils.cleanPlayer(player, $scope.draftMode);
           draftedPlayer.managerName = $scope.selectedManager.managerName;
 
           $scope.selectedManager.players = $scope.selectedManager.players || {};
@@ -86,7 +86,7 @@
           $scope.selectedManager.players[draftedPlayer.id] = draftedPlayer;
 
           var saveObject = $scope.managersData;
-          saveObject._lastSyncedOn = $momentService.syncDate();
+          saveObject._lastSyncedOn = momentService.syncDate();
 
           $scope.startFireBase(function () {
             $scope.saveToFireBase(saveObject, 'managersData');
@@ -94,11 +94,11 @@
 
         } else {
 
-          var addedPlayer = $objectUtils.playerResetGoalPoints(player);
+          var addedPlayer = objectUtils.playerResetGoalPoints(player);
 
-          $apiFactory.getPlayerProfile('soccer', addedPlayer.id)
+          apiFactory.getPlayerProfile('soccer', addedPlayer.id)
             .then(function (result) {
-              return $arrayMappers.playerInfo(addedPlayer, result);
+              return arrayMappers.playerInfo(addedPlayer, result);
             })
             .then(function () {
               $scope.addedPlayerObject = addedPlayer;
@@ -189,12 +189,12 @@
           $scope.addedPlayerObject.status = 'added';
 
           // add
-          $scope.selectedManager.players[$scope.addedPlayerObject.id] = $objectUtils.cleanPlayer($scope.addedPlayerObject);
+          $scope.selectedManager.players[$scope.addedPlayerObject.id] = objectUtils.cleanPlayer($scope.addedPlayerObject);
 
           // drop
           var droppedPlayer = $scope.selectedManager.players[$scope.droppedPlayerObject.id];
           droppedPlayer.status = 'dropped';
-          droppedPlayer.dateOfTransaction = $momentService.transactionDate();
+          droppedPlayer.dateOfTransaction = momentService.transactionDate();
 
           console.log('///////////////////////////////////////////');
           console.log('addedPlayerObject: ', $scope.addedPlayerObject);
@@ -236,7 +236,7 @@
        */
       $scope.updatePlayerPoolData = function () {
 
-        $updateDataUtils.updatePlayerPoolData(function (result) {
+        updateDataUtils.updatePlayerPoolData(function (result) {
           console.log('PLAYER POOL DATA UPDATED');
           $scope.allPlayers = result;
         });
@@ -253,7 +253,7 @@
 
           var saveObject = {
             _syncedFrom: 'transfersCtrl',
-            _lastSyncedOn: $momentService.syncDate(),
+            _lastSyncedOn: momentService.syncDate(),
             allPlayers: $scope.allPlayers
           };
 
@@ -269,9 +269,9 @@
        */
       var init = function () {
 
-        $updateDataUtils.updateCoreData(function () {
+        updateDataUtils.updateCoreData(function () {
 
-          $apiFactory.getApiData('playerPoolData')
+          apiFactory.getApiData('playerPoolData')
             .then(loadData);
 
         });

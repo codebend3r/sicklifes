@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$workerService', function () {
+    .factory('workerService', function () {
 
       var worker,
         defer;

@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$textManipulator', function () {
+    .factory('textManipulator', function () {
 
       var textManipulator = {
 
@@ -255,7 +255,6 @@
           var leagueString = '';
           result.data.teams.some(function (team, i) {
             team.leagues.some(function (league, j) {
-              //console.log('slug:', league.slug);
               if (textManipulator.acceptedLeague(league.slug)) {
                 leagueString = league.slug;
                 return true;
@@ -284,10 +283,6 @@
         acceptedLeague: function (league) {
           league = league.toLocaleLowerCase();
           return league === 'liga' || league === 'epl' || league === 'seri' || league === 'chlg' || league === 'europa' || league === 'uefa';
-        },
-
-        getPlayerPlayerRecordURL: function (leagueSlug, id) {
-          return 'http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id + '/player_records';
         },
 
         getPlayerSummaryURL: function (leagueSlug, id) {

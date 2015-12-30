@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$scoringLogic', function () {
+    .factory('scoringLogic', function () {
 
       return {
 

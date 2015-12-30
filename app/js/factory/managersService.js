@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$managersService', function ($fireBaseService) {
+    .factory('managersService', function (fireBaseService) {
 
       /**
        * TODO
@@ -56,8 +56,8 @@
          */
         getAllPlayers: function () {
 
-          //$fireBaseService.initialize(allManagers);
-          var firePromise = $fireBaseService.getFireBaseData();
+          //fireBaseService.initialize(allManagers);
+          var firePromise = fireBaseService.getFireBaseData();
           firePromise.promise.then(function (data) {
 
             return data;

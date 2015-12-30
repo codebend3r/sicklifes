@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('tablesCtrl', function ($scope, $apiFactory, $rootScope, $stateParams, $updateDataUtils, $textManipulator, $momentService, $localStorage) {
+    .controller('tablesCtrl', function ($scope, apiFactory, $rootScope, $stateParams, updateDataUtils, textManipulator, momentService, localStorage) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -63,7 +63,7 @@
 
         var saveObject = {
           _syncedFrom: 'tablesCtrl',
-          _lastSyncedOn: $momentService.syncDate(),
+          _lastSyncedOn: momentService.syncDate(),
           liga: $scope.allLeagues[0].source,
           epl: $scope.allLeagues[1].source,
           seri: $scope.allLeagues[2].source,
@@ -91,7 +91,7 @@
 
         var saveObject = {
           _syncedFrom: 'tablesCtrl',
-          _lastSyncedOn: $momentService.syncDate(),
+          _lastSyncedOn: momentService.syncDate(),
           liga: $scope.allLeagues[0].source,
           epl: $scope.allLeagues[1].source,
           seri: $scope.allLeagues[2].source,
@@ -99,7 +99,7 @@
           uefa: $scope.allLeagues[4].source
         };
 
-        if ($momentService.isHoursAgo(data._lastSyncedOn, saveObject)) {
+        if (momentService.isHoursAgo(data._lastSyncedOn, saveObject)) {
 
           console.log('-- data is too old --');
           //$scope.updateTablesFromHTTP(httpDataLoaded);
@@ -312,16 +312,16 @@
           console.log('load from $rootScope');
           loadData($rootScope[$scope.dataKeyName]);
 
-        } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
+        } else if (angular.isDefined(localStorage[$scope.dataKeyName])) {
 
           console.log('load from local storage');
-          loadData($localStorage[$scope.dataKeyName]);
+          loadData(localStorage[$scope.dataKeyName]);
 
         } else {
 
           console.log('load from firebase');
 
-          $apiFactory.getApiData('leagueTables')
+          apiFactory.getApiData('leagueTables')
             .then(loadData);
 
         }

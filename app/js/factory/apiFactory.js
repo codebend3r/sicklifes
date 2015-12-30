@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$apiFactory', function ($http, $q, $localStorage, $moment, $rootScope, $textManipulator, $stateParams) {
+    .factory('apiFactory', function ($http, $q, $moment, $rootScope, textManipulator, $stateParams) {
 
       var apiFactory = {};
 
@@ -70,33 +70,30 @@
       };
 
       /**
+       * @name getPlayerLog
        * @description gets players game log and goal per game details
+       * @returns {promise}
        */
-      apiFactory.getPlayerGameDetails = function (league, id) {
+      apiFactory.getPlayerLog = function (leagueSlug, id) {
 
-        return apiFactory.getData({
-          endPointURL: $textManipulator.getPlayerPlayerRecordURL(league, id)
-        });
-
-      };
-
-      apiFactory.getPlayerProfileURL = function (leagueSlug, id) {
-        return 'http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id;
-      };
-
-      /**
-       * gets player's league related data
-       */
-      apiFactory.getPlayerProfile = function (league, id) {
-
-        return apiFactory.getData({
-          endPointURL: apiFactory.getPlayerProfileURL(league, id)
-        });
+        return $http.get('http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id + '/player_records');
 
       };
 
       /**
-       * getting league tables
+       * @name getPlayerProfile
+       * @description gets player's league related data
+       * @returns {promise}
+       */
+      apiFactory.getPlayerProfile = function (leagueSlug, id) {
+
+        return $http.get('http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id);
+
+      };
+
+      /**
+       * @name getLeagueTables
+       * @description getting league tables
        */
       apiFactory.getLeagueTables = function () {
 
@@ -130,7 +127,7 @@
       };
 
       /**
-       * getting teamms in all the leagues
+       * @description getting teams in all the leagues
        */
       apiFactory.getAllTeams = function () {
 

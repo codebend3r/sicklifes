@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('adminCtrl', function ($scope, $timeout, $fireBaseService, $routeParams, $apiFactory, $updateDataUtils, $momentService, $managersService) {
+    .controller('adminCtrl', function ($scope, $timeout, fireBaseService, apiFactory, updateDataUtils, momentService, managersService) {
 
       /**
        * TODO
@@ -104,11 +104,11 @@
 
         var allPlayersObject = {
           _syncedFrom: 'adminCtrl',
-          _lastSyncedOn: $momentService.syncDate(),
+          _lastSyncedOn: momentService.syncDate(),
           allPlayers: $scope.allPlayers
         };
 
-        $fireBaseService.syncPlayerPoolData(allPlayersObject);
+        fireBaseService.syncPlayerPoolData(allPlayersObject);
 
         console.log('////////////////////////////////////');
         console.log('$scope.managersData', $scope.managersData);
@@ -116,7 +116,7 @@
 
         var managersObject = {
           _syncedFrom: 'adminCtrl',
-          _lastSyncedOn: $momentService.syncDate(),
+          _lastSyncedOn: momentService.syncDate(),
           chester: $scope.managersData[0],
           frank: $scope.managersData[1],
           dan: $scope.managersData[2],
@@ -125,7 +125,7 @@
           joe: $scope.managersData[5]
         };
 
-        $fireBaseService.syncManagersData(managersObject);
+        fireBaseService.syncManagersData(managersObject);
 
       };
 
@@ -134,7 +134,7 @@
        */
       $scope.resetToDefault = function () {
 
-        $scope.managersData = $managersService.getAllPlayers();
+        $scope.managersData = managersService.getAllPlayers();
 
         console.log('////////////////////////////////////');
         console.log('$scope.managersData', $scope.managersData);
@@ -192,9 +192,9 @@
           data.managersData.joe
         ];
 
-        $scope.updatePlayerPoolData = $updateDataUtils.updatePlayerPoolData.bind($scope, $scope.allPlayers);
+        $scope.updatePlayerPoolData = updateDataUtils.updatePlayerPoolData.bind($scope, $scope.allPlayers);
 
-        $scope.updateAllManagerData = $updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
+        $scope.updateAllManagerData = updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
 
         chooseTeam();
 
@@ -211,8 +211,8 @@
        */
       var init = function () {
 
-        $fireBaseService.initialize($scope);
-        var firePromise = $fireBaseService.getFireBaseData();
+        fireBaseService.initialize($scope);
+        var firePromise = fireBaseService.getFireBaseData();
         firePromise.promise.then(fireBaseLoaded);
 
       };

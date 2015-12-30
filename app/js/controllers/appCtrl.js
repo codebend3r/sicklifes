@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, $fireBaseService, $arrayMappers, $momentService, $location, $objectUtils, $arrayFilter, $textManipulator) {
+    .controller('appCtrl', function ($scope, $rootScope, fireBaseService, arrayMappers, momentService, $location, objectUtils, arrayFilter, textManipulator) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -33,25 +33,25 @@
 
         _.each($rootScope.managersData.data, function (manager) {
 
-          //manager = $objectUtils.managerResetGoalPoints(manager);
+          //manager = objectUtils.managerResetGoalPoints(manager);
 
           var filteredGames = _.chain(manager.filteredMonthlyGoalsLog)
             .flatten(true)
-            .filter($arrayFilter.filterOnMonth.bind($scope, $scope.selectedMonth))
+            .filter(arrayFilter.filterOnMonth.bind($scope, $scope.selectedMonth))
             .value();
 
-          manager = $objectUtils.managerResetGoalPoints(manager);
+          manager = objectUtils.managerResetGoalPoints(manager);
 
           _.map(filteredGames, function (data) {
 
             manager.totalGoals += data.goalsScored;
             manager.totalPoints += data.points;
 
-            if ($textManipulator.isDomesticLeague(data.leagueSlug)) {
+            if (textManipulator.isDomesticLeague(data.leagueSlug)) {
               manager.domesticGoals += data.goalsScored;
-            } else if ($textManipulator.isChampionsLeague(data.leagueSlug)) {
+            } else if (textManipulator.isChampionsLeague(data.leagueSlug)) {
               manager.clGoals += data.goalsScored;
-            } else if ($textManipulator.isEuropaLeague(data.leagueSlug)) {
+            } else if (textManipulator.isEuropaLeague(data.leagueSlug)) {
               manager.eGoals += data.goalsScored;
             }
 
@@ -69,7 +69,7 @@
 
           _.each(manager.players, function (player) {
 
-            player = $objectUtils.playerResetGoalPoints(player);
+            player = objectUtils.playerResetGoalPoints(player);
 
             _.each(filteredGames, function (data) {
               if (player.playerName === data.playerName) {
@@ -162,13 +162,13 @@
       $scope.saveRoster = function () {
 
         var saveObject = {
-          _lastSyncedOn: $momentService.syncDate(),
+          _lastSyncedOn: momentService.syncDate(),
           data: $rootScope.managersData.data
         };
 
         console.log('saveObject:', saveObject);
 
-        $scope.saveToFireBase(saveObject, 'managersData');
+        //$scope.saveToFireBase(saveObject, 'managersData');
 
       };
 
@@ -259,7 +259,7 @@
        */
       $scope.saveToFireBase = function (saveObject, dataKey) {
         if ($rootScope.fireBaseReady) {
-          $fireBaseService.saveToFireBase(saveObject, dataKey);
+          fireBaseService.saveToFireBase(saveObject, dataKey);
         } else {
           $scope.startFireBase($scope.saveToFireBase.bind($scope, saveObject, dataKey));
         }
@@ -274,8 +274,8 @@
         if ($rootScope.fireBaseReady) {
           callback($rootScope.firebaseData);
         } else {
-          $fireBaseService.initialize($scope);
-          var firePromise = $fireBaseService.getFireBaseData();
+          fireBaseService.initialize($scope);
+          var firePromise = fireBaseService.getFireBaseData();
           firePromise.then(function (fbData) {
             $rootScope.firebaseData = fbData;
             $rootScope.fireBaseReady = true;
@@ -296,7 +296,7 @@
 
         var allPlayers = $rootScope.allPlayersIndex || {};
         allPlayers.data[playerId] = player;
-        allPlayers._lastSyncedOn = $momentService.syncDate();
+        allPlayers._lastSyncedOn = momentService.syncDate();
 
         $scope.saveToFireBase(allPlayers, 'allPlayersIndex');
 

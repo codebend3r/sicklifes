@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('$arrayFilter', function ($momentService, $scoringLogic) {
+    .factory('arrayFilter', function (momentService) {
 
       var arrayFilters = {};
 
@@ -23,7 +23,8 @@
        * @returns {boolean}
        */
       arrayFilters.filterAfterDate = function (game) {
-        var gameDate = $momentService.getDate(new Date(game.box_score.event.game_date));
+        //var gameDate = momentService.getDate(new Date(game.box_score.event.game_date));
+        var gameDate = moment(game.datePlayed);
         return gameDate.isAfter(arrayFilters.leagueStartDate);
       };
 
@@ -31,24 +32,15 @@
        * @description filters out any games after from players added or dropped aug 1
        * @returns {boolean}
        */
-      arrayFilters.filterValidDate = function (player, game) {
-        var gameDate = moment(game.box_score.event.game_date);
+      arrayFilters.filterOnValidGoals = function (player, game) {
+        var gameDate = moment(game.datePlayed);
         if (player.status === 'added') {
           return gameDate.isAfter(player.dateOfTransaction);
         } else if (player.status === 'dropped') {
           return gameDate.isBefore(player.dateOfTransaction);
         } else {
-          // console.log('> filter gameDate:', gameDate.format('MM/DD/YYYY'), 'valid:', gameDate.isAfter(arrayFilters.leagueStartDate));
-          return gameDate.isAfter(arrayFilters.leagueStartDate);
+          return gameDate.isAfter(arrayFilters.leagueStartDate)
         }
-      };
-
-      /**
-       * @description filters out games without goals
-       * @returns {boolean}
-       */
-      arrayFilters.filterOnValidGoals = function (player, game) {
-        return player.goals;
       };
 
       /**
@@ -58,7 +50,7 @@
        * @returns {boolean}
        */
       arrayFilters.isSelectedMonth = function (selectedMonth, game) {
-        var gameDate = game.rawDatePlayed || $momentService.getDate(game.box_score.event.game_date),
+        var gameDate = game.rawDatePlayed || momentService.getDate(game.box_score.event.game_date),
           scoredAGoal = game.goals ? true : false,
           isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
         return isBetween && scoredAGoal;
@@ -73,7 +65,7 @@
        * @returns {boolean}
        */
       arrayFilters.filterOnMonth = function (selectedMonth, game) {
-        var gameDate = $momentService.getDate(game.originalDate),
+        var gameDate = momentService.getDate(game.originalDate),
           isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
         return isBetween;
       };
