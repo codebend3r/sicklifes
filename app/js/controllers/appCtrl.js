@@ -117,7 +117,7 @@
 
       $scope.$watch(function () {
         return $location.search().admin;
-      }, function (newValue, oldValue) {
+      }, function (nv, ov) {
         //console.log(newValue, oldValue);
         //$scope.admin = newValue;
       });
@@ -139,7 +139,6 @@
        *
        */
       $scope.isActive = function (title) {
-        console.log('title', title);
         return false;
       };
 
@@ -168,7 +167,7 @@
 
         console.log('saveObject:', saveObject);
 
-        //$scope.saveToFireBase(saveObject, 'managersData');
+        $scope.saveToFireBase(saveObject, 'managersData');
 
       };
 

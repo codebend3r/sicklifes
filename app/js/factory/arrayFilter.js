@@ -24,7 +24,7 @@
        */
       arrayFilters.filterAfterDate = function (game) {
         //var gameDate = momentService.getDate(new Date(game.box_score.event.game_date));
-        var gameDate = moment(game.datePlayed);
+        var gameDate = moment(new Date(game.datePlayed));
         return gameDate.isAfter(arrayFilters.leagueStartDate);
       };
 
@@ -33,7 +33,7 @@
        * @returns {boolean}
        */
       arrayFilters.filterOnValidGoals = function (player, game) {
-        var gameDate = moment(game.datePlayed);
+        var gameDate = moment(new Date(game.datePlayed));
         if (player.status === 'added') {
           return gameDate.isAfter(player.dateOfTransaction);
         } else if (player.status === 'dropped') {
@@ -50,7 +50,7 @@
        * @returns {boolean}
        */
       arrayFilters.isSelectedMonth = function (selectedMonth, game) {
-        var gameDate = game.rawDatePlayed || momentService.getDate(game.box_score.event.game_date),
+        var gameDate = game.rawDatePlayed || moment(new Date(game.box_score.event.game_date)),
           scoredAGoal = game.goals ? true : false,
           isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
         return isBetween && scoredAGoal;

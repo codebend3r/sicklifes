@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, $apiFactory, $location, $stateParams, $arrayMappers, $textManipulator, $objectUtils, $managersService, $updateDataUtils, $momentService) {
+    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, textManipulator, objectUtils, managersService, updateDataUtils, momentService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -24,7 +24,7 @@
       /**
        * @description league images
        */
-      $scope.leagueImages = $textManipulator.leagueImages;
+      $scope.leagueImages = textManipulator.leagueImages;
 
       ////////////////////////////////////////
       ////////////// private /////////////////
@@ -77,7 +77,7 @@
         }
 
         // check the data of the source data
-        if (foundPlayer && angular.isDefined($scope.player._lastSyncedOn) && !$momentService.isHoursAgo($scope.player._lastSyncedOn)) {
+        if (foundPlayer && angular.isDefined($scope.player._lastSyncedOn) && !momentService.isHoursAgo($scope.player._lastSyncedOn)) {
 
           console.log('foundPlayer and is up to date', $scope.player.playerName);
           requestUpdateOnPlayer();
@@ -100,23 +100,23 @@
           throw new Error('$stateParams.playerId was not defined, don\'t do that');
         }
 
-        $scope.player = $objectUtils.playerResetGoalPoints($scope.player);
+        $scope.player = objectUtils.playerResetGoalPoints($scope.player);
         $scope.player.id = $stateParams.playerId;
 
-        $apiFactory.getPlayerProfile('soccer', $stateParams.playerId)
+        apiFactory.getPlayerProfile('soccer', $stateParams.playerId)
           .then(function (result) {
             $scope.player.playerName = result.data.full_name;
-            return $arrayMappers.playerInfo($scope.player, result);
+            return arrayMappers.playerInfo($scope.player, result);
           })
-          .then($arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
-          .then($arrayMappers.playerGamesLog.bind(this, {
+          .then(arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
+          .then(arrayMappers.playerGamesLog.bind(this, {
             player: $scope.player,
             manager: null
           }))
           .then(function (result) {
 
             $scope.player = result;
-            $scope.player._lastSyncedOn = $momentService.syncDate();
+            $scope.player._lastSyncedOn = momentService.syncDate();
 
             $rootScope.loading = false;
 
@@ -131,7 +131,7 @@
        */
       var init = function () {
 
-        $updateDataUtils.updateCoreData(loadData);
+        updateDataUtils.updateCoreData(loadData);
 
       };
 

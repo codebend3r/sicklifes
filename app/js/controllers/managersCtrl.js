@@ -22,11 +22,7 @@
       $scope.goalsOnlyFilterOn = true;
 
       $scope.managersList = [ 'Chester', 'Frank', 'Joe', 'Justin', 'Dan', 'Mike' ];
-
-      // $scope.isActive = function () {
-      //   console.log('> isActive');
-      // };
-
+      
       /**
        * @name changeManager
        * @description

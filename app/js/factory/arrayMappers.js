@@ -180,7 +180,7 @@
 
             player.ligaFilteredGameLog = player.ligaCompleteLog
               .filter(arrayFilter.filterOnValidGoals.bind(this, player))
-              .map(arrayMapper.calculatePoints)
+              .forEach(arrayMapper.calculatePoints);
 
             var foundTeam = _.where($rootScope.leagueTables.liga, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.ligaCompleteLog.length)) {
@@ -219,7 +219,7 @@
 
             player.eplFilteredGameLog = player.eplCompleteLog
               .filter(arrayFilter.filterOnValidGoals.bind(this, player))
-              .map(arrayMapper.calculatePoints);
+              .forEach(arrayMapper.calculatePoints);
 
             var foundTeam = _.where($rootScope.leagueTables.epl, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.eplCompleteLog.length)) {
@@ -269,7 +269,7 @@
 
             player.seriFilteredGameLog = player.seriCompleteLog
               .filter(arrayFilter.filterOnValidGoals.bind(this, player))
-              .map(arrayMapper.calculatePoints);
+              .forEach(arrayMapper.calculatePoints);
 
             var foundTeam = _.where($rootScope.leagueTables.seri, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.seriCompleteLog.length)) {
@@ -307,7 +307,7 @@
 
             player.chlgFilteredGameLog = player.chlgCompleteLogs
               .filter(arrayFilter.filterOnValidGoals.bind(this, player))
-              .map(arrayMapper.calculatePoints);
+              .forEach(arrayMapper.calculatePoints);
 
             var foundTeam = _.where($rootScope.leagueTables.chlg, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.chlgCompleteLogs.length)) {
@@ -346,7 +346,7 @@
 
             player.euroFilteredGameLog = player.euroCompleteLogs
               .filter(arrayFilter.filterOnValidGoals.bind(this, player))
-              .map(arrayMapper.calculatePoints);
+              .forEach(arrayMapper.calculatePoints);
 
             var foundTeam = _.where($rootScope.leagueTables.uefa, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.euroCompleteLogs.length)) {
@@ -423,68 +423,56 @@
        * @name calculatePoints
        * @description takes previous built object
        * @param dataObj
-       * @param game
-       * @param index
        */
       arrayMapper.calculatePoints = function (dataObj) {
 
-        var gameGoals,
-          leagueSlug,
-          computedPoints;
+        var computedPoints;
 
-        gameGoals = dataObj.goalsScored;
-        leagueSlug = dataObj.leagueSlug;
+        //console.log(player.playerName, '|', manager.managerName, player.goalsScored);
+        debugger;
 
-        // console.log('================================');
-        // console.log('playerName', dataObj.playerName, ', id:', dataObj.id);
-        // console.log('playerName', dataObj.playerName, ', leagueSlug:', leagueSlug);
-        // console.log('playerName', dataObj.playerName, ', managerName:', dataObj.managerName);
-        // console.log(gameMapsObj.playerName, 'goals', gameMapsObj.goalsScored);
-        // console.log(gameMapsObj.playerName, 'assists', gameMapsObj.assists);
-        // console.log(gameMapsObj.playerName, 'shots', gameMapsObj.shots);
-        // console.log(gameMapsObj.playerName, 'shots on goals', gameMapsObj.shotsOnGoal);
-        // console.log(gameMapsObj.playerName, 'minutes played', gameMapsObj.minutesPlayed);
-        // console.log(gameMapsObj.playerName, 'datePlayed', gameMapsObj.datePlayed);
-        // console.log(gameMapsObj.playerName, 'vsTeam', gameMapsObj.vsTeam);
+        if (textManipulator.acceptedLeague(player.leagueSlug)) {
 
-        if (textManipulator.acceptedLeague(leagueSlug)) {
+          computedPoints = scoringLogic.calculatePoints(player.goalsScored, player.leagueSlug);
 
-          computedPoints = scoringLogic.calculatePoints(gameGoals, leagueSlug);
+          if (textManipulator.isDomesticLeague(player.leagueSlug)) {
 
-          if (textManipulator.isDomesticLeague(leagueSlug)) {
+            // is in domestic league
+            if (player) player.domesticGoals += player.goalsScored;
+            if (manager) manager.domesticGoals += player.goalsScored;
 
-            if (dataObj.player) dataObj.player.domesticGoals += gameGoals;
-            if (dataObj.manager) dataObj.manager.domesticGoals += gameGoals;
+          } else if (textManipulator.isChampionsLeague(player.leagueSlug)) {
 
-          } else if (textManipulator.isChampionsLeague(leagueSlug)) {
+            // is in champions league
+            if (player) player.clGoals += player.goalsScored;
+            if (manager) manager.clGoals += player.goalsScored;
 
-            if (dataObj.player) dataObj.player.clGoals += gameGoals;
-            if (dataObj.manager) dataObj.manager.clGoals += gameGoals;
+          } else if (textManipulator.isEuropaLeague(player.leagueSlug)) {
 
-          } else if (textManipulator.isEuropaLeague(leagueSlug)) {
-
-            if (dataObj.player) dataObj.player.eGoals += gameGoals;
-            if (dataObj.manager) dataObj.manager.eGoals += gameGoals;
+            // is in europa league
+            if (player) player.eGoals += player.goalsScored;
+            if (manager) manager.eGoals += player.goalsScored;
 
           }
 
           // increment goals for each player
-          if (dataObj.player) dataObj.player.goals += gameGoals;
+          if (player) player.goals += player.goalsScored;
 
           // increment goals for the manager
-          if (dataObj.manager) dataObj.manager.totalGoals += gameGoals;
+          if (manager) manager.totalGoals += player.goalsScored;
 
           // increment points
-          if (dataObj.player) {
-            dataObj.player.points += computedPoints;
+          if (player) {
+            player.points += computedPoints;
           }
-          if (dataObj.manager) dataObj.manager.totalPoints += computedPoints;
+
+          if (manager) manager.totalPoints += computedPoints;
 
         }
 
-        if (dataObj.player) dataObj.player.assists += game.assists;
+        if (player) player.assists += player.assists;
 
-        return dataObj;
+        return player;
 
       }
 
