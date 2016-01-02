@@ -166,8 +166,9 @@
         };
 
         console.log('saveObject:', saveObject);
+        console.log('Jovetic Goals:', saveObject.data.chester.players['123'].goals);
 
-        $scope.saveToFireBase(saveObject, 'managersData');
+        //$scope.saveToFireBase(saveObject, 'managersData');
 
       };
 
