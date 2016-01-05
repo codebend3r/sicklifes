@@ -22,7 +22,7 @@
       $scope.goalsOnlyFilterOn = true;
 
       $scope.managersList = [ 'Chester', 'Frank', 'Joe', 'Justin', 'Dan', 'Mike' ];
-      
+
       /**
        * @name changeManager
        * @description

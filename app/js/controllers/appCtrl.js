@@ -166,7 +166,23 @@
         };
 
         console.log('saveObject:', saveObject);
-        console.log('Jovetic Goals:', saveObject.data.chester.players['123'].goals);
+        //console.log('Jovetic Goals:', saveObject.data.chester.players['123'].goals);
+        console.log('Aggiretxe Goals:', saveObject.data.chester.players['49820'].goals);
+
+        //delete saveObject.data.chester.monthlyGoalsLog[0];
+
+        //console.log('data.chester.monthlyGoalsLog.0.euroCompleteLogs', saveObject.data.chester.monthlyGoalsLog[0].euroCompleteLogs);
+
+        _.each(saveObject.data.chester.monthlyGoalsLog, function(log) {
+          console.log('chester log:', Array.isArray(log));
+          if (Array.isArray(log)) {
+            console.log(log.length);
+          }
+        });
+
+        // _.each(saveObject.data.frank.monthlyGoalsLog, function(log) {
+        //   console.log('frank log:', log);
+        // });
 
         //$scope.saveToFireBase(saveObject, 'managersData');
 

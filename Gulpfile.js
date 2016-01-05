@@ -130,30 +130,9 @@
 
   });
 
-  // partials
-  gulp.task('partials', function () {
-
-    return gulp.src([config.app + '/views/**/*.html'])
-      .pipe(gulp.dest('builds/' + gutil.env.build + '/views/'))
-      .pipe($.size())
-      .on('error', gutil.log);
-
-  });
-
-  // modal-views
-  gulp.task('modal-views', function () {
-
-    return gulp.src([config.app + '/views/modal/*.html'])
-      .pipe(gulp.dest('builds/' + gutil.env.build + '/views/modal/'))
-      .pipe($.size({
-        title: 'modal views',
-        showFiles: false
-      }))
-      .on('error', gutil.log);
-
-  });
-
-  // template
+  /**
+  * @description generate templates through templatescache
+  */
   gulp.task('template', function () {
 
     return gulp.src([config.app + '/views/**/*.html'])
@@ -168,7 +147,9 @@
 
   });
 
-  // sass
+  /**
+  * @description converts sass to css
+  */
   gulp.task('sass', function () {
 
     return gulp.src([config.app + '/sass/*.scss'])
@@ -180,7 +161,9 @@
 
   });
 
-  // css
+  /**
+  * @description moves css files to builds
+  */
   gulp.task('css', ['sass'], function () {
 
     if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
@@ -209,10 +192,10 @@
 
   });
 
-  // js (partials or template)
   gulp.task('js', ['template'], function () {
 
     if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
+
       return gulp.src([config.app + '/js/**/*.js'])
         .pipe(gulp.dest('builds/' + gutil.env.build + '/js/'))
         .pipe($.size({
@@ -220,11 +203,11 @@
           showFiles: true
         }))
         .on('error', gutil.log);
+
     }
 
   });
 
-  // bower
   gulp.task('bower-all', function () {
 
     if (gutil.env.build !== 'prod' && gutil.env.build !== 'release') {
@@ -239,13 +222,12 @@
 
   });
 
-  // fonts
   gulp.task('fonts', function () {
 
     return gulp.src(config.app + '/bower_components/**/*.{woff,ttf,svg,eot}')
       .pipe($.size({
         title: 'fonts',
-        showFiles: true
+        showFiles: false
       }))
       .pipe(gulp.dest('builds/' + gutil.env.build + '/bower_components/'))
       //.pipe(gulp.dest('builds/' + gutil.env.build + '/fonts/'))
@@ -253,74 +235,79 @@
 
   });
 
-  // images
   gulp.task('images', function () {
 
-    return gulp.src([config.app + '/images/**/*.{jpg,png,gif}'])
+    return gulp.src(config.app + '/images/**/*.{jpg,png,gif}')
+      // .pipe($.imagemin({
+      //   optimizationLevel: 1
+      // }))
+      // .pipe($.size({
+      //   title: 'images',
+      //   showFiles: false
+      // }))
       .pipe(gulp.dest('builds/' + gutil.env.build + '/images/'))
-      .pipe($.imagemin({
-        optimizationLevel: 1
-      }))
-      .pipe($.size({
-        title: 'images',
-        showFiles: false
-      }))
       .on('error', gutil.log);
 
   });
 
   // clean
   gulp.task('clean-templatecache', function () {
+
     return gulp.src([config.app + '/js/templates/templateCache.js'], { read: false }).pipe($.clean({ force: true }))
       .pipe($.size())
       .on('error', gutil.log);
+
   });
 
   /**
    * build-GUI
    */
-  gulp.task('build-GUI', function (callback) {
+  gulp.task('build-GUI', function (cb) {
 
     runSequence(
       'js',
       'css',
-      //'vendor-css',
       'html',
       'bower-all',
-      //'modal-views',
-      'images',
+      //'images',
       'fonts',
-      callback);
+      cb);
 
   });
 
   /**
    * build
    */
-  gulp.task('build', function (callback) {
+  gulp.task('build', function (cb) {
+
     runSequence(
       'clean',
       'start',
       'build-GUI',
-      'watch',
       'browser-sync',
-      callback);
+      'watch',
+      cb);
+
   });
 
-  gulp.task('re-build-GUI', function (callback) {
+  gulp.task('re-build-GUI', function (cb) {
+
     runSequence(
       'start',
       'build-GUI',
       'bs-reload',
-      callback);
+      cb);
+
   });
 
-  gulp.task('deploy', function (callback) {
+  gulp.task('deploy', function (cb) {
+
     runSequence(
       'clean',
       'start',
       'build-GUI',
-      callback);
+      cb);
+
   });
 
   /**
@@ -332,13 +319,13 @@
     gulp.watch([config.app + '/views/**/*.html', config.app + '/index.html'], ['re-build-GUI']);
 
     // Watch .scss files
-    gulp.watch(config.app + '/sass/**/*.scss', ['re-build-GUI']);
+    gulp.watch([config.app + '/sass/**/*.scss'], ['re-build-GUI']);
 
     // Watch .js files
     gulp.watch([config.app + '/js/**/*.js', config.app + '/js/*.js', '!' + config.app + '/js/templates/templatescache.js'], ['re-build-GUI']);
 
     // Watch image files
-    gulp.watch(config.app + '/images/**/*.{png,jpg,gif}', ['re-build-GUI']);
+    gulp.watch([config.app + '/images/**/*.{png,jpg,gif}'], ['re-build-GUI']);
 
   });
 
@@ -348,37 +335,13 @@
 
   gulp.task('browser-sync', function () {
 
-    if (gutil.env.build === 'prod') {
-
-      browserSync({
-        open: gutil.env.open === true,
-        port: port,
-        server: {
-          baseDir: config.prod
-        }
-      });
-
-    } else if (gutil.env.build === 'release') {
-
-      browserSync({
-        open: gutil.env.open === true,
-        port: port,
-        server: {
-          baseDir: config.release
-        }
-      });
-
-    } else {
-
-      browserSync({
-        open: gutil.env.open === true,
-        port: port,
-        server: {
-          baseDir: config.dev
-        }
-      });
-
-    }
+    browserSync({
+      open: gutil.env.open == true,
+      port: port,
+      server: {
+        baseDir: 'builds/' + gutil.env.build
+      }
+    });
 
   });
 
