@@ -23,7 +23,6 @@
        * @returns {boolean}
        */
       arrayFilter.filterAfterDate = function (game) {
-        //var gameDate = momentService.getDate(new Date(game.box_score.event.game_date));
         var gameDate = moment(new Date(game.datePlayed));
         return gameDate.isAfter(arrayFilter.leagueStartDate);
       };
@@ -34,15 +33,13 @@
        */
       arrayFilter.filterOnValidGoals = function (player, game) {
         var gameDate = moment(new Date(game.datePlayed));
-        //if (player.status === 'added') {
-        //  return gameDate.isAfter(player.dateOfTransaction);
-        //} else if (player.status === 'dropped') {
-        //  return gameDate.isBefore(player.dateOfTransaction);
-        //} else {
-        //  //console.log('isAfter leagueStartDate:', gameDate.isAfter(arrayFilter.leagueStartDate));
-        //  return gameDate.isAfter(arrayFilter.leagueStartDate);
-        //}
-        return true;
+        if (player.status === 'added') {
+         return gameDate.isAfter(player.dateOfTransaction);
+        } else if (player.status === 'dropped') {
+         return gameDate.isBefore(player.dateOfTransaction);
+        } else {
+         return gameDate.isAfter(arrayFilter.leagueStartDate);
+        }
       };
 
       /**
