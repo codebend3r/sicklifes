@@ -10,38 +10,37 @@
 
     .factory('arrayFilter', function (momentService) {
 
-      var arrayFilters = {};
+      var arrayFilter = {};
 
       /**
        * @description the date the league starts capturing data
        * @returns {string}
        */
-      arrayFilters.leagueStartDate = 'August 1 2015';
+      arrayFilter.leagueStartDate = 'August 1 2015';
 
       /**
        * @description filters out any games after aug 1
        * @returns {boolean}
        */
-      arrayFilters.filterAfterDate = function (game) {
+      arrayFilter.filterAfterDate = function (game) {
         //var gameDate = momentService.getDate(new Date(game.box_score.event.game_date));
-        //var gameDate = moment(new Date(game.datePlayed));
-        //return gameDate.isAfter(arrayFilters.leagueStartDate);
-        return true;
+        var gameDate = moment(new Date(game.datePlayed));
+        return gameDate.isAfter(arrayFilter.leagueStartDate);
       };
 
       /**
        * @description filters out any games after from players added or dropped aug 1
        * @returns {boolean}
        */
-      arrayFilters.filterOnValidGoals = function (player, game) {
-        //var gameDate = moment(new Date(game.datePlayed));
+      arrayFilter.filterOnValidGoals = function (player, game) {
+        var gameDate = moment(new Date(game.datePlayed));
         //if (player.status === 'added') {
         //  return gameDate.isAfter(player.dateOfTransaction);
         //} else if (player.status === 'dropped') {
         //  return gameDate.isBefore(player.dateOfTransaction);
         //} else {
-        //  //console.log('isAfter leagueStartDate:', gameDate.isAfter(arrayFilters.leagueStartDate));
-        //  return gameDate.isAfter(arrayFilters.leagueStartDate);
+        //  //console.log('isAfter leagueStartDate:', gameDate.isAfter(arrayFilter.leagueStartDate));
+        //  return gameDate.isAfter(arrayFilter.leagueStartDate);
         //}
         return true;
       };
@@ -52,7 +51,7 @@
        * @param game
        * @returns {boolean}
        */
-      arrayFilters.isSelectedMonth = function (selectedMonth, game) {
+      arrayFilter.isSelectedMonth = function (selectedMonth, game) {
         var gameDate = game.rawDatePlayed || moment(new Date(game.box_score.event.game_date)),
           scoredAGoal = game.goals ? true : false,
           isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
@@ -67,13 +66,17 @@
        * @param game
        * @returns {boolean}
        */
-      arrayFilters.filterOnMonth = function (selectedMonth, game) {
+      arrayFilter.filterOnMonth = function (selectedMonth, game) {
         var gameDate = momentService.getDate(game.originalDate),
           isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
         return isBetween;
       };
 
-      return arrayFilters;
+      arrayFilter.filterOutUndefined = function(data) {
+        return !angular.isUndefinedOrNull(data);
+      };
+
+      return arrayFilter;
 
     });
 

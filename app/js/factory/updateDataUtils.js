@@ -21,7 +21,7 @@
        */
       updateDataUtils.updatePlayerPoolData = function (callback) {
 
-        console.log('$updateDataUtils -- updatePlayerPoolData');
+        console.log('updateDataUtils -- updatePlayerPoolData');
 
         var allTeams = apiFactory.getAllTeams(),
           allTeamsPromise = [],
@@ -73,7 +73,7 @@
        */
       updateDataUtils.updateLeagueTables = function () {
 
-        console.log('$updateDataUtils -- updateLeagueTables');
+        console.log('updateDataUtils -- updateLeagueTables');
 
         var leagueTables = apiFactory.getLeagueTables(),
           defer = $q.defer(),
@@ -131,13 +131,6 @@
 
           player = objectUtils.playerResetGoalPoints(player);
 
-          manager.seriCount = 0;
-          manager.ligaCount = 0;
-          manager.eplCount = 0;
-          manager.chlgCount = 0;
-          manager.euroCount = 0;
-          manager.wildCardCount = 0;
-
           apiFactory.getPlayerProfile('soccer', player.id)
             .then(arrayMappers.playerInfo.bind(this, player))
             .then(arrayMappers.playerMapPersonalInfo.bind(this, player))
@@ -170,7 +163,7 @@
        */
       updateDataUtils.updateAllManagerData = function (cb) {
 
-        console.log('$updateDataUtils --> updateAllManagerData');
+        console.log('updateDataUtils --> updateAllManagerData');
 
         if (angular.isUndefinedOrNull($rootScope.managersData)) throw new Error('$rootScope.managersData is not defined');
 
@@ -189,7 +182,7 @@
        */
       updateDataUtils.updateCoreData = function (cb) {
 
-        console.log('$updateDataUtils --> updateCoreData');
+        console.log('updateDataUtils --> updateCoreData');
 
         $q.all([apiFactory.getApiData('managersData'), apiFactory.getApiData('leagueTables')])
           .then(function () {
@@ -204,7 +197,7 @@
        */
       updateDataUtils.updateLeagueLeadersData = function () {
 
-        console.log('$updateDataUtils --> updateLeagueLeadersData');
+        console.log('updateDataUtils --> updateLeagueLeadersData');
 
         var allLeagues = [],
           defer = $q.defer(),

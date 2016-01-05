@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('tablesCtrl', function ($scope, apiFactory, $rootScope, $stateParams, updateDataUtils, textManipulator, momentService, localStorage) {
+    .controller('tablesCtrl', function ($scope, $rootScope, $stateParams, $localStorage, apiFactory, updateDataUtils, textManipulator, momentService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -312,10 +312,10 @@
           console.log('load from $rootScope');
           loadData($rootScope[$scope.dataKeyName]);
 
-        } else if (angular.isDefined(localStorage[$scope.dataKeyName])) {
+        } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
 
           console.log('load from local storage');
-          loadData(localStorage[$scope.dataKeyName]);
+          loadData($localStorage[$scope.dataKeyName]);
 
         } else {
 

@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, $apiFactory, $arrayMappers, $momentService, $textManipulator, $objectUtils, $updateDataUtils) {
+    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, $arrayMappers, momentService, textManipulator, $objectUtils, updateDataUtils) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -118,7 +118,7 @@
 
                   var currentPlayer = $objectUtils.playerResetGoalPoints({});
 
-                  $apiFactory.getPlayerProfile('soccer', player.id)
+                  apiFactory.getPlayerProfile('soccer', player.id)
                     .then(function (playerResult) {
                       currentPlayer.playerName = playerResult.data.full_name;
                       currentPlayer.id = player.id;
@@ -132,7 +132,7 @@
                     .then(function (result) {
 
                       currentPlayer = result;
-                      currentPlayer._lastSyncedOn = $momentService.syncDate();
+                      currentPlayer._lastSyncedOn = momentService.syncDate();
 
                       $scope.players.push(currentPlayer);
 
@@ -164,9 +164,9 @@
        */
       var init = function () {
 
-        $updateDataUtils.updateCoreData(function () {
+        updateDataUtils.updateCoreData(function () {
 
-          $apiFactory.getApiData('allPlayersIndex')
+          apiFactory.getApiData('allPlayersIndex')
             .then(loadData);
 
         });
@@ -183,7 +183,7 @@
         //
         //} else {
         //
-        //  $apiFactory.getApiData('allTeamsPool')
+        //  apiFactory.getApiData('allTeamsPool')
         //    .then(loadData);
         //
         //}

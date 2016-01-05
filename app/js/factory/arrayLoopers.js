@@ -8,7 +8,7 @@
 //
 //  angular.module('sicklifes')
 //
-//    .factory('$arrayLoopers', function ($rootScope, $textManipulator, $objectUtils, $localStorage, $managersService, $apiFactory, $scoringLogic) {
+//    .factory('$arrayLoopers', function ($rootScope, textManipulator, $objectUtils, $localStorage, $managersService, apiFactory, $scoringLogic) {
 //
 //      var arrayLoopers = {};
 //

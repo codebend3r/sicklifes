@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leadersCtrl', function ($scope, $state, $stateParams, $localStorage, $updateDataUtils, $rootScope, $momentService, $apiFactory, $textManipulator) {
+    .controller('leadersCtrl', function ($scope, $state, $stateParams, $localStorage, updateDataUtils, $rootScope, momentService, apiFactory, textManipulator) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -21,7 +21,7 @@
        */
       $scope.updateLeaders = function () {
 
-        $updateDataUtils.updateCoreData(function () {
+        updateDataUtils.updateCoreData(function () {
           $scope.updateLeadersFromHTTP(mapLeagueLeaders);
         });
 
@@ -63,7 +63,7 @@
             rank: data.ranking_tie ? 'T' + data.ranking : data.ranking,
             goals: data.stat,
             logo: data.team.logos.small,
-            playerName: $textManipulator.formattedFullName(data.player.first_name, data.player.last_name),
+            playerName: textManipulator.formattedFullName(data.player.first_name, data.player.last_name),
             teamName: data.team.full_name
           };
 
@@ -80,7 +80,7 @@
           saveObject.leagues = {};
           saveObject.leagues[$stateParams.leagueName] = {
             goalLeaders: $scope.leagueLeaders,
-            _lastSyncedOn: $momentService.syncDate()
+            _lastSyncedOn: momentService.syncDate()
           };
 
           if ($rootScope.scoringLeaders) {
@@ -115,7 +115,7 @@
 
         if (angular.isDefined(data.leagues)
           && angular.isDefined(data.leagues[$stateParams.leagueName])
-          && $momentService.isHoursAgo(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
+          && momentService.isHoursAgo(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
 
           console.log('-- data is too old --');
           //$scope.updateLeadersFromHTTP(mapLeagueLeaders);
@@ -162,7 +162,7 @@
 
         } else {
 
-          $apiFactory.getApiData('scoringLeaders')
+          apiFactory.getApiData('scoringLeaders')
             .then(loadData);
 
         }

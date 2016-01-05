@@ -20,6 +20,14 @@
           cleanLogs = cleanLogs || false;
 
           m._lastSyncedOn = momentService.syncDate();
+
+          m.seriCount = 0;
+          m.ligaCount = 0;
+          m.eplCount = 0;
+          m.chlgCount = 0;
+          m.euroCount = 0;
+          m.wildCardCount = 0;
+
           m.totalGoals = 0;
           m.totalPoints = 0;
           m.domesticGoals = 0;
@@ -48,6 +56,8 @@
           p.domesticGoals = 0;
           p.clGoals = 0;
           p.eGoals = 0;
+          p.gameLogs = {};
+          p.leagueSlugs = '';
           return p;
 
         },

@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leaguesCtrl', function ($scope, $stateParams, $state, $apiFactory, $localStorage, $location, $http, $updateDataUtils, $momentService, $rootScope, $textManipulator, $fireBaseService) {
+    .controller('leaguesCtrl', function ($scope, $rootScope, $stateParams, $state, $localStorage, $location, $http, apiFactory, updateDataUtils, momentService, textManipulator, fireBaseService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -41,34 +41,34 @@
        */
       $scope.allLeagues = [
         {
-          name: $textManipulator.leagueLongNames.liga,
+          name: textManipulator.leagueLongNames.liga,
           source: null,
           slug: 'liga',
-          img: $textManipulator.leagueImages.liga
+          img: textManipulator.leagueImages.liga
         },
         {
-          name: $textManipulator.leagueLongNames.epl,
+          name: textManipulator.leagueLongNames.epl,
           source: null,
           slug: 'epl',
-          img: $textManipulator.leagueImages.epl
+          img: textManipulator.leagueImages.epl
         },
         {
-          name: $textManipulator.leagueLongNames.seri,
+          name: textManipulator.leagueLongNames.seri,
           source: null,
           slug: 'seri',
-          img: $textManipulator.leagueImages.seri
+          img: textManipulator.leagueImages.seri
         },
         {
-          name: $textManipulator.leagueLongNames.chlg,
+          name: textManipulator.leagueLongNames.chlg,
           source: null,
           slug: 'chlg',
-          img: $textManipulator.leagueImages.chlg
+          img: textManipulator.leagueImages.chlg
         },
         {
-          name: $textManipulator.leagueLongNames.euro,
+          name: textManipulator.leagueLongNames.euro,
           source: null,
           slug: 'uefa',
-          img: $textManipulator.leagueImages.euro
+          img: textManipulator.leagueImages.euro
         }
       ];
 
@@ -133,7 +133,7 @@
 
         console.log('leaguesCtrl --> updateTablesFromHTTP');
 
-        $updateDataUtils.updateLeagueTables()
+        updateDataUtils.updateLeagueTables()
           .then(callback);
 
       };
