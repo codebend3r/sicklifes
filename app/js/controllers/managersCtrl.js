@@ -66,11 +66,7 @@
       var checkForWildCard = function (player, manager) {
 
         // if player is not dropped then count on active roster
-        if (player.status !== 'dropped'
-          && angular.isDefined(manager)
-          || player.playedInChlgGames
-          || player.playedInEuroGames) {
-
+        if (player.status !== 'dropped' && angular.isDefined(manager) && (player.playedInChlgGames || player.playedInEuroGames)) {
           if (!player.playedInLigaGames && !player.playedInEPLGames && !player.playedInSeriGames) {
             manager.wildCardCount += 1;
           }
@@ -112,6 +108,12 @@
 
         _.each($scope.selectedManager.players, function (player) {
           checkForWildCard(player, $scope.selectedManager);
+          if (player.leagueName === 'LA LIGA') {
+            player.leagueName = 'LIGA';
+          }
+          if (player.leagueName === 'SERI A' || player.leagueName === 'SERIE A') {
+            player.leagueName = 'SERI';
+          }
         });
 
         var fixPickNumber = false;

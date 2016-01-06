@@ -11,9 +11,9 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat='game in list | limitTo: 30'>
+    <tr ng-repeat='game in list | limitTo: 30' ng-class="{transfer: isTransfer(tableParams.player, game), active: !isTransfer(tableParams.player, game)}">
       <td>{{game.alignment}} {{game.vsTeam}}</td>
-      <td>{{game.goalsScored}}</td>
+      <td>{{game.goals}}</td>
       <td>{{game.shots}}</td>
       <td>{{game.shotsOnGoal}}</td>
       <td>{{game.result}} {{game.finalScore}}</td>
@@ -35,7 +35,7 @@
   <tbody>
     <tr ng-repeat='game in list | limitTo: 30'>
       <td>{{game.alignment}} {{game.vsTeam}}</td>
-      <td>{{game.goalsScored}}</td>
+      <td>{{game.goals}}</td>
       <td>{{game.datePlayed}}</td>
     </tr>
   </tbody>

@@ -12,21 +12,20 @@
 
       var statsCorrection = {};
 
-      statsCorrection.correction = {
-
-        chester: {
-          event: {
+      statsCorrection.events = {
+        seri: {
+          game: {
+            leagueSlug: 'seri',
             gameId: 28151164,
             playerId: 18403,
+            statType: 'goals',
             goals: 1
           }
         },
-        frank: {},
-        justin: {},
-        joe: {},
-        mike: {},
-        dan: {}
-
+        epl: {},
+        liga: {},
+        chlg: {},
+        euro: {}
       };
 
       return statsCorrection;

@@ -30,8 +30,37 @@ h4 {
   }
 }
 
-table.table tr td {
-  vertical-align: middle;
+table.table {
+  tr {
+    &.active {
+      &:first-child {
+        border-top: 2px solid red;
+        color: green;
+        font-weight: bold;
+      }
+      &:last-child {
+        border-top: 2px solid red;
+        color: green;
+        font-weight: bold;
+      }
+    }
+    &.transfer {
+      opacity: 0.6;
+      &:first-child {
+        border-top: 2px solid red;
+        color: green;
+        font-weight: bold;
+      }
+      &:last-child {
+        border-top: 2px solid red;
+        color: green;
+        font-weight: bold;
+      }
+    }
+    td {
+      vertical-align: middle;
+    }
+  }
 }
 
 .vertical-center {
@@ -42,13 +71,14 @@ table.table tr td {
 }
 
 h3.manager-name {
-  display: inline-block;
   color: $textColour;
-  font-size: 38px;
-  width: 40%;
+  font-size: 18px;
   margin: 0;
-  text-decoration: underline;
   padding: 10px 0;
+  span {
+    font-size: 18px;
+    font-weight: bold;
+  }
 }
 
 .master-container {

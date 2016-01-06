@@ -16,6 +16,7 @@
 
       <h1 class='player-name'>{{player.playerName}}</h1>
       <h3 class='player-team'>{{player.teamName}}</h3><br/>
+      <h3 class='manager-name'>Manager Name: <span>{{matchingManager.managerName}}</span></h3><br/>
       <p class='player-info'><span class='player-prop'>GOALS: </span><span>{{player.goals}}</span></p>
       <p class='player-info'><span class='player-prop'>POINTS: </span><span>{{player.points}}</span></p>
       <p ng-if='player.leagueName' class='player-info'><span class='player-prop'>DOMESTIC LEAGUE:</span> {{player.leagueName}}</p>
@@ -34,14 +35,14 @@
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 
-  <custom-table ng-if='player.ligaCompleteLog.length > 0' table-body-template='game-log' list='player.ligaCompleteLog' table-header='tableHeader' league-img='leagueImages.liga' table-name='La Liga Game Logs'></custom-table>
+  <custom-table ng-if='player.gameLogs.ligaCompleteLog.length > 0' table-body-template='game-log' list='player.gameLogs.ligaCompleteLog' table-params='{player: player}' league-img='leagueImages.liga' table-name='La Liga Game Logs'></custom-table>
 
-  <custom-table ng-if='player.eplCompleteLog.length > 0' table-body-template='game-log' list='player.eplCompleteLog' table-header='tableHeader' league-img='leagueImages.epl' table-name='EPL Game Logs'></custom-table>
+  <custom-table ng-if='player.gameLogs.eplCompleteLog.length > 0' table-body-template='game-log' list='player.gameLogs.eplCompleteLog' table-params='{player: player}' league-img='leagueImages.epl' table-name='EPL Game Logs'></custom-table>
 
-  <custom-table ng-if='player.seriCompleteLog.length > 0' table-body-template='game-log' list='player.seriCompleteLog' table-header='tableHeader' league-img='leagueImages.seri' table-name='Seri A Game Logs'></custom-table>
+  <custom-table ng-if='player.gameLogs.seriCompleteLog.length > 0' table-body-template='game-log' list='player.gameLogs.seriCompleteLog' table-params='{player: player}' league-img='leagueImages.seri' table-name='Seri A Game Logs'></custom-table>
 
-  <custom-table ng-if='player.chlgCompleteLogs.length > 0' table-body-template='game-log' list='player.chlgCompleteLogs' table-header='tableHeader' league-img='leagueImages.chlg' table-name='Champions League Game Logs'></custom-table>
+  <custom-table ng-if='player.gameLogs.chlgCompleteLogs.length > 0' table-body-template='game-log' list='player.gameLogs.chlgCompleteLogs' table-params='{player: player}' league-img='leagueImages.chlg' table-name='Champions League Game Logs'></custom-table>
 
-  <custom-table ng-if='player.euroCompleteLogs.length > 0' table-body-template='game-log' list='player.euroCompleteLogs' table-header='tableHeader' league-img='leagueImages.euro' table-name='Euro League Game Logs'></custom-table>
+  <custom-table ng-if='player.gameLogs.euroCompleteLogs.length > 0' table-body-template='game-log' list='player.gameLogs.euroCompleteLogs' table-params='{player: player}' league-img='leagueImages.euro' table-name='Euro League Game Logs'></custom-table>
 
 </div>

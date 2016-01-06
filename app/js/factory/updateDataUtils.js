@@ -134,7 +134,10 @@
           apiFactory.getPlayerProfile('soccer', player.id)
             .then(arrayMappers.playerInfo.bind(this, player))
             .then(arrayMappers.playerMapPersonalInfo.bind(this, player))
-            .then(arrayMappers.playerGamesLog.bind(this, { player: player, manager: manager }))
+            .then(arrayMappers.playerGamesLog.bind(this, {
+              player: player,
+              manager: manager
+            }))
             .then(function (result) {
 
               // TODO make function available in services

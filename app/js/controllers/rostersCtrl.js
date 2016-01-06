@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, $arrayMappers, momentService, textManipulator, $objectUtils, updateDataUtils) {
+    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, textManipulator, objectUtils, updateDataUtils) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -64,7 +64,7 @@
 
         console.log('$stateParams.teamId:', $stateParams.teamId);
         console.log('$stateParams.leagueName:', $stateParams.leagueName);
-        console.log('playersIndex:', playersIndex);
+        //console.log('playersIndex:', playersIndex);
 
         if (angular.isDefined($stateParams.teamId) && angular.isDefined($stateParams.leagueName)) {
 
@@ -102,50 +102,62 @@
 
               _.each(result.data, function (player) {
 
-                if (angular.isDefined(playersIndex) && angular.isDefined(playersIndex[player.id]) && !Array.isArray(playersIndex)) {
+                //if (angular.isDefined(playersIndex) && angular.isDefined(playersIndex[player.id]) && !Array.isArray(playersIndex)) {
+                //
+                //  var indexPlayer = playersIndex[player.id];
+                //
+                //  $scope.players.push(indexPlayer);
+                //
+                //  numberOfRequests += 1;
+                //
+                //  if (numberOfRequests === numberOfPlayers) {
+                //    $rootScope.loading = false;
+                //  }
+                //
+                //} else {
 
-                  var indexPlayer = playersIndex[player.id];
+                var matchingManager = null;
+                player = objectUtils.playerResetGoalPoints(player);
 
-                  $scope.players.push(indexPlayer);
+                _.each($rootScope.managersData.data, function (manager) {
 
-                  numberOfRequests += 1;
-
-                  if (numberOfRequests === numberOfPlayers) {
-                    $rootScope.loading = false;
+                  if (!angular.isUndefinedOrNull(manager.players[player.id])) {
+                    console.log('manager found', manager.managerName);
+                    matchingManager = manager;
                   }
 
-                } else {
+                });
 
-                  var currentPlayer = $objectUtils.playerResetGoalPoints({});
+                apiFactory.getPlayerProfile('soccer', player.id)
+                  .then(function (playerResult) {
+                    player.playerName = playerResult.data.full_name;
+                    return arrayMappers.playerInfo(player, playerResult);
+                  })
+                  //.then(arrayMappers.playerInfo.bind(this, player))
+                  .then(arrayMappers.playerMapPersonalInfo.bind(this, player))
+                  .then(arrayMappers.playerGamesLog.bind(this, {
+                    player: player,
+                    manager: matchingManager
+                  }))
+                  .then(function (result) {
 
-                  apiFactory.getPlayerProfile('soccer', player.id)
-                    .then(function (playerResult) {
-                      currentPlayer.playerName = playerResult.data.full_name;
-                      currentPlayer.id = player.id;
-                      return $arrayMappers.playerInfo(currentPlayer, playerResult);
-                    })
-                    .then($arrayMappers.playerMapPersonalInfo.bind(this, currentPlayer))
-                    .then($arrayMappers.playerGamesLog.bind(this, {
-                      player: currentPlayer,
-                      manager: null
-                    }))
-                    .then(function (result) {
+                    player = result;
+                    player._lastSyncedOn = momentService.syncDate();
 
-                      currentPlayer = result;
-                      currentPlayer._lastSyncedOn = momentService.syncDate();
+                    $scope.players.push(player);
 
-                      $scope.players.push(currentPlayer);
+                    numberOfRequests += 1;
 
-                      numberOfRequests += 1;
+                    console.log('numberOfRequests', numberOfRequests);
 
-                      if (numberOfRequests === numberOfPlayers) {
-                        $rootScope.loading = false;
-                        $scope.saveTeamToPlayerIndex($scope.players);
-                      }
+                    if (numberOfRequests === numberOfPlayers) {
+                      $rootScope.loading = false;
+                      //$scope.saveTeamToPlayerIndex($scope.players);
+                    }
 
-                    });
+                  });
 
-                }
+                //}
 
               });
 

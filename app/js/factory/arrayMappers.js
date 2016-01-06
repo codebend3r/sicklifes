@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('arrayMappers', function ($rootScope, $q, textManipulator, scoringLogic, objectUtils, momentService, arrayFilter, apiFactory) {
+    .factory('arrayMappers', function ($rootScope, $q, textManipulator, scoringLogic, objectUtils, momentService, arrayFilter, apiFactory, statsCorrection) {
 
       var arrayMapper = {};
 
@@ -125,14 +125,13 @@
        */
       arrayMapper.playerMapPersonalInfo = function (player, result) {
 
-        //console.log('playerMapPersonalInfo > result', result);
-
         player.position = result.data.position;
         player.pos = result.data.position_abbreviation;
         player.weight = result.data.weight;
         player.height = result.data.height_feet + '\'' + result.data.height_inches;
         player.birthdate = result.data.birthdate;
         player.birthplace = result.data.birth_city + ', ' + result.data.birth_country;
+        player.teamId = result.data.team.id;
         player.teamName = result.data.team.full_name;
         player.teamLogo = result.data.team.logos.large;
 
@@ -173,16 +172,14 @@
                 player: player,
                 manager: manager
               }))
-              .filter(arrayFilter.filterAfterDate)
+              .filter(arrayFilter.filterAfterDate);
+
+            player.gameLogs.ligaFilteredGameLog = player.gameLogs.ligaCompleteLog
+              .filter(arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMapper.computedPoints.bind(this, {
                 player: player,
                 manager: manager
               }));
-
-            player.gameLogs.ligaFilteredGameLog = player.gameLogs.ligaCompleteLog
-              .filter(arrayFilter.filterOnValidGoals.bind(this, player));
-
-            //console.log(player.playerName, player.leagueName, player.ligaCompleteLog);
 
             var foundTeam = _.where($rootScope.leagueTables.liga, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.ligaCompleteLog.length)) {
@@ -217,14 +214,14 @@
                 player: player,
                 manager: manager || null
               }))
-              .filter(arrayFilter.filterAfterDate)
+              .filter(arrayFilter.filterAfterDate);
+
+            player.gameLogs.eplFilteredGameLog = player.gameLogs.eplCompleteLog
+              .filter(arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMapper.computedPoints.bind(this, {
                 player: player,
                 manager: manager
               }));
-
-            player.gameLogs.eplFilteredGameLog = player.gameLogs.eplCompleteLog
-              .filter(arrayFilter.filterOnValidGoals.bind(this, player));
 
             var foundTeam = _.where($rootScope.leagueTables.epl, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.eplCompleteLog.length)) {
@@ -254,14 +251,13 @@
           seriGamesRequest.then(function (result) {
 
             result.data
-              .some(function (game) {
-                if (player.id === 18403 && game.id === 28151164) {
-                  game.goals = 1;
-                  console.log('adjustment:', game.goals);
-                  return true;
-                } else {
-                  return false;
-                }
+              .forEach(function (gameData) {
+                _.each(statsCorrection.events.seri, function (game) {
+                  if (player.id === game.playerId && gameData.id === game.gameId) {
+                    gameData[game.statType] = game.goals;
+                    console.log('stats corrected', game.statType, game.goals);
+                  }
+                });
               });
 
             player.gameLogs.seriCompleteLog = result.data
@@ -270,14 +266,14 @@
                 player: player,
                 manager: manager || null
               }))
-              .filter(arrayFilter.filterAfterDate)
+              .filter(arrayFilter.filterAfterDate);
+
+            player.gameLogs.seriFilteredGameLog = player.gameLogs.seriCompleteLog
+              .filter(arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMapper.computedPoints.bind(this, {
                 player: player,
                 manager: manager
               }));
-
-            player.gameLogs.seriFilteredGameLog = player.gameLogs.seriCompleteLog
-              .filter(arrayFilter.filterOnValidGoals.bind(this, player));
 
             var foundTeam = _.where($rootScope.leagueTables.seri, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.seriCompleteLog.length)) {
@@ -313,14 +309,14 @@
                 player: player,
                 manager: manager || null
               }))
-              .filter(arrayFilter.filterAfterDate)
+              .filter(arrayFilter.filterAfterDate);
+
+            player.gameLogs.chlgFilteredGameLog = player.gameLogs.chlgCompleteLogs
+              .filter(arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMapper.computedPoints.bind(this, {
                 player: player,
                 manager: manager
               }));
-
-            player.gameLogs.chlgFilteredGameLog = player.gameLogs.chlgCompleteLogs
-              .filter(arrayFilter.filterOnValidGoals.bind(this, player));
 
             var foundTeam = _.where($rootScope.leagueTables.chlg, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.chlgCompleteLogs.length)) {
@@ -358,14 +354,14 @@
                 player: player,
                 manager: manager || null
               }))
-              .filter(arrayFilter.filterAfterDate)
+              .filter(arrayFilter.filterAfterDate);
+
+            player.gameLogs.euroFilteredGameLog = player.gameLogs.euroCompleteLogs
+              .filter(arrayFilter.filterOnValidGoals.bind(this, player))
               .map(arrayMapper.computedPoints.bind(this, {
                 player: player,
                 manager: manager
               }));
-
-            player.gameLogs.euroFilteredGameLog = player.gameLogs.euroCompleteLogs
-              .filter(arrayFilter.filterOnValidGoals.bind(this, player));
 
             var foundTeam = _.where($rootScope.leagueTables.uefa, { teamName: player.teamName });
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.euroCompleteLogs.length)) {
@@ -445,8 +441,9 @@
       /**
        * @name computedPoints
        * @description takes previous built object
-       * @param manager
-       * @param player
+       * @param dataObj
+       * @param game
+       * @param index
        */
       arrayMapper.computedPoints = function (dataObj, game, index) {
 
@@ -462,19 +459,19 @@
 
             // is in domestic league
             player.domesticGoals += game.goals;
-            manager.domesticGoals += game.goals;
+            if (!angular.isUndefinedOrNull(manager)) manager.domesticGoals += game.goals;
 
           } else if (textManipulator.isChampionsLeague(game.leagueSlug)) {
 
             // is in champions league
             player.clGoals += game.goals;
-            manager.clGoals += game.goals;
+            if (!angular.isUndefinedOrNull(manager)) manager.clGoals += game.goals;
 
           } else if (textManipulator.isEuropaLeague(game.leagueSlug)) {
 
             // is in europa league
             player.eGoals += game.goals;
-            manager.eGoals += game.goals;
+            if (!angular.isUndefinedOrNull(manager)) manager.eGoals += game.goals;
 
           }
 
@@ -482,13 +479,13 @@
           player.goals += game.goals;
 
           // increment goals for the manager
-          manager.totalGoals += game.goals;
+          if (!angular.isUndefinedOrNull(manager)) manager.totalGoals += game.goals;
 
           // increment points
           player.points += points;
 
           // manager total points
-          manager.totalPoints += points;
+          if (!angular.isUndefinedOrNull(manager)) manager.totalPoints += points;
 
         }
 
@@ -519,7 +516,8 @@
         gameMapsObj.shots = game.shots || 0;
         gameMapsObj.shotsOnGoal = game.shots_on_goal || 0;
         gameMapsObj.minutesPlayed = game.minutes_played || 0;
-        gameMapsObj.teamName = dataObj.player.teamName;
+        gameMapsObj.teamName = game.team.full_name;
+        gameMapsObj.teamId = game.team.id;
         gameMapsObj.teamLogo = dataObj.player.teamLogo;
         gameMapsObj.datePlayed = momentService.goalLogDate(game.box_score.event.game_date);
         gameMapsObj.originalDate = game.box_score.event.game_date;

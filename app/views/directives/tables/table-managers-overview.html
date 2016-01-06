@@ -19,7 +19,9 @@
       </div>
     </td>
     <td class="bold small-text">
-      <div class="vertical-center"><img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;{{player.teamName}}</div>
+      <div class="vertical-center">
+        <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a ui-sref="roster({leagueName: player.leagueName.toLowerCase(), teamId: player.teamId})">{{player.teamName}}</a>
+      </div>
     </td>
     <td class="small-text"><div class="vertical-center">{{player.leagueName}}</div></td>
     <td><div class="vertical-center">{{player.goals}}</div></td>

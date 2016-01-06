@@ -126,11 +126,11 @@
          *
          */
         leagueShortNames: {
-          liga: 'LA LIGA',
+          liga: 'LIGA',
           epl: 'EPL',
-          seri: 'SERIE A',
-          chlg: 'CHAMPIONS',
-          euro: 'EUROPA'
+          seri: 'SERI',
+          chlg: 'CHLG',
+          euro: 'EURO'
         },
 
         /**
