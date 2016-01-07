@@ -84,8 +84,17 @@
         $rootScope.loading = false;
 
         $scope.selectedManager = $rootScope.managersData.data[$stateParams.managerId];
+        $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog
+          .filter(function (log) {
+            return log.goals;
+          })
+          .map(function (log, index) {
+            log.date = new Date(log.datePlayed);
+            console.log(index, log.date);
+            return log;
+          });
+
         $scope.selectedManagerName = $rootScope.selectedManager.managerName;
-        $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog;
 
         $rootScope.lastSyncDate = $scope.selectedManager._lastSyncedOn;
         $rootScope.source = 'firebase';
@@ -104,14 +113,14 @@
 
         }
 
-        $scope.selectedManager.filteredMonthlyGoalsLog
-          .filter(function (log) {
-            return log.goals;
-          })
-          .map(function (log) {
-            log.date = new Date(log.datePlayed);
-            return log;
-          });
+        // $scope.selectedManager.filteredMonthlyGoalsLog = $scope.selectedManager.filteredMonthlyGoalsLog
+        //   .filter(function (log) {
+        //     return log.goals;
+        //   })
+        //   .map(function (log) {
+        //     log.date = new Date(log.datePlayed);
+        //     return log;
+        //   });
 
         $scope.selectedManager.wildCardCount = 0;
 

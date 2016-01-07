@@ -30,7 +30,43 @@ h4 {
   }
 }
 
+@-webkit-keyframes fadeIn {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  80% { opacity: 0.9; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  80% { opacity: 0.9; }
+  100% { opacity: 1; }
+}
+
 table.table {
+
+  /* make keyframes that tell the start state and the end state of our object */
+
+  &.fade-in {
+
+    // opacity: 0;
+    // -webkit-animation-name: fadeIn;
+    // -webkit-animation-duration: 1s;
+    // animation-name: fadeIn;
+    // animation-duration: 1s;
+    //
+    // @for $item from 1 through 40 {
+    //   &:nth-child(#{$item}) {
+    //     animation-delay: #{$item * 0.2}s;
+    //   }
+    // }
+
+  }
   tr {
     &.active {
     }

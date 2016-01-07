@@ -156,6 +156,7 @@
       .pipe($.sass({
         outputStyle: 'expanded'
       }))
+      .pipe($.plumber())
       .pipe(gulp.dest(config.app + '/css/'))
       .pipe($.size());
 

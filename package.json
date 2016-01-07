@@ -19,6 +19,7 @@
     "gulp-imagemin": "^2.3.0",
     "gulp-load-plugins": "^0.6.0",
     "gulp-ng-annotate": "^1.1.0",
+    "gulp-plumber": "^1.0.1",
     "gulp-rev": "^4.0.0",
     "gulp-sass": "^0.7.3",
     "gulp-size": "^1.1.0",
