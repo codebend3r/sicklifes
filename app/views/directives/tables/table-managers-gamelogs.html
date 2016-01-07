@@ -14,32 +14,32 @@
   </thead>
 
   <tbody ng-if="tableParams.goalsOnlyFilterOn">
-  <tr ng-repeat="player in list | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 50">
+  <tr ng-repeat="log in list | filter: {goals: '!0'} | orderBy: '-datePlayed' | limitTo: 50">
     <td>
-      <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+      <img width="40" height="40" ng-src="{{log.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: log.id})">{{log.playerName}}</a>
     </td>
-    <td>{{player.alignment}} {{player.vsTeam}}</td>
-    <td>{{player.goalsScored}}</td>
-    <td>{{player.shots}}</td>
-    <td>{{player.shotsOnGoal}}</td>
-    <td>{{player.minutesPlayed}}mins</td>
-    <td>{{player.result}} {{player.finalScore}}</td>
-    <td>{{player.datePlayed}}</td>
+    <td>{{log.alignment}} {{log.vsTeam}}</td>
+    <td>{{log.goals}}</td>
+    <td>{{log.shots}}</td>
+    <td>{{log.shotsOnGoal}}</td>
+    <td>{{log.minutesPlayed}}mins</td>
+    <td>{{log.result}} {{log.finalScore}}</td>
+    <td>{{log.datePlayed | date:'shortDate'}}</td>
   </tr>
   </tbody>
 
   <tbody ng-if="!tableParams.goalsOnlyFilterOn">
-  <tr ng-repeat="player in list | orderBy: '-datePlayed' | limitTo: 50">
+  <tr ng-repeat="log in list | orderBy: '-datePlayed' | limitTo: 50">
     <td>
-      <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+      <img width="40" height="40" ng-src="{{log.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: log.id})">{{log.playerName}}</a>
     </td>
-    <td>{{player.alignment}} {{player.vsTeam}}</td>
-    <td>{{player.goalsScored}}</td>
-    <td>{{player.shots}}</td>
-    <td>{{player.shotsOnGoal}}</td>
-    <td>{{player.minutesPlayed}}mins</td>
-    <td>{{player.result}} {{player.finalScore}}</td>
-    <td>{{player.datePlayed}}</td>
+    <td>{{log.alignment}} {{log.vsTeam}}</td>
+    <td>{{log.goals}}</td>
+    <td>{{log.shots}}</td>
+    <td>{{log.shotsOnGoal}}</td>
+    <td>{{log.minutesPlayed}}mins</td>
+    <td>{{log.result}} {{log.finalScore}}</td>
+    <td>{{log.datePlayed | date:'shortDate'}}</td>
   </tr>
   </tbody>
 
@@ -57,24 +57,24 @@
   </thead>
 
   <tbody ng-if="tableParams.goalsOnlyFilterOn">
-  <tr ng-repeat="player in list | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 50">
+  <tr ng-repeat="log in list | filter: {goals: '!0'} | orderBy: '-datePlayed' | limitTo: 50">
     <td>
-      <a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+      <a class="bold" ui-sref="playerDetails({playerId: log.id})">{{log.playerName}}</a>
     </td>
-    <td class="small-text">{{player.alignment}} {{player.vsTeam}}</td>
-    <td>{{player.goalsScored}}</td>
-    <td class="small-text">{{player.datePlayed}}</td>
+    <td class="small-text">{{log.alignment}} {{log.vsTeam}}</td>
+    <td>{{log.goals}}</td>
+    <td class="small-text">{{log.datePlayed | date:'shortDate'}}</td>
   </tr>
   </tbody>
 
   <tbody ng-if="!tableParams.goalsOnlyFilterOn">
-  <tr ng-repeat="player in list | orderBy: '-datePlayed' | limitTo: 30">
+  <tr ng-repeat="log in list | orderBy: '-datePlayed' | limitTo: 30">
     <td>
-      <a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+      <a class="bold" ui-sref="playerDetails({playerId: log.id})">{{log.playerName}}</a>
     </td>
-    <td class="small-text">{{player.alignment}} {{player.vsTeam}}</td>
-    <td>{{player.goalsScored}}</td>
-    <td class="small-text">{{player.datePlayed}}</td>
+    <td class="small-text">{{log.alignment}} {{log.vsTeam}}</td>
+    <td>{{log.goals}}</td>
+    <td class="small-text">{{log.datePlayed | date:'shortDate'}}</td>
   </tr>
   </tbody>
 

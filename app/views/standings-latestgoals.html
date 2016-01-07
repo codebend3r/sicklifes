@@ -15,17 +15,17 @@
   </thead>
 
   <tbody>
-  <tr ng-repeat="player in combinedLogs | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 30">
+  <tr ng-repeat="log in combinedLogs | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 100">
     <td>
-      <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+      <img width="40" height="40" ng-src="{{log.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: log.id})">{{log.playerName}}</a>
     </td>
-    <td>{{player.managerName}}</td>
-    <td>{{player.goalsScored}}</td>
-    <td>{{player.shots}}</td>
-    <td>{{player.shotsOnGoal}}</td>
-    <td>{{player.result}} {{player.finalScore}}</td>
-    <td>{{player.minutesPlayed}}mins</td>
-    <td>{{player.datePlayed}}</td>
+    <td>{{log.managerName}}</td>
+    <td>{{log.goals}}</td>
+    <td>{{log.shots}}</td>
+    <td>{{log.shotsOnGoal}}</td>
+    <td>{{log.result}} {{log.finalScore}}</td>
+    <td>{{log.minutesPlayed}}mins</td>
+    <td>{{log.date | date:'MM/d/yy'}}</td>
   </tr>
   </tbody>
 
@@ -43,13 +43,13 @@
   </thead>
 
   <tbody>
-  <tr ng-repeat="player in combinedLogs | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 30">
+  <tr ng-repeat="log in combinedLogs | filter: {goalsScored: '!0'} | orderBy: '-datePlayed' | limitTo: 40">
     <td>
-      <a class="bold" ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+      <a class="bold" ui-sref="playerDetails({playerId: log.id})">{{log.playerName}}</a>
     </td>
-    <td>{{player.managerName}}</td>
-    <td>{{player.goalsScored}}</td>
-    <td class="small-text">{{player.datePlayed}}</td>
+    <td>{{log.managerName}}</td>
+    <td>{{log.goals}}</td>
+    <td class="small-text">{{log.date | date:'MM/d/yy'}}</td>
   </tr>
   </tbody>
 

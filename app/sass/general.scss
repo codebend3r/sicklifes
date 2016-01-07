@@ -33,29 +33,9 @@ h4 {
 table.table {
   tr {
     &.active {
-      &:first-child {
-        border-top: 2px solid red;
-        color: green;
-        font-weight: bold;
-      }
-      &:last-child {
-        border-top: 2px solid red;
-        color: green;
-        font-weight: bold;
-      }
     }
     &.transfer {
-      opacity: 0.6;
-      &:first-child {
-        border-top: 2px solid red;
-        color: green;
-        font-weight: bold;
-      }
-      &:last-child {
-        border-top: 2px solid red;
-        color: green;
-        font-weight: bold;
-      }
+      opacity: 0.5;
     }
     td {
       vertical-align: middle;

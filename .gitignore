@@ -1,6 +1,7 @@
 *.log
 *.iml
 .idea
+.brackets.json
 node_modules
 builds/
 design

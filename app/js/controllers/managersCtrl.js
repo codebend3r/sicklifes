@@ -21,7 +21,7 @@
 
       $scope.goalsOnlyFilterOn = true;
 
-      $scope.managersList = [ 'Chester', 'Frank', 'Joe', 'Justin', 'Dan', 'Mike' ];
+      $scope.managersList = ['Chester', 'Frank', 'Joe', 'Justin', 'Dan', 'Mike'];
 
       /**
        * @name changeManager
@@ -103,6 +103,15 @@
           console.log('-- data is up to date --');
 
         }
+
+        $scope.selectedManager.filteredMonthlyGoalsLog
+          .filter(function (log) {
+            return log.goals;
+          })
+          .map(function (log) {
+            log.date = new Date(log.datePlayed);
+            return log;
+          });
 
         $scope.selectedManager.wildCardCount = 0;
 

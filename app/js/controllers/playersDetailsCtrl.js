@@ -115,10 +115,6 @@
         });
 
         apiFactory.getPlayerProfile('soccer', $stateParams.playerId)
-          //.then(function (result) {
-          //  $scope.player.playerName = result.data.full_name;
-          //  return arrayMappers.playerInfo($scope.player, result);
-          //})
           .then(arrayMappers.playerInfo.bind(this, $scope.player))
           .then(arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
           .then(arrayMappers.playerGamesLog.bind(this, {

@@ -43,10 +43,10 @@
           title: 'Latest Goals',
           route: 'standings.latestgoals'
         }/*,
-        {
-          title: 'Charts',
-          route: 'standings.charts'
-        }*/
+         {
+         title: 'Charts',
+         route: 'standings.charts'
+         }*/
       ];
 
       /**
@@ -71,6 +71,16 @@
 
         });
 
+      };
+
+      /**
+       *
+       * @param log
+       * @returns {date}
+       */
+      $scope.theDate = function (log) {
+        console.log(log.datePlayed);
+        return new Date(log.datePlayed);
       };
 
       ////////////////////////////////////////
@@ -188,7 +198,15 @@
         $scope.combinedLogs = [];
 
         _.each($scope.managersData, function (manager) {
-          $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog);
+          console.log('name:', manager.managerName, manager);
+          $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog
+            .filter(function (log) {
+              return log.goals;
+            })
+            .map(function (log) {
+              log.date = new Date(log.datePlayed);
+              return log;
+            }));
           //$scope.combinedLogs = $scope.combinedLogs.concat(manager.monthlyGoalsLog);
         });
 
@@ -207,11 +225,11 @@
 
       };
 
-       $rootScope.$on('MONTH_CHANGED', function(e, month) {
-         console.log('month change detected:', month.monthName);
-         currentMonth = month;
-         //processChart();
-       });
+      $rootScope.$on('MONTH_CHANGED', function (e, month) {
+        console.log('month change detected:', month.monthName);
+        currentMonth = month;
+        //processChart();
+      });
 
       /**
        * @description current month

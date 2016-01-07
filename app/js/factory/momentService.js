@@ -50,7 +50,7 @@
         },
 
         goalLogDate: function (date) {
-          return $moment(new Date(date)).format('MM/DD/YYYY');
+          return $moment(new Date(date)).format('YYYY/MM/DD');
         },
 
         /**
