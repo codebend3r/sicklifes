@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - '0.10'
+  - '0.12'
 sudo: false
 notifications:
   slack: solaryetsofar:oh0tLw34OZvc8WK5t5MgeGKp
@@ -9,8 +9,8 @@ cache:
     - node_modules
     - app/bower_components
 before_script:
-  - 'npm install -g bower gulp'
-  - 'npm install' # install npm packages
-  - 'bower install' # install bower packages
+  - 'npm i -g bower gulp'
+  - 'npm i' # install npm packages
+  - 'bower i' # install bower packages
 after_script:
-  - 'gulp build-GUI' # package the UI
+  - 'npm run release' # package the UI
