@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 09/01/2015
+ * Created by Bouse on 01/07/2016
  */
 
 (function () {
@@ -8,14 +8,13 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $stateParams, $state, arrayFilter, updateDataUtils, $moment, momentService, $localStorage, apiFactory) {
+    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, arrayFilter, updateDataUtils, $moment, momentService, $localStorage, apiFactory) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
       console.log('-- managersCtrl --');
-      console.log('managerId:', $stateParams.managerId);
 
       $rootScope.loading = true;
 
@@ -26,16 +25,12 @@
       /**
        * @name changeManager
        * @description
-       * @param selectedManager
+       * @param selectedManagerName
        */
       $scope.changeManager = function (selectedManagerName) {
-        var params = {
-          managerId: selectedManagerName.toLowerCase()
-        };
-        $rootScope.selectedManager = $rootScope.managersData.data[params.managerId];
-        $state.go($state.current, params, {
-          reload: true
-        });
+        $rootScope.loading = true;
+        $state.go($state.current, { managerId: selectedManagerName.toLowerCase() });
+        $window.location.reload();
       };
 
       /**
@@ -88,13 +83,16 @@
           .filter(function (log) {
             return log.goals;
           })
-          .map(function (log, index) {
+          .map(function (log) {
             log.date = new Date(log.datePlayed);
-            console.log(index, log.date);
             return log;
           });
 
         $scope.selectedManagerName = $rootScope.selectedManager.managerName;
+
+        console.log('-----------------------------');
+        console.log('>', $scope.selectedManagerName);
+        console.log('-----------------------------');
 
         $rootScope.lastSyncDate = $scope.selectedManager._lastSyncedOn;
         $rootScope.source = 'firebase';
@@ -113,25 +111,10 @@
 
         }
 
-        // $scope.selectedManager.filteredMonthlyGoalsLog = $scope.selectedManager.filteredMonthlyGoalsLog
-        //   .filter(function (log) {
-        //     return log.goals;
-        //   })
-        //   .map(function (log) {
-        //     log.date = new Date(log.datePlayed);
-        //     return log;
-        //   });
-
         $scope.selectedManager.wildCardCount = 0;
 
         _.each($scope.selectedManager.players, function (player) {
           checkForWildCard(player, $scope.selectedManager);
-          if (player.leagueName === 'LA LIGA') {
-            player.leagueName = 'LIGA';
-          }
-          if (player.leagueName === 'SERI A' || player.leagueName === 'SERIE A') {
-            player.leagueName = 'SERI';
-          }
         });
 
         var fixPickNumber = false;
@@ -193,8 +176,6 @@
       var init = function () {
 
         console.log('> init');
-
-        console.log('$stateParams.managerId:', $stateParams.managerId);
 
         if (angular.isDefined($rootScope.managersData)) {
 

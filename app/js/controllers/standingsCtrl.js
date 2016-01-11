@@ -228,7 +228,7 @@
       $rootScope.$on('MONTH_CHANGED', function (e, month) {
         console.log('month change detected:', month.monthName);
         currentMonth = month;
-        //processChart();
+        processChart();
       });
 
       /**

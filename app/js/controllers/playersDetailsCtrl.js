@@ -100,19 +100,9 @@
           throw new Error('$stateParams.playerId was not defined, don\'t do that');
         }
 
-        $scope.matchingManager = null;
-
         $scope.player = objectUtils.playerResetGoalPoints($scope.player);
         $scope.player.id = $stateParams.playerId;
-
-        _.each($rootScope.managersData.data, function (manager) {
-
-          if (!angular.isUndefinedOrNull(manager.players[$stateParams.playerId])) {
-            console.log('manager found', manager.managerName);
-            $scope.matchingManager = manager;
-          }
-
-        });
+        $scope.matchingManager = $scope.findPlayerInManagers($stateParams.playerId);
 
         apiFactory.getPlayerProfile('soccer', $stateParams.playerId)
           .then(arrayMappers.playerInfo.bind(this, $scope.player))
@@ -128,7 +118,7 @@
 
             $rootScope.loading = false;
 
-            //$scope.saveToPlayerIndex($stateParams.playerId, $scope.player);
+            //$scope.saveToPlayerIndex($scope.player.id , $scope.player);
 
           });
 

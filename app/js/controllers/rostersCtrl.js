@@ -102,62 +102,62 @@
 
               _.each(result.data, function (player) {
 
-                //if (angular.isDefined(playersIndex) && angular.isDefined(playersIndex[player.id]) && !Array.isArray(playersIndex)) {
-                //
-                //  var indexPlayer = playersIndex[player.id];
-                //
-                //  $scope.players.push(indexPlayer);
-                //
-                //  numberOfRequests += 1;
-                //
-                //  if (numberOfRequests === numberOfPlayers) {
-                //    $rootScope.loading = false;
-                //  }
-                //
-                //} else {
+                console.log('---------------------');
+                console.log('player._lastSyncedOn', player._lastSyncedOn);
+                console.log('angular.isUndefinedOrNull(player._lastSyncedOn)', angular.isUndefinedOrNull(player._lastSyncedOn));
+                console.log('momentService.isPastYesterday(player._lastSyncedOn)', momentService.isPastYesterday(player._lastSyncedOn));
 
-                var matchingManager = null;
-                player = objectUtils.playerResetGoalPoints(player);
+                if (angular.isDefined(playersIndex) && angular.isDefined(playersIndex[player.id]) && !Array.isArray(playersIndex) && (!angular.isUndefinedOrNull(player._lastSyncedOn) && !momentService.isPastYesterday(player._lastSyncedOn))) {
 
-                _.each($rootScope.managersData.data, function (manager) {
+                  console.log('synced data found for', player.full_name);
 
-                  if (!angular.isUndefinedOrNull(manager.players[player.id])) {
-                    console.log('manager found', manager.managerName);
-                    matchingManager = manager;
+                  var indexPlayer = playersIndex[player.id];
+
+                  $scope.players.push(indexPlayer);
+
+                  numberOfRequests += 1;
+
+                  if (numberOfRequests === numberOfPlayers) {
+                    $rootScope.loading = false;
+                    //$scope.saveTeamToPlayerIndex($scope.players);
                   }
 
-                });
+                } else {
 
-                apiFactory.getPlayerProfile('soccer', player.id)
-                  .then(function (playerResult) {
-                    player.playerName = playerResult.data.full_name;
-                    return arrayMappers.playerInfo(player, playerResult);
-                  })
-                  //.then(arrayMappers.playerInfo.bind(this, player))
-                  .then(arrayMappers.playerMapPersonalInfo.bind(this, player))
-                  .then(arrayMappers.playerGamesLog.bind(this, {
-                    player: player,
-                    manager: matchingManager
-                  }))
-                  .then(function (result) {
+                  console.log('new request for', player.full_name);
 
-                    player = result;
-                    player._lastSyncedOn = momentService.syncDate();
+                  var matchingManager = $scope.findPlayerInManagers(player.id);
 
-                    $scope.players.push(player);
+                  player = objectUtils.playerResetGoalPoints(player);
 
-                    numberOfRequests += 1;
+                  apiFactory.getPlayerProfile('soccer', player.id)
+                    .then(function (playerResult) {
+                      player.playerName = playerResult.data.full_name;
+                      return arrayMappers.playerInfo(player, playerResult);
+                    })
+                    //.then(arrayMappers.playerInfo.bind(this, player))
+                    .then(arrayMappers.playerMapPersonalInfo.bind(this, player))
+                    .then(arrayMappers.playerGamesLog.bind(this, {
+                      player: player,
+                      manager: matchingManager
+                    }))
+                    .then(function (result) {
 
-                    console.log('numberOfRequests', numberOfRequests);
+                      player = result;
+                      player._lastSyncedOn = momentService.syncDate();
 
-                    if (numberOfRequests === numberOfPlayers) {
-                      $rootScope.loading = false;
-                      //$scope.saveTeamToPlayerIndex($scope.players);
-                    }
+                      $scope.players.push(player);
 
-                  });
+                      numberOfRequests += 1;
 
-                //}
+                      if (numberOfRequests === numberOfPlayers) {
+                        $rootScope.loading = false;
+                        //$scope.saveTeamToPlayerIndex($scope.players);
+                      }
+
+                    });
+
+                }
 
               });
 

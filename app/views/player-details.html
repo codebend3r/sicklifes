@@ -15,8 +15,8 @@
     <div class='col-md-8 col-sm-8 col-xs-12 manager-jumbotron'>
 
       <h1 class='player-name'>{{player.playerName}}</h1>
-      <h3 class='player-team'>{{player.teamName}}</h3><br/>
-      <h3 class='manager-name'>Manager Name: <span>{{matchingManager.managerName}}</span></h3><br/>
+      <h3 class='player-team'><a ui-sref="roster({leagueName: player.leagueName.toLowerCase(), teamId: player.teamId})">{{player.teamName}}</a></h3><br/>
+      <h3 ng-if="matchingManager !== null" class='manager-name'>Manager Name: <span><a ui-sref="managers.overview({managerId: matchingManager.managerName.toLowerCase()})">{{matchingManager.managerName}}</a></span></h3><br/>
       <p class='player-info'><span class='player-prop'>GOALS: </span><span>{{player.goals}}</span></p>
       <p class='player-info'><span class='player-prop'>POINTS: </span><span>{{player.points}}</span></p>
       <p ng-if='player.leagueName' class='player-info'><span class='player-prop'>DOMESTIC LEAGUE:</span> {{player.leagueName}}</p>

@@ -245,7 +245,7 @@
         $rootScope.$emit('MONTH_CHANGED', month);
       };
 
-      $rootScope.$on('MONTH_CHANGED', function() {
+      $rootScope.$on('MONTH_CHANGED', function () {
         updateAllManagersFilter();
       });
 
@@ -320,7 +320,28 @@
       };
 
       /**
-       * clears all players from every roster
+       * @name findPlayerInManagers
+       * @description looks through all the managers and returns the matching manager if player belong to a manager
+       * @param id
+       * @returns {manager}
+       */
+      $scope.findPlayerInManagers = function (id) {
+
+        var matchingManager = null;
+
+        _.some($rootScope.managersData.data, function (manager) {
+
+          return !angular.isUndefinedOrNull(manager.players[id]) && (matchingManager = manager);
+
+        });
+
+        return matchingManager;
+
+      };
+
+      /**
+       * @resetAllPlayers
+       * @description clears all players from every roster
        */
       $scope.resetAllPlayers = function () {
 

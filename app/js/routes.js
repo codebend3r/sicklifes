@@ -21,7 +21,9 @@
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
       $urlRouterProvider.when('/managers', '/managers/chester/overview');
+      $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
       $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
+
       //$urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview');
 
       $urlRouterProvider.when('/transfers', '/transfers/chester');
@@ -85,12 +87,7 @@
           url: '/managers/:managerId',
           parent: 'app',
           templateUrl: 'views/managers.html',
-          controller: 'managersCtrl',
-          resolve: {
-            managerId: function($stateParams) {
-              return $stateParams.managerId
-            }
-          }
+          controller: 'managersCtrl'
         })
         .state('managers.overview', {
           url: '/overview',
