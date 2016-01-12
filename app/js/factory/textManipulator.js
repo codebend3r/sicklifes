@@ -13,7 +13,7 @@
       var textManipulator = {
 
         /**
-         * returns a string sans accents
+         * @description returns a string sans accents
          */
         stripVowelAccent: function (str) {
           var rExps = [
@@ -39,43 +39,56 @@
         },
 
         /**
-         *
+         * @description
          */
         isDomesticLeague: function (league) {
-          return league === 'liga'.toLocaleLowerCase() || league.toLocaleLowerCase() === 'epl' || league.toLocaleLowerCase() === 'seri';
+          return league.toLocaleLowerCase() === 'liga' || league.toLocaleLowerCase() === 'epl' || league.toLocaleLowerCase() === 'seri';
         },
 
         /**
-         *
+         * @description
          */
         isTournamentLeague: function (league) {
-          return league.toLocaleLowerCase() === 'chlg' || league.toLocaleLowerCase() === 'uefa';
+          return league.toLocaleLowerCase() === 'chlg' || league.toLocaleLowerCase() === 'uefa' || league.toLocaleLowerCase() === 'europa';
         },
 
         /**
-         *
+         * @description
          */
         isChampionsLeague: function (league) {
           return league.toLocaleLowerCase() === 'chlg';
         },
 
         /**
-         *
+         * @description
          */
         isEuropaLeague: function (league) {
           return league.toLocaleLowerCase() === 'uefa' || league.toLocaleLowerCase() === 'europa';
         },
 
         /**
-         *
+         * @description
          */
         isWildCardLeague: function (validLeagues) {
           return ((validLeagues.inChlg || validLeagues.inEuro) && !validLeagues.inLiga && !validLeagues.inEPL && !validLeagues.inSeri);
+        },
+
+        /**
+         * @description
+         */
+        checkForWildCard: function (player, manager) {
+
+          // if player is not dropped then count on active roster
+          if (player.status !== 'dropped' && angular.isDefined(manager) && (player.playedInChlgGames || player.playedInEuroGames)) {
+            if (!player.playedInLigaGames && !player.playedInEPLGames && !player.playedInSeriGames) {
+              manager.wildCardCount += 1;
+            }
+          }
 
         },
 
         /**
-         * unified string formatter for team names
+         * @description unified string formatter for team names
          * @returns {string}
          */
         teamNameFormatted: function (teamStr) {
@@ -92,7 +105,7 @@
         },
 
         /**
-         *
+         * @description
          */
         formattedLeagueName: function (league) {
           league = league.toLocaleLowerCase();
@@ -112,7 +125,7 @@
         },
 
         /**
-         * returns object will full league names
+         * @description returns object will full league names
          */
         leagueLongNames: {
           liga: 'SPANISH PRIMERA DIVISION',
@@ -123,7 +136,7 @@
         },
 
         /**
-         *
+         * @description *
          */
         leagueShortNames: {
           liga: 'LIGA',
@@ -134,7 +147,7 @@
         },
 
         /**
-         * returns image ref
+         * @description returns image ref
          * @type {{liga: string, epl: string, seri: string, chlg: string, euro: string}}
          */
         leagueImages: {
@@ -148,7 +161,7 @@
         },
 
         /**
-         *
+         * @description
          */
         properLeagueName: function (league) {
           league = league.toLocaleLowerCase();
@@ -168,7 +181,7 @@
         },
 
         /**
-         *
+         * @description
          */
         getLeagueByURL: function (url) {
           if (url.contains('liga')) {
@@ -187,7 +200,7 @@
         },
 
         /**
-         *
+         * @description
          * @param result
          * @returns {{}}
          */
@@ -206,7 +219,7 @@
         },
 
         /**
-         *
+         * @description
          */
         result: function (game) {
           var result = '';
@@ -231,7 +244,7 @@
         },
 
         /**
-         *
+         * @description
          */
         validLeagueNamesFormatted: function (result) {
           var l = '',
@@ -248,7 +261,7 @@
         },
 
         /**
-         *
+         * @description
          */
         getLeagueSlug: function (result) {
 
@@ -266,7 +279,7 @@
         },
 
         /**
-         *
+         * @description 
          */
         finalScore: function (game) {
           var final = '';

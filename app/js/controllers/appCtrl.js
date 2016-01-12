@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, fireBaseService, arrayMappers, momentService, $location, objectUtils, arrayFilter, textManipulator) {
+    .controller('appCtrl', function ($scope, $rootScope, fireBaseService, arrayMappers, momentService, $location, objectUtils, arrayFilter, textManipulator, scoringLogic) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -33,7 +33,7 @@
 
         _.each($rootScope.managersData.data, function (manager) {
 
-          //manager = objectUtils.managerResetGoalPoints(manager);
+          var points;
 
           var filteredGames = _.chain(manager.filteredMonthlyGoalsLog)
             .flatten(true)
@@ -42,28 +42,36 @@
 
           manager = objectUtils.managerResetGoalPoints(manager);
 
-          _.map(filteredGames, function (data) {
+          filteredGames = _.map(filteredGames, function (data) {
 
-            manager.totalGoals += data.goalsScored;
+            points = scoringLogic.calculatePoints(data.goals, data.leagueSlug);
+
+            data.points = points;
+
+            manager.totalGoals += data.goals;
             manager.totalPoints += data.points;
 
             if (textManipulator.isDomesticLeague(data.leagueSlug)) {
-              manager.domesticGoals += data.goalsScored;
-            } else if (textManipulator.isChampionsLeague(data.leagueSlug)) {
-              manager.clGoals += data.goalsScored;
-            } else if (textManipulator.isEuropaLeague(data.leagueSlug)) {
-              manager.eGoals += data.goalsScored;
+              manager.domesticGoals += data.goals;
             }
 
-            //console.log(manager.managerName, 'totalPoints', manager.totalPoints);
+            if (textManipulator.isChampionsLeague(data.leagueSlug)) {
+              manager.clGoals += data.goals;
+            }
+
+            if (textManipulator.isEuropaLeague(data.leagueSlug)) {
+              manager.eGoals += data.goals;
+            }
 
             manager.chartData.push({
               points: manager.totalPoints,
-              goals: manager.goalsScored,
+              goals: manager.goals,
               stepPoints: data.points,
-              stepGoals: data.goalsScored,
+              stepGoals: data.goals,
               date: data.datePlayed
             });
+
+            return data;
 
           });
 
@@ -73,7 +81,7 @@
 
             _.each(filteredGames, function (data) {
               if (player.playerName === data.playerName) {
-                player.goals += data.goalsScored;
+                player.goals += data.goals;
                 player.points += data.points;
               }
             });

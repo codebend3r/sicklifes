@@ -35,15 +35,15 @@
         {
           title: 'Latest Goals',
           route: 'standings.latestgoals'
-        },
-        {
-          title: 'Charts',
-          route: 'standings.charts'
         }
+        // {
+        //   title: 'Charts',
+        //   route: 'standings.charts'
+        // }
       ];
 
       /**
-       * @description function to check
+       * @description function to check current month
        */
       $scope.isCurrentMonth = function (selectedMonth, date) {
         var gameDate = momentService.getDate(date),
@@ -109,7 +109,6 @@
         $scope.combinedLogs = [];
 
         _.each($scope.managersData, function (manager) {
-          console.log('name:', manager.managerName, manager);
           $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog
             .filter(function (log) {
               return log.goals;
@@ -118,7 +117,6 @@
               log.date = new Date(log.datePlayed);
               return log;
             }));
-          //$scope.combinedLogs = $scope.combinedLogs.concat(manager.monthlyGoalsLog);
         });
 
         // $scope.startFireBase(function () {

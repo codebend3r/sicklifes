@@ -21,6 +21,8 @@
 
   ])
 
+  angular.module('sicklifes')
+  
     .constant('$moment', moment)
 
 
