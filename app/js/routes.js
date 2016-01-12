@@ -129,7 +129,8 @@
         })
         .state('standings.charts', {
           url: '/charts',
-          templateUrl: 'views/standings-charts.html'
+          templateUrl: 'views/standings-charts.html',
+          controller: 'chartsCtrl'
         })
         .state('admin', {
           url: '/admin',
