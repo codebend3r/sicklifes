@@ -6,8 +6,6 @@
 
   'use strict';
 
-  console.log('chartsCtrl.js');
-
   angular.module('sicklifes')
 
     .controller('chartsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $stateParams, fireBaseService, updateDataUtils, momentService, $localStorage) {
@@ -53,16 +51,6 @@
 
         });
 
-      };
-
-      /**
-       * @description
-       * @param log
-       * @returns {date}
-       */
-      $scope.theDate = function (log) {
-        console.log(log.datePlayed);
-        return new Date(log.datePlayed);
       };
 
       ////////////////////////////////////////
@@ -156,14 +144,20 @@
        */
       var loadData = function (result) {
 
-        console.log('loadData');
+        console.log('charts load data');
         $rootScope.loading = false;
 
       };
 
+      $rootScope.$on('STANDINGS_READY', function (e) {
+
+        //loadData($rootScope.managersData);
+
+      });
+
       $rootScope.$on('MONTH_CHANGED', function (e, month) {
-        console.log('month change detected:', month.monthName);
-        currentMonth = month;
+        console.log('charts | month changed', month.monthName);
+        //currentMonth = month;
         //processChart();
       });
 
@@ -286,18 +280,6 @@
       };
 
       /**
-       * @description when managers http data is loaded
-       * @param managerData
-       */
-      var onManagersRequestFinished = function (managerData) {
-
-        console.log('onManagersRequestFinished');
-        $rootScope.loading = false;
-        $scope.saveRoster();
-
-      };
-
-      /**
        * @description init
        */
       var init = function () {
@@ -324,8 +306,6 @@
 
       };
 
-      console.log('start charts!');
-      init();
 
     });
 

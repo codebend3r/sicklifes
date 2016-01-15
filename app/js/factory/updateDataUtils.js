@@ -132,20 +132,21 @@
           player = objectUtils.playerResetGoalPoints(player);
 
           apiFactory.getPlayerProfile('soccer', player.id)
-            .then(arrayMappers.playerInfo.bind(this, player))
-            .then(arrayMappers.playerMapPersonalInfo.bind(this, player))
+            .then(arrayMappers.playerInfo.bind(this, player), function() { console.log('fail 1') })
+            .then(arrayMappers.playerMapPersonalInfo.bind(this, player), function() { console.log('fail 2') })
             .then(arrayMappers.playerGamesLog.bind(this, {
               player: player,
               manager: manager
-            }))
+            }), function() { console.log('fail 3') })
             .then(function (result) {
 
               // TODO make function available in services
-              //console.log(result);
-              //$scope.saveToIndex(player.playerId, player);
+              //console.log(result)
 
               current += 1;
               //$rootScope.percentage = Math.round((current / total) * 100);
+              console.log(current, total, player.playerName);
+              //console.log(current);
 
               if (current === total) {
                 if (typeof cb === 'function') {
@@ -154,7 +155,7 @@
                   throw new Error('cb parameter is not type function');
                 }
               }
-            });
+            }, function() { console.log('fail 4') });
 
         });
 

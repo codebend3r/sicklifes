@@ -166,6 +166,10 @@
           ligaGamesRequest = apiFactory.getPlayerLog('liga', player.id);
           ligaGamesRequest.then(function (result) {
 
+            if (player.id === 3747) {
+              console.log(player.playerName);
+            }
+
             player.gameLogs.ligaCompleteLog = result.data
               .filter(arrayFilter.filterOutUndefined)
               .map(arrayMapper.monthlyMapper.bind(this, {
@@ -196,6 +200,8 @@
               delete player.gameLogs.ligaFilteredGameLog;
             }
 
+          }, function() {
+            console.log('LIGA failed', player.playerName);
           });
 
           allPromises.push(ligaGamesRequest);
@@ -238,6 +244,8 @@
               delete player.gameLogs.eplFilteredGameLog;
             }
 
+          }, function() {
+            console.log('EPL failed', player.playerName);
           });
 
           allPromises.push(eplGamesRequest);
@@ -255,7 +263,6 @@
                 _.each(statsCorrection.events.seri, function (game) {
                   if (player.id === game.playerId && gameData.id === game.gameId) {
                     gameData[game.statType] = game.goals;
-                    console.log('stats corrected', game.statType, game.goals);
                   }
                 });
               });
@@ -290,6 +297,8 @@
               delete player.gameLogs.seriFilteredGameLog;
             }
 
+          }, function() {
+            console.log('EPL failed', player.playerName);
           });
 
           allPromises.push(seriGamesRequest);
@@ -334,6 +343,8 @@
               delete player.gameLogs.chlgFilteredGameLog;
             }
 
+          }, function() {
+            console.log('CHLG failed', player.playerName);
           });
 
           allPromises.push(chlgGamesRequest);
@@ -380,6 +391,8 @@
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.euroFilteredGameLog).filter(arrayFilter.filterOutUndefined);
             }
 
+          }, function() {
+            console.log('EURO failed', player.playerName);
           });
 
           allPromises.push(euroGamesRequest);
@@ -388,6 +401,8 @@
 
         $q.all(allPromises).then(function () {
           deferred.resolve(player);
+        }, function() {
+          console.log('FAIL');
         });
 
         return deferred.promise;
@@ -453,7 +468,7 @@
 
         if (textManipulator.acceptedLeague(game.leagueSlug)) {
 
-          points = scoringLogic.calculatePoints(game.goals, game.leagueSlug);
+          points = scoringLogic.calculatePoints(game.goals, game.leagueSlug, game.datePlayed);
 
           if (textManipulator.isDomesticLeague(game.leagueSlug)) {
 
@@ -491,6 +506,16 @@
 
         player.assists += game.assists;
 
+        if (!angular.isUndefinedOrNull(manager)) {
+          manager.chartData.push({
+            points: manager.totalPoints,
+            goals: manager.totalGoals,
+            stepPoints: points,
+            stepGoals: game.goals,
+            date: game.datePlayed
+          });
+        }
+
         return game;
 
       }
@@ -510,7 +535,6 @@
         gameMapsObj.vsTeam = game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name;
         gameMapsObj.leagueSlug = game.box_score.event.league.slug;
         gameMapsObj.goals = game.goals || 0;
-        //gameMapsObj.points = scoringLogic.calculatePoints(gameMapsObj.goals, gameMapsObj.leagueSlug) || scoringLogic.calculatePoints(0, gameMapsObj.leagueSlug);
         gameMapsObj.points = 0;
         gameMapsObj.assists = game.assists || 0;
         gameMapsObj.shots = game.shots || 0;

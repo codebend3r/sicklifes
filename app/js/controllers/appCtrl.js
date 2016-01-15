@@ -31,6 +31,8 @@
        */
       var updateAllManagersFilter = function () {
 
+        console.log('updateAllManagersFilter');
+
         _.each($rootScope.managersData.data, function (manager) {
 
           var points;
@@ -173,6 +175,8 @@
           data: $rootScope.managersData.data
         };
         console.log('saveObject:', saveObject);
+        console.log('saveObject chester.monthlyGoalsLog', saveObject.data.chester.monthlyGoalsLog);
+        console.log('saveObject chester.filteredMonthlyGoalsLog', saveObject.data.chester.filteredMonthlyGoalsLog);
         $scope.saveToFireBase(saveObject, 'managersData');
 
       };

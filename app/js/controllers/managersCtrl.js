@@ -191,7 +191,6 @@
 
         } else {
 
-          //var request = 'managersData/data/' + $stateParams.managerId;
           var request = 'managersData';
 
           apiFactory.getApiData(request)

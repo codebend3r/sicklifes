@@ -95,6 +95,54 @@ $chartColor6: #692cb0;
 
 /////////////////////
 
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  div {
+    display: inline-block;
+    line-height: 30px;
+    height: 30px;
+    vertical-align: middle;
+    padding: 2px 10px;
+    &.manager-chester {
+      circle.manager-circle {
+        fill: $chartColor1;
+      }
+    }
+
+    &.manager-frank {
+      circle.manager-circle {
+        fill: $chartColor2;
+      }
+    }
+
+    &.manager-dan {
+      circle.manager-circle {
+        fill: $chartColor3;
+      }
+    }
+
+    &.manager-justin {
+      circle.manager-circle {
+        fill: $chartColor4;
+      }
+    }
+
+    &.manager-mike {
+      circle.manager-circle {
+        fill: $chartColor5;
+      }
+    }
+
+    &.manager-joe {
+      circle.manager-circle {
+        fill: $chartColor6;
+      }
+    }
+  }
+}
+
 .table {
 
   .manager-row {
