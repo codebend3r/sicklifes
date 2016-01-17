@@ -1,9 +1,9 @@
 $chartColor1: #dd0000;
 $chartColor2: #00b00d;
-$chartColor3: #7482ff;
+$chartColor3: #0D58A8;
 $chartColor4: #00ffd9;
 $chartColor5: #fa6f12;
-$chartColor6: #692cb0;
+$chartColor6: #A35AF2;
 
 /////////////////////
 // FOR CHARTS
@@ -62,33 +62,33 @@ $chartColor6: #692cb0;
     }
   }
   &:nth-child(2) {
-    // frank
-    .ct-line, .ct-point {
-      stroke: $chartColor2;
-    }
-  }
-  &:nth-child(3) {
     // dan
     .ct-line, .ct-point {
       stroke: $chartColor3;
     }
   }
+  &:nth-child(3) {
+    // frank
+    .ct-line, .ct-point {
+      stroke: $chartColor2;
+    }
+  }
   &:nth-child(4) {
+    // joe
+    .ct-line, .ct-point {
+      stroke: $chartColor6;
+    }
+  }
+  &:nth-child(5) {
     // justin
     .ct-line, .ct-point {
       stroke: $chartColor4;
     }
   }
-  &:nth-child(5) {
+  &:nth-child(6) {
     // mike
     .ct-line, .ct-point {
       stroke: $chartColor5;
-    }
-  }
-  &:nth-child(6) {
-    // joe
-    .ct-line, .ct-point {
-      stroke: $chartColor6;
     }
   }
 }

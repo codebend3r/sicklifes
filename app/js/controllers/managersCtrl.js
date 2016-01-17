@@ -15,6 +15,7 @@
       ////////////////////////////////////////
 
       console.log('-- managersCtrl --');
+      console.log('$stateParams.managerId', $stateParams.managerId);
 
       $rootScope.loading = true;
 
@@ -30,7 +31,7 @@
       $scope.changeManager = function (selectedManagerName) {
         $rootScope.loading = true;
         $state.go($state.current, { managerId: selectedManagerName.toLowerCase() });
-        $window.location.reload();
+        //$window.location.reload();
       };
 
       /**
@@ -78,7 +79,10 @@
 
         $rootScope.loading = false;
 
+        console.log('$stateParams.managerId', $stateParams.managerId);
+
         $scope.selectedManager = $rootScope.managersData.data[$stateParams.managerId];
+
         $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog
           .filter(function (log) {
             return log.goals;
@@ -88,10 +92,10 @@
             return log;
           });
 
-        $scope.selectedManagerName = $rootScope.selectedManager.managerName;
+        $scope.selectedManagerName = $scope.selectedManager.managerName;
 
         console.log('-----------------------------');
-        console.log('>', $scope.selectedManagerName);
+        console.log($scope.selectedManagerName);
         console.log('-----------------------------');
 
         $rootScope.lastSyncDate = $scope.selectedManager._lastSyncedOn;

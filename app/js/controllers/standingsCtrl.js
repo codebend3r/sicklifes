@@ -15,9 +15,7 @@
       ////////////////////////////////////////
 
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-
         toState.name === 'standings.charts' && $timeout(processChart, 500);
-
       });
 
       /**
@@ -145,18 +143,20 @@
         // fireBaseService.saveToLocalStorage(saveObject, 'managersData');
 
         $rootScope.$emit('STANDINGS_READY');
-
-        $state.current.name === 'standings.charts' && $timeout(processChart, 500);
         //setTimeout(processChart, 1000);
 
         /////////////////////////////
 
       };
 
+      $rootScope.$on('STANDINGS_READY', function () {
+        $state.current.name === 'standings.charts' && $timeout(processChart, 500);
+      });
+
       $rootScope.$on('MONTH_CHANGED', function (e, month) {
         console.log('month change detected:', month.monthName);
         currentMonth = month;
-        $state.current.name === 'standings.charts' && processChart();
+        $state.current.name === 'standings.charts' && $timeout(processChart, 500);
       });
 
       /**
@@ -199,7 +199,7 @@
           onlyInteger: true,
           low: 0
         },
-        lineSmooth: true,
+        lineSmooth: false,
         fullWidth: false,
         chartPadding: {
           right: 0
@@ -263,7 +263,9 @@
        */
       var processChart = function () {
 
-        console.log('processChart()');
+        console.log('---------------------');
+        console.log('processChart');
+        console.log('---------------------');
 
         $scope.loadingChart = false;
 
@@ -279,6 +281,8 @@
           var seriesDataObj = {};
           seriesDataObj.name = manager.managerName;
           seriesDataObj.data = [];
+
+          console.log('manager name:', seriesDataObj.name);
 
           _.each(manager.chartData, function (data) {
 
@@ -368,6 +372,22 @@
         //     top: (event.offsetY || event.originalEvent.layerY) - $toolTip.height() - 40
         //   });
         // });
+
+        // $timeout(function() {
+        //
+        //   debugger;
+        //   console.log($('.ct-chart .ct-series[ct:series-name]'));
+        //   console.log($('.ct-chart .ct-series[ct]'));
+        //   console.log($('.ct-chart .ct-series[series-name]'));
+        //   //console.log($('.ct-chart .ct-series["ct:series-name"="Frank"]'));
+        //
+        //   _.each($('.ct-chart .ct-series'), function(ele, index) {
+        //
+        //     var currentAttr = $(ele).attr('ct:series-name');
+        //     console.log(index, currentAttr);
+        //
+        //   });
+        // }, 500);
 
       };
 
