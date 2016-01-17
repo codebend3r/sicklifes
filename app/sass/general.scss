@@ -50,33 +50,24 @@ h4 {
 
 table.table {
 
-  /* make keyframes that tell the start state and the end state of our object */
-
-  &.fade-in {
-
-    // opacity: 0;
-    // -webkit-animation-name: fadeIn;
-    // -webkit-animation-duration: 1s;
-    // animation-name: fadeIn;
-    // animation-duration: 1s;
-    //
-    // @for $item from 1 through 40 {
-    //   &:nth-child(#{$item}) {
-    //     animation-delay: #{$item * 0.2}s;
-    //   }
-    // }
-
+  &.borderless td, .borderless th {
+    border: none;
+    padding: 2px;
+    font-size: 12px;
   }
+
   tr {
-    &.active {
+    &.game-drafted {
+      //
     }
-    &.transfer {
+    &.game-dropped, &.game-added {
       opacity: 0.5;
     }
     td {
       vertical-align: middle;
     }
   }
+
 }
 
 .vertical-center {
@@ -86,12 +77,12 @@ table.table {
   align-items: center;
 }
 
-h3.manager-name {
+.manager-name {
   color: $textColour;
   font-size: 18px;
   margin: 0;
   padding: 10px 0;
-  span {
+  span, a{
     font-size: 18px;
     font-weight: bold;
   }
@@ -195,6 +186,31 @@ p.info-text {
 .player-info {
   font-size: 12px;
   color: white;
+}
+
+.player-status {
+  font-weight: bold;
+  font-size: 14px;
+  display: inline-block;
+  width: auto;
+  padding: 5px;
+
+  &.dropped {
+    background-color: #C71717;
+    color: #ffffff;
+    text-decoration: blink;
+  }
+  &.drafted {
+    background-color: $secondaryColour;
+    color: #ffffff;
+    text-decoration: blink;
+  }
+  &.added {
+    background-color: #42C717;
+    color: #ffffff;
+    text-decoration: blink;
+  }
+
 }
 
 .player-prop {

@@ -131,6 +131,9 @@
 
           player = objectUtils.playerResetGoalPoints(player);
 
+          player.managerName = manager.managerName;
+          console.log(player.managerName);
+
           apiFactory.getPlayerProfile('soccer', player.id)
             .then(arrayMappers.playerInfo.bind(this, player), function() { console.log('fail 1') })
             .then(arrayMappers.playerMapPersonalInfo.bind(this, player), function() { console.log('fail 2') })
@@ -141,11 +144,24 @@
             .then(function (result) {
 
               // TODO make function available in services
-              //console.log(result)
+              //console.log(result);
+
+              // if (angular.isUndefinedOrNull(player.status)) {
+              //   player.status = 'drafted';
+              //   player.dateOfTransaction = '08/01/2015';
+              // }
+              //
+              // if (player.dateOfTransaction === '11/9/2015') {
+              //   player.dateOfTransaction = '11/09/2015';
+              // }
+              //
+              // if (player.dateOfTransaction === '08/01/2015') {
+              //   player.dateOfTransaction = '08/01/2015';
+              // }
 
               current += 1;
               //$rootScope.percentage = Math.round((current / total) * 100);
-              console.log(current, total, player.playerName);
+              console.log(current, total, player.playerName, player.status);
               //console.log(current);
 
               if (current === total) {
@@ -186,12 +202,19 @@
        */
       updateDataUtils.updateCoreData = function (cb) {
 
-        console.log('updateDataUtils --> updateCoreData');
+        if (angular.isDefined($rootScope.managersData) && angular.isDefined($rootScope.leagueTables)) {
 
-        $q.all([apiFactory.getApiData('managersData'), apiFactory.getApiData('leagueTables')])
-          .then(function () {
-            cb();
-          });
+          console.log('managersData and leagueTables already defined');
+          cb();
+
+        } else {
+
+          $q.all([apiFactory.getApiData('managersData'), apiFactory.getApiData('leagueTables')])
+            .then(function () {
+              cb();
+            });
+
+        }
 
       };
 

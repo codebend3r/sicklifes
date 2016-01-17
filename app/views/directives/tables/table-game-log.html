@@ -11,7 +11,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat='game in list | limitTo: 30' ng-class="{transfer: isTransfer(tableParams.player, game), active: !isTransfer(tableParams.player, game)}">
+    <tr ng-repeat='game in list | limitTo: 30' ng-class="{'game-drafted': isValidGame(tableParams.player, game), 'game-dropped': !isValidGame(tableParams.player, game)}">
       <td>{{game.alignment}} {{game.vsTeam}}</td>
       <td>{{game.goals}}</td>
       <td>{{game.shots}}</td>

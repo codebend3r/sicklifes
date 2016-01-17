@@ -166,10 +166,6 @@
           ligaGamesRequest = apiFactory.getPlayerLog('liga', player.id);
           ligaGamesRequest.then(function (result) {
 
-            if (player.id === 3747) {
-              console.log(player.playerName);
-            }
-
             player.gameLogs.ligaCompleteLog = result.data
               .filter(arrayFilter.filterOutUndefined)
               .map(arrayMapper.monthlyMapper.bind(this, {
@@ -195,7 +191,7 @@
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.ligaCompleteLog).filter(arrayFilter.filterOutUndefined);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.ligaFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
-            } else {
+            } else if (player.gameLogs.ligaCompleteLog.length === 0) {
               delete player.gameLogs.ligaCompleteLog;
               delete player.gameLogs.ligaFilteredGameLog;
             }
@@ -239,7 +235,7 @@
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.eplCompleteLog).filter(arrayFilter.filterOutUndefined);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.eplFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
-            } else {
+            } else if (player.gameLogs.eplCompleteLog.length === 0) {
               delete player.gameLogs.eplCompleteLog;
               delete player.gameLogs.eplFilteredGameLog;
             }
@@ -292,7 +288,7 @@
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.seriCompleteLog).filter(arrayFilter.filterOutUndefined);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.seriFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
-            } else {
+            } else if (player.gameLogs.seriCompleteLog.length === 0) {
               delete player.gameLogs.seriCompleteLog;
               delete player.gameLogs.seriFilteredGameLog;
             }
@@ -338,7 +334,7 @@
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.chlgCompleteLogs).filter(arrayFilter.filterOutUndefined);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.chlgFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
-            } else {
+            } else if (player.gameLogs.chlgCompleteLogs.length === 0) {
               delete player.gameLogs.chlgCompleteLogs;
               delete player.gameLogs.chlgFilteredGameLog;
             }
@@ -380,7 +376,7 @@
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'euro' : '/euro';
               player.tournamentLeagueName = textManipulator.formattedLeagueName('uefa');
               //player.leagueName = 'EURO';
-            } else {
+            } else if (player.gameLogs.euroCompleteLogs.length === 0) {
               delete player.gameLogs.euroCompleteLogs;
               delete player.gameLogs.euroFilteredGameLog;
             }

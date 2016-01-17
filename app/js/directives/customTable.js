@@ -29,16 +29,14 @@
 
           var transferShown = false;
 
-          $scope.isTransfer = function (player, game) {
+          $scope.isValidGame = function (player, game) {
             var gameDate = moment(new Date(game.datePlayed));
-            //console.log('gameDate:', gameDate);
-            //console.log('gameDate.isAfter(player.dateOfTransaction):', gameDate.isBefore(player.dateOfTransaction));
-            //console.log('player:', player);
-            //var game.datePlayed
-            if (player.status === 'added' && gameDate.isBefore(player.dateOfTransaction)) {
+            if (player.status === 'added' && gameDate.isAfter(new Date(player.dateOfTransaction).toISOString())) {
               return true;
-            } else {
-              return false;
+            } else if (player.status === 'dropped' && gameDate.isBefore(new Date(player.dateOfTransaction).toISOString())) {
+              return true;
+            } else if (player.status === 'drafted') {
+              return true;
             }
 
           };

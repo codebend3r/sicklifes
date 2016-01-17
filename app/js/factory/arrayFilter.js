@@ -34,11 +34,11 @@
       arrayFilter.filterOnValidGoals = function (player, game) {
         var gameDate = moment(new Date(game.datePlayed).toISOString());
         if (player.status === 'added') {
-         return gameDate.isAfter(player.dateOfTransaction);
+         return gameDate.isAfter(new Date(player.dateOfTransaction).toISOString());
         } else if (player.status === 'dropped') {
-         return gameDate.isBefore(player.dateOfTransaction);
+         return gameDate.isBefore(new Date(player.dateOfTransaction).toISOString());
         } else {
-         return gameDate.isAfter(arrayFilter.leagueStartDate);
+         return gameDate.isAfter(new Date(arrayFilter.leagueStartDate).toISOString());
         }
       };
 
