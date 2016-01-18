@@ -16,16 +16,15 @@
 
       <h1 class='player-name'>{{player.playerName}}</h1>
       <h3 class='player-team'><a ui-sref="roster({leagueName: player.leagueName.toLowerCase(), teamId: player.teamId})">{{player.teamName}}</a></h3><br/>
-      <h4 class='player-status' ng-class="{drafted: player.status === 'drafted', dropped: player.status === 'dropped', added: player.status === 'added'}">{{player.status | uppercase}}</h4><br/>
+      <h4 class='player-status' ng-class="{drafted: player.status === 'drafted', dropped: player.status === 'dropped', added: player.status === 'added', 'free-agent': player.status === 'free agent'}">{{player.status | uppercase}} {{player.pickNumber | ordinal}}</h4><br/>
       <h4 ng-if="matchingManager !== null" class='manager-name'>Manager Name: <span><a ui-sref="managers.overview({managerId: matchingManager.managerName.toLowerCase()})">{{matchingManager.managerName}}</a></span></h4><br/>
 
-      <table class="table borderless table-responsive">
+      <table class="table borderless">
         <tr><td>GOALS</td><td>{{player.goals}}</td></tr>
         <tr><td>POINTS</td><td>{{player.points}}</td></tr>
         <tr ng-if='player.leagueName'><td>DOMESTIC LEAGUE</td><td>{{player.leagueName}}</td></tr>
         <tr ng-if='player.tournamentLeagueName'><td>TOURNAMENT LEAGUE</td><td>{{player.tournamentLeagueName}}</td></tr>
-
-        <tr><td>POSITION</td><td>{{player.playerPos}}</td></tr>
+        <tr><td>POSITION</td><td>{{player.position}}</td></tr>
         <tr><td>WEIGHT/HEIGHT</td><td>{{player.weight}}lbs/{{player.height}}</td></tr>
         <tr><td>BIRTHPLACE</td><td>{{player.birthplace}}</td></tr>
         <tr><td>BIRTHDATE</td><td>{{player.birthdate}}</td></tr>

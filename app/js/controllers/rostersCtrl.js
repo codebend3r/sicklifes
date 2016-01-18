@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, textManipulator, objectUtils, updateDataUtils) {
+    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, managersService, textManipulator, objectUtils, updateDataUtils) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -126,7 +126,7 @@
 
                   console.log('new request for', player.full_name);
 
-                  var matchingManager = $scope.findPlayerInManagers(player.id);
+                  var matchingManager = managersService.findPlayerInManagers(player.id).manager;
 
                   player = objectUtils.playerResetGoalPoints(player);
 

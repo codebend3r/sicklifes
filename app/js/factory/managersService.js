@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('managersService', function (fireBaseService) {
+    .factory('managersService', function ($rootScope) {
 
       /**
        * TODO
@@ -52,30 +52,26 @@
         },
 
         /**
-         * TODO
+         * @name findPlayerInManagers
+         * @description looks through all the managers and returns the matching manager if player belong to a manager
+         * @param id
+         * @returns {manager}
          */
-        getAllPlayers: function () {
+        findPlayerInManagers: function (id) {
 
-          //fireBaseService.initialize(allManagers);
-          var firePromise = fireBaseService.getFireBaseData();
-          firePromise.promise.then(function (data) {
+          var matchingManager = null;
+          var matchingPlayer = null;
 
-            return data;
+          _.some($rootScope.managersData.data, function (manager) {
 
-          }, function () {
-
-            return [
-              allManagers.chester,
-              allManagers.frank,
-              allManagers.dan,
-              allManagers.justin,
-              allManagers.mike,
-              allManagers.joe
-            ];
+            return !angular.isUndefinedOrNull(manager.players[id]) && (matchingManager = manager) && (matchingPlayer = manager.players[id]);
 
           });
 
-          return firePromise;
+          return {
+            manager: matchingManager,
+            player: matchingPlayer
+          };
 
         }
 

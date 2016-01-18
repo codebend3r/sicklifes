@@ -175,8 +175,6 @@
           data: $rootScope.managersData.data
         };
         console.log('saveObject:', saveObject);
-        console.log('saveObject chester.monthlyGoalsLog', saveObject.data.chester.monthlyGoalsLog);
-        console.log('saveObject chester.filteredMonthlyGoalsLog', saveObject.data.chester.filteredMonthlyGoalsLog);
         $scope.saveToFireBase(saveObject, 'managersData');
 
       };
@@ -328,26 +326,6 @@
         var combinedPlayers = _.defaults({}, allPlayers, teamObj);
 
         $scope.saveToFireBase(combinedPlayers, 'allPlayersIndex');
-
-      };
-
-      /**
-       * @name findPlayerInManagers
-       * @description looks through all the managers and returns the matching manager if player belong to a manager
-       * @param id
-       * @returns {manager}
-       */
-      $scope.findPlayerInManagers = function (id) {
-
-        var matchingManager = null;
-
-        _.some($rootScope.managersData.data, function (manager) {
-
-          return !angular.isUndefinedOrNull(manager.players[id]) && (matchingManager = manager);
-
-        });
-
-        return matchingManager;
 
       };
 

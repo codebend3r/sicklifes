@@ -193,7 +193,7 @@
           } else if (url.contains('chlg')) {
             return 'chlg';
           } else if (url.contains('uefa')) {
-            return 'uefa';
+            return 'euro';
           } else {
             return 'unknown';
           }
@@ -279,7 +279,7 @@
         },
 
         /**
-         * @description 
+         * @description
          */
         finalScore: function (game) {
           var final = '';

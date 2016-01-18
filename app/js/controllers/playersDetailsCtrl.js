@@ -102,7 +102,7 @@
 
         $scope.player = objectUtils.playerResetGoalPoints($scope.player);
         $scope.player.id = $stateParams.playerId;
-        $scope.matchingManager = $scope.findPlayerInManagers($stateParams.playerId);
+        $scope.matchingManager = managersService.findPlayerInManagers($stateParams.playerId).manager;
 
         apiFactory.getPlayerProfile('soccer', $stateParams.playerId)
           .then(arrayMappers.playerInfo.bind(this, $scope.player))

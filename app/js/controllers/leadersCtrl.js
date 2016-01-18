@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leadersCtrl', function ($scope, $state, $stateParams, $localStorage, updateDataUtils, $rootScope, momentService, apiFactory, textManipulator) {
+    .controller('leadersCtrl', function ($scope, $state, $stateParams, $localStorage, updateDataUtils, $rootScope, momentService, apiFactory, textManipulator, managersService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -27,25 +27,6 @@
 
       };
 
-      var findOwner = function (playerId) {
-
-        var managerName = 'Free Agent';
-
-        _.some($rootScope.managersData.data, function (manager) {
-
-          if (angular.isDefined(manager.players[playerId])) {
-
-            managerName = manager.managerName;
-            return true;
-
-          }
-
-        });
-
-        return managerName;
-
-      };
-
       /**
        * map the http response to leagueLeaders array
        */
@@ -59,7 +40,7 @@
 
           return {
             id: data.player.id,
-            owner: findOwner.call(self, data.player.id),
+            owner: angular.isUndefinedOrNull(managersService.findPlayerInManagers(data.player.id).manager) ? 'Free Agent' : managersService.findPlayerInManagers(data.player.id).manager.managerName,
             rank: data.ranking_tie ? 'T' + data.ranking : data.ranking,
             goals: data.stat,
             logo: data.team.logos.small,

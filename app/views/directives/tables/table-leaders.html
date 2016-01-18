@@ -1,4 +1,4 @@
-<table class="table table-hover table-responsive">
+<table class="table table-hover table-responsive hidden-xs hidden-sm">
   <thead>
   <tr>
     <th>Rank</th>
@@ -8,7 +8,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="player in list | limitTo: 30">
+  <tr ng-repeat="player in list | limitTo: 50">
     <td class="big-text">
       <div class="vertical-center">{{player.rank}}</div>
     </td>
@@ -17,10 +17,33 @@
         <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
       </p>
       <p>
-        <img class="hidden-xs" width="30" height="30" ng-src="{{player.logo}}"/><span>{{player.teamName}}</span>
+        <img width="30" height="30" ng-src="{{player.logo}}"/><span>{{player.teamName}}</span>
       </p>
     </td>
     <td class="small-text">{{player.owner}}</td>
+    <td class="bold">
+      <div class="vertical-center">{{player.goals}}</div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<table class='table table-hover table-responsive hidden-lg hidden-md'>
+  <thead>
+  <tr>
+    <th>Rank</th>
+    <th>Player</th>
+    <th>Goals</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="player in list | limitTo: 25">
+    <td class="big-text">
+      <div class="vertical-center">{{player.rank}}</div>
+    </td>
+    <td class="bold small-text">
+      <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+    </td>
     <td class="bold">
       <div class="vertical-center">{{player.goals}}</div>
     </td>

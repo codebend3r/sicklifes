@@ -5,6 +5,13 @@
   <h2>Transfers</h2>
   <h3>Transaction for: <b>{{ selectedManager.managerName }}</b></h3>
 
+  <div ng-if='admin' class='well'>
+    <button type='button' class='btn btn-danger' ng-click='updatePlayerPoolData()'>Update Player Pool Data</button>
+    <button type='button' class='btn btn-danger' ng-click='savePlayerPoolData()'>Save to Firebase</button>
+    <!-- <button type='button' class='btn btn-danger' ng-click='resetAllPlayers()'>Reset All Players</button> -->
+    <button type='button' class='btn btn-danger' ng-click='saveTransaction()'>Save Roster</button>
+  </div>
+
   <table class="table">
     <thead>
       <tr>
@@ -29,13 +36,6 @@
 
   <div class='well'>
     <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managersData' ng-change='changeManager(selectedManager)'></select>
-  </div>
-
-  <div ng-if='admin' class='well'>
-    <button type='button' class='btn btn-danger' ng-click='updatePlayerPoolData()'>Update Player Pool Data</button>
-    <button type='button' class='btn btn-danger' ng-click='savePlayerPoolData()'>Save to Firebase</button>
-    <!-- <button type='button' class='btn btn-danger' ng-click='resetAllPlayers()'>Reset All Players</button> -->
-    <button type='button' class='btn btn-danger' ng-click='saveTransaction()'>Save Roster</button>
   </div>
 
   <div class='transfer-container'>
@@ -65,7 +65,7 @@
 
   <div ng-if="transactionPlayerAdded">
     <p class="input-group">
-      <input type="date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
+      <!-- <input type="date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/> -->
       <span class="input-group-btn">
         <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
       </span>

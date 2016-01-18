@@ -160,11 +160,6 @@ p.info-text {
   color: red;
 }
 
-.free-agent {
-  color: #919191;
-  font-style: italic;
-}
-
 .faded {
   opacity: .3;
 }
@@ -194,7 +189,6 @@ p.info-text {
   display: inline-block;
   width: auto;
   padding: 5px;
-
   &.dropped {
     background-color: #C71717;
     color: #ffffff;
@@ -210,7 +204,11 @@ p.info-text {
     color: #ffffff;
     text-decoration: blink;
   }
-
+  &.free-agent {
+    background-color: #666666;
+    color: #ffffff;
+    text-decoration: blink;
+  }
 }
 
 .player-prop {

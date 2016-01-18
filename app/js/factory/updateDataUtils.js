@@ -68,50 +68,6 @@
       };
 
       /**
-       * @name updateLeagueTables
-       * @description gets all leagues in teams
-       */
-      updateDataUtils.updateLeagueTables = function () {
-
-        console.log('updateDataUtils -- updateLeagueTables');
-
-        var leagueTables = apiFactory.getLeagueTables(),
-          defer = $q.defer(),
-          leagueTablesData = [],
-          allLeagues = {
-            _lastSyncedOn: momentService.syncDate()
-          };
-
-        // returns a list of promise with the end point for each league
-        apiFactory.listOfPromises(leagueTables, function (promiseData) {
-
-          leagueTablesData = _.map(promiseData, function (result, index) {
-
-            if (index <= 2) {
-
-              return {
-                data: _.map(result.data, arrayMappers.tableMap)
-              };
-
-            } else {
-
-              return {
-                data: _.map(result.data, arrayMappers.tableTournamentMap)
-              };
-
-            }
-
-          });
-
-          defer.resolve(leagueTablesData);
-
-        });
-
-        return defer.promise;
-
-      };
-
-      /**
        * @name updateManagerData
        * @description update only one manager
        * @param cb
@@ -215,6 +171,50 @@
             });
 
         }
+
+      };
+
+      /**
+       * @name updateLeagueTables
+       * @description gets all leagues in teams
+       */
+      updateDataUtils.updateLeagueTables = function () {
+
+        console.log('updateDataUtils -- updateLeagueTables');
+
+        var leagueTables = apiFactory.getLeagueTables(),
+          defer = $q.defer(),
+          leagueTablesData = [],
+          allLeagues = {
+            _lastSyncedOn: momentService.syncDate()
+          };
+
+        // returns a list of promise with the end point for each league
+        apiFactory.listOfPromises(leagueTables, function (promiseData) {
+
+          leagueTablesData = _.map(promiseData, function (result, index) {
+
+            if (index <= 2) {
+
+              return {
+                data: _.map(result.data, arrayMappers.tableMap)
+              };
+
+            } else {
+
+              return {
+                data: _.map(result.data, arrayMappers.tableTournamentMap)
+              };
+
+            }
+
+          });
+
+          defer.resolve(leagueTablesData);
+
+        });
+
+        return defer.promise;
 
       };
 

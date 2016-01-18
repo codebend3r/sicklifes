@@ -24,8 +24,11 @@
           </button>
         </span>
         <span ng-switch-default>
-          <span ng-switch on="player.managerName">
-            <button ng-switch-when="Free Agent" ng-click="tableParams.addPlayer(player)" type="button" class="btn btn-primary btn-xs btn-plus">
+          <span ng-switch on="player.status">
+            <button ng-switch-when="free agent" ng-click="tableParams.addPlayer(player)" type="button" class="btn btn-primary btn-xs btn-plus">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <button ng-switch-when="dropped" ng-click="tableParams.addPlayer(player)" type="button" class="btn btn-primary btn-xs btn-plus">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
             <button ng-switch-default ng-click="tableParams.dropPlayer(player)" type="button" class="btn btn-danger btn-xs btn-plus">
@@ -36,8 +39,12 @@
       </span>&nbsp;
       <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
     </td>
-    <td class="bold small-text" ng-class="{'free-agent': player.managerName === 'Free Agent'}"><div class="vertical-center">{{player.managerName}}</div></td>
-    <td><div class="vertical-center">{{player.leagueName}}</div></td>
+    <td class="bold small-text" ng-class="{'free-agent': player.managerName === ''}">
+      <div ng-if="player.status !== 'dropped'" class="vertical-center">{{player.managerName}}</div>
+    </td>
+    <td>
+      <div class="vertical-center">{{player.leagueName}}&nbsp;<span class='player-status' ng-class="{drafted: player.status === 'drafted', dropped: player.status === 'dropped', added: player.status === 'added', 'free-agent': player.status === 'free agent'}">{{player.status | uppercase}}</span></div>
+    </td>
     <td class="bold">
       <div class="vertical-center"><img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;{{player.teamName}}</div>
     </td>

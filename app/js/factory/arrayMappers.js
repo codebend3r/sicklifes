@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('arrayMappers', function ($rootScope, $q, textManipulator, scoringLogic, objectUtils, momentService, arrayFilter, apiFactory, statsCorrection) {
+    .factory('arrayMappers', function ($rootScope, $q, textManipulator, managersService, scoringLogic, objectUtils, momentService, arrayFilter, apiFactory, statsCorrection) {
 
       var arrayMapper = {};
 
@@ -112,7 +112,8 @@
         // based on player result data return an object with the valid leagues for this player
         player.validLeagues = textManipulator.getPlayerValidLeagues(result);
 
-        // console.log('>', player.playerName, player.id);
+        // set player name
+        player.playerName = textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
 
         return apiFactory.getPlayerProfile(profileLeagueSlug, player.id);
 
@@ -134,6 +135,10 @@
         player.teamId = result.data.team.id;
         player.teamName = result.data.team.full_name;
         player.teamLogo = result.data.team.logos.large;
+
+        if (angular.isUndefinedOrNull(managersService.findPlayerInManagers(player.id))) {
+          player.status = 'free agent';
+        }
 
       };
 
@@ -157,8 +162,6 @@
           euroGamesRequest;
 
         validLeagues = player.validLeagues || {};
-
-        //console.log('playerName:', player.playerName, player.gameLog);
 
         if (validLeagues.inLiga) {
 
@@ -431,21 +434,38 @@
        * @description maps each player in the whole player pool
        * @param leagueData
        * @param teamData
-       * @param i
+       * @param result
        * @param index
        * @returns {{index: *, id: *, playerName: *, managerName: *, teamName: string, leagueName: string}}
        */
-      arrayMapper.transferPlayersMap = function (leagueData, teamData, i, index) {
+      arrayMapper.transferPlayersMap = function (leagueData, teamData, result, index) {
 
-        return {
+        var obj = {
           index: index,
-          id: i.id,
-          playerName: textManipulator.formattedFullName(i.first_name, i.last_name),
-          managerName: $rootScope.draftMode ? 'Free Agent' : arrayMapper.getOwnerByID(i.id),
+          id: result.id,
+          injured: result.injury !== null,
+          playerName: textManipulator.formattedFullName(result.first_name, result.last_name),
+          managerName: $rootScope.draftMode ? 'Free Agent' : arrayMapper.getOwnerByID(result.id),
           teamName: textManipulator.teamNameFormatted(teamData.full_name),
           teamLogo: teamData.logos.small,
           leagueName: textManipulator.getLeagueByURL(leagueData.leagueURL).toUpperCase()
         };
+
+        var match = managersService.findPlayerInManagers(result.id);
+
+        if (!angular.isUndefinedOrNull(match.player)) {
+          obj.status = match.player.status;
+        } else {
+          obj.status = 'free agent';
+        }
+
+        if (!angular.isUndefinedOrNull(match.manager)) {
+          obj.managerName = match.manager.managerName;
+        } else {
+          obj.managerName = '';
+        }
+
+        return obj;
 
       };
 
