@@ -17,18 +17,18 @@
         },
 
         leagueStartDate: function() {
-          return $moment(new Date('August 1 2015').toISOString()).format('MM/DD/YYYY h:mm:ss a');
+          return $moment(new Date('August 1 2015').toISOString()).format('YYYY/MM/DD h:mm:ss a');
         },
 
         syncDate: function () {
-          return $moment().format('MM/DD/YYYY h:mm:ss a');
+          return $moment().format('YYYY/MM/DD h:mm:ss a');
         },
 
         chartDate: function (date) {
           if (date) {
-            return $moment(new Date(date).toISOString()).format('MM/DD/YYYY');
+            return $moment(new Date(date).toISOString()).format('YYYY/MM/DD');
           } else {
-            return $moment().format('MM/DD/YYYY');
+            return $moment().format('YYYY/MM/DD');
           }
         },
 
@@ -43,9 +43,9 @@
 
         transactionDate: function (date) {
           if (angular.isDefined(date)) {
-            return $moment(date).format('MM/DD/YYYY');
+            return $moment(date).format('YYYY/MM/DD');
           } else {
-            return $moment().format('MM/DD/YYYY');
+            return $moment().format('YYYY/MM/DD');
           }
         },
 

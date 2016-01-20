@@ -14,21 +14,20 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-        toState.name === 'standings.charts' && $timeout(processChart, 500);
-      });
-
       /**
+       * @name loading
        * @description
        */
       $rootScope.loading = true;
 
       /**
+       * @name allLeagues
        * @description consolidated list of all owned players by a manager
        */
       $scope.allLeagues = null;
 
       /**
+       * @name tabData
        * @description tabs data
        */
       $scope.tabData = [
@@ -49,21 +48,17 @@
         }
       ];
 
-      $scope.isActive = function(route){
-        console.log($state.is(route))
-        return $state.is(route);
-      };
-
       /**
+       * @name isCurrentMonth
        * @description function to check current month
        */
       $scope.isCurrentMonth = function (selectedMonth, date) {
-        var gameDate = momentService.getDate(date),
-          isBetween = gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
-        return isBetween;
+        var gameDate = momentService.getDate(date);
+        return gameDate.isBetween(selectedMonth.range[0], selectedMonth.range[1]);
       };
 
       /**
+       * @name updateAllManagerData
        * @description update only the current manager data
        */
       $scope.updateAllManagerData = function () {
@@ -78,21 +73,12 @@
 
       };
 
-      /**
-       *
-       * @param log
-       * @returns {date}
-       */
-      $scope.theDate = function (log) {
-        console.log(log.datePlayed);
-        return new Date(log.datePlayed);
-      };
-
       ////////////////////////////////////////
       ////////////// private /////////////////
       ////////////////////////////////////////
 
       /**
+       * @name loadData
        * @description callback for when data is loaded
        */
       var loadData = function (result) {
@@ -124,10 +110,6 @@
           $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog
             .filter(function (log) {
               return log.goals;
-            })
-            .map(function (log) {
-              log.date = new Date(log.datePlayed);
-              return log;
             }));
         });
 
@@ -159,12 +141,18 @@
         $state.current.name === 'standings.charts' && $timeout(processChart, 500);
       });
 
+      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        toState.name === 'standings.charts' && $timeout(processChart, 500);
+      });
+
       /**
+       * @name currentMonth
        * @description current month
        */
       var currentMonth = $scope.selectedMonth;
 
       /**
+       * @name onManagersRequestFinished
        * @description when managers http data is loaded
        * @param managerData
        */
@@ -177,6 +165,7 @@
       };
 
       /**
+       * @name chartOptions
        * @description options for chart
        */
       var chartOptions = {
@@ -214,6 +203,10 @@
         }
       };
 
+      /**
+       * @name responsiveOptions
+       * @description responsive options for charts
+       */
       var responsiveOptions = [
         ['screen and (min-width: 641px) and (max-width: 1024px)', {
           lineSmooth: true,
@@ -259,6 +252,7 @@
       ];
 
       /**
+       * @name processChart
        * @description populates chart
        */
       var processChart = function () {
@@ -274,10 +268,26 @@
         var gameDates = [];
         var seriesData = [];
         var chartKey = 'stepPoints';
+        var seriesHashTable = {};
 
         _.each($rootScope.managersData.data, function (manager) {
 
-          var seriesHashTable = {};
+          _.each(manager.chartData, function (data) {
+
+            if ($scope.isCurrentMonth(currentMonth, data.date)) {
+              if (angular.isDefined(seriesHashTable[data.date])) {
+                seriesHashTable[data.date] += data[chartKey];
+              } else {
+                seriesHashTable[data.date] = data[chartKey];
+              }
+            }
+
+          });
+
+        });
+
+        _.each($rootScope.managersData.data, function (manager) {
+
           var seriesDataObj = {};
           seriesDataObj.name = manager.managerName;
           seriesDataObj.data = [];
@@ -287,28 +297,25 @@
           _.each(manager.chartData, function (data) {
 
             if ($scope.isCurrentMonth(currentMonth, data.date)) {
-              if (angular.isDefined(seriesHashTable[data.date])) {
-                seriesHashTable[data.date] += data[chartKey];
-                //console.log(manager.managerName, 'exists, add', data[chartKey], _.keys(seriesHashTable).length);
-              } else {
-                seriesHashTable[data.date] = data[chartKey];
-                //console.log(manager.managerName, 'new, add', data[chartKey], _.keys(seriesHashTable).length);
-              }
-              //console.log(manager.managerName, '| pushing >', data[chartKey]);
+              // if (angular.isDefined(seriesHashTable[data.date])) {
+              //   seriesHashTable[data.date] += data[chartKey];
+              // } else {
+              //   seriesHashTable[data.date] = data[chartKey];
+              // }
               if (angular.isDefined(data.date)) gameDates.push(data.date);
             }
 
           });
 
-          //console.log(manager.managerName, 'seriesHashTable', seriesHashTable);
-          //console.log(manager.managerName, 'seriesHashTable', _.keys(seriesHashTable).length);
+          console.log(manager.managerName, 'seriesHashTable', seriesHashTable);
+          console.log(manager.managerName, 'seriesHashTable.length', _.keys(seriesHashTable).length);
 
           var chartStartValue = 0;
 
-          _.each(seriesHashTable, function (obj) {
+          _.each(seriesHashTable, function (points) {
 
             seriesDataObj.data.push(chartStartValue);
-            chartStartValue += obj;
+            chartStartValue += points;
 
           });
 
@@ -322,24 +329,26 @@
           return new Date(a).getTime() - new Date(b).getTime();
         });
 
-        console.log('date length', gameDates.length);
+        console.log('seriesData.length:', seriesData.length);
+        //console.log('gameDates.length:', gameDates.length);
 
         $scope.showLastAmount = gameDates.length;
 
-        // seriesData = _.map(seriesData, function(d) {
-        //   if ($scope.showLastAmount < d.data.length) {
-        //     console.log('cutting off', Math.abs($scope.showLastAmount - d.data.length));
-        //     return {
-        //       name: d.name,
-        //       data: d.data.splice(d.data.length - $scope.showLastAmount, d.data.length)
-        //     }
-        //   } else {
-        //     return {
-        //       name: d.name,
-        //       data: d.data
-        //     };
-        //   }
-        // });
+        seriesData = _.map(seriesData, function(d) {
+          console.log('d.data.length:', d.data.length);
+          if ($scope.showLastAmount < d.data.length) {
+            console.log('cutting off', Math.abs($scope.showLastAmount - d.data.length));
+            return {
+              name: d.name,
+              data: d.data.splice(d.data.length - $scope.showLastAmount, d.data.length)
+            }
+          } else {
+            return {
+              name: d.name,
+              data: d.data
+            };
+          }
+        });
 
         new Chartist.Line('.ct-chart', {
           labels: gameDates,
