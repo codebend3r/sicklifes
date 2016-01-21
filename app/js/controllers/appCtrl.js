@@ -139,19 +139,6 @@
        */
       $scope.draftMode = $location.search().draftMode;
 
-      /**
-       * @name dataKeyName
-       * @description key name
-       */
-      $scope.dataKeyName = '';
-
-      /**
-       *
-       */
-      $scope.isActive = function (title) {
-        return false;
-      };
-
       /////////////////////////////
       // ROSTER
       /////////////////////////////
@@ -244,7 +231,7 @@
        * @description the select box model
        * @type {{monthName: string, range: string[]}}
        */
-      $scope.selectedMonth = $scope.allMonths[0];
+      $scope.selectedMonth = $scope.allMonths[6];
 
       /**
        * @name changeMonth
@@ -260,6 +247,7 @@
       });
 
       /**
+       * @name saveToFireBase
        * @description sets data in the initialized firebase service
        * @param saveObject
        * @param dataKey
@@ -273,6 +261,7 @@
       };
 
       /**
+       * @name startFireBase
        * @description starts the process of getting data from firebase
        * @param callback
        */
