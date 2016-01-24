@@ -8,61 +8,28 @@
 
   angular.module('sicklifes')
 
-    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, arrayMappers, apiFactory, objectUtils, updateDataUtils, momentService) {
+    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, arrayMappers, transferDates, apiFactory, objectUtils, updateDataUtils, momentService) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      /*
-      Round 1, Move 1 - November 9
-      Round 1, Move 2 - November 10
-      Round 1, Move 3 - November 11
-      Round 1, Move 4 - November 12
-      Round 1, Move 5 - November 13
-      Round 1, Move 6 - November 14
-
-      Round 2, Move 1 - November 16
-      Round 2, Move 2 - November 17
-      Round 2, Move 3 - November 18
-      Round 2, Move 4 - November 19
-      Round 2, Move 5 - November 20
-      Round 2, Move 6 - November 21
-
-      Round 3, Move 1 - November 23
-      Round 3, Move 2 - November 24
-      Round 3, Move 3 - November 25
-      Round 3, Move 4 - November 26
-      Round 3, Move 5 - November 27
-      Round 3, Move 6 - November 28
-
-      ////////////
-
-      Round 1, Move 1 - February 8
-      Round 1, Move 2 - February 9
-      Round 1, Move 3 - February 10
-      Round 1, Move 4 - February 11
-      Round 1, Move 5 - February 12
-      Round 1, Move 6 - February 13
-
-      Round 2, Move 1 - February 15
-      Round 2, Move 2 - February 16
-      Round 2, Move 3 - February 17
-      Round 2, Move 4 - February 18
-      Round 2, Move 5 - February 19
-      Round 2, Move 6 - February 20
-
-      Round 3, Move 1 - February 22
-      Round 3, Move 2 - February 23
-      Round 3, Move 3 - February 24
-      Round 3, Move 4 - February 25
-      Round 3, Move 5 - February 26
-      Round 3, Move 6 - February 27
-      */
-
       $rootScope.loading = true;
 
-      $scope.dt = new Date();
+      /**
+       * @name tabData
+       * @description tabs data
+       */
+      $scope.tabData = [
+        {
+          title: 'History',
+          route: 'transfers.history'
+        },
+        {
+          title: 'Free Agency',
+          route: 'transfers.freeagency'
+        }
+      ];
 
       /**
        * @name allPlayers
@@ -208,10 +175,6 @@
        * @type {boolean}
        */
       $scope.transactionPlayerRemoved = false;
-
-      $scope.$watch('dt', function(nv, ov) {
-        console.log('nv:', nv);
-      });
 
       /**
        * @name saveTransaction

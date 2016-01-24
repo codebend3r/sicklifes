@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, arrayFilter, updateDataUtils, $moment, momentService, $localStorage, apiFactory) {
+    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, updateDataUtils, momentService, transferDates, apiFactory) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -54,23 +54,6 @@
       ////////////////////////////////////////
 
       /**
-       * @name checkForWildCard
-       * @description computed function to determine manager wildcard count
-       * @param player
-       * @param manager
-       */
-      var checkForWildCard = function (player, manager) {
-
-        // if player is not dropped then count on active roster
-        if (player.status !== 'dropped' && angular.isDefined(manager) && (player.playedInChlgGames || player.playedInEuroGames)) {
-          if (!player.playedInLigaGames && !player.playedInEPLGames && !player.playedInSeriGames) {
-            manager.wildCardCount += 1;
-          }
-        }
-
-      };
-
-      /**
        * @name loadData
        * @description callback for when firebase is loaded
        * @param result {object} - response
@@ -86,10 +69,6 @@
         $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog
           .filter(function (log) {
             return log.goals;
-          })
-          .map(function (log) {
-            log.date = new Date(log.datePlayed);
-            return log;
           });
 
         $scope.selectedManagerName = $scope.selectedManager.managerName;
@@ -118,7 +97,27 @@
         $scope.selectedManager.wildCardCount = 0;
 
         _.each($scope.selectedManager.players, function (player) {
-          checkForWildCard(player, $scope.selectedManager);
+          $scope.checkForWildCard(player, $scope.selectedManager);
+        });
+
+        _.each($rootScope.managersData.data, function(manager) {
+
+          _.each(manager.players, function (player) {
+
+            if (player.pickNumber === 25) {
+              player.dateOfTransaction = transferDates.transfers.round1.date;
+            } else if (player.pickNumber === 26) {
+              player.dateOfTransaction = transferDates.transfers.round2.date;
+            } else if (player.pickNumber === 27) {
+              player.dateOfTransaction = transferDates.transfers.round3.date;
+            } else {
+              if (player.status === 'drafted') {
+                player.dateOfTransaction = transferDates.leagueStart.date;
+              }
+            }
+
+          });
+
         });
 
         var fixPickNumber = false;
@@ -173,38 +172,8 @@
           .value();
       });
 
-      /**
-       * @name init
-       * @description init
-       */
-      var init = function () {
-
-        console.log('> init');
-
-        if (angular.isDefined($rootScope.managersData)) {
-
-          console.log('load from $rootScope');
-
-          loadData($rootScope.managersData);
-
-        } else if (angular.isDefined($localStorage.managersData)) {
-
-          console.log('load from local storage');
-          $rootScope.managersData = $localStorage.managersData;
-          loadData($localStorage.managersData);
-
-        } else {
-
-          var request = 'managersData';
-
-          apiFactory.getApiData(request)
-            .then(loadData);
-
-        }
-
-      };
-
-      init();
+      $scope.init('managersData')
+        .then(loadData);
 
     });
 

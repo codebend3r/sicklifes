@@ -1,0 +1,16 @@
+<table class="table">
+  <thead>
+    <tr>
+    <th>Player Name</th>
+    <th>Manager Name</th>
+    <th>Type</th>
+    <th>Date of Transaction</th>
+    </tr>
+  </thead>
+  <tr ng-repeat="player in transferHistory | orderBy: ['-dateOfTransaction', 'status']">
+    <td><img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a class='bold' ui-sref='playerDetails({playerId: player.id})'>{{player.playerName}}</a></td>
+    <td>{{player.managerName}}</td>
+    <td><div class="player-status" ng-class="{dropped: player.status === 'dropped', added: player.status === 'added'}">{{player.status | uppercase}}</div></td>
+    <td class="small-text">{{player.dateOfTransaction}}</td>
+  </tr>
+</table>

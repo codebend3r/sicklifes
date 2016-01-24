@@ -26,8 +26,9 @@
 
       //$urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview');
 
-      $urlRouterProvider.when('/transfers', '/transfers/chester');
-      $urlRouterProvider.when('/transfers/', '/transfers/chester');
+      $urlRouterProvider.when('/transfers', '/transfers/chester/history');
+      $urlRouterProvider.when('/transfers/chester', '/transfers/chester/history');
+      $urlRouterProvider.when('/transfers/', '/transfers/chester/history');
 
       $urlRouterProvider.otherwise('/standings');
 
@@ -142,6 +143,14 @@
           parent: 'app',
           templateUrl: 'views/transfers.html',
           controller: 'transfersCtrl'
+        })
+        .state('transfers.history', {
+          url: '/history',
+          templateUrl: 'views/transfers-history.html',
+        })
+        .state('transfers.freeagency', {
+          url: '/freeagency',
+          templateUrl: 'views/transfers-freeagency.html',
         })
         .state('roster', {
           url: '/roster/:leagueName/:teamId',

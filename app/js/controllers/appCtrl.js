@@ -8,13 +8,13 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, fireBaseService, arrayMappers, momentService, $location, objectUtils, arrayFilter, textManipulator, scoringLogic) {
+    .controller('appCtrl', function ($scope, $rootScope, $q, $location, $localStorage, apiFactory, fireBaseService, arrayMappers, momentService, objectUtils, arrayFilter, textManipulator, scoringLogic) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.version = '5.10';
+      $rootScope.version = '5.11';
 
       /**
        * @description starting year
@@ -128,9 +128,14 @@
       $scope.$watch(function () {
         return $location.search().admin;
       }, function (nv, ov) {
-        //console.log(newValue, oldValue);
-        //$scope.admin = newValue;
-      });
+        $scope.admin = angular.isDefined(nv);
+      }, true);
+
+      /**
+       * @description if admin you can edit information
+       * @type {boolean}
+       */
+      $scope.edit = $location.search().edit;
 
       /**
        * @name draftMode
@@ -283,6 +288,34 @@
       };
 
       /**
+       * @name init
+       * @description init the controller
+       * @param keyName {string}
+       */
+      $scope.init = function (keyName) {
+
+        var defer = $q.defer();
+
+        if (angular.isDefined($rootScope[keyName])) {
+
+          defer.resolve($rootScope[keyName]);
+          return defer.promise;
+
+        } else if (angular.isDefined($localStorage[keyName])) {
+
+          $rootScope[keyName] = $localStorage[keyName];
+          defer.resolve($localStorage[keyName]);
+          return defer.promise;
+
+        } else {
+
+          return apiFactory.getApiData(keyName);
+
+        }
+
+      };
+
+      /**
        * @name saveToPlayerIndex
        * @description saves 1 player to allPlayersIndex
        * @param playerId
@@ -315,6 +348,23 @@
         var combinedPlayers = _.defaults({}, allPlayers, teamObj);
 
         $scope.saveToFireBase(combinedPlayers, 'allPlayersIndex');
+
+      };
+
+      /**
+       * @name checkForWildCard
+       * @description computed function to determine manager wildcard count
+       * @param player
+       * @param manager
+       */
+      $scope.checkForWildCard = function (player, manager) {
+
+        // if player is not dropped then count on active roster
+        if (player.status !== 'dropped' && angular.isDefined(manager) && (player.playedInChlgGames || player.playedInEuroGames)) {
+          if (!player.playedInLigaGames && !player.playedInEPLGames && !player.playedInSeriGames) {
+            manager.wildCardCount += 1;
+          }
+        }
 
       };
 

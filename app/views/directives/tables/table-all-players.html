@@ -39,7 +39,7 @@
       </span>&nbsp;
       <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
     </td>
-    <td class="bold small-text" ng-class="{'free-agent': player.managerName === ''}">
+    <td class="bold" ng-class="{'free-agent': player.managerName === ''}">
       <div ng-if="player.status !== 'dropped'" class="vertical-center">{{player.managerName}}</div>
     </td>
     <td>

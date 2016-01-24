@@ -14,13 +14,13 @@
 
       statsCorrection.events = {
         seri: {
-          game: {
-            leagueSlug: 'seri',
-            gameId: 28151164,
-            playerId: 18403,
-            statType: 'goals',
-            goals: 1
-          }
+          // game: {
+          //   leagueSlug: 'seri',
+          //   gameId: 28151164,
+          //   playerId: 18403,
+          //   statType: 'goals',
+          //   goals: 1
+          // }
         },
         epl: {},
         liga: {},

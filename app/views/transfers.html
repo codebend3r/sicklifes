@@ -2,77 +2,22 @@
 
 <div ng-if='!loading' class='panel-body'>
 
-  <h2>Transfers</h2>
   <h3>Transaction for: <b>{{ selectedManager.managerName }}</b></h3>
 
   <div ng-if='admin' class='well'>
     <button type='button' class='btn btn-danger' ng-click='updatePlayerPoolData()'>Update Player Pool Data</button>
     <button type='button' class='btn btn-danger' ng-click='savePlayerPoolData()'>Save to Firebase</button>
-    <!-- <button type='button' class='btn btn-danger' ng-click='resetAllPlayers()'>Reset All Players</button> -->
     <button type='button' class='btn btn-danger' ng-click='saveTransaction()'>Save Roster</button>
   </div>
-
-  <table class="table">
-    <thead>
-      <tr>
-      <th>Player Name</th>
-      <th>Manager Name</th>
-      <th>Type</th>
-      <th>Date of Transaction</th>
-      </tr>
-    </thead>
-    <tr ng-repeat="player in transferHistory | orderBy: ['-dateOfTransaction', 'status']">
-      <td><a class='bold' ui-sref='playerDetails({playerId: player.id})'>{{player.playerName}}</a></td>
-      <td>{{player.managerName}}</td>
-      <td><div class="player-status" ng-class="{dropped: player.status === 'dropped', added: player.status === 'added'}">{{player.status | uppercase}}</div></td>
-      <td class="small-text">{{player.dateOfTransaction}}</td>
-    </tr>
-  </table>
-
-  <!--<span>managersData:</span><json-formatter json="managersData" open="0"></json-formatter>-->
-  <!--<span>allPlayers:</span><json-formatter json="allPlayers" open="0"></json-formatter>-->
-  <!--<span>allPlayers:</span>-->
-  <!--<json-formatter json="selectedPlayers" open="0"></json-formatter>-->
 
   <div class='well'>
     <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managersData' ng-change='changeManager(selectedManager)'></select>
   </div>
 
-  <div class='transfer-container'>
-    <div class='col-xs-6' ng-if='droppedPlayerObject'>
-      <div class='col-xs-4'>
-        <img class='img-responsive profile-pic' ng-src='{{droppedPlayerObject.playerImage}}'/>
-      </div>
-      <div class='col-xs-8'>
-        <p class='bold red'>DROPS PLAYER</p>
-        <p><b>{{ droppedPlayerObject.playerName }}</b></p>
-        <p class="small-text">{{ droppedPlayerObject.teamName }}</p>
-        <p class="small-text">{{ droppedPlayerObject.leagueName }}</p>
-      </div>
-    </div>
-    <div class='col-xs-6' ng-if='addedPlayerObject'>
-      <div class='col-xs-4'>
-        <img class='img-responsive profile-pic' ng-src='{{addedPlayerObject.playerImage}}'/>
-      </div>
-      <div class='col-xs-8'>
-        <p class='bold green'>ADDS PLAYER</p>
-        <p><b>{{ addedPlayerObject.playerName }}</b></p>
-        <p class="small-text">{{ addedPlayerObject.teamName }}</p>
-        <p class="small-text">{{ addedPlayerObject.leagueName }}</p>
-      </div>
-    </div>
-  </div>
-
-  <div ng-if="transactionPlayerAdded">
-    <p class="input-group">
-      <!-- <input type="date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/> -->
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-      </span>
-    </p>
-  </div>
-
-  <custom-table ng-if="(transactionPlayerAdded || draftMode)" table-body-template="managers-players" sort-function="byPickNumber" table-params="playersTableParams" list="selectedManager.players"></custom-table>
-  <custom-table ng-if="!transactionPlayerAdded" table-body-template="all-players" table-params="playersTableParams" list="allPlayers"></custom-table>
+  <uib-tabset>
+    <uib-tab ng-repeat="tab in tabData" heading="{{tab.title}}" ui-sref="{{tab.route}}" ui-sref-active="current">
+    </uib-tab>
+  </uib-tabset>
+  <ui-view/>
 
 </div>
