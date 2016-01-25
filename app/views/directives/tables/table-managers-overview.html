@@ -15,12 +15,7 @@
   <tr ng-repeat="player in list | orderObjectBy:sortKey:ascending">
     <td class="player-column" ng-class="{dropped: player.status === 'dropped', added: player.status === 'added'}">
       <div class="vertical-center">
-        <div class="col-xs-4">
-          <input class="form-control" type="text" ng-model="player.dateOfTransaction" />
-        </div>
-        <div class="col-xs-8">
-          <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
-        </div>
+        <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
       </div>
     </td>
     <td class="bold small-text">
