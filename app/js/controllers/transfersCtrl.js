@@ -57,6 +57,7 @@
         $state.go($state.current.name, { managerId: selectedManager.managerName.toLowerCase() });
       };
 
+
       /**
        * @name getManagersPlayerById
        * @description TODO
