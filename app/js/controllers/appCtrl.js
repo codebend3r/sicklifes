@@ -14,7 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.version = '5.11';
+      $rootScope.version = '5.12';
 
       /**
        * @description starting year
@@ -236,7 +236,7 @@
        * @description the select box model
        * @type {{monthName: string, range: string[]}}
        */
-      $scope.selectedMonth = $scope.allMonths[6];
+      $scope.selectedMonth = $scope.allMonths[0];
 
       /**
        * @name changeMonth

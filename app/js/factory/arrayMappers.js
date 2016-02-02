@@ -136,7 +136,7 @@
         player.teamName = result.data.team.full_name;
         player.teamLogo = result.data.team.logos.large;
 
-        if (angular.isUndefinedOrNull(managersService.findPlayerInManagers(player.id))) {
+        if (angular.isUndefinedOrNull(managersService.findPlayerInManagers(player.id).manager)) {
           player.status = 'free agent';
         }
 
@@ -184,7 +184,7 @@
                 manager: manager
               }));
 
-            var foundTeam = _.where($rootScope.leagueTables.liga, { teamName: player.teamName });
+            var foundTeam = _.where($rootScope.leagueTables.liga, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.ligaCompleteLog.length)) {
               player.playedInLigaGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'liga' : '/liga';
@@ -199,7 +199,7 @@
               delete player.gameLogs.ligaFilteredGameLog;
             }
 
-          }, function() {
+          }, function () {
             console.log('LIGA failed', player.playerName);
           });
 
@@ -228,7 +228,7 @@
                 manager: manager
               }));
 
-            var foundTeam = _.where($rootScope.leagueTables.epl, { teamName: player.teamName });
+            var foundTeam = _.where($rootScope.leagueTables.epl, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.eplCompleteLog.length)) {
               player.playedInEPLGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'epl' : '/epl';
@@ -243,7 +243,7 @@
               delete player.gameLogs.eplFilteredGameLog;
             }
 
-          }, function() {
+          }, function () {
             console.log('EPL failed', player.playerName);
           });
 
@@ -281,7 +281,7 @@
                 manager: manager
               }));
 
-            var foundTeam = _.where($rootScope.leagueTables.seri, { teamName: player.teamName });
+            var foundTeam = _.where($rootScope.leagueTables.seri, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.seriCompleteLog.length)) {
               player.playedInSeriGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'seri' : '/seri';
@@ -296,7 +296,7 @@
               delete player.gameLogs.seriFilteredGameLog;
             }
 
-          }, function() {
+          }, function () {
             console.log('EPL failed', player.playerName);
           });
 
@@ -326,7 +326,7 @@
                 manager: manager
               }));
 
-            var foundTeam = _.where($rootScope.leagueTables.chlg, { teamName: player.teamName });
+            var foundTeam = _.where($rootScope.leagueTables.chlg, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.chlgCompleteLogs.length)) {
               player.playedInChlgGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'chlg' : '/chlg';
@@ -342,7 +342,7 @@
               delete player.gameLogs.chlgFilteredGameLog;
             }
 
-          }, function() {
+          }, function () {
             console.log('CHLG failed', player.playerName);
           });
 
@@ -373,7 +373,7 @@
                 manager: manager
               }));
 
-            var foundTeam = _.where($rootScope.leagueTables.uefa, { teamName: player.teamName });
+            var foundTeam = _.where($rootScope.leagueTables.uefa, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.euroCompleteLogs.length)) {
               player.playedInEuroGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'euro' : '/euro';
@@ -390,7 +390,7 @@
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.euroFilteredGameLog).filter(arrayFilter.filterOutUndefined);
             }
 
-          }, function() {
+          }, function () {
             console.log('EURO failed', player.playerName);
           });
 
@@ -400,7 +400,7 @@
 
         $q.all(allPromises).then(function () {
           deferred.resolve(player);
-        }, function() {
+        }, function () {
           console.log('FAIL');
         });
 
@@ -534,7 +534,7 @@
 
         return game;
 
-      }
+      };
 
       /**
        * @name monthlyMapper

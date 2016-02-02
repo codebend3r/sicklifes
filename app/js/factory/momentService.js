@@ -54,13 +54,13 @@
         },
 
         /**
-         * compares two dates and returns true if past 4 hours ago
+         * @description compares two dates and returns true if past 4 hours ago
          * @param syncDate
          * @returns {boolean}
          */
         isHoursAgo: function (syncDate) {
 
-          var thenMoment = $moment(new Date(syncDate).toISOString());
+          var thenMoment = $moment(new Date(syncDate));
           var nowMoment = $moment();
           var diff = nowMoment.diff(thenMoment, 'minutes');
 
@@ -69,13 +69,13 @@
         },
 
         /**
-         * checks to see if the current date and the sync date is past 22 hours
+         * @description checks to see if the current date and the sync date is past 22 hours
          * @param syncDate
          * @returns {boolean}
          */
         isPastYesterday: function (syncDate) {
 
-          var thenMoment = $moment(new Date(syncDate).toISOString());
+          var thenMoment = $moment(new Date(syncDate));
           var nowMoment = $moment();
           var diff = nowMoment.diff(thenMoment, 'hours');
 

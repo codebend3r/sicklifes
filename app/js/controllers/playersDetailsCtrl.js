@@ -31,17 +31,17 @@
       ////////////////////////////////////////
 
       /**
-       * call when firebase data has loaded
-       * @description defines $scope.managersData
+       * @description defines $scope.managersData - call when firebase data has loaded
        * @param result
        */
       var loadData = function (result) {
 
         $scope.managersData = $rootScope.managersData.data;
 
-        // if (angular.isDefined($rootScope.allPlayersIndex)) {
-        //   $scope.allPlayers = $rootScope.allPlayersIndex;
-        // }
+        if (angular.isDefined($rootScope.allPlayersIndex)) {
+          console.log('player found in allPlayers index');
+          $scope.allPlayers = $rootScope.allPlayersIndex;
+        }
 
         //////////////////
 
@@ -77,7 +77,7 @@
         }
 
         // check the data of the source data
-        if (foundPlayer && angular.isDefined($scope.player._lastSyncedOn) && !momentService.isHoursAgo($scope.player._lastSyncedOn)) {
+        if (foundPlayer && angular.isDefined($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
 
           console.log('foundPlayer and is up to date', $scope.player.playerName);
           requestUpdateOnPlayer();
@@ -115,6 +115,8 @@
 
             $scope.player = result;
             $scope.player._lastSyncedOn = momentService.syncDate();
+
+            console.log('player', $scope.player);
 
             $rootScope.loading = false;
 

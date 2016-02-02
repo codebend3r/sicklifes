@@ -102,10 +102,10 @@
 
               _.each(result.data, function (player) {
 
-                console.log('---------------------');
-                console.log('player._lastSyncedOn', player._lastSyncedOn);
-                console.log('angular.isUndefinedOrNull(player._lastSyncedOn)', angular.isUndefinedOrNull(player._lastSyncedOn));
-                console.log('momentService.isPastYesterday(player._lastSyncedOn)', momentService.isPastYesterday(player._lastSyncedOn));
+                // console.log('---------------------');
+                // console.log('player._lastSyncedOn', player._lastSyncedOn);
+                // console.log('angular.isUndefinedOrNull(player._lastSyncedOn)', angular.isUndefinedOrNull(player._lastSyncedOn));
+                // console.log('momentService.isPastYesterday(player._lastSyncedOn)', momentService.isPastYesterday(player._lastSyncedOn));
 
                 if (angular.isDefined(playersIndex) && angular.isDefined(playersIndex[player.id]) && !Array.isArray(playersIndex) && (!angular.isUndefinedOrNull(player._lastSyncedOn) && !momentService.isPastYesterday(player._lastSyncedOn))) {
 
