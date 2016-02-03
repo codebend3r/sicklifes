@@ -66,6 +66,13 @@
     return del(['builds'], cb);
   });
 
+  // clean templates
+  gulp.task('clean-templatecache', function (cb) {
+
+    return del([config.app + '/js/templates/templateCache.js', cb]);
+
+  });
+
   // html
   gulp.task('html', function () {
 
@@ -247,15 +254,6 @@
       //   showFiles: false
       // }))
       .pipe(gulp.dest('builds/' + gutil.env.build + '/images/'))
-      .on('error', gutil.log);
-
-  });
-
-  // clean
-  gulp.task('clean-templatecache', function () {
-
-    return gulp.src([config.app + '/js/templates/templateCache.js'], { read: false }).pipe($.clean({ force: true }))
-      .pipe($.size())
       .on('error', gutil.log);
 
   });
