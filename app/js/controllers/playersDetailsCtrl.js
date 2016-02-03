@@ -116,6 +116,24 @@
             $scope.player = result;
             $scope.player._lastSyncedOn = momentService.syncDate();
 
+            var lastDays = $scope.lastDays(30);
+            var data = [];
+
+            lastDays.forEach(function (calendarDay) {
+
+              $scope.player.gameLogs.eplCompleteLog.forEach(function (log) {
+
+                if (log.datePlayed === calendarDay) {
+                  console.log('MATCHING', log.goals);
+                  data.push(log.goals);
+                } else {
+                  data.push(0);
+                }
+
+              });
+
+            });
+
             console.log('player', $scope.player);
 
             $rootScope.loading = false;

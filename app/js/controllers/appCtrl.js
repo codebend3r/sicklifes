@@ -369,7 +369,25 @@
       };
 
       /**
-       * @resetAllPlayers
+       * @name lastDays
+       * @description
+       */
+      $scope.lastDays = function (days) {
+
+        var listOfDays = [];
+        var today = moment();
+        var thePast = today.subtract(days, 'days');
+        for (var i = 0; i < days; i++) {
+          var newDay = thePast.add(1, 'days');
+          console.log(newDay.format('YYYY/MM/DD'));
+          listOfDays.push(newDay.format('YYYY/MM/DD'));
+        }
+        return listOfDays;
+
+      };
+
+      /**
+       * @name resetAllPlayers
        * @description clears all players from every roster
        */
       $scope.resetAllPlayers = function () {
