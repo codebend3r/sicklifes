@@ -10,6 +10,36 @@
 
     .config(function ($stateProvider, $urlRouterProvider) {
 
+      var self = this;
+
+      /**
+       * @name init
+       * @description init the controller
+       * @param keyName {string}
+       */
+      // self.resolver = function (keyName) {
+      //
+      //   var defer = $q.defer();
+      //
+      //   if (angular.isDefined($rootScope[keyName])) {
+      //
+      //     defer.resolve($rootScope[keyName]);
+      //     return defer.promise;
+      //
+      //   } else if (angular.isDefined($localStorage[keyName])) {
+      //
+      //     $rootScope[keyName] = $localStorage[keyName];
+      //     defer.resolve($localStorage[keyName]);
+      //     return defer.promise;
+      //
+      //   } else {
+      //
+      //     return apiFactory.getApiData(keyName);
+      //
+      //   }
+      //
+      // };
+
       $urlRouterProvider.when('', '/standings');
       $urlRouterProvider.when('/', '/standings');
 
@@ -20,12 +50,11 @@
 
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
-      $urlRouterProvider.when('/managers', '/managers/chester/overview');
-      $urlRouterProvider.when('/managers/', '/managers/chester/overview');
-      $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
-      $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
-
-      //$urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview');
+      // $urlRouterProvider.when('/managers', '/managers/chester/overview');
+      // $urlRouterProvider.when('/managers/', '/managers/chester/overview');
+      // $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
+      // $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
+      // $urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview');
 
       $urlRouterProvider.when('/transfers', '/transfers/chester/history');
       $urlRouterProvider.when('/transfers/chester', '/transfers/chester/history');
@@ -89,7 +118,33 @@
           url: '/managers/:managerId',
           parent: 'app',
           templateUrl: 'views/managers.html',
-          controller: 'managersCtrl'
+          controller: 'managersCtrl',
+          resolve: {
+            managersData: function($rootScope, $localStorage, apiFactory) {
+
+              // var defer = $q.defer();
+              //
+              // if (angular.isDefined($rootScope['managersData'])) {
+              //
+              //   defer.resolve($rootScope['managersData']);
+              //   return defer.promise;
+              //
+              // } else if (angular.isDefined($localStorage['managersData'])) {
+              //
+              //   $rootScope['managersData'] = $localStorage['managersData'];
+              //   defer.resolve($localStorage['managersData']);
+              //   return defer.promise;
+              //
+              // } else {
+              //
+              //   return apiFactory.getApiData('managersData');
+              //
+              // }
+
+              return apiFactory.getApiData('managersData');
+
+            }
+          }
         })
         .state('managers.overview', {
           url: '/overview',
@@ -98,11 +153,6 @@
         .state('managers.gamelogs', {
           url: '/gamelog',
           templateUrl: 'views/managers-gamelogs.html'
-          // resolve: {
-          //   managerId: function($stateParams) {
-          //     return $stateParams.managerId ? $stateParams.managerId : 'Chester';
-          //   }
-          // }
         })
         .state('managers.stats', {
           url: '/stats',

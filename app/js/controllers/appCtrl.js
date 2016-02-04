@@ -288,34 +288,6 @@
       };
 
       /**
-       * @name init
-       * @description init the controller
-       * @param keyName {string}
-       */
-      $scope.init = function (keyName) {
-
-        var defer = $q.defer();
-
-        if (angular.isDefined($rootScope[keyName])) {
-
-          defer.resolve($rootScope[keyName]);
-          return defer.promise;
-
-        } else if (angular.isDefined($localStorage[keyName])) {
-
-          $rootScope[keyName] = $localStorage[keyName];
-          defer.resolve($localStorage[keyName]);
-          return defer.promise;
-
-        } else {
-
-          return apiFactory.getApiData(keyName);
-
-        }
-
-      };
-
-      /**
        * @name saveToPlayerIndex
        * @description saves 1 player to allPlayersIndex
        * @param playerId

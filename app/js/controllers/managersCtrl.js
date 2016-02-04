@@ -8,14 +8,13 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, updateDataUtils, momentService, transferDates, apiFactory) {
+    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, momentService, transferDates, managersData) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
       console.log('-- managersCtrl --');
-      console.log('$stateParams.managerId', $stateParams.managerId);
 
       $rootScope.loading = true;
 
@@ -31,7 +30,6 @@
       $scope.changeManager = function (selectedManagerName) {
         $rootScope.loading = true;
         $state.go($state.current, { managerId: selectedManagerName.toLowerCase() });
-        //$window.location.reload();
       };
 
       /**
@@ -172,8 +170,7 @@
           .value();
       });
 
-      $scope.init('managersData')
-        .then(loadData);
+      loadData(managersData);
 
     });
 
