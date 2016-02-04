@@ -48,6 +48,11 @@ $chartColor6: #A35AF2;
 
 .ct-chart, .sick-line-chart {
   position: relative;
+  .sick-series {
+    .ct-point {
+      stroke-width: 5px;
+    }
+  }
 }
 
 .ct-line.sick-line {

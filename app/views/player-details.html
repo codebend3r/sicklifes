@@ -30,8 +30,11 @@
         <tr><td>BIRTHDATE</td><td>{{player.birthdate}}</td></tr>
       </table>
 
-
     </div>
+
+    <select class="form-control" ng-model="selectedRange" ng-options="option for option in ranges" ng-change="changeRange(selectedRange)"></select>
+
+    <div class="ct-chart"></div>
 
   </div>
 

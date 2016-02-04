@@ -21,6 +21,7 @@
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
       $urlRouterProvider.when('/managers', '/managers/chester/overview');
+      $urlRouterProvider.when('/managers/', '/managers/chester/overview');
       $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
       $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
 

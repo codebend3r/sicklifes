@@ -8,7 +8,15 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, textManipulator, objectUtils, managersService, updateDataUtils, momentService) {
+    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, managersService, updateDataUtils, momentService) {
+
+      var lastDays = $scope.lastDays($scope.selectedRange);
+
+      var self = this;
+
+      var data = [];
+
+      var dataObj = {};
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -91,6 +99,78 @@
 
       };
 
+      $scope.ranges = [30, 60, 90, 120];
+
+      $scope.selectedRange = $scope.ranges[0];
+
+      $scope.changeRange = function (selectedRange) {
+
+        data = [];
+        data.push([]);
+
+        dataObj = {};
+
+        $scope.selectedRange = selectedRange;
+
+        console.log($scope.selectedRange);
+
+        lastDays = $scope.lastDays($scope.selectedRange);
+
+        var targetObject = dataObj;
+        var targetArray = data[0];
+
+        _.each(lastDays, function (calendarDay) {
+
+          if ($scope.player.playedInEPLGames) {
+            //targetObject = {};
+            $scope.player.gameLogs.eplCompleteLog.forEach(logLoop.bind(self, calendarDay, targetObject));
+          }
+
+          if ($scope.player.playedInSeriGames) {
+            //targetObject = {};
+            $scope.player.gameLogs.seriCompleteLog.forEach(logLoop.bind(self, calendarDay, targetObject));
+          }
+
+          if ($scope.player.playedInLigaGames) {
+            //targetObject = {};
+            $scope.player.gameLogs.ligaCompleteLog.forEach(logLoop.bind(self, calendarDay, targetObject));
+          }
+
+        });
+
+        var incValue = 0;
+
+        _.each(targetObject, function (value) {
+          incValue += value;
+          targetArray.push(incValue);
+        });
+
+        console.log('data', data);
+
+        $timeout(function () {
+          $('.ct-chart').empty();
+          new Chartist.Line('.ct-chart', {
+            labels: lastDays,
+            series: data
+          }, chartSettings.chartOptions);
+        }, 1000);
+
+      };
+
+      var logLoop = function (calendarDay, targetObject, log) {
+        if (log.datePlayed === calendarDay) {
+          if (angular.isDefined(targetObject[calendarDay])) {
+            targetObject[calendarDay] += log.goals;
+          } else {
+            targetObject[calendarDay] = log.goals;
+          }
+        } else {
+          if (angular.isUndefinedOrNull(targetObject[calendarDay])) {
+            targetObject[calendarDay] = 0;
+          }
+        }
+      };
+
       /**
        * @description
        */
@@ -116,23 +196,7 @@
             $scope.player = result;
             $scope.player._lastSyncedOn = momentService.syncDate();
 
-            var lastDays = $scope.lastDays(30);
-            var data = [];
-
-            lastDays.forEach(function (calendarDay) {
-
-              $scope.player.gameLogs.eplCompleteLog.forEach(function (log) {
-
-                if (log.datePlayed === calendarDay) {
-                  console.log('MATCHING', log.goals);
-                  data.push(log.goals);
-                } else {
-                  data.push(0);
-                }
-
-              });
-
-            });
+            $scope.changeRange($scope.selectedRange);
 
             console.log('player', $scope.player);
 
