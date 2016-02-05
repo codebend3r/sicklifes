@@ -14,7 +14,7 @@
 
       transferDates.leagueStart = {
         date: '2015/08/01'
-      }
+      };
 
       transferDates.transfers = {
         round1: {

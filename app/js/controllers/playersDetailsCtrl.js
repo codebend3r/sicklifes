@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, managersService, updateDataUtils, momentService) {
+    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService) {
 
       var lastDays = $scope.lastDays($scope.selectedRange);
 
@@ -99,10 +99,46 @@
 
       };
 
-      $scope.ranges = [30, 60, 90, 120];
+      $scope.ranges = [
+        {
+          days: 30,
+          label: 'Last 30 Days'
+        },
+        {
+          days: 60,
+          label: 'Last 60 Days'
+        },
+        {
+          days: 90,
+          label: 'Last 90 Days'
+        },
+        {
+          days: 120,
+          label: 'Last 120 Days'
+        },
+        {
+          days: -1,
+          label: 'Entire Season'
+        }
+      ];
 
-      $scope.selectedRange = $scope.ranges[0];
+      $scope.selectedRange = $scope.ranges[4];
 
+      $scope.types = ['cumulative', 'relative'];
+
+      $scope.selectedType = $scope.types[0];
+
+      $scope.changeChartType = function (selectedType) {
+
+        $scope.selectedType = selectedType;
+        $scope.changeRange($scope.selectedRange);
+
+      };
+
+      /**
+       * @name
+       * @description
+       */
       $scope.changeRange = function (selectedRange) {
 
         data = [];
@@ -112,9 +148,15 @@
 
         $scope.selectedRange = selectedRange;
 
-        console.log($scope.selectedRange);
-
-        lastDays = $scope.lastDays($scope.selectedRange);
+        if ($scope.selectedRange.days === -1) {
+          var a = moment();
+          //var b = moment(transferDates.leagueStart.days);
+          var b = moment('2015/08/01');
+          var difference = a.diff(b, 'days');
+          lastDays = $scope.lastDays(difference);
+        } else {
+          lastDays = $scope.lastDays($scope.selectedRange.days);
+        }
 
         var targetObject = dataObj;
         var targetArray = data[0];
@@ -122,17 +164,14 @@
         _.each(lastDays, function (calendarDay) {
 
           if ($scope.player.playedInEPLGames) {
-            //targetObject = {};
             $scope.player.gameLogs.eplCompleteLog.forEach(logLoop.bind(self, calendarDay, targetObject));
           }
 
           if ($scope.player.playedInSeriGames) {
-            //targetObject = {};
             $scope.player.gameLogs.seriCompleteLog.forEach(logLoop.bind(self, calendarDay, targetObject));
           }
 
           if ($scope.player.playedInLigaGames) {
-            //targetObject = {};
             $scope.player.gameLogs.ligaCompleteLog.forEach(logLoop.bind(self, calendarDay, targetObject));
           }
 
@@ -140,12 +179,16 @@
 
         var incValue = 0;
 
-        _.each(targetObject, function (value) {
-          incValue += value;
-          targetArray.push(incValue);
-        });
+        console.log('$scope.selectedType', $scope.selectedType);
 
-        console.log('data', data);
+        _.each(targetObject, function (value) {
+          if ($scope.selectedType === 'cumulative') {
+            incValue += value;
+            targetArray.push(incValue);
+          } else {
+            targetArray.push(value);
+          }
+        });
 
         $timeout(function () {
           $('.ct-chart').empty();
@@ -157,6 +200,10 @@
 
       };
 
+      /**
+       * @name
+       * @description
+       */
       var logLoop = function (calendarDay, targetObject, log) {
         if (log.datePlayed === calendarDay) {
           if (angular.isDefined(targetObject[calendarDay])) {
@@ -172,6 +219,7 @@
       };
 
       /**
+       * @name
        * @description
        */
       var requestUpdateOnPlayer = function () {

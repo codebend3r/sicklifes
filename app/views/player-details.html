@@ -32,9 +32,18 @@
 
     </div>
 
-    <select class="form-control" ng-model="selectedRange" ng-options="option for option in ranges" ng-change="changeRange(selectedRange)"></select>
 
-    <div class="ct-chart"></div>
+    <div class='col-md-6 col-sm-6 col-xs-12'>
+      <select class="form-control" ng-model="selectedRange" ng-options="option.label for option in ranges" ng-change="changeRange(selectedRange)"></select>
+    </div>
+
+    <div class='col-md-6 col-sm-6 col-xs-12'>
+      <select class="form-control" ng-model="selectedType" ng-options="option for option in types" ng-change="changeChartType(selectedType)"></select>
+    </div>
+
+    <div class='col-md-12 col-sm-12 col-xs-12'>
+      <div class="ct-chart"></div>
+    </div>
 
   </div>
 

@@ -36,12 +36,16 @@
             onlyInteger: true,
             low: 0
           },
-          lineSmooth: false,
-          fullWidth: false,
+          //lineSmooth: true,
+          lineSmooth: Chartist.Interpolation.simple({
+            divisor: 4,
+            fillHoles: true
+          }),
+          fullWidth: true,
           chartPadding: {
             right: 0
           },
-          showPoint: true,
+          showPoint: false,
           height: 250,
           classNames: {
             chart: 'sick-chart-line ct-chart-line',

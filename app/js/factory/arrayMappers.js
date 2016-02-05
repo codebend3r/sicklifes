@@ -527,7 +527,10 @@
             points: manager.totalPoints,
             goals: manager.totalGoals,
             stepPoints: points,
+            stepAssists: game.assists,
             stepGoals: game.goals,
+            stepShots: game.shots,
+            stepShotsOnGoal: game.shots_on_goal,
             date: game.datePlayed
           });
         }
