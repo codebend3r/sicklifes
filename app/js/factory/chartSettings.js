@@ -12,11 +12,54 @@
 
       return {
 
-        /**Ø
+        /**
          * @name chartOptions
          * @description options for chart
          */
         chartOptions: {
+          axisX: {
+            labelInterpolationFnc: function (value, index, axis) {
+              var divider;
+              if (axis.length < 8) {
+                divider = 1;
+              } else {
+                divider = Math.ceil(axis.length / 16);
+              }
+              if (index % divider === 0) {
+                return value;
+              } else {
+                return '';
+              }
+            }
+          },
+          axisY: {
+            onlyInteger: true,
+            low: 0
+          },
+          //lineSmooth: true,
+          lineSmooth: Chartist.Interpolation.simple({
+            divisor: 4,
+            fillHoles: true
+          }),
+          fullWidth: true,
+          chartPadding: {
+            right: 0
+          },
+          showPoint: false,
+          height: 250,
+          classNames: {
+            chart: 'sick-chart-line ct-chart-line',
+            label: 'sick-label ct-label',
+            series: 'sick-series ct-series',
+            line: 'sick-line ct-line'
+          }
+        },
+
+        /**
+         * @name chartOptions
+         * @description options for chart
+         */
+        profileChartOptions: {
           axisX: {
             labelInterpolationFnc: function (value, index, axis) {
               var divider;

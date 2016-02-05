@@ -29,7 +29,7 @@
        */
       $scope.changeManager = function (selectedManagerName) {
         $rootScope.loading = true;
-        $state.go($state.current, { managerId: selectedManagerName.toLowerCase() });
+        $state.go($state.current, {managerId: selectedManagerName.toLowerCase()});
       };
 
       /**
@@ -56,13 +56,13 @@
        * @description callback for when firebase is loaded
        * @param result {object} - response
        */
-      var loadData = function (result) {
+      var loadData = function () {
+
+        if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
 
         $rootScope.loading = false;
 
-        console.log('$stateParams.managerId', $stateParams.managerId);
-
-        $scope.selectedManager = $rootScope.managersData.data[$stateParams.managerId];
+        $scope.selectedManager = managersData.data[$stateParams.managerId];
 
         $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog
           .filter(function (log) {
@@ -70,10 +70,6 @@
           });
 
         $scope.selectedManagerName = $scope.selectedManager.managerName;
-
-        console.log('-----------------------------');
-        console.log($scope.selectedManagerName);
-        console.log('-----------------------------');
 
         $rootScope.lastSyncDate = $scope.selectedManager._lastSyncedOn;
         $rootScope.source = 'firebase';
@@ -98,25 +94,25 @@
           $scope.checkForWildCard(player, $scope.selectedManager);
         });
 
-        _.each($rootScope.managersData.data, function(manager) {
-
-          _.each(manager.players, function (player) {
-
-            if (player.pickNumber === 25) {
-              player.dateOfTransaction = transferDates.transfers.round1.date;
-            } else if (player.pickNumber === 26) {
-              player.dateOfTransaction = transferDates.transfers.round2.date;
-            } else if (player.pickNumber === 27) {
-              player.dateOfTransaction = transferDates.transfers.round3.date;
-            } else {
-              if (player.status === 'drafted') {
-                player.dateOfTransaction = transferDates.leagueStart.date;
-              }
-            }
-
-          });
-
-        });
+        //_.each(managersData.data, function (manager) {
+        //
+        //  _.each(manager.players, function (player) {
+        //
+        //    if (player.pickNumber === 25) {
+        //      player.dateOfTransaction = transferDates.transfers.round1.date;
+        //    } else if (player.pickNumber === 26) {
+        //      player.dateOfTransaction = transferDates.transfers.round2.date;
+        //    } else if (player.pickNumber === 27) {
+        //      player.dateOfTransaction = transferDates.transfers.round3.date;
+        //    } else {
+        //      if (player.status === 'drafted') {
+        //        player.dateOfTransaction = transferDates.leagueStart.date;
+        //      }
+        //    }
+        //
+        //  });
+        //
+        //});
 
         var fixPickNumber = false;
 
@@ -155,7 +151,7 @@
 
           $rootScope.loading = false;
           $scope.managersData = result;
-          $rootScope.managersData.data = result;
+          managersData.data = result;
           $scope.saveRoster();
 
         });
@@ -170,7 +166,7 @@
           .value();
       });
 
-      loadData(managersData);
+      loadData();
 
     });
 

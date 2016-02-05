@@ -8,7 +8,9 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService) {
+    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService, managersData, updateCoreData) {
+
+      console.log('managersData:', managersData);
 
       var lastDays = $scope.lastDays($scope.selectedRange);
 
@@ -39,10 +41,11 @@
       ////////////////////////////////////////
 
       /**
+       * @name loadData
        * @description defines $scope.managersData - call when firebase data has loaded
        * @param result
        */
-      var loadData = function (result) {
+      var loadData = function () {
 
         $scope.managersData = $rootScope.managersData.data;
 
@@ -58,6 +61,7 @@
       };
 
       /**
+       * @name findPlayerByID
        * @description find more data on a player by id in the route
        */
       var findPlayerByID = function () {
@@ -136,7 +140,7 @@
       };
 
       /**
-       * @name
+       * @name changeRange
        * @description
        */
       $scope.changeRange = function (selectedRange) {
@@ -195,13 +199,13 @@
           new Chartist.Line('.ct-chart', {
             labels: lastDays,
             series: data
-          }, chartSettings.chartOptions);
+          }, chartSettings.profileChartOptions);
         }, 1000);
 
       };
 
       /**
-       * @name
+       * @name logLoop
        * @description
        */
       var logLoop = function (calendarDay, targetObject, log) {
@@ -219,7 +223,7 @@
       };
 
       /**
-       * @name
+       * @name requestUpdateOnPlayer
        * @description
        */
       var requestUpdateOnPlayer = function () {
@@ -256,16 +260,7 @@
 
       };
 
-      /**
-       * @description init function
-       */
-      var init = function () {
-
-        updateDataUtils.updateCoreData(loadData);
-
-      };
-
-      init();
+      loadData()
 
     });
 

@@ -17,28 +17,24 @@
        * @description init the controller
        * @param keyName {string}
        */
-      // self.resolver = function (keyName) {
-      //
-      //   var defer = $q.defer();
-      //
-      //   if (angular.isDefined($rootScope[keyName])) {
-      //
-      //     defer.resolve($rootScope[keyName]);
-      //     return defer.promise;
-      //
-      //   } else if (angular.isDefined($localStorage[keyName])) {
-      //
-      //     $rootScope[keyName] = $localStorage[keyName];
-      //     defer.resolve($localStorage[keyName]);
-      //     return defer.promise;
-      //
-      //   } else {
-      //
-      //     return apiFactory.getApiData(keyName);
-      //
-      //   }
-      //
-      // };
+      var init = function () {
+        var defer = $q.defer();
+
+        if (angular.isDefined($rootScope['managersData'])) {
+          console.log('$rootScope');
+          defer.resolve($rootScope['managersData']);
+          return defer.promise;
+        } else if (angular.isDefined($localStorage['managersData'])) {
+          console.log('$localStorage');
+          $rootScope['managersData'] = $localStorage['managersData'];
+          defer.resolve($localStorage['managersData']);
+          return defer.promise;
+        } else {
+          console.log('$http');
+          return apiFactory.getApiData('managersData');
+        }
+
+      };
 
       $urlRouterProvider.when('', '/standings');
       $urlRouterProvider.when('/', '/standings');
@@ -50,11 +46,11 @@
 
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
-      // $urlRouterProvider.when('/managers', '/managers/chester/overview');
-      // $urlRouterProvider.when('/managers/', '/managers/chester/overview');
-      // $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
-      // $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
-      // $urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview');
+      $urlRouterProvider.when('/managers', '/managers/chester/overview');
+      $urlRouterProvider.when('/managers/', '/managers/chester/overview');
+      $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
+      $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
+      $urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview');
 
       $urlRouterProvider.when('/transfers', '/transfers/chester/history');
       $urlRouterProvider.when('/transfers/chester', '/transfers/chester/history');
@@ -62,11 +58,17 @@
 
       $urlRouterProvider.otherwise('/standings');
 
+
       $stateProvider
         .state('app', {
           abstract: true,
           template: '<ui-view />',
-          controller: 'appCtrl'
+          controller: 'appCtrl',
+          resolve: {
+            managersData: function ($rootScope, $localStorage, apiFactory) {
+              return apiFactory.getApiData('managersData');
+            }
+          }
         })
         //.state('signIn', {
         //  url: '/login',
@@ -105,8 +107,12 @@
         .state('leagues.tables', {
           url: '/tables',
           templateUrl: 'views/leagues-tables.html',
-          controller: 'tablesCtrl'
-
+          controller: 'tablesCtrl',
+          resolve: {
+            leagueTables: function () {
+              return apiFactory.getApiData('leagueTables');
+            }
+          }
         })
         .state('leagues.leaders', {
           url: '/leaders',
@@ -114,37 +120,10 @@
           controller: 'leadersCtrl'
         })
         .state('managers', {
-
           url: '/managers/:managerId',
           parent: 'app',
           templateUrl: 'views/managers.html',
-          controller: 'managersCtrl',
-          resolve: {
-            managersData: function($rootScope, $localStorage, apiFactory) {
-
-              // var defer = $q.defer();
-              //
-              // if (angular.isDefined($rootScope['managersData'])) {
-              //
-              //   defer.resolve($rootScope['managersData']);
-              //   return defer.promise;
-              //
-              // } else if (angular.isDefined($localStorage['managersData'])) {
-              //
-              //   $rootScope['managersData'] = $localStorage['managersData'];
-              //   defer.resolve($localStorage['managersData']);
-              //   return defer.promise;
-              //
-              // } else {
-              //
-              //   return apiFactory.getApiData('managersData');
-              //
-              // }
-
-              return apiFactory.getApiData('managersData');
-
-            }
-          }
+          controller: 'managersCtrl'
         })
         .state('managers.overview', {
           url: '/overview',
@@ -209,7 +188,6 @@
           templateUrl: 'views/rosters.html',
           controller: 'rostersCtrl'
         });
-
     });
 
 })();

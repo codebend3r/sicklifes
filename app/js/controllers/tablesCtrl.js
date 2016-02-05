@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('tablesCtrl', function ($scope, $rootScope, $stateParams, $localStorage, apiFactory, updateDataUtils, textManipulator, momentService) {
+    .controller('tablesCtrl', function ($scope, $rootScope, $stateParams, $localStorage, apiFactory, updateDataUtils, textManipulator, momentService, leagueTables) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -79,13 +79,13 @@
        *
        * @param data
        */
-      var loadData = function (data) {
+      var loadData = function () {
 
-        $scope.allLeagues[0].source = data.liga;
-        $scope.allLeagues[1].source = data.epl;
-        $scope.allLeagues[2].source = data.seri;
-        $scope.allLeagues[3].source = data.chlg;
-        $scope.allLeagues[4].source = data.uefa;
+        $scope.allLeagues[0].source = leagueTables.liga;
+        $scope.allLeagues[1].source = leagueTables.epl;
+        $scope.allLeagues[2].source = leagueTables.seri;
+        $scope.allLeagues[3].source = leagueTables.chlg;
+        $scope.allLeagues[4].source = leagueTables.uefa;
 
         $scope.setSelectedLeague();
 
@@ -296,39 +296,7 @@
 
       };
 
-      ////////////////////////////////////////
-      ////////////// private /////////////////
-      ////////////////////////////////////////
-
-      /**
-       * init
-       */
-      var init = function () {
-
-        $scope.dataKeyName = 'leagueTables';
-
-        if (angular.isDefined($rootScope[$scope.dataKeyName])) {
-
-          console.log('load from $rootScope');
-          loadData($rootScope[$scope.dataKeyName]);
-
-        } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
-
-          console.log('load from local storage');
-          loadData($localStorage[$scope.dataKeyName]);
-
-        } else {
-
-          console.log('load from firebase');
-
-          apiFactory.getApiData('leagueTables')
-            .then(loadData);
-
-        }
-
-      };
-
-      init();
+      loadData();
 
     });
 

@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, $localStorage) {
+    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, managersData) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -81,17 +81,17 @@
        * @name loadData
        * @description callback for when data is loaded
        */
-      var loadData = function (result) {
+      var loadData = function () {
 
         $rootScope.loading = false;
 
-        $scope.managersData = $rootScope.managersData.data;
+        $scope.managersData = managersData.data;
 
-        $rootScope.lastSyncDate = result._lastSyncedOn;
+        $rootScope.lastSyncDate = managersData._lastSyncedOn;
 
         $rootScope.source = 'firebase';
 
-        if (momentService.isHoursAgo($rootScope.managersData._lastSyncedOn)) {
+        if (momentService.isHoursAgo(managersData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
@@ -141,7 +141,7 @@
         $state.current.name === 'standings.charts' && $timeout(processChart, 500);
       });
 
-      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+      $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         toState.name === 'standings.charts' && $timeout(processChart, 500);
       });
 
@@ -183,7 +183,7 @@
         var chartKey = 'stepPoints';
         var seriesHashTable = {};
 
-        _.each($rootScope.managersData.data, function (manager) {
+        _.each(managersData.data, function (manager) {
 
           _.each(manager.chartData, function (data) {
 
@@ -197,7 +197,7 @@
 
         console.log(seriesHashTable, _.keys(seriesHashTable).length);
 
-        _.each($rootScope.managersData.data, function (manager) {
+        _.each(managersData.data, function (manager) {
 
           var seriesDataObj = {};
           seriesDataObj.name = manager.managerName;
@@ -313,35 +313,8 @@
 
       };
 
-      /**
-      * @description init
-      */
-      var init = function () {
+      loadData();
 
-       console.log('> init');
-
-       if (angular.isDefined($rootScope.managersData)) {
-
-         console.log('load from $rootScope');
-
-         loadData($rootScope.managersData);
-
-       } else if (angular.isDefined($localStorage.managersData)) {
-
-         console.log('load from local storage');
-         $rootScope.managersData = $localStorage.managersData;
-         loadData($localStorage.managersData);
-
-       } else {
-
-         apiFactory.getApiData('managersData')
-           .then(loadData);
-
-       }
-
-      };
-
-       init();
 
     });
 
