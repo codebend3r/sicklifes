@@ -522,6 +522,8 @@
 
         player.assists += game.assists;
 
+        //console.log(game);
+
         if (!angular.isUndefinedOrNull(manager)) {
           manager.chartData.push({
             points: manager.totalPoints,
@@ -530,7 +532,7 @@
             stepAssists: game.assists,
             stepGoals: game.goals,
             stepShots: game.shots,
-            stepShotsOnGoal: game.shots_on_goal,
+            stepShotsOnGoal: game.shotsOnGoal,
             date: game.datePlayed
           });
         }

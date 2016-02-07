@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, momentService, transferDates, managersData) {
+    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, momentService, transferDates, managersData, updateDataUtils) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -102,10 +102,10 @@
 
         $rootScope.loading = true;
 
-        updateDataUtils.updateAllManagerData(function (result) {
+        updateDataUtils.updateAllManagerData(managersData, function (result) {
 
           $rootScope.loading = false;
-          $scope.managersData = result;
+          //$scope.managersData = result;
           managersData.data = result;
           $scope.saveRoster();
 
