@@ -120,37 +120,7 @@
 
       };
 
-      ////////////////////////////////////////
-      ////////////// private /////////////////
-      ////////////////////////////////////////
-
-      /**
-       * TODO
-       */
-      var init = function () {
-
-        $scope.dataKeyName = 'scoringLeaders';
-
-        if (angular.isDefined($rootScope[$scope.dataKeyName]) && angular.isDefined($rootScope[$scope.dataKeyName].leagues[$stateParams.leagueName])) {
-
-          console.log('load from $rootScope');
-          loadData($rootScope[$scope.dataKeyName]);
-
-        } else if (angular.isDefined($localStorage[$scope.dataKeyName]) && angular.isDefined($localStorage[$scope.dataKeyName].leagues[$stateParams.leagueName])) {
-
-          console.log('load from local storage');
-          loadData($localStorage[$scope.dataKeyName]);
-
-        } else {
-
-          apiFactory.getApiData('scoringLeaders')
-            .then(loadData);
-
-        }
-
-      };
-
-      init();
+      loadData();
 
     });
 

@@ -14,8 +14,6 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      console.log('-- managersCtrl --');
-
       $rootScope.loading = true;
 
       $scope.goalsOnlyFilterOn = true;
@@ -93,49 +91,6 @@
         _.each($scope.selectedManager.players, function (player) {
           $scope.checkForWildCard(player, $scope.selectedManager);
         });
-
-        //_.each(managersData.data, function (manager) {
-        //
-        //  _.each(manager.players, function (player) {
-        //
-        //    if (player.pickNumber === 25) {
-        //      player.dateOfTransaction = transferDates.transfers.round1.date;
-        //    } else if (player.pickNumber === 26) {
-        //      player.dateOfTransaction = transferDates.transfers.round2.date;
-        //    } else if (player.pickNumber === 27) {
-        //      player.dateOfTransaction = transferDates.transfers.round3.date;
-        //    } else {
-        //      if (player.status === 'drafted') {
-        //        player.dateOfTransaction = transferDates.leagueStart.date;
-        //      }
-        //    }
-        //
-        //  });
-        //
-        //});
-
-        var fixPickNumber = false;
-
-        if (fixPickNumber) {
-
-          var indexPick = 1;
-          var sortedArray = [];
-
-          _.each($scope.selectedManager.players, function (p) {
-            sortedArray.push(p);
-          });
-
-          sortedArray.sort(function (a, b) {
-            return a.pickNumber - b.pickNumber;
-          });
-
-          _.each(sortedArray, function (p) {
-            console.log(p.playerName, p.pickNumber, 'to', indexPick);
-            $scope.selectedManager.players[p.id].pickNumber = indexPick;
-            indexPick += 1;
-          });
-
-        }
 
       };
 

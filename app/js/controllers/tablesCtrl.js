@@ -76,10 +76,12 @@
       };
 
       /**
-       *
+       * @name loadData
        * @param data
        */
       var loadData = function () {
+
+        console.log('leagueTables', leagueTables);
 
         $scope.allLeagues[0].source = leagueTables.liga;
         $scope.allLeagues[1].source = leagueTables.epl;

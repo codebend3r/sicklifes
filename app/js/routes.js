@@ -65,8 +65,16 @@
           template: '<ui-view />',
           controller: 'appCtrl',
           resolve: {
-            managersData: function ($rootScope, $localStorage, apiFactory) {
+            managersData: function (apiFactory) {
               return apiFactory.getApiData('managersData');
+            },
+            leagueTables: function (apiFactory) {
+              console.log('leagueTables');
+              return apiFactory.getApiData('leagueTables');
+            },
+            scoringLeaders: function (apiFactory) {
+              console.log('scoringLeaders');
+              return apiFactory.getApiData('scoringLeaders');
             }
           }
         })
@@ -107,12 +115,7 @@
         .state('leagues.tables', {
           url: '/tables',
           templateUrl: 'views/leagues-tables.html',
-          controller: 'tablesCtrl',
-          resolve: {
-            leagueTables: function () {
-              return apiFactory.getApiData('leagueTables');
-            }
-          }
+          controller: 'tablesCtrl'
         })
         .state('leagues.leaders', {
           url: '/leaders',

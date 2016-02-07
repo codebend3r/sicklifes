@@ -46,7 +46,7 @@
         $http.get('https://glaring-fire-9383.firebaseio.com/' + namespace + '.json')
           .then(function (result) {
 
-            //console.log('rootScope variable saved:', namespace, $rootScope[namespace]);
+            console.log('resolved data:', namespace, result);
             if (namespace === 'managersData') {
               var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
               console.log('managerId:', managerId);
