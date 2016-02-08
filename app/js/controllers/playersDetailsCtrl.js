@@ -20,6 +20,8 @@
 
       var dataObj = {};
 
+      var chartMapKeys = ['goals', 'shots', 'shotsOnGoal'];
+
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
@@ -103,6 +105,10 @@
 
       };
 
+      /**
+       * @name ranges
+       * @description
+       */
       $scope.ranges = [
         {
           days: 30,
@@ -126,12 +132,28 @@
         }
       ];
 
-      $scope.selectedRange = $scope.ranges[4];
+      /**
+       * @name selectedRange
+       * @description
+       */
+      $scope.selectedRange = $scope.ranges[0];
 
-      $scope.types = ['cumulative', 'relative'];
+      /**
+       * @name types
+       * @description
+       */
+      $scope.types = ['Cumulative', 'Relative'];
 
+      /**
+       * @name selectedType
+       * @description
+       */
       $scope.selectedType = $scope.types[0];
 
+      /**
+       * @name changeChartType
+       * @description
+       */
       $scope.changeChartType = function (selectedType) {
 
         $scope.selectedType = selectedType;
@@ -154,16 +176,19 @@
 
         if ($scope.selectedRange.days === -1) {
           var a = moment();
-          //var b = moment(transferDates.leagueStart.days);
-          var b = moment('2015/08/01');
+          var b = moment(transferDates.leagueStart.days);
           var difference = a.diff(b, 'days');
           lastDays = $scope.lastDays(difference);
         } else {
           lastDays = $scope.lastDays($scope.selectedRange.days);
         }
 
-        var targetObject = dataObj;
-        var targetArray = data[0];
+        var targetArray = data;
+
+        var targetObject = {};
+        _.each(chartMapKeys, function (key) {
+          targetObject[key] = {};
+        });
 
         _.each(lastDays, function (calendarDay) {
 
@@ -179,19 +204,28 @@
             $scope.player.gameLogs.ligaCompleteLog.forEach(logLoop.bind(self, calendarDay, targetObject));
           }
 
+          if ($scope.player.playedInChlgGames) {
+            $scope.player.gameLogs.chlgCompleteLogs.forEach(logLoop.bind(self, calendarDay, targetObject));
+          }
+
+          if ($scope.player.playedInEuroGames) {
+            $scope.player.gameLogs.euroCompleteLogs.forEach(logLoop.bind(self, calendarDay, targetObject));
+          }
+
         });
 
         var incValue = 0;
 
-        console.log('$scope.selectedType', $scope.selectedType);
-
         _.each(targetObject, function (value) {
-          if ($scope.selectedType === 'cumulative') {
-            incValue += value;
-            targetArray.push(incValue);
-          } else {
-            targetArray.push(value);
-          }
+          incValue = 0;
+          targetArray.push(_.map(value, function (stat) {
+            if ($scope.selectedType.toLowerCase() === 'cumulative') {
+              incValue += stat;
+              return incValue;
+            } else {
+              return stat;
+            }
+          }));
         });
 
         $timeout(function () {
@@ -200,31 +234,36 @@
             labels: lastDays,
             series: data
           }, chartSettings.profileChartOptions);
-        }, 1000);
+        }, 500);
 
       };
 
       /**
        * @name logLoop
-       * @description
+       * @description loop function for mapping chart data
+       * @param calendarDay
+       * @param targetObject
+       * @param log
        */
       var logLoop = function (calendarDay, targetObject, log) {
-        if (log.datePlayed === calendarDay) {
-          if (angular.isDefined(targetObject[calendarDay])) {
-            targetObject[calendarDay] += log.goals;
+        _.each(targetObject, function (obj, mapKey) {
+          if (log.datePlayed === calendarDay) {
+            if (angular.isDefined(targetObject[mapKey][calendarDay])) {
+              targetObject[mapKey][calendarDay] += log[mapKey];
+            } else {
+              targetObject[mapKey][calendarDay] = log[mapKey];
+            }
           } else {
-            targetObject[calendarDay] = log.goals;
+            if (angular.isUndefinedOrNull(targetObject[mapKey][calendarDay])) {
+              targetObject[mapKey][calendarDay] = 0;
+            }
           }
-        } else {
-          if (angular.isUndefinedOrNull(targetObject[calendarDay])) {
-            targetObject[calendarDay] = 0;
-          }
-        }
+        });
       };
 
       /**
        * @name requestUpdateOnPlayer
-       * @description
+       * @description makes a new http request from thescore api
        */
       var requestUpdateOnPlayer = function () {
 

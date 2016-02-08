@@ -43,7 +43,6 @@
 
       $urlRouterProvider.when('/leagues', '/leagues/liga/tables');
       $urlRouterProvider.when('/leagues/', '/leagues/liga/tables');
-
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
       $urlRouterProvider.when('/managers', '/managers/chester/overview');
@@ -69,11 +68,9 @@
               return apiFactory.getApiData('managersData');
             },
             leagueTables: function (apiFactory) {
-              console.log('leagueTables');
               return apiFactory.getApiData('leagueTables');
             },
             scoringLeaders: function (apiFactory) {
-              console.log('scoringLeaders');
               return apiFactory.getApiData('scoringLeaders');
             }
           }
