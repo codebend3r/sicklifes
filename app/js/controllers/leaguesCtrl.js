@@ -10,11 +10,11 @@
 
     .controller('leaguesCtrl', function ($scope, $rootScope, $stateParams, $state, $localStorage, $location, $http, updateDataUtils, momentService, textManipulator, leagueTables, apiFactory) {
 
+      console.log('--> leaguesCtrl');
+
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
-
-      console.log('--> leaguesCtrl', leagueTables);
 
       $scope.totalItems = 10;
       $scope.currentPage = 1;
@@ -28,7 +28,7 @@
        * select box changes function
        */
       $scope.changeLeague = function (league) {
-        $state.go($state.current.name, { leagueName: league.slug });
+        $state.go($state.current.name, {leagueName: league.slug});
       };
 
       /**

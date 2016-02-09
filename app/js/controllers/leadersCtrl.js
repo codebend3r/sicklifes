@@ -34,8 +34,6 @@
 
         console.log('mapLeagueLeaders');
 
-        var self = this;
-
         $scope.leagueLeaders = _.map(result.data.Goals, function (data) {
 
           return {

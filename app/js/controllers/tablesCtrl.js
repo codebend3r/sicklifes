@@ -14,7 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      console.log('--> tablesCtrl', leagueTables);
+      console.log('--> tablesCtrl');
 
       $rootScope.loading = true;
 

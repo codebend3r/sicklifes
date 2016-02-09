@@ -10,6 +10,8 @@
 
     .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, managersData) {
 
+      console.log('--> standingsCtrl');
+
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////

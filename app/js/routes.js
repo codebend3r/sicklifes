@@ -10,51 +10,53 @@
 
     .config(function ($stateProvider, $urlRouterProvider) {
 
-      var self = this;
+      console.log('-- config routes --');
+
+      //var self = this;
 
       /**
        * @name init
        * @description init the controller
        * @param keyName {string}
        */
-      var init = function () {
-        var defer = $q.defer();
+      //var init = function () {
+      //  var defer = $q.defer();
+      //
+      //  if (angular.isDefined($rootScope['managersData'])) {
+      //    console.log('$rootScope');
+      //    defer.resolve($rootScope['managersData']);
+      //    return defer.promise;
+      //  } else if (angular.isDefined($localStorage['managersData'])) {
+      //    console.log('$localStorage');
+      //    $rootScope['managersData'] = $localStorage['managersData'];
+      //    defer.resolve($localStorage['managersData']);
+      //    return defer.promise;
+      //  } else {
+      //    console.log('$http');
+      //    return apiFactory.getApiData('managersData');
+      //  }
+      //
+      //};
 
-        if (angular.isDefined($rootScope['managersData'])) {
-          console.log('$rootScope');
-          defer.resolve($rootScope['managersData']);
-          return defer.promise;
-        } else if (angular.isDefined($localStorage['managersData'])) {
-          console.log('$localStorage');
-          $rootScope['managersData'] = $localStorage['managersData'];
-          defer.resolve($localStorage['managersData']);
-          return defer.promise;
-        } else {
-          console.log('$http');
-          return apiFactory.getApiData('managersData');
-        }
+      //$urlRouterProvider.when('', '/standings');
+      //$urlRouterProvider.when('/', '/standings');
 
-      };
+      //$urlRouterProvider.when('/standings', '/standings/overview');
 
-      $urlRouterProvider.when('', '/standings');
-      $urlRouterProvider.when('/', '/standings');
-
-      $urlRouterProvider.when('/standings', '/standings/overview');
-
-      $urlRouterProvider.when('/leagues', '/leagues/liga/tables');
-      $urlRouterProvider.when('/leagues/', '/leagues/liga/tables');
-      $urlRouterProvider.when('/leagues/:leagueName', '/leagues/liga/tables');
-      $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
-
-      $urlRouterProvider.when('/managers', '/managers/chester/overview');
-      $urlRouterProvider.when('/managers/', '/managers/chester/overview');
-      $urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
-      $urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
-      $urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview');
-
-      $urlRouterProvider.when('/transfers', '/transfers/chester/history');
-      $urlRouterProvider.when('/transfers/chester', '/transfers/chester/history');
-      $urlRouterProvider.when('/transfers/', '/transfers/chester/history');
+      //$urlRouterProvider.when('/leagues', '/leagues/liga/tables');
+      //$urlRouterProvider.when('/leagues/', '/leagues/liga/tables');
+      //$urlRouterProvider.when('/leagues/:leagueName', '/leagues/liga/tables');
+      //$urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
+      //
+      //$urlRouterProvider.when('/managers', '/managers/chester/overview');
+      //$urlRouterProvider.when('/managers/', '/managers/chester/overview');
+      //$urlRouterProvider.when('/managers//overview', '/managers/chester/overview');
+      //$urlRouterProvider.when('/managers/:managerId', '/managers/:managerId/overview');
+      //$urlRouterProvider.when('/managers/:managerId/overview/', '/managers/:managerId/overview');
+      //
+      //$urlRouterProvider.when('/transfers', '/transfers/chester/history');
+      //$urlRouterProvider.when('/transfers/chester', '/transfers/chester/history');
+      //$urlRouterProvider.when('/transfers/', '/transfers/chester/history');
 
       $urlRouterProvider.otherwise('/standings');
 
@@ -104,6 +106,8 @@
         //    public: true
         //  }
         //})
+
+        // leagues
         .state('leagues', {
           url: '/leagues/:leagueName',
           parent: 'app',
@@ -120,6 +124,31 @@
           templateUrl: 'views/leagues-leaders.html',
           controller: 'leadersCtrl'
         })
+
+        // standings
+        .state('standings', {
+          url: '/standings',
+          parent: 'app',
+          templateUrl: 'views/standings.html',
+          controller: function() {
+            console.log('standings!!!!!!');
+          }
+          //controller: 'standingsCtrl'
+        })
+        //.state('standings.overview', {
+        //  url: '/overview',
+        //  templateUrl: 'views/standings-overview.html'
+        //})
+        //.state('standings.latestgoals', {
+        //  url: '/latestgoals',
+        //  templateUrl: 'views/standings-latestgoals.html'
+        //})
+        //.state('standings.charts', {
+        //  url: '/charts',
+        //  templateUrl: 'views/standings-charts.html'
+        //})
+
+        // managers
         .state('managers', {
           url: '/managers/:managerId',
           parent: 'app',
@@ -139,30 +168,8 @@
           templateUrl: 'views/stats.html',
           controller: 'statsCtrl'
         })
-        .state('playerDetails', {
-          url: '/player-details/:playerId',
-          parent: 'app',
-          templateUrl: 'views/player-details.html',
-          controller: 'playersDetailsCtrl'
-        })
-        .state('standings', {
-          url: '/standings',
-          parent: 'app',
-          templateUrl: 'views/standings.html',
-          controller: 'standingsCtrl'
-        })
-        .state('standings.overview', {
-          url: '/overview',
-          templateUrl: 'views/standings-overview.html'
-        })
-        .state('standings.latestgoals', {
-          url: '/latestgoals',
-          templateUrl: 'views/standings-latestgoals.html'
-        })
-        .state('standings.charts', {
-          url: '/charts',
-          templateUrl: 'views/standings-charts.html'
-        })
+
+        // transfer
         .state('transfers', {
           url: '/transfers/:managerId',
           parent: 'app',
@@ -177,6 +184,16 @@
           url: '/freeagency',
           templateUrl: 'views/transfers-freeagency.html',
         })
+
+        // player details
+        .state('playerDetails', {
+          url: '/player-details/:playerId',
+          parent: 'app',
+          templateUrl: 'views/player-details.html',
+          controller: 'playersDetailsCtrl'
+        })
+
+        // roster
         .state('roster', {
           url: '/roster/:leagueName/:teamId',
           parent: 'app',
