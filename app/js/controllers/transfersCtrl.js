@@ -54,7 +54,7 @@
        * {ng-click} - when manager option changes
        */
       $scope.changeManager = function (selectedManager) {
-        $state.go($state.current.name, { managerId: selectedManager.managerName.toLowerCase() });
+        $state.go($state.current.name, {managerId: selectedManager.managerName.toLowerCase()});
       };
 
 
@@ -102,9 +102,7 @@
           var saveObject = $scope.managersData;
           saveObject._lastSyncedOn = momentService.syncDate();
 
-          $scope.startFireBase(function () {
-            $scope.saveToFireBase(saveObject, 'managersData');
-          });
+          $scope.saveToFireBase(saveObject, 'managersData');
 
         } else {
 
@@ -209,51 +207,13 @@
           console.log('droppedPlayerObject: ', $scope.droppedPlayerObject);
           console.log('///////////////////////////////////////////');
 
-          $scope.startFireBase(function () {
-            $scope.saveRoster();
-          });
+          $scope.saveRoster();
 
         } else {
 
           console.warn('no player to add and/or drop has been specified');
 
         }
-
-      };
-
-      /**
-       * @name loadData
-       * @description read data from firebase
-       * @param result
-       */
-      var loadData = function (result) {
-
-        $scope.managersData = managersData.data;
-
-        $scope.allPlayers = $rootScope.playerPoolData.allPlayers;
-
-        console.log('populate transfer history - START');
-
-        $scope.transferHistory = [];
-
-        _.each($scope.managersData, function (m) {
-
-          _.each(m.players, function(player) {
-
-            if (player.status !== 'drafted') {
-
-              $scope.transferHistory.push(player);
-
-            }
-
-          });
-        });
-
-        console.log('populate transfer history - END');
-
-        $timeout(function() {
-          $rootScope.loading = false;
-        }, 250);
 
       };
 
@@ -276,17 +236,44 @@
        */
       $scope.savePlayerPoolData = function () {
 
-        $scope.startFireBase(function () {
+        var saveObject = {
+          _syncedFrom: 'transfersCtrl',
+          _lastSyncedOn: momentService.syncDate(),
+          allPlayers: $scope.allPlayers
+        };
 
-          var saveObject = {
-            _syncedFrom: 'transfersCtrl',
-            _lastSyncedOn: momentService.syncDate(),
-            allPlayers: $scope.allPlayers
-          };
+        $scope.saveToFireBase(saveObject, 'playerPoolData');
 
-          $scope.saveToFireBase(saveObject, 'playerPoolData');
+      };
 
+      /**
+       * @name loadData
+       * @description read data from firebase
+       * @param result
+       */
+      var loadData = function () {
+
+        $scope.managersData = managersData.data;
+
+        $scope.allPlayers = $rootScope.playerPoolData.allPlayers;
+
+        console.log('populate transfer history - START');
+
+        $scope.transferHistory = [];
+
+        _.each($scope.managersData, function (m) {
+          _.each(m.players, function (player) {
+            if (player.status !== 'drafted') {
+              $scope.transferHistory.push(player);
+            }
+          });
         });
+
+        console.log('populate transfer history - END');
+
+        $timeout(function () {
+          $rootScope.loading = false;
+        }, 250);
 
       };
 

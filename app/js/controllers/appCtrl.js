@@ -6,6 +6,8 @@
 
   'use strict';
 
+  console.log('appCtrl.js');
+
   angular.module('sicklifes')
 
     .controller('appCtrl', function ($scope, $rootScope, $q, $location, $localStorage, apiFactory, $state, fireBaseService, arrayMappers, momentService, objectUtils, arrayFilter, textManipulator, scoringLogic) {
@@ -388,17 +390,20 @@
       };
 
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
-        console.log('toState', toState);
-        console.log('toParams:', toParams);
-        // if (toParams.leagueName === '') {
-        //   toParams.leagueName = 'epl';
-        // }
-        // console.log('fromState:', fromState);
-        // console.log('fromParams:', fromParams);
-        // if (toState.name === 'leagues') {
-        //   console.log('state name is leagues');
-        //   $state.go('leagues.tables', {leagueName: toParams.leagueName});
-        // }
+        if (toState.name === 'leagues') {
+          if (!_.has(toParams, 'leagueName') || toParams.leagueName === '') {
+            toParams.leagueName = 'epl';
+          }
+          //console.log('go to league', toParams.leagueName);
+          $state.go('leagues.tables', {leagueName: toParams.leagueName});
+        } else if (toState.name === 'standings') {
+          console.log('toState', toState);
+          console.log('toParams:', toParams);
+          //if (!_.has(toParams, 'leagueName') || toParams.leagueName === '') {
+          //  toParams.leagueName = 'epl';
+          //}
+          //$state.go('standings.tables', {leagueName: toParams.leagueName});
+        }
       });
 
 

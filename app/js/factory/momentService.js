@@ -33,7 +33,7 @@
         },
 
         goalDate: function () {
-          return $moment().format('MM/DD/YYYY');
+          return $moment().format('YYYY/MM/DD');
         },
 
         getUnixTime: function (date) {

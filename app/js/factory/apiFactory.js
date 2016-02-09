@@ -8,66 +8,50 @@
 
   angular.module('sicklifes')
 
-    .factory('apiFactory', function ($http, $q, $moment, $rootScope, textManipulator, $stateParams) {
+    .factory('apiFactory', function ($http, $q, $moment, $rootScope) {
 
       var apiFactory = {};
 
-      /**
-       * @description
-       * @returns {Promise}
-       */
-      apiFactory.getData = function (endPoint) {
+      apiFactory.baseUrl = 'http://api.thescore.com/';
 
-        var defer = $q.defer(),
-          httpObject = {
-            method: endPoint.method || 'GET',
-            url: endPoint.endPointURL
-          };
+      apiFactory.firebaseUrl = 'https://glaring-fire-9383.firebaseio.com/';
 
-        $http(httpObject).then(function (result) {
-
-          defer.resolve(result);
-          if (angular.isDefined(endPoint.qCallBack)) endPoint.qCallBack(result);
-
-        });
-
-        return defer.promise;
-
-      };
+      apiFactory.slugs = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
 
       /**
        * @description
        * @returns {Promise}
        */
-      apiFactory.getApiData = function (namespace) {
+        apiFactory.getApiData = function (namespace) {
 
-        var defer = $q.defer();
+          var defer = $q.defer();
 
-        $http.get('https://glaring-fire-9383.firebaseio.com/' + namespace + '.json')
-          .then(function (result) {
+          $http.get(apiFactory.firebaseUrl + namespace + '.json')
+            .then(function (result) {
 
-            console.log('resolved data:', namespace, result);
-            if (namespace === 'managersData') {
-              var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
-              console.log('managerId:', managerId);
+              //console.log('resolved data:', namespace, result);
+              //if (namespace === 'managersData') {
+              //  var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
+              //  console.log('managerId:', managerId);
+              //  $rootScope[namespace] = result.data;
+              //  $rootScope.selectedManager = $rootScope.managersData.data[managerId.toLowerCase()];
+              //} else if (namespace.contains('managersData')) {
+              //  var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
+              //  $rootScope['managersData'] = $rootScope[namespace] || {};
+              //  $rootScope['managersData'][managerId] = result.data;
+              //  $rootScope.selectedManager = result.data;
+              //} else {
+              //  $rootScope[namespace] = result.data;
+              //}
               $rootScope[namespace] = result.data;
-              $rootScope.selectedManager = $rootScope.managersData.data[managerId.toLowerCase()];
-            } else if (namespace.contains('managersData')) {
-              var managerId = $stateParams.managerId ? $stateParams.managerId : 'chester';
-              $rootScope['managersData'] = $rootScope[namespace] || {};
-              $rootScope['managersData'][managerId] = result.data;
-              $rootScope.selectedManager = result.data;
-            } else {
-              $rootScope[namespace] = result.data;
-            }
-            console.log('rootScope variable saved:', namespace);
-            defer.resolve(result.data);
+              console.log('rootScope variable saved:', namespace);
+              defer.resolve(result.data);
 
-          });
+            });
 
-        return defer.promise;
+          return defer.promise;
 
-      };
+        };
 
       /**
        * @name getPlayerLog
@@ -76,7 +60,7 @@
        */
       apiFactory.getPlayerLog = function (leagueSlug, id) {
 
-        return $http.get('http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id + '/player_records');
+        return $http.get(apiFactory.baseUrl + leagueSlug.toLowerCase() + '/players/' + id + '/player_records');
 
       };
 
@@ -87,8 +71,17 @@
        */
       apiFactory.getPlayerProfile = function (leagueSlug, id) {
 
-        return $http.get('http://origin-api.thescore.com/' + leagueSlug.toLowerCase() + '/players/' + id);
+        return $http.get(apiFactory.baseUrl + leagueSlug.toLowerCase() + '/players/' + id);
 
+      };
+
+      /**
+       * @name getTablesByLeague
+       * @description TODO
+       * @returns {promise}
+       */
+      apiFactory.getTablesByLeague = function (slug) {
+        return $http.get(apiFactory.baseUrl + slug + '/standings');
       };
 
       /**
@@ -97,25 +90,14 @@
        */
       apiFactory.getLeagueTables = function () {
 
-        var leagues = [
-            'http://api.thescore.com/liga/standings/',
-            'http://api.thescore.com/epl/standings/',
-            'http://api.thescore.com/seri/standings/',
-            'http://api.thescore.com/chlg/standings/',
-            'http://api.thescore.com/uefa/standings/'
-          ],
-          leagueSlugs = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
-          listOrPromises = [];
+        var listOrPromises = [];
 
-        _.each(leagues, function (url, index) {
+        _.each(apiFactory.slugs, function (slug) {
 
-          var leagueRequest = apiFactory.getData({
-            endPointURL: url
-          });
+          var leagueRequest = apiFactory.getTablesByLeague(slug);
 
           leagueRequest.then(function (result) {
-            result.data.leagueURL = url;
-            result.data.leagueSlug = leagueSlugs[index];
+            result.slug = slug;
           });
 
           listOrPromises.push(leagueRequest);
@@ -124,6 +106,13 @@
 
         return listOrPromises;
 
+      };
+
+      /**
+       * @description get teams in specific league by slug
+       */
+      apiFactory.getTeamsByLeague = function (slug) {
+        return $http.get(apiFactory.baseUrl + slug + '/teams');
       };
 
       /**
@@ -131,39 +120,14 @@
        */
       apiFactory.getAllTeams = function () {
 
-        var allLeaguesURL = [
-            {
-              url: 'http://origin-api.thescore.com/liga/teams/',
-              leagueName: 'liga'
-            },
-            {
-              url: 'http://origin-api.thescore.com/epl/teams/',
-              leagueName: 'epl'
-            },
-            {
-              url: 'http://origin-api.thescore.com/seri/teams/',
-              leagueName: 'seri'
-            },
-            {
-              url: 'http://origin-api.thescore.com/chlg/teams/',
-              leagueName: 'chlg'
-            },
-            {
-              url: 'http://origin-api.thescore.com/uefa/teams/',
-              leagueName: 'uefa'
-            }
-          ],
-          listOrPromises = [];
+        var listOrPromises = [];
 
-        _.each(allLeaguesURL, function (urlObj) {
+        _.each(apiFactory.slugs, function (slug) {
 
-          var leagueRequest = apiFactory.getData({
-            endPointURL: urlObj.url
-          });
+          var leagueRequest = apiFactory.getTeamsByLeague(slug);
 
           leagueRequest.then(function (result) {
-            result.leagueURL = urlObj.url;
-            result.leagueName = urlObj.leagueName;
+            result.slug = slug;
           });
 
           listOrPromises.push(leagueRequest);
@@ -171,27 +135,6 @@
         });
 
         return listOrPromises;
-
-      };
-
-      /**
-       * @description 
-       */
-      apiFactory.getRoster = function (result) {
-
-        var listOrPromises = [];
-
-        _.each(result.data, function (leagueData) {
-
-          var rosterRequest = apiFactory.getData({
-            endPointURL: url + leagueData.id + '/players/'
-          });
-
-          rosterRequest.promise.then(function () {
-            listOrPromises.push(rosterRequest.promise);
-          });
-
-        });
 
       };
 
@@ -199,53 +142,54 @@
        * @description make http request for current league leader in goals
        * @param cb
        */
-      $scope.getGoalLeadersByLeague = function (slug) {
-
-        console.log('apiFactory --> getGoalLeadersByLeague');
-
-        return $http.get('http://api.thescore.com/' + slug + '/leaders?categories=Goals&season_type=regular');
-
+      apiFactory.getGoalLeadersByLeague = function (slug) {
+        return $http.get(apiFactory.baseUrl + slug + '/leaders?categories=Goals&season_type=regular');
       };
 
       /**
-       * @description
+       * @description TODO
        */
       apiFactory.getAllGoalLeaders = function () {
 
-        console.log('getting goal leaders in each league');
+        var listOrPromises = [];
 
-        var allLeagues = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
-          listOrPromises = [],
-          listOfResults = [];
+        _.each(apiFactory.slugs, function (slug) {
 
-        _.each(allLeaguesURL, function (url, index) {
-
-          var leagueRequest = apiFactory.getGoalLeadersByLeague(allLeagues[index]);
+          var leagueRequest = apiFactory.getGoalLeadersByLeague(slug);
 
           leagueRequest.then(function (result) {
-
-            result.leagueURL = url;
-            result.leagueName = allLeagues[index];
-            listOfResults.push(result);
-
+            result.slug = slug;
           });
 
           listOrPromises.push(leagueRequest);
 
         });
 
-        return listOrPromises;
+        return $q.all(listOrPromises);
 
       };
 
       /**
-       * @description waits for an array of promises to resolve
+       * @description
        */
-      apiFactory.listOfPromises = function (list, callbackFunc) {
+      //apiFactory.getRoster = function (result) {
+      //
+      //  var listOrPromises = [];
+      //
+      //  _.each(result.data, function (leagueData) {
+      //
+      //    var rosterRequest = apiFactory.getData({
+      //      endPointURL: url + leagueData.id + '/players/'
+      //    });
+      //
+      //    rosterRequest.promise.then(function () {
+      //      listOrPromises.push(rosterRequest.promise);
+      //    });
+      //
+      //  });
+      //
+      //};
 
-        $q.all(list).then(callbackFunc);
-
-      };
 
       return apiFactory;
 

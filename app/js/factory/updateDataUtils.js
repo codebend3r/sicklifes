@@ -28,42 +28,42 @@
           allPlayers = [];
 
         // returns a list of promise with the end point for each league
-        apiFactory.listOfPromises(allTeams, function (result) {
+        $q.all(allTeams)
+          .then(function (result) {
+            _.each(result, function (leagueData) {
 
-          _.each(result, function (leagueData) {
+              _.each(leagueData.data, function (teamData) {
 
-            _.each(leagueData.data, function (teamData) {
+                console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
 
-              console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
-
-              // returns a promise with the end point for each team
-              var rosterRequest = apiFactory.getData({
-                endPointURL: textManipulator.getTeamRosterURL(leagueData.leagueName, teamData.id)
-              });
-
-              allTeamsPromise.push(rosterRequest);
-
-              rosterRequest.then(function (playerData) {
-
-                _.each(playerData.data, function (eachPlayer) {
-                  console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
+                // returns a promise with the end point for each team
+                var rosterRequest = apiFactory.getData({
+                  endPointURL: textManipulator.getTeamRosterURL(leagueData.leagueName, teamData.id)
                 });
 
-                // each player on each team
-                var rosterArray = _.map(playerData.data, arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
-                allPlayers = allPlayers.concat(rosterArray);
+                allTeamsPromise.push(rosterRequest);
+
+                rosterRequest.then(function (playerData) {
+
+                  _.each(playerData.data, function (eachPlayer) {
+                    console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
+                  });
+
+                  // each player on each team
+                  var rosterArray = _.map(playerData.data, arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
+                  allPlayers = allPlayers.concat(rosterArray);
+
+                });
 
               });
 
             });
 
-          });
+            $q.all(allTeamsPromise).then(function () {
+              callback(allPlayers);
+            });
 
-          $q.all(allTeamsPromise).then(function () {
-            callback(allPlayers);
           });
-
-        });
 
       };
 
@@ -91,12 +91,18 @@
           console.log(player.managerName);
 
           apiFactory.getPlayerProfile('soccer', player.id)
-            .then(arrayMappers.playerInfo.bind(this, player), function() { console.log('fail 1') })
-            .then(arrayMappers.playerMapPersonalInfo.bind(this, player), function() { console.log('fail 2') })
+            .then(arrayMappers.playerInfo.bind(this, player), function () {
+              console.log('fail 1')
+            })
+            .then(arrayMappers.playerMapPersonalInfo.bind(this, player), function () {
+              console.log('fail 2')
+            })
             .then(arrayMappers.playerGamesLog.bind(this, {
               player: player,
               manager: manager
-            }), function() { console.log('fail 3') })
+            }), function () {
+              console.log('fail 3')
+            })
             .then(function (result) {
 
               // TODO make function available in services
@@ -127,7 +133,9 @@
                   throw new Error('cb parameter is not type function');
                 }
               }
-            }, function() { console.log('fail 4') });
+            }, function () {
+              console.log('fail 4')
+            });
 
         });
 
@@ -138,6 +146,8 @@
        * @description gets data from all of the players in all valid leagues
        */
       updateDataUtils.updateAllManagerData = function (managersData, cb) {
+
+        console.log('updateDataUtils --> updateAllManagerData');
 
         var managers = angular.copy(managersData.data);
         _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
@@ -152,6 +162,8 @@
        */
       updateDataUtils.updateCoreData = function (cb) {
 
+        console.log('updateDataUtils --> updateCoreData');
+
         $q.all([apiFactory.getApiData('managersData'), apiFactory.getApiData('leagueTables')])
           .then(function () {
             cb();
@@ -165,6 +177,8 @@
        */
       updateDataUtils.updateLeagueTables = function () {
 
+        console.log('updateDataUtils --> updateLeagueTables');
+
         var leagueTables = apiFactory.getLeagueTables(),
           defer = $q.defer(),
           leagueTablesData = [],
@@ -173,29 +187,30 @@
           };
 
         // returns a list of promise with the end point for each league
-        apiFactory.listOfPromises(leagueTables, function (promiseData) {
+        $q.all(leagueTables)
+          .then(function (promiseData) {
 
-          leagueTablesData = _.map(promiseData, function (result, index) {
+            leagueTablesData = _.map(promiseData, function (result, index) {
 
-            if (index <= 2) {
+              if (index <= 2) {
 
-              return {
-                data: _.map(result.data, arrayMappers.tableMap)
-              };
+                return {
+                  data: _.map(result.data, arrayMappers.tableMap)
+                };
 
-            } else {
+              } else {
 
-              return {
-                data: _.map(result.data, arrayMappers.tableTournamentMap)
-              };
+                return {
+                  data: _.map(result.data, arrayMappers.tableTournamentMap)
+                };
 
-            }
+              }
+
+            });
+
+            defer.resolve(leagueTablesData);
 
           });
-
-          defer.resolve(leagueTablesData);
-
-        });
 
         return defer.promise;
 
@@ -217,24 +232,23 @@
           allPromises = apiFactory.getAllGoalLeaders();
 
         // waits for an array of promises to resolve, sets allLeagues data
-        apiFactory.listOfPromises(allPromises, function (result) {
-
-          allLeagues = [];
-
-          _.each(result, function (league) {
-            var goalsMap = league.data.goals.map(arrayMappers.goalsMap.bind(arrayMappers, $rootScope.managersData, league.leagueURL));
-            allLeagues.push({
-              name: textManipulator.properLeagueName(league.leagueName),
-              source: goalsMap,
-              className: league.leagueName,
-              img: textManipulator.leagueImages[league.leagueName]
+        $q.all(allPromises)
+          .then(function (result) {
+            allLeagues = [];
+            _.each(result, function (league) {
+              var goalsMap = league.data.goals.map(arrayMappers.goalsMap.bind(arrayMappers, $rootScope.managersData, league.leagueURL));
+              allLeagues.push({
+                name: textManipulator.properLeagueName(league.leagueName),
+                source: goalsMap,
+                className: league.leagueName,
+                img: textManipulator.leagueImages[league.leagueName]
+              });
+              consolidatedGoalScorers = consolidatedGoalScorers.concat(goalsMap);
             });
-            consolidatedGoalScorers = consolidatedGoalScorers.concat(goalsMap);
+
+            defer.resolve(allLeagues);
+
           });
-
-          defer.resolve(allLeagues);
-
-        });
 
         return defer.promise;
 
