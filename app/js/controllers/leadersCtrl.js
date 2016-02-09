@@ -73,18 +73,6 @@
       };
 
       /**
-       * TODO
-       * @returns {boolean}
-       */
-      // var existsInFireBase = function (data) {
-      //
-      //   return !angular.isUndefinedOrNull(data)
-      //     && !angular.isUndefinedOrNull(data.leagues)
-      //     && !angular.isUndefinedOrNull(data.leagues[$stateParams.leagueName]);
-      //
-      // };
-
-      /**
        * when firebase data is loaded
        * @param firebaseObj
        */
@@ -93,30 +81,6 @@
         $scope.setSelectedLeague();
         $scope.leagueLeaders = scoringLeaders.leagues[$stateParams.leagueName].goalLeaders;
         $rootScope.loading = false;
-
-        // if (angular.isDefined(data.leagues)
-        //   && angular.isDefined(data.leagues[$stateParams.leagueName])
-        //   && momentService.isHoursAgo(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
-        //
-        //   console.log('-- data is too old --');
-        //   //$scope.updateLeadersFromHTTP(mapLeagueLeaders);
-        //   $scope.setSelectedLeague();
-        //   $scope.leagueLeaders = data.leagues[$stateParams.leagueName].goalLeaders;
-        //   $rootScope.loading = false;
-        //
-        // } else if (existsInFireBase(data)) {
-        //
-        //   console.log('-- data is up to date & exists in firebase --');
-        //   $scope.setSelectedLeague();
-        //   $scope.leagueLeaders = data.leagues[$stateParams.leagueName].goalLeaders;
-        //   $rootScope.loading = false;
-        //
-        // } else {
-        //
-        //   console.log('-- data not available in firebase --');
-        //   $scope.updateLeadersFromHTTP(mapLeagueLeaders);
-        //
-        // }
 
       };
 
