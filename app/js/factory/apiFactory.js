@@ -175,7 +175,7 @@
       };
 
       /**
-       * TODO
+       * @description 
        */
       apiFactory.getRoster = function (result) {
 
@@ -196,28 +196,31 @@
       };
 
       /**
-       * TODO
+       * @description make http request for current league leader in goals
+       * @param cb
+       */
+      $scope.getGoalLeadersByLeague = function (slug) {
+
+        console.log('apiFactory --> getGoalLeadersByLeague');
+
+        return $http.get('http://api.thescore.com/' + slug + '/leaders?categories=Goals&season_type=regular');
+
+      };
+
+      /**
+       * @description
        */
       apiFactory.getAllGoalLeaders = function () {
 
         console.log('getting goal leaders in each league');
 
-        var allLeaguesURL = [
-            'http://api.thescore.com/liga/leaders?categories=goals',
-            'http://api.thescore.com/epl/leaders?categories=goals',
-            'http://api.thescore.com/seri/leaders?categories=goals',
-            'http://api.thescore.com/chlg/leaders?categories=goals',
-            'http://api.thescore.com/uefa/leaders?categories=goals'
-          ],
-          allLeagues = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
+        var allLeagues = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
           listOrPromises = [],
           listOfResults = [];
 
         _.each(allLeaguesURL, function (url, index) {
 
-          var leagueRequest = apiFactory.getData({
-            endPointURL: url
-          });
+          var leagueRequest = apiFactory.getGoalLeadersByLeague(allLeagues[index]);
 
           leagueRequest.then(function (result) {
 
@@ -236,7 +239,7 @@
       };
 
       /**
-       * waits for an array of promises to resolve
+       * @description waits for an array of promises to resolve
        */
       apiFactory.listOfPromises = function (list, callbackFunc) {
 

@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 09/01/2015
+ * Created by Bouse on 02/09/2016
  */
 
 (function () {
@@ -8,13 +8,13 @@
 
   angular.module('sicklifes')
 
-    .controller('leaguesCtrl', function ($scope, $rootScope, $stateParams, $state, $localStorage, $location, $http, updateDataUtils, momentService, textManipulator) {
+    .controller('leaguesCtrl', function ($scope, $rootScope, $stateParams, $state, $localStorage, $location, $http, updateDataUtils, momentService, textManipulator, leagueTables, apiFactory) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      console.log('--> leaguesCtrl');
+      console.log('--> leaguesCtrl', leagueTables);
 
       $scope.totalItems = 10;
       $scope.currentPage = 1;
@@ -109,34 +109,6 @@
           active: false
         }
       ];
-
-      /**
-       * make http request for current league leader in goals
-       * @param callback
-       */
-      $scope.updateLeadersFromHTTP = function (callback) {
-
-        console.log('leaguesCtrl --> updateLeadersFromHTTP');
-
-        $http({
-          url: 'http://api.thescore.com/' + $stateParams.leagueName + '/leaders?categories=Goals&season_type=regular',
-          method: 'GET'
-        }).then(callback);
-
-      };
-
-      /**
-       * get data through HTTP request
-       * @param callback
-       */
-      $scope.updateTablesFromHTTP = function (callback) {
-
-        console.log('leaguesCtrl --> updateTablesFromHTTP');
-
-        updateDataUtils.updateLeagueTables()
-          .then(callback);
-
-      };
 
 
     });

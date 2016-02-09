@@ -385,20 +385,20 @@
 
       };
 
-      $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
-        //console.log(event, toState, toParams, fromState, fromParams);
-        console.log('toState', toState);
-        console.log('toParams:', toParams);
-        if (toParams.leagueName === '') {
-          toParams.leagueName = 'epl';
-        }
-        console.log('fromState:', fromState);
-        console.log('fromParams:', fromParams);
-        if (toState.name === 'leagues') {
-          console.log('state name is leagues');
-          $state.go('leagues.tables', {leagueName: toParams.leagueName});
-        }
-      });
+      // $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
+      //   //console.log(event, toState, toParams, fromState, fromParams);
+      //   console.log('toState', toState);
+      //   console.log('toParams:', toParams);
+      //   if (toParams.leagueName === '') {
+      //     toParams.leagueName = 'epl';
+      //   }
+      //   console.log('fromState:', fromState);
+      //   console.log('fromParams:', fromParams);
+      //   if (toState.name === 'leagues') {
+      //     console.log('state name is leagues');
+      //     $state.go('leagues.tables', {leagueName: toParams.leagueName});
+      //   }
+      // });
 
 
     });

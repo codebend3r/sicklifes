@@ -43,6 +43,7 @@
 
       $urlRouterProvider.when('/leagues', '/leagues/liga/tables');
       $urlRouterProvider.when('/leagues/', '/leagues/liga/tables');
+      $urlRouterProvider.when('/leagues/:leagueName', '/leagues/liga/tables');
       $urlRouterProvider.when('/leagues//tables', '/leagues/liga/tables');
 
       $urlRouterProvider.when('/managers', '/managers/chester/overview');
@@ -161,12 +162,6 @@
         .state('standings.charts', {
           url: '/charts',
           templateUrl: 'views/standings-charts.html'
-        })
-        .state('admin', {
-          url: '/admin',
-          parent: 'app',
-          templateUrl: 'views/admin.html',
-          controller: 'adminCtrl'
         })
         .state('transfers', {
           url: '/transfers/:managerId',

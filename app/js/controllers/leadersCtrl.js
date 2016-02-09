@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('leadersCtrl', function ($scope, $state, $stateParams, $localStorage, updateDataUtils, $rootScope, momentService, apiFactory, textManipulator, managersService) {
+    .controller('leadersCtrl', function ($scope, $state, $stateParams, $localStorage, updateDataUtils, $rootScope, momentService, apiFactory, textManipulator, managersService, scoringLeaders) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -21,9 +21,9 @@
        */
       $scope.updateLeaders = function () {
 
-        updateDataUtils.updateCoreData(function () {
-          $scope.updateLeadersFromHTTP(mapLeagueLeaders);
-        });
+        console.log('leadersCtrl --> updateLeaders');
+
+        apiFactory.getAllGoalLeaders(mapLeagueLeaders);
 
       };
 
@@ -54,25 +54,21 @@
 
         $rootScope.loading = false;
 
-        $scope.startFireBase(function () {
+        var saveObject = {};
+        saveObject._syncedFrom = 'leadersCtrl';
+        saveObject.leagues = {};
+        saveObject.leagues[$stateParams.leagueName] = {
+          goalLeaders: $scope.leagueLeaders,
+          _lastSyncedOn: momentService.syncDate()
+        };
 
-          var saveObject = {};
-          saveObject._syncedFrom = 'leadersCtrl';
-          saveObject.leagues = {};
-          saveObject.leagues[$stateParams.leagueName] = {
-            goalLeaders: $scope.leagueLeaders,
-            _lastSyncedOn: momentService.syncDate()
-          };
+        if ($rootScope.scoringLeaders) {
+          _.defaults(saveObject.leagues, $rootScope.scoringLeaders.leagues);
+        }
 
-          if ($rootScope.scoringLeaders) {
-            _.defaults(saveObject.leagues, $rootScope.scoringLeaders.leagues);
-          }
+        console.log('updating league leaders for', $stateParams.leagueName);
 
-          console.log('updating league leaders for', $stateParams.leagueName);
-
-          $scope.saveToFireBase(saveObject, 'scoringLeaders');
-
-        });
+        $scope.saveToFireBase(saveObject, 'scoringLeaders');
 
       };
 
@@ -80,43 +76,47 @@
        * TODO
        * @returns {boolean}
        */
-      var existsInFireBase = function (data) {
-
-        return !angular.isUndefinedOrNull(data)
-          && !angular.isUndefinedOrNull(data.leagues)
-          && !angular.isUndefinedOrNull(data.leagues[$stateParams.leagueName]);
-
-      };
+      // var existsInFireBase = function (data) {
+      //
+      //   return !angular.isUndefinedOrNull(data)
+      //     && !angular.isUndefinedOrNull(data.leagues)
+      //     && !angular.isUndefinedOrNull(data.leagues[$stateParams.leagueName]);
+      //
+      // };
 
       /**
        * when firebase data is loaded
        * @param firebaseObj
        */
-      var loadData = function (data) {
+      var loadData = function () {
 
-        if (angular.isDefined(data.leagues)
-          && angular.isDefined(data.leagues[$stateParams.leagueName])
-          && momentService.isHoursAgo(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
+        $scope.setSelectedLeague();
+        $scope.leagueLeaders = scoringLeaders.leagues[$stateParams.leagueName].goalLeaders;
+        $rootScope.loading = false;
 
-          console.log('-- data is too old --');
-          //$scope.updateLeadersFromHTTP(mapLeagueLeaders);
-          $scope.setSelectedLeague();
-          $scope.leagueLeaders = data.leagues[$stateParams.leagueName].goalLeaders;
-          $rootScope.loading = false;
-
-        } else if (existsInFireBase(data)) {
-
-          console.log('-- data is up to date & exists in firebase --');
-          $scope.setSelectedLeague();
-          $scope.leagueLeaders = data.leagues[$stateParams.leagueName].goalLeaders;
-          $rootScope.loading = false;
-
-        } else {
-
-          console.log('-- data not available in firebase --');
-          $scope.updateLeadersFromHTTP(mapLeagueLeaders);
-
-        }
+        // if (angular.isDefined(data.leagues)
+        //   && angular.isDefined(data.leagues[$stateParams.leagueName])
+        //   && momentService.isHoursAgo(data.leagues[$stateParams.leagueName]._lastSyncedOn)) {
+        //
+        //   console.log('-- data is too old --');
+        //   //$scope.updateLeadersFromHTTP(mapLeagueLeaders);
+        //   $scope.setSelectedLeague();
+        //   $scope.leagueLeaders = data.leagues[$stateParams.leagueName].goalLeaders;
+        //   $rootScope.loading = false;
+        //
+        // } else if (existsInFireBase(data)) {
+        //
+        //   console.log('-- data is up to date & exists in firebase --');
+        //   $scope.setSelectedLeague();
+        //   $scope.leagueLeaders = data.leagues[$stateParams.leagueName].goalLeaders;
+        //   $rootScope.loading = false;
+        //
+        // } else {
+        //
+        //   console.log('-- data not available in firebase --');
+        //   $scope.updateLeadersFromHTTP(mapLeagueLeaders);
+        //
+        // }
 
       };
 

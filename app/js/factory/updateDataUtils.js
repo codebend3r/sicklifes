@@ -139,14 +139,6 @@
        */
       updateDataUtils.updateAllManagerData = function (managersData, cb) {
 
-        console.log('updateDataUtils --> updateAllManagerData');
-
-        //if (angular.isUndefinedOrNull($rootScope.managersData)) throw new Error('$rootScope.managersData is not defined');
-
-        // updateDataUtils.updateCoreData(function () {
-        //
-        // });
-
         var managers = angular.copy(managersData.data);
         _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
           cb(managers);
@@ -160,19 +152,10 @@
        */
       updateDataUtils.updateCoreData = function (cb) {
 
-        if (angular.isDefined(managersData) && angular.isDefined(leagueTables)) {
-
-          console.log('managersData and leagueTables already defined');
-          cb();
-
-        } else {
-
-          $q.all([apiFactory.getApiData('managersData'), apiFactory.getApiData('leagueTables')])
-            .then(function () {
-              cb();
-            });
-
-        }
+        $q.all([apiFactory.getApiData('managersData'), apiFactory.getApiData('leagueTables')])
+          .then(function () {
+            cb();
+          });
 
       };
 
@@ -181,8 +164,6 @@
        * @description gets all leagues in teams
        */
       updateDataUtils.updateLeagueTables = function () {
-
-        console.log('updateDataUtils -- updateLeagueTables');
 
         var leagueTables = apiFactory.getLeagueTables(),
           defer = $q.defer(),

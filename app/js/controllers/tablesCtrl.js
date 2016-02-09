@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 09/01/2015
+ * Created by Bouse on 02/09/2016
  */
 
 (function () {
@@ -14,7 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      console.log('--> tablesCtrl');
+      console.log('--> tablesCtrl', leagueTables);
 
       $rootScope.loading = true;
 
@@ -81,6 +81,7 @@
        */
       var loadData = function () {
 
+        console.log('loadData');
         console.log('leagueTables', leagueTables);
 
         $scope.allLeagues[0].source = leagueTables.liga;
@@ -101,7 +102,7 @@
           uefa: $scope.allLeagues[4].source
         };
 
-        if (momentService.isHoursAgo(data._lastSyncedOn, saveObject)) {
+        if (momentService.isHoursAgo(leagueTables._lastSyncedOn, saveObject)) {
 
           console.log('-- data is too old --');
           //$scope.updateTablesFromHTTP(httpDataLoaded);
@@ -114,7 +115,7 @@
 
         $rootScope.loading = false;
 
-        $rootScope.lastSyncDate = data._lastSyncedOn;
+        $rootScope.lastSyncDate = leagueTables._lastSyncedOn;
 
         $rootScope.source = 'firebase';
 

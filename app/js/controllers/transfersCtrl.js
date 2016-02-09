@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, arrayMappers, transferDates, apiFactory, objectUtils, updateDataUtils, momentService) {
+    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, arrayMappers, transferDates, apiFactory, objectUtils, updateDataUtils, momentService, managersData) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -228,11 +228,11 @@
        */
       var loadData = function (result) {
 
-        $scope.managersData = $rootScope.managersData.data;
+        $scope.managersData = managersData.data;
 
         $scope.allPlayers = $rootScope.playerPoolData.allPlayers;
 
-        console.log('populate transfer history');
+        console.log('populate transfer history - START');
 
         $scope.transferHistory = [];
 
@@ -248,6 +248,8 @@
 
           });
         });
+
+        console.log('populate transfer history - END');
 
         $timeout(function() {
           $rootScope.loading = false;
@@ -294,12 +296,8 @@
        */
       var init = function () {
 
-        updateDataUtils.updateCoreData(function () {
-
-          apiFactory.getApiData('playerPoolData')
-            .then(loadData);
-
-        });
+        apiFactory.getApiData('playerPoolData')
+          .then(loadData);
 
       };
 
