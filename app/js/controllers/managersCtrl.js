@@ -6,8 +6,6 @@
 
   'use strict';
 
-  console.log('managersCtrl.js');
-
   angular.module('sicklifes')
 
     .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, momentService, transferDates, managersData, updateDataUtils) {

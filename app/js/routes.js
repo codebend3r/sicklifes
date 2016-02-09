@@ -78,14 +78,6 @@
             }
           }
         })
-        .state('test', {
-          url: '/test',
-          parent: 'app',
-          templateUrl: 'views/test.html',
-          controller: function () {
-            console.log('WORKING!!!');
-          }
-        })
         //.state('signIn', {
         //  url: '/login',
         //  parent: 'app',

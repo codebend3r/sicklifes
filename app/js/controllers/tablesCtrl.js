@@ -81,9 +81,6 @@
        */
       var loadData = function () {
 
-        console.log('loadData');
-        console.log('leagueTables', leagueTables);
-
         $scope.allLeagues[0].source = leagueTables.liga;
         $scope.allLeagues[1].source = leagueTables.epl;
         $scope.allLeagues[2].source = leagueTables.seri;

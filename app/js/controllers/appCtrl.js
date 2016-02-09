@@ -6,8 +6,6 @@
 
   'use strict';
 
-  console.log('appCtrl.js');
-
   angular.module('sicklifes')
 
     .controller('appCtrl', function ($scope, $rootScope, $q, $location, $localStorage, apiFactory, $state, fireBaseService, arrayMappers, momentService, objectUtils, arrayFilter, textManipulator, scoringLogic) {
