@@ -8,8 +8,7 @@
   <meta name="description" content="Sicklifes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic,700italic"/>
-  <link rel='stylesheet' href="http://fonts.googleapis.com/css?family=Oswald:400,700,400italic,700italic"/>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Sans:400,700|Lobster|Ubuntu:400,500,700' rel='stylesheet' type='text/css'>
 
   <!-- build:css css/sicklifes.css -->
   <link rel="stylesheet" href="bower_components/json-formatter/dist/json-formatter.css"/>
@@ -32,7 +31,11 @@
 <div class="container master-container">
 
   <header></header>
-  <div class="main-container container" ui-view></div>
+  <div class="main-container container">
+    <preloader ng-if="loading"></preloader>
+    <h1 ng-if="loading">LOADING</h1>
+    <ui-view></ui-view>
+  </div>
   <footer class="ng-cloak" ng-if="!loading">Build v{{version}} | Data Synced on <b>{{lastSyncDate}}</b> from <b>{{source}}</b></footer>
 
 </div>

@@ -14,11 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.loading = true;
-
       $scope.goalsOnlyFilterOn = true;
-
-      $scope.managersList = ['Chester', 'Frank', 'Joe', 'Justin', 'Dan', 'Mike'];
 
       /**
        * @name changeManager
@@ -55,6 +51,8 @@
        * @param result {object} - response
        */
       var loadData = function () {
+
+        console.log('managersCtrl - loadData()');
 
         if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
 
@@ -104,7 +102,7 @@
 
         updateDataUtils.updateAllManagerData(managersData, function (result) {
 
-          $rootScope.loading = false;
+          $scope.loading = false;
           //$scope.managersData = result;
           managersData.data = result;
           $scope.saveRoster();

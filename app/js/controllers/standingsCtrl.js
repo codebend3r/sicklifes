@@ -42,12 +42,12 @@
           title: 'Latest Goals',
           route: 'standings.latestgoals',
           active: false
-        },
-        {
-          title: 'Charts',
-          route: 'standings.charts',
-          active: false
         }
+        //{
+        //  title: 'Charts',
+        //  route: 'standings.charts',
+        //  active: false
+        //}
       ];
 
       /**

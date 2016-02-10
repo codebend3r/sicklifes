@@ -82,10 +82,9 @@
         /**
          * resets goal and points count for a player
          */
-        cleanPlayer: function (p, draftMode) {
+        cleanPlayer: function (p) {
 
           if (p) {
-            p.dateOfTransaction = draftMode ? momentService.leagueStartDate() : momentService.transactionDate();
             p.goals = 0;
             p.assists = 0;
             p.points = 0;

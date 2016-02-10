@@ -23,7 +23,8 @@
   overflow: hidden;
 
   h1 {
-    font-family: Oswald, sans-serif;
+    font-family: $headerFont;
+    letter-spacing: -2px;
     font-size: 55px;
     @media (max-width: 750px) {
       h1 {

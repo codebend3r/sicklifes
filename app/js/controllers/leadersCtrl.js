@@ -85,8 +85,7 @@
 
         $scope.setSelectedLeague();
         console.log(leagueLeaders.leagues);
-        //$scope.leagueLeaders = leagueLeaders.leagues[$stateParams.leagueName].goalLeaders;
-
+        $scope.leagueLeaders = leagueLeaders.leagues[$stateParams.leagueName].goalLeaders;
         $rootScope.loading = false;
 
       };

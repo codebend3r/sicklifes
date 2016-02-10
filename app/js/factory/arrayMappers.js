@@ -448,7 +448,7 @@
           managerName: $rootScope.draftMode ? 'Free Agent' : arrayMapper.getOwnerByID(result.id),
           teamName: textManipulator.teamNameFormatted(teamData.full_name),
           teamLogo: teamData.logos.small,
-          leagueName: textManipulator.getLeagueByURL(leagueData.leagueURL).toUpperCase()
+          leagueName: leagueData.slug.toUpperCase()
         };
 
         var match = managersService.findPlayerInManagers(result.id);

@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('updateDataUtils', function ($rootScope, $q, apiFactory, objectUtils, managersService, momentService, fireBaseService, textManipulator, arrayMappers) {
+    .factory('updateDataUtils', function ($rootScope, $q, $http, apiFactory, objectUtils, managersService, momentService, fireBaseService, textManipulator, arrayMappers) {
 
       var current = 0,
         total = 0;
@@ -30,16 +30,16 @@
         // returns a list of promise with the end point for each league
         $q.all(allTeams)
           .then(function (result) {
+
+            //loop through each result
             _.each(result, function (leagueData) {
 
               _.each(leagueData.data, function (teamData) {
 
-                console.log('LEAGUE:', leagueData.leagueName, ', TEAM:', teamData.full_name);
+                console.log('LEAGUE:', leagueData.slug, ', TEAM:', teamData.full_name);
 
                 // returns a promise with the end point for each team
-                var rosterRequest = apiFactory.getData({
-                  endPointURL: textManipulator.getTeamRosterURL(leagueData.leagueName, teamData.id)
-                });
+                var rosterRequest = apiFactory.getTeamRosterURL(leagueData.slug, teamData.id);
 
                 allTeamsPromise.push(rosterRequest);
 

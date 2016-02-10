@@ -16,7 +16,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.version = '5.13';
+      $rootScope.version = '6.0';
 
       /**
        * @description starting year
@@ -107,7 +107,7 @@
        * @name loading
        * @description whether data is still loading
        */
-      $rootScope.loading = true;
+      $scope.loading = true;
 
       /**
        * @name fireBaseReady
@@ -149,6 +149,8 @@
       /////////////////////////////
       // ROSTER
       /////////////////////////////
+
+      $scope.managersList = ['Chester', 'Frank', 'Joe', 'Justin', 'Dan', 'Mike'];
 
       /**
        * @name chooseManager
@@ -388,6 +390,9 @@
       };
 
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+
+        $scope.loading = true;
+
         if (toState.name === 'leagues') {
           if (!_.has(toParams, 'leagueName') || toParams.leagueName === '') {
             toParams.leagueName = 'epl';
@@ -402,6 +407,12 @@
           //}
           //$state.go('standings.tables', {leagueName: toParams.leagueName});
         }
+      });
+
+      $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+
+        $scope.loading = false;
+
       });
 
 

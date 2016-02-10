@@ -72,6 +72,7 @@
       /**
        * @name getLeagueTables
        * @description getting league tables
+       * @returns {promise}
        */
       apiFactory.getLeagueTables = function () {
 
@@ -94,13 +95,25 @@
       };
 
       /**
+       * @name getTeamsByLeague
        * @description get teams in specific league by slug
+       * @returns {promise}
        */
       apiFactory.getTeamsByLeague = function (slug) {
         return $http.get(apiFactory.baseUrl + slug + '/teams');
       };
 
       /**
+       * @name getTeamRosterURL
+       * @description get roster for specific team
+       * @returns {promise}
+       */
+      apiFactory.getTeamRosterURL = function (slug, id) {
+        return $http.get(apiFactory.baseUrl + slug.toLowerCase() + '/teams/' + id + '/players/?rpp=-1');
+      }
+
+      /**
+       * @name getAllTeams
        * @description getting teams in all the leagues
        */
       apiFactory.getAllTeams = function () {

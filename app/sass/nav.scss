@@ -2,15 +2,17 @@
 
 .navbar-default {
   a.navbar-brand {
+    font-family: $brandFont;
     font-weight: bold;
     color: $secondaryColour;
     background-color: $mainColour;
+    font-size: 26px;
     &:hover {
-      color: $textColour;
+      color: $secondaryColour;
       //background-color: $secondaryColour;
     }
     &:active, &:visited {
-      color: $textColour;
+      color: $secondaryColour;
       //background-color: $secondaryColour;
     }
   }

@@ -1,7 +1,7 @@
 @import 'variables';
 
 html, body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: $mainFont;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -12,6 +12,7 @@ a {
 
 h1, h2 {
   color: $textColour;
+  font-family: $headerFont;
 }
 
 h3 {
@@ -131,6 +132,10 @@ p.info-text {
 
 .btn-plus {
   padding: 5px 10px;
+}
+
+.btn-warning {
+  padding: 5px 5px;
 }
 
 //////////////////////////////////

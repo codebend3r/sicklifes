@@ -304,10 +304,6 @@
 
         getTeamInfoURL: function (id) {
           return 'http://origin-api.thescore.com/soccer/teams/' + id;
-        },
-
-        getTeamRosterURL: function (leagueSlug, id) {
-          return 'http://api.thescore.com/' + leagueSlug.toLowerCase() + '/teams/' + id + '/players/?rpp=-1';
         }
 
       };

@@ -80,10 +80,22 @@
             low: 0
           },
           //lineSmooth: true,
-          lineSmooth: Chartist.Interpolation.simple({
-            divisor: 4,
-            fillHoles: true
-          }),
+          lineSmooth: Chartist.Interpolation.simple(),
+          //lineSmooth: Chartist.Interpolation.simple({
+          //  divisor: 4,
+          //  fillHoles: true
+          //}),
+          //series: {
+          //  'goals': {
+          //    lineSmooth: Chartist.Interpolation.step()
+          //  },
+          //  'shots': {
+          //    lineSmooth: Chartist.Interpolation.simple()
+          //  },
+          //  'shotsOnGoal': {
+          //    showPoint: false
+          //  },
+          //},
           fullWidth: true,
           chartPadding: {
             right: 0
@@ -104,14 +116,17 @@
          */
         responsiveOptions: [
           ['screen and (min-width: 641px) and (max-width: 1024px)', {
-            lineSmooth: true,
-            showPoint: false,
             fullWidth: true,
-            height: 400,
             axisX: {
               showLabel: true,
               labelInterpolationFnc: function (value, index, axis) {
-                if (index % 4 === 0) {
+                var divider;
+                if (axis.length < 8) {
+                  divider = 1;
+                } else {
+                  divider = Math.ceil(axis.length / 10);
+                }
+                if (index % divider === 0) {
                   return value;
                 } else {
                   return '';
@@ -124,15 +139,19 @@
             }
           }],
           ['screen and (max-width: 640px)', {
-            lineSmooth: true,
-            showPoint: false,
+            //chartPadding: {
+            //  top: 10,
+            //  right: 10,
+            //  bottom: 10,
+            //  left: 10
+            //},
             fullWidth: true,
-            height: 400,
             axisX: {
               showLabel: true,
-              offsetX: 20,
               labelInterpolationFnc: function (value, index, axis) {
-                if (index % 12 === 0) {
+                var divider;
+                divider = Math.ceil(axis.length / 5);
+                if (index % divider === 0) {
                   return value;
                 } else {
                   return '';
@@ -140,8 +159,10 @@
               }
             },
             axisY: {
-              onlyInteger: true,
-              showLabel: true
+              labelOffset: {
+                x: 0,
+                y: 0
+              }
             }
           }]
         ],

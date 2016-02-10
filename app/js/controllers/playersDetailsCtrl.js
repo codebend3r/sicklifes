@@ -20,7 +20,7 @@
 
       var dataObj = {};
 
-      var chartMapKeys = ['goals', 'shots', 'shotsOnGoal'];
+      var chartMapKeys = ['shots', 'shotsOnGoal', 'goals'];
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -168,8 +168,6 @@
       $scope.changeRange = function (selectedRange) {
 
         data = [];
-        data.push([]);
-
         dataObj = {};
 
         $scope.selectedRange = selectedRange;
@@ -216,16 +214,20 @@
 
         var incValue = 0;
 
-        _.each(targetObject, function (value) {
+        _.each(targetObject, function (value, key) {
           incValue = 0;
-          targetArray.push(_.map(value, function (stat) {
-            if ($scope.selectedType.toLowerCase() === 'cumulative') {
-              incValue += stat;
-              return incValue;
-            } else {
-              return stat;
-            }
-          }));
+          targetArray.push({
+            name: key,
+            className: key,
+            data: _.map(value, function (stat) {
+              if ($scope.selectedType.toLowerCase() === 'cumulative') {
+                incValue += stat;
+                return incValue;
+              } else {
+                return stat;
+              }
+            })
+          });
         });
 
         $timeout(function () {
@@ -233,7 +235,7 @@
           new Chartist.Line('.ct-chart', {
             labels: lastDays,
             series: data
-          }, chartSettings.profileChartOptions);
+          }, chartSettings.profileChartOptions, chartSettings.responsiveOptions);
         }, 500);
 
       };

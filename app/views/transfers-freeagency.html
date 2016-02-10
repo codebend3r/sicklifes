@@ -23,14 +23,7 @@
   </div>
 </div>
 
-<div ng-if="transactionPlayerAdded">
-  <p class="input-group">
-    <!-- <input type="date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/> -->
-    <span class="input-group-btn">
-      <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-    </span>
-  </p>
-</div>
+<h3>{{currentRound.name}} transfers will take effect on <b>{{currentRound.date}}</b></h3>
 
 <custom-table ng-if="(transactionPlayerAdded || draftMode)" table-body-template="managers-players" sort-function="byPickNumber" table-params="playersTableParams" list="selectedManager.players"></custom-table>
 <custom-table ng-if="!transactionPlayerAdded" table-body-template="all-players" table-params="playersTableParams" list="allPlayers"></custom-table>

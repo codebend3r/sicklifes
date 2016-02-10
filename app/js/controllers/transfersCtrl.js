@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, arrayMappers, transferDates, apiFactory, objectUtils, updateDataUtils, momentService, managersData) {
+    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, $stateParams, arrayMappers, transferDates, apiFactory, objectUtils, updateDataUtils, momentService, managersService, managersData) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -57,25 +57,24 @@
         $state.go($state.current.name, {managerId: selectedManager.managerName.toLowerCase()});
       };
 
-
-      /**
-       * @name getManagersPlayerById
-       * @description TODO
-       */
-      $scope.getManagersPlayerById = function (id) {
-
-        var selectedPlayer = {};
-
-        _.some($rootScope.managersData.data, function (manager) {
-          if (manager.players[id]) {
-            selectedPlayer = manager.players[id];
-            return true;
-          }
-        });
-
-        return selectedPlayer;
-
-      };
+      ///**
+      // * @name getManagersPlayerById
+      // * @description TODO
+      // */
+      //$scope.getManagersPlayerById = function (id) {
+      //
+      //  var selectedPlayer = {};
+      //
+      //  _.some($rootScope.managersData.data, function (manager) {
+      //    if (manager.players[id]) {
+      //      selectedPlayer = manager.players[id];
+      //      return true;
+      //    }
+      //  });
+      //
+      //  return selectedPlayer;
+      //
+      //};
 
       /**
        * @name addPlayer
@@ -114,7 +113,8 @@
             })
             .then(function () {
               $scope.addedPlayerObject = addedPlayer;
-              $scope.addedPlayerObject.pickNumber = pickNumber;
+              $scope.addedPlayerObject.pickNumber = $scope.currentRound.pick;
+              $scope.addedPlayerObject.dateOfTransaction = $scope.currentRound.date;
               console.log('pickNumber', pickNumber);
               $scope.transactionPlayerAdded = true;
             })
@@ -129,10 +129,53 @@
        */
       $scope.dropPlayer = function (player) {
 
-        $scope.droppedPlayerObject = $scope.getManagersPlayerById(player.id);
+        $scope.droppedPlayerObject = managersService.findPlayerInManagers(player.id).player;
+        $scope.droppedPlayerObject.dateOfTransaction = $scope.currentRound.date;
         //var pickNumber = _.keys($scope.selectedManager.players).length + 1;
         //$scope.droppedPlayerObject.pickNumber = pickNumber;
         $scope.transactionPlayerRemoved = true;
+
+      };
+
+      /**
+       * @name saveTransaction
+       * @description saves the added and dropped players to the current manager's roster
+       */
+      $scope.saveTransaction = function () {
+
+        if (angular.isDefined($scope.addedPlayerObject) && angular.isDefined($scope.droppedPlayerObject)) {
+
+          $scope.selectedManager.transactions = $scope.selectedManager.transactions || [];
+
+          console.log('# of transactions for manager', _.keys($scope.selectedManager.transactions).length);
+
+          $scope.addedPlayerObject.status = 'added';
+
+          // add
+          $scope.selectedManager.players[$scope.addedPlayerObject.id] = objectUtils.cleanPlayer($scope.addedPlayerObject);
+
+          // drop
+          var droppedPlayer = $scope.selectedManager.players[$scope.droppedPlayerObject.id];
+          droppedPlayer.status = 'dropped';
+          droppedPlayer.dateOfTransaction = $scope.currentRound.date;
+
+          $scope.selectedManager.transactions.push({
+            drop: $scope.droppedPlayerObject,
+            add: $scope.addedPlayerObject
+          });
+
+          console.log('///////////////////////////////////////////');
+          console.log('addedPlayerObject: ', $scope.addedPlayerObject);
+          console.log('droppedPlayerObject: ', $scope.droppedPlayerObject);
+          console.log('///////////////////////////////////////////');
+
+          $scope.saveRoster();
+
+        } else {
+
+          console.warn('no player to add and/or drop has been specified');
+
+        }
 
       };
 
@@ -175,47 +218,6 @@
        */
       $scope.transactionPlayerRemoved = false;
 
-      /**
-       * @name saveTransaction
-       * @description saves the added and dropped players to the current manager's roster
-       */
-      $scope.saveTransaction = function () {
-
-        if (angular.isDefined($scope.addedPlayerObject) && angular.isDefined($scope.droppedPlayerObject)) {
-
-          $scope.selectedManager.transactions = $scope.selectedManager.transactions || [];
-
-          console.log('# of transactions for manager', _.keys($scope.selectedManager.transactions).length);
-
-          $scope.selectedManager.transactions.push({
-            drop: $scope.droppedPlayerObject,
-            add: $scope.addedPlayerObject
-          });
-
-          $scope.addedPlayerObject.status = 'added';
-
-          // add
-          $scope.selectedManager.players[$scope.addedPlayerObject.id] = objectUtils.cleanPlayer($scope.addedPlayerObject);
-
-          // drop
-          var droppedPlayer = $scope.selectedManager.players[$scope.droppedPlayerObject.id];
-          droppedPlayer.status = 'dropped';
-          droppedPlayer.dateOfTransaction = momentService.transactionDate();
-
-          console.log('///////////////////////////////////////////');
-          console.log('addedPlayerObject: ', $scope.addedPlayerObject);
-          console.log('droppedPlayerObject: ', $scope.droppedPlayerObject);
-          console.log('///////////////////////////////////////////');
-
-          $scope.saveRoster();
-
-        } else {
-
-          console.warn('no player to add and/or drop has been specified');
-
-        }
-
-      };
 
       /**
        * @name updatePlayerPoolData
@@ -223,9 +225,13 @@
        */
       $scope.updatePlayerPoolData = function () {
 
+        $rootScope.loading = true;
+
         updateDataUtils.updatePlayerPoolData(function (result) {
           console.log('PLAYER POOL DATA UPDATED');
           $scope.allPlayers = result;
+          $rootScope.loading = false;
+          $scope.savePlayerPoolData();
         });
 
       };
@@ -253,7 +259,15 @@
        */
       var loadData = function () {
 
+        if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
+
+        $rootScope.loading = false;
+
         $scope.managersData = managersData.data;
+
+        $scope.selectedManager = managersData.data[$stateParams.managerId];
+
+        $scope.selectedManagerName = $scope.selectedManager.managerName;
 
         $scope.allPlayers = $rootScope.playerPoolData.allPlayers;
 
@@ -270,6 +284,12 @@
         });
 
         console.log('populate transfer history - END');
+
+        _.some(transferDates.transfers, function (round) {
+          return !round.roundCompleted && ($scope.currentRound = round);
+        });
+
+        console.log('currentRound', $scope.currentRound);
 
         $timeout(function () {
           $rootScope.loading = false;
