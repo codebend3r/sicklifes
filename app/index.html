@@ -32,8 +32,7 @@
 
   <header></header>
   <div class="main-container container">
-    <preloader ng-if="loading"></preloader>
-    <h1 ng-if="loading">LOADING</h1>
+    <!-- <preloader ng-if="loading"></preloader> -->
     <ui-view></ui-view>
   </div>
   <footer class="ng-cloak" ng-if="!loading">Build v{{version}} | Data Synced on <b>{{lastSyncDate}}</b> from <b>{{source}}</b></footer>

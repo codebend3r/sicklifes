@@ -52,8 +52,6 @@
        */
       var loadData = function () {
 
-        console.log('managersCtrl - loadData()');
-
         if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
 
         $rootScope.loading = false;
@@ -71,17 +69,11 @@
         $rootScope.source = 'firebase';
 
         if (angular.isDefined($scope.selectedManager._lastSyncedOn) && momentService.isHoursAgo($scope.selectedManager._lastSyncedOn)) {
-
           console.log('-- data for', $scope.selectedManager.managerName, 'is old --');
-
         } else if (momentService.isHoursAgo($scope.managersData._lastSyncedOn)) {
-
           console.log('-- data is too old --');
-
         } else {
-
           console.log('-- data is up to date --');
-
         }
 
         $scope.selectedManager.wildCardCount = 0;
@@ -103,7 +95,6 @@
         updateDataUtils.updateAllManagerData(managersData, function (result) {
 
           $scope.loading = false;
-          //$scope.managersData = result;
           managersData.data = result;
           $scope.saveRoster();
 

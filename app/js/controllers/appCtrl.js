@@ -391,6 +391,8 @@
 
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
 
+        console.log('state changed start');
+
         $scope.loading = true;
 
         if (toState.name === 'leagues') {
@@ -411,6 +413,7 @@
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 
+        console.log('state changed success');
         $scope.loading = false;
 
       });

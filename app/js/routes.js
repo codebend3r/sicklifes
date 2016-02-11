@@ -171,7 +171,12 @@
           url: '/transfers/:managerId',
           parent: 'app',
           templateUrl: 'views/transfers.html',
-          controller: 'transfersCtrl'
+          controller: 'transfersCtrl',
+          resolve: {
+            playerPoolData: function(apiFactory) {
+              return apiFactory.getApiData('playerPoolData');
+            }
+          }
         })
         .state('transfers.history', {
           url: '/history',

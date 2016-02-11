@@ -261,8 +261,6 @@
 
         if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
 
-        $rootScope.loading = false;
-
         $scope.managersData = managersData.data;
 
         $scope.selectedManager = managersData.data[$stateParams.managerId];
@@ -289,26 +287,9 @@
           return !round.roundCompleted && ($scope.currentRound = round);
         });
 
-        console.log('currentRound', $scope.currentRound);
-
-        $timeout(function () {
-          $rootScope.loading = false;
-        }, 250);
-
       };
 
-      /**
-       * @name init
-       * @description init function
-       */
-      var init = function () {
-
-        apiFactory.getApiData('playerPoolData')
-          .then(loadData);
-
-      };
-
-      init();
+      loadData();
 
     });
 
