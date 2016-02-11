@@ -12,20 +12,35 @@
 
       var apiFactory = {};
 
+      /**
+       * @name baseUrl
+       * @description base url for all api requests
+       */
       apiFactory.baseUrl = 'http://api.thescore.com/';
 
+      /**
+       * @name firebaseUrl
+       * @description url for firebase DB
+       */
       apiFactory.firebaseUrl = 'https://glaring-fire-9383.firebaseio.com/';
 
+      /**
+       * @name slugs
+       * @description all league slugs
+       */
       apiFactory.slugs = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
 
       /**
-       * @description
+       * @name getApiData
+       * @description makes a request from the firebase api by namespace and saves the response to the $rootScope
+       *      supported requests are:
+       *           - managersData
+       *           - leagueLeaders
+       *           - leagueTables
        * @returns {Promise}
        */
         apiFactory.getApiData = function (namespace) {
-
           var defer = $q.defer();
-
           $http.get(apiFactory.firebaseUrl + namespace + '.json')
             .then(function (result) {
               $rootScope[namespace] = result.data;
@@ -33,9 +48,7 @@
               defer.resolve(result.data);
 
             });
-
           return defer.promise;
-
         };
 
       /**
@@ -44,9 +57,7 @@
        * @returns {promise}
        */
       apiFactory.getPlayerLog = function (leagueSlug, id) {
-
         return $http.get(apiFactory.baseUrl + leagueSlug.toLowerCase() + '/players/' + id + '/player_records');
-
       };
 
       /**
@@ -55,9 +66,7 @@
        * @returns {promise}
        */
       apiFactory.getPlayerProfile = function (leagueSlug, id) {
-
         return $http.get(apiFactory.baseUrl + leagueSlug.toLowerCase() + '/players/' + id);
-
       };
 
       /**
@@ -75,23 +84,15 @@
        * @returns {promise}
        */
       apiFactory.getLeagueTables = function () {
-
         var listOrPromises = [];
-
         _.each(apiFactory.slugs, function (slug) {
-
           var leagueRequest = apiFactory.getTablesByLeague(slug);
-
           leagueRequest.then(function (result) {
             result.slug = slug;
           });
-
           listOrPromises.push(leagueRequest);
-
         });
-
         return listOrPromises;
-
       };
 
       /**
@@ -105,7 +106,7 @@
 
       /**
        * @name getTeamRosterURL
-       * @description get roster for specific team
+       * @description get roster for specific team by league slug and team id
        * @returns {promise}
        */
       apiFactory.getTeamRosterURL = function (slug, id) {
@@ -114,30 +115,24 @@
 
       /**
        * @name getAllTeams
-       * @description getting teams in all the leagues
+       * @description loops through league slugs and makes a request for all teams in each league
+       * @returns {promise}
        */
       apiFactory.getAllTeams = function () {
-
         var listOrPromises = [];
-
         _.each(apiFactory.slugs, function (slug) {
-
           var leagueRequest = apiFactory.getTeamsByLeague(slug);
-
           leagueRequest.then(function (result) {
             result.slug = slug;
           });
-
           listOrPromises.push(leagueRequest);
-
         });
-
         return listOrPromises;
-
       };
 
       /**
-       * @description make http request for current league leader in goals
+       * @name getGoalLeadersByLeague
+       * @description get goal leaders by league slug
        * @param cb
        */
       apiFactory.getGoalLeadersByLeague = function (slug) {
@@ -145,48 +140,21 @@
       };
 
       /**
-       * @description TODO
+       * @name getAllGoalLeaders
+       * @description loops through league slugs and makes a request for goal leaders in each league
+       * @returns {promise}
        */
       apiFactory.getAllGoalLeaders = function () {
-
         var listOrPromises = [];
-
         _.each(apiFactory.slugs, function (slug) {
-
           var leagueRequest = apiFactory.getGoalLeadersByLeague(slug);
-
           leagueRequest.then(function (result) {
             result.slug = slug;
           });
-
           listOrPromises.push(leagueRequest);
-
         });
-
         return $q.all(listOrPromises);
-
       };
-
-      /**
-       * @description
-       */
-      //apiFactory.getRoster = function (result) {
-      //
-      //  var listOrPromises = [];
-      //
-      //  _.each(result.data, function (leagueData) {
-      //
-      //    var rosterRequest = apiFactory.getData({
-      //      endPointURL: url + leagueData.id + '/players/'
-      //    });
-      //
-      //    rosterRequest.promise.then(function () {
-      //      listOrPromises.push(rosterRequest.promise);
-      //    });
-      //
-      //  });
-      //
-      //};
 
 
       return apiFactory;
