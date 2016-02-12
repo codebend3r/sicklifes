@@ -78,9 +78,34 @@
 
         $scope.selectedManager.wildCardCount = 0;
 
+        var gameLogsObject = {};
+
+        _.each(managersData.data, function (manager, key) {
+
+          gameLogsObject[key] = {
+            filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
+            monthlyGoalsLog: manager.monthlyGoalsLog
+          }
+
+          angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
+          angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
+
+          _.each(manager.player, function(player) {
+
+            angular.isDefined(player.ligaGameLog) && delete player.ligaGameLog;
+            angular.isDefined(player.chlgGameLog) && delete player.chlgGameLog;
+            angular.isDefined(player.allLeaguesName) && delete player.allLeaguesName;
+
+          });
+
+        });
+
         _.each($scope.selectedManager.players, function (player) {
           $scope.checkForWildCard(player, $scope.selectedManager);
         });
+
+        console.log('gameLogsObject', gameLogsObject);
+        console.log('managersData', managersData.data);
 
       };
 
