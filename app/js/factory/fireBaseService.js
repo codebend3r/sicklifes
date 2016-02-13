@@ -27,6 +27,9 @@
           //var syncArray = sync.$asArray();
           syncObject = sync.$asObject();
 
+          // var list = $firebaseArray(ref);
+          // var rec = list.$getRecord('foo');
+
           syncObject.$bindTo(scope, 'syncedObject');
 
         },

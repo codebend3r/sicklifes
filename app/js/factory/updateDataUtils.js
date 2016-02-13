@@ -92,16 +92,16 @@
 
           apiFactory.getPlayerProfile('soccer', player.id)
             .then(arrayMappers.playerInfo.bind(this, player), function () {
-              console.log('fail 1')
+              console.log('failed at player info mapping')
             })
             .then(arrayMappers.playerMapPersonalInfo.bind(this, player), function () {
-              console.log('fail 2')
+              console.log('failed at player personal info mapping')
             })
             .then(arrayMappers.playerGamesLog.bind(this, {
               player: player,
               manager: manager
             }), function () {
-              console.log('fail 3')
+              console.log('failed at player game logs')
             })
             .then(function (result) {
 

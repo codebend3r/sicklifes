@@ -150,7 +150,12 @@
           url: '/managers/:managerId',
           parent: 'app',
           templateUrl: 'views/managers.html',
-          controller: 'managersCtrl'
+          controller: 'managersCtrl',
+          resolve: {
+            managerPlayers: function (apiFactory) {
+              return apiFactory.getApiData('managerPlayers');
+            }
+          }
         })
         .state('managers.overview', {
           url: '/overview',
