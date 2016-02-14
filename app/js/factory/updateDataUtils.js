@@ -88,7 +88,6 @@
           player = objectUtils.playerResetGoalPoints(player);
 
           player.managerName = manager.managerName;
-          console.log(player.managerName);
 
           apiFactory.getPlayerProfile('soccer', player.id)
             .then(arrayMappers.playerInfo.bind(this, player), function () {
@@ -142,14 +141,96 @@
       };
 
       /**
+       * @name filterManagerData
+       * @description TODO
+       */
+      updateDataUtils.mapManagerData = function(managerData) {
+
+        var gameLogsObject = {};
+        var chartsObj = {};
+        var playersObj = {};
+        var index = 0;
+
+        _.each(managerData, function (manager, key) {
+
+          manager.id = index++;
+
+          gameLogsObject[key] = {
+            filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
+            monthlyGoalsLog: manager.monthlyGoalsLog
+          }
+
+          chartsObj[key] = {
+            chartData: manager.chartData
+          }
+
+          playersObj[key] = {
+            players: manager.players
+          }
+
+          angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
+          angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
+          angular.isDefined(manager.chartData) && delete manager.chartData;
+          angular.isDefined(manager.players) && delete manager.players;
+
+          _.each(manager.player, function(player) {
+
+            angular.isDefined(player.seriGameLog) && delete player.seriGameLog;
+            angular.isDefined(player.eplGameLog) && delete player.eplGameLog;
+            angular.isDefined(player.ligaGameLog) && delete player.ligaGameLog;
+            angular.isDefined(player.chlgGameLog) && delete player.chlgGameLog;
+            angular.isDefined(player.euroGameLog) && delete player.euroGameLog;
+            angular.isDefined(player.allLeaguesName) && delete player.allLeaguesName;
+
+          });
+
+        });
+
+      };
+
+      /**
+       * @name saveManagerData
+       * @description TODO
+       */
+      updateDataUtils.saveManagerData = function(managerData) {
+
+        console.log('gameLogsObject', gameLogsObject);
+        console.log('chartsObj', chartsObj);
+        console.log('peoplesObj', peoplesObj);
+        console.log('managerData', managerData.data);
+
+        $timeout(function () {
+
+          $scope.saveRoster();
+
+          $scope.saveToFireBase({
+            data: chartsObj,
+            _lastSyncedOn: momentService.syncDate()
+          }, 'charts');
+
+          $scope.saveToFireBase({
+            data: gameLogsObject,
+            _lastSyncedOn: momentService.syncDate()
+          }, 'gameLogs');
+
+          $scope.saveToFireBase({
+            data: playersObj,
+            _lastSyncedOn: momentService.syncDate()
+          }, 'managerPlayers');
+
+        }, 1500);
+
+      };
+
+      /**
        * @name updateAllManagerData
        * @description gets data from all of the players in all valid leagues
        */
-      updateDataUtils.updateAllManagerData = function (managersData, cb) {
+      updateDataUtils.updateAllManagerData = function (managerData, cb) {
 
         console.log('updateDataUtils --> updateAllManagerData');
 
-        var managers = angular.copy(managersData.data);
+        var managers = angular.copy(managerData);
         _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
           cb(managers);
         }));
@@ -164,7 +245,7 @@
 
         console.log('updateDataUtils --> updateCoreData');
 
-        $q.all([apiFactory.getApiData('managersData'), apiFactory.getApiData('leagueTables')])
+        $q.all([apiFactory.getApiData('managerData'), apiFactory.getApiData('leagueTables')])
           .then(function () {
             cb();
           });
@@ -236,7 +317,7 @@
           .then(function (result) {
             allLeagues = [];
             _.each(result, function (league) {
-              var goalsMap = league.data.goals.map(arrayMappers.goalsMap.bind(arrayMappers, $rootScope.managersData, league.leagueURL));
+              var goalsMap = league.data.goals.map(arrayMappers.goalsMap.bind(arrayMappers, $rootScope.managerData, league.leagueURL));
               allLeagues.push({
                 name: textManipulator.properLeagueName(league.leagueName),
                 source: goalsMap,

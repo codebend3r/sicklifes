@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, $stateParams, arrayMappers, transferDates, apiFactory, objectUtils, updateDataUtils, momentService, managersService, managersData) {
+    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, $stateParams, arrayMappers, transferDates, apiFactory, objectUtils, updateDataUtils, momentService, managersService, managerData) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -65,7 +65,7 @@
       //
       //  var selectedPlayer = {};
       //
-      //  _.some($rootScope.managersData.data, function (manager) {
+      //  _.some($rootScope.managerData.data, function (manager) {
       //    if (manager.players[id]) {
       //      selectedPlayer = manager.players[id];
       //      return true;
@@ -98,10 +98,10 @@
           console.log('pick #', pickNumber);
           $scope.selectedManager.players[draftedPlayer.id] = draftedPlayer;
 
-          var saveObject = $scope.managersData;
+          var saveObject = $scope.managerData;
           saveObject._lastSyncedOn = momentService.syncDate();
 
-          $scope.saveToFireBase(saveObject, 'managersData');
+          $scope.saveToFireBase(saveObject, 'managerData');
 
         } else {
 
@@ -261,9 +261,9 @@
 
         if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
 
-        $scope.managersData = managersData.data;
+        $scope.managerData = managerData.data;
 
-        $scope.selectedManager = managersData.data[$stateParams.managerId];
+        $scope.selectedManager = managerData.data[$stateParams.managerId];
 
         $scope.selectedManagerName = $scope.selectedManager.managerName;
 
@@ -273,7 +273,7 @@
 
         $scope.transferHistory = [];
 
-        _.each($scope.managersData, function (m) {
+        _.each($scope.managerData, function (m) {
           _.each(m.players, function (player) {
             if (player.status !== 'drafted') {
               $scope.transferHistory.push(player);

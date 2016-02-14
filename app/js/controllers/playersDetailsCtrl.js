@@ -8,9 +8,9 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService, managersData) {
+    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService, managerData, managerPlayers, charts) {
 
-      console.log('managersData:', managersData);
+      console.log('managerData:', managerData);
 
       var lastDays = $scope.lastDays($scope.selectedRange);
 
@@ -44,12 +44,20 @@
 
       /**
        * @name loadData
-       * @description defines $scope.managersData - call when firebase data has loaded
+       * @description defines $scope.managerData - call when firebase data has loaded
        * @param result
        */
       var loadData = function () {
 
-        $scope.managersData = $rootScope.managersData.data;
+        $scope.managerData = managerData.data;
+
+        _.each($scope.managerData, function(manager, key) {
+
+          manager.players = managerPlayers.data[key].players;
+
+          manager.chartData = charts.data[key].chartData;
+
+        });
 
         if (angular.isDefined($rootScope.allPlayersIndex)) {
           console.log('player found in allPlayers index');
@@ -78,7 +86,7 @@
 
         } else {
 
-          _.some($scope.managersData, function (manager) {
+          _.some($scope.managerData, function (manager) {
 
             if (angular.isDefined(manager.players[$stateParams.playerId])) {
               $scope.player = manager.players[$stateParams.playerId];

@@ -14,11 +14,11 @@
 
       /**
        * @description maps each player's stats
-       * @param managersData
+       * @param managerData
        * @param url
        * @param i
        */
-      arrayMapper.goalsMap = function (managersData, url, i) {
+      arrayMapper.goalsMap = function (managerData, url, i) {
 
         return {
           id: i.player.id,
@@ -29,7 +29,7 @@
           domesticGoals: 0,
           leagueGoals: 0,
           goals: i.stat,
-          managerName: arrayLoopers.getOwnerByID(managersData, i.player.id),
+          managerName: arrayLoopers.getOwnerByID(managerData, i.player.id),
           leagueName: textManipulator.getLeagueByURL(url),
           transactionsLog: [],
           historyLog: []
@@ -416,7 +416,7 @@
 
         var owner = 'Free Agent';
 
-        _.some($rootScope.managersData.data, function (manager) {
+        _.some($rootScope.managerData.data, function (manager) {
           _.some(manager.players, function (p) {
             if (p.id === id) {
               owner = manager.managerName;
@@ -566,7 +566,7 @@
         gameMapsObj.teamLogo = dataObj.player.teamLogo;
         gameMapsObj.datePlayed = momentService.goalLogDate(game.box_score.event.game_date);
         gameMapsObj.originalDate = game.box_score.event.game_date;
-        gameMapsObj.managerName = dataObj.manager ? dataObj.manager.managerName : 'N/A';
+        //gameMapsObj.managerName = dataObj.manager ? dataObj.manager.managerName : 'N/A';
         gameMapsObj.result = textManipulator.result.call(gameMapsObj, game);
         gameMapsObj.finalScore = textManipulator.finalScore.call(gameMapsObj, game);
 

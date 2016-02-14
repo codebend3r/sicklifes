@@ -151,7 +151,7 @@
 
       $rootScope.$on('STANDINGS_READY', function (e) {
 
-        //loadData($rootScope.managersData);
+        //loadData($rootScope.managerData);
 
       });
 
@@ -299,7 +299,7 @@
         } else {
 
           console.log('load from firebase');
-          apiFactory.getApiData('managersData')
+          apiFactory.getApiData('managerData')
             .then(loadData);
 
         }

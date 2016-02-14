@@ -35,7 +35,7 @@
 
         console.log('updateAllManagersFilter');
 
-        _.each($rootScope.managersData.data, function (manager) {
+        _.each($rootScope.managerData.data, function (manager) {
 
           var points;
 
@@ -157,21 +157,79 @@
        * @description defines $scope.selectedManager
        */
       $scope.chooseManager = function (managerId) {
-        $rootScope.selectedManager = $rootScope.managersData[managerId.toLowerCase()];
+        $rootScope.selectedManager = $rootScope.managerData[managerId.toLowerCase()];
       };
 
       /**
        * @name saveRoster
-       * @description saves current managersData to firebase
+       * @description saves current managerData to firebase
        */
-      $scope.saveRoster = function () {
+      $scope.saveRoster = function (managerData) {
 
-        var saveObject = {
+        var gameLogsObject = {};
+        var chartsObj = {};
+        var managerPlayers = {};
+        var index = 0;
+        var managersList = [ 'Chester', 'Dan', 'Frank', 'Joe', 'Justin', 'Mike' ];
+
+        _.each(managerData, function(manager, key) {
+
+          manager.managerName = managersList[index];
+          index += 1;
+
+          gameLogsObject[key] = {
+            filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
+            monthlyGoalsLog: manager.monthlyGoalsLog
+          }
+
+          chartsObj[key] = {
+            chartData: manager.chartData
+          }
+
+          angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
+          angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
+          angular.isDefined(manager.chartData) && delete manager.chartData;
+
+          _.each(manager.players, function(player) {
+
+            player.managerName = manager.managerName;
+
+            angular.isDefined(player.seriGameLog) && delete player.seriGameLog;
+            angular.isDefined(player.eplGameLog) && delete player.eplGameLog;
+            angular.isDefined(player.ligaGameLog) && delete player.ligaGameLog;
+            angular.isDefined(player.chlgGameLog) && delete player.chlgGameLog;
+            angular.isDefined(player.euroGameLog) && delete player.euroGameLog;
+            angular.isDefined(player.allLeaguesName) && delete player.allLeaguesName;
+
+          });
+
+          managerPlayers[key] = {
+            players: manager.players
+          }
+
+          angular.isDefined(manager.players) && delete manager.players;
+
+        });
+
+        $scope.saveToFireBase({
+          data: managerData,
           _lastSyncedOn: momentService.syncDate(),
-          data: $rootScope.managersData.data
-        };
-        console.log('saveObject:', saveObject);
-        $scope.saveToFireBase(saveObject, 'managersData');
+        }, 'managerData');
+
+        $scope.saveToFireBase({
+          data: chartsObj,
+          _lastSyncedOn: momentService.syncDate()
+        }, 'charts');
+
+        $scope.saveToFireBase({
+          data: gameLogsObject,
+          _lastSyncedOn: momentService.syncDate()
+        }, 'gameLogs');
+
+        $scope.saveToFireBase({
+          data: managerPlayers,
+          _lastSyncedOn: momentService.syncDate()
+        }, 'managerPlayers');
 
       };
 
@@ -284,8 +342,8 @@
           firePromise.then(function (fbData) {
             $rootScope.firebaseData = fbData;
             $rootScope.fireBaseReady = true;
-            $rootScope.lastSyncDate = $rootScope.firebaseData.managersData._lastSyncedOn;
-            $rootScope.source = 'firebase';
+            //$rootScope.lastSyncDate = $rootScope.firebaseData.managerData._lastSyncedOn;
+            //$rootScope.source = 'firebase';
             callback(fbData);
           });
         }
@@ -367,7 +425,7 @@
        */
       $scope.resetAllPlayers = function () {
 
-        _.each($rootScope.managersData, function (manager) {
+        _.each($rootScope.managerData, function (manager) {
 
           manager.players = {};
           manager.chlgCount = 0;

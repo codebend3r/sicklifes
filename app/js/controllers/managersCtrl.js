@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, managerPlayers, momentService, transferDates, managersData, updateDataUtils) {
+    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter,momentService, transferDates, managerData, managerPlayers, updateDataUtils, apiFactory) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -56,14 +56,15 @@
 
         $rootScope.loading = false;
 
-        $scope.selectedManager = managersData.data[$stateParams.managerId];
+        $scope.selectedManager = managerData.data[$stateParams.managerId];
+        //$scope.selectedManager = {};
 
         $scope.selectedManager.players = managerPlayers.data[$stateParams.managerId].players;
 
-        $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog
-          .filter(function (log) {
-            return log.goals;
-          });
+        // $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog
+        //   .filter(function (log) {
+        //     return log.goals;
+        //   });
 
         $scope.selectedManagerName = $scope.selectedManager.managerName;
 
@@ -72,7 +73,7 @@
 
         if (angular.isDefined($scope.selectedManager._lastSyncedOn) && momentService.isHoursAgo($scope.selectedManager._lastSyncedOn)) {
           console.log('-- data for', $scope.selectedManager.managerName, 'is old --');
-        } else if (momentService.isHoursAgo($scope.managersData._lastSyncedOn)) {
+        } else if (momentService.isHoursAgo($scope.managerData._lastSyncedOn)) {
           console.log('-- data is too old --');
         } else {
           console.log('-- data is up to date --');
@@ -80,75 +81,9 @@
 
         $scope.selectedManager.wildCardCount = 0;
 
-        var gameLogsObject = {};
-        var chartsObj = {};
-        var playersObj = {};
-        var index = 0;
-
-        _.each(managersData.data, function (manager, key) {
-
-          manager.id = index++;
-
-          gameLogsObject[key] = {
-            filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
-            monthlyGoalsLog: manager.monthlyGoalsLog
-          }
-
-          chartsObj[key] = {
-            chartData: manager.chartData
-          }
-
-          playersObj[key] = {
-            players: manager.players
-          }
-
-          // angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
-          // angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
-          // angular.isDefined(manager.chartData) && delete manager.chartData;
-          // angular.isDefined(manager.players) && delete manager.players;
-
-          _.each(manager.player, function(player) {
-
-            angular.isDefined(player.seriGameLog) && delete player.seriGameLog;
-            angular.isDefined(player.eplGameLog) && delete player.eplGameLog;
-            angular.isDefined(player.ligaGameLog) && delete player.ligaGameLog;
-            angular.isDefined(player.chlgGameLog) && delete player.chlgGameLog;
-            angular.isDefined(player.euroGameLog) && delete player.euroGameLog;
-            angular.isDefined(player.allLeaguesName) && delete player.allLeaguesName;
-
-          });
-
-        });
-
         _.each($scope.selectedManager.players, function (player) {
           $scope.checkForWildCard(player, $scope.selectedManager);
         });
-
-        // console.log('gameLogsObject', gameLogsObject);
-        // console.log('chartsObj', chartsObj);
-        // console.log('peoplesObj', peoplesObj);
-        console.log('managersData', managersData.data);
-
-        $timeout(function () {
-
-          //$scope.saveRoster();
-
-          // $scope.saveToFireBase({
-          //   data: chartsObj,
-          //   _lastSyncedOn: momentService.syncDate()
-          // }, 'charts');
-
-          // $scope.saveToFireBase({
-          //   data: gameLogsObject,
-          //   _lastSyncedOn: momentService.syncDate()
-          // }, 'gameLogs');
-
-          // $scope.saveToFireBase({
-          //   data: playersObj,
-          //   _lastSyncedOn: momentService.syncDate()
-          // }, 'managerPlayers');
-
-        }, 1500);
 
       };
 
@@ -160,11 +95,17 @@
 
         $rootScope.loading = true;
 
-        updateDataUtils.updateAllManagerData(managersData, function (result) {
+        var tempManagers = managerPlayers.data;
 
-          $scope.loading = false;
-          managersData.data = result;
-          $scope.saveRoster();
+        apiFactory.getApiData('leagueTables').then(function() {
+
+          updateDataUtils.updateAllManagerData(tempManagers, function (result) {
+
+            $scope.loading = false;
+            managerData.data = result;
+            $scope.saveRoster(result);
+
+          });
 
         });
 

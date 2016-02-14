@@ -62,7 +62,7 @@
           var matchingManager = null;
           var matchingPlayer = null;
 
-          _.some($rootScope.managersData.data, function (manager) {
+          _.some($rootScope.managerPlayers.data, function (manager) {
 
             return !angular.isUndefinedOrNull(manager.players[id]) && (matchingManager = manager) && (matchingPlayer = manager.players[id]);
 

@@ -111,18 +111,18 @@
         fireBaseService.syncPlayerPoolData(allPlayersObject);
 
         console.log('////////////////////////////////////');
-        console.log('$scope.managersData', $scope.managersData);
+        console.log('$scope.managerData', $scope.managerData);
         console.log('////////////////////////////////////');
 
         var managersObject = {
           _syncedFrom: 'adminCtrl',
           _lastSyncedOn: momentService.syncDate(),
-          chester: $scope.managersData[0],
-          frank: $scope.managersData[1],
-          dan: $scope.managersData[2],
-          justin: $scope.managersData[3],
-          mike: $scope.managersData[4],
-          joe: $scope.managersData[5]
+          chester: $scope.managerData[0],
+          frank: $scope.managerData[1],
+          dan: $scope.managerData[2],
+          justin: $scope.managerData[3],
+          mike: $scope.managerData[4],
+          joe: $scope.managerData[5]
         };
 
         fireBaseService.syncManagersData(managersObject);
@@ -134,10 +134,10 @@
        */
       $scope.resetToDefault = function () {
 
-        $scope.managersData = managersService.getAllPlayers();
+        $scope.managerData = managersService.getAllPlayers();
 
         console.log('////////////////////////////////////');
-        console.log('$scope.managersData', $scope.managersData);
+        console.log('$scope.managerData', $scope.managerData);
         console.log('////////////////////////////////////');
 
       };
@@ -163,44 +163,44 @@
       var chooseTeam = function () {
 
         if ($routeParams.manager) {
-          $scope.managersData.forEach(function (manager) {
+          $scope.managerData.forEach(function (manager) {
             if (manager.managerName === $routeParams.manager) {
               $scope.selectedManager = manager;
             }
           });
         } else {
-          $scope.selectedManager = $scope.managersData[0];
+          $scope.selectedManager = $scope.managerData[0];
         }
 
       };
 
       /**
        * call when firebase data has loaded
-       * defines $scope.managersData
+       * defines $scope.managerData
        * @param data
        */
       var fireBaseLoaded = function (data) {
 
         $scope.allPlayers = data.allPlayersData.allPlayers;
 
-        $scope.managersData = [
-          data.managersData.chester,
-          data.managersData.frank,
-          data.managersData.dan,
-          data.managersData.justin,
-          data.managersData.mike,
-          data.managersData.joe
+        $scope.managerData = [
+          data.managerData.chester,
+          data.managerData.frank,
+          data.managerData.dan,
+          data.managerData.justin,
+          data.managerData.mike,
+          data.managerData.joe
         ];
 
         $scope.updatePlayerPoolData = updateDataUtils.updatePlayerPoolData.bind($scope, $scope.allPlayers);
 
-        $scope.updateAllManagerData = updateDataUtils.updateAllManagerData.bind($scope, $scope.managersData);
+        $scope.updateAllManagerData = updateDataUtils.updateAllManagerData.bind($scope, $scope.managerData);
 
         chooseTeam();
 
         console.log('syncDate allPlayersData', data.allPlayersData._lastSyncedOn);
         console.log('syncDate leagueData', data.leagueData._lastSyncedOn);
-        console.log('syncDate managersData', data.managersData._lastSyncedOn);
+        console.log('syncDate managerData', data.managerData._lastSyncedOn);
 
         $scope.loading = false;
 

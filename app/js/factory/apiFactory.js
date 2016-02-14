@@ -34,7 +34,7 @@
        * @name getApiData
        * @description makes a request from the firebase api by namespace and saves the response to the $rootScope
        *      supported requests are:
-       *           - managersData
+       *           - managerData
        *           - leagueLeaders
        *           - leagueTables
        * @returns {Promise}

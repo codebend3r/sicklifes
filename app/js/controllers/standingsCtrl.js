@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, managersData) {
+    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, managerData) {
 
       console.log('--> standingsCtrl');
 
@@ -87,13 +87,13 @@
 
         $rootScope.loading = false;
 
-        $scope.managersData = managersData.data;
+        $scope.managerData = managerData.data;
 
-        $rootScope.lastSyncDate = managersData._lastSyncedOn;
+        $rootScope.lastSyncDate = managerData._lastSyncedOn;
 
         $rootScope.source = 'firebase';
 
-        if (momentService.isHoursAgo(managersData._lastSyncedOn)) {
+        if (momentService.isHoursAgo(managerData._lastSyncedOn)) {
 
           console.log('-- data is too old --');
 
@@ -108,7 +108,7 @@
 
         $scope.combinedLogs = [];
 
-        _.each($scope.managersData, function (manager) {
+        _.each($scope.managerData, function (manager) {
           $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog
             .filter(function (log) {
               return log.goals;
@@ -124,7 +124,7 @@
         //   data: $rootScope.managerData
         // };
         //
-        // fireBaseService.saveToLocalStorage(saveObject, 'managersData');
+        // fireBaseService.saveToLocalStorage(saveObject, 'managerData');
 
         $rootScope.$emit('STANDINGS_READY');
         //setTimeout(processChart, 1000);
@@ -185,7 +185,7 @@
         var chartKey = 'stepPoints';
         var seriesHashTable = {};
 
-        _.each(managersData.data, function (manager) {
+        _.each(managerData.data, function (manager) {
 
           _.each(manager.chartData, function (data) {
 
@@ -199,7 +199,7 @@
 
         console.log(seriesHashTable, _.keys(seriesHashTable).length);
 
-        _.each(managersData.data, function (manager) {
+        _.each(managerData.data, function (manager) {
 
           var seriesDataObj = {};
           seriesDataObj.name = manager.managerName;

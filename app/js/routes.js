@@ -22,18 +22,18 @@
         //var init = function () {
         //  var defer = $q.defer();
         //
-        //  if (angular.isDefined($rootScope['managersData'])) {
+        //  if (angular.isDefined($rootScope['managerData'])) {
         //    console.log('$rootScope');
-        //    defer.resolve($rootScope['managersData']);
+        //    defer.resolve($rootScope['managerData']);
         //    return defer.promise;
-        //  } else if (angular.isDefined($localStorage['managersData'])) {
+        //  } else if (angular.isDefined($localStorage['managerData'])) {
         //    console.log('$localStorage');
-        //    $rootScope['managersData'] = $localStorage['managersData'];
-        //    defer.resolve($localStorage['managersData']);
+        //    $rootScope['managerData'] = $localStorage['managerData'];
+        //    defer.resolve($localStorage['managerData']);
         //    return defer.promise;
         //  } else {
         //    console.log('$http');
-        //    return apiFactory.getApiData('managersData');
+        //    return apiFactory.getApiData('managerData');
         //  }
         //
         //};
@@ -65,18 +65,7 @@
         .state('app', {
           abstract: true,
           template: '<ui-view />',
-          controller: 'appCtrl',
-          resolve: {
-            managersData: function (apiFactory) {
-              return apiFactory.getApiData('managersData');
-            },
-            leagueTables: function (apiFactory) {
-              return apiFactory.getApiData('leagueTables');
-            },
-            leagueLeaders: function (apiFactory) {
-              return apiFactory.getApiData('leagueLeaders');
-            }
-          }
+          controller: 'appCtrl'
         })
         //.state('signIn', {
         //  url: '/login',
@@ -112,7 +101,15 @@
           url: '/leagues/:leagueName',
           parent: 'app',
           templateUrl: 'views/leagues.html',
-          controller: 'leaguesCtrl'
+          controller: 'leaguesCtrl',
+          resolve: {
+            leagueTables: function (apiFactory) {
+              return apiFactory.getApiData('leagueTables');
+            },
+            leagueLeaders: function (apiFactory) {
+              return apiFactory.getApiData('leagueLeaders');
+            }
+          }
         })
         .state('leagues.tables', {
           url: '/tables',
@@ -130,7 +127,12 @@
           url: '/standings',
           parent: 'app',
           templateUrl: 'views/standings.html',
-          controller: 'standingsCtrl'
+          controller: 'standingsCtrl',
+          resolve: {
+            managerData: function (apiFactory) {
+              return apiFactory.getApiData('managerData');
+            }
+          }
         })
         .state('standings.overview', {
           url: '/overview',
@@ -152,6 +154,9 @@
           templateUrl: 'views/managers.html',
           controller: 'managersCtrl',
           resolve: {
+            managerData: function (apiFactory) {
+              return apiFactory.getApiData('managerData');
+            },
             managerPlayers: function (apiFactory) {
               return apiFactory.getApiData('managerPlayers');
             }
@@ -197,7 +202,24 @@
           url: '/player-details/:playerId',
           parent: 'app',
           templateUrl: 'views/player-details.html',
-          controller: 'playersDetailsCtrl'
+          controller: 'playersDetailsCtrl',
+          resolve: {
+            managerData: function (apiFactory) {
+              return apiFactory.getApiData('managerData');
+            },
+            managerPlayers: function (apiFactory) {
+              return apiFactory.getApiData('managerPlayers');
+            },
+            leagueTables: function (apiFactory) {
+              return apiFactory.getApiData('leagueTables');
+            },
+            leagueLeaders: function (apiFactory) {
+              return apiFactory.getApiData('leagueLeaders');
+            },
+            charts: function (apiFactory) {
+              return apiFactory.getApiData('charts');
+            },
+          }
         })
 
         // roster
