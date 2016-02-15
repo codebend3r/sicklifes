@@ -131,6 +131,12 @@
           resolve: {
             managerData: function (apiFactory) {
               return apiFactory.getApiData('managerData');
+            },
+            managerPlayers: function (apiFactory) {
+              return apiFactory.getApiData('managerPlayers');
+            },
+            gameLogs: function (apiFactory) {
+              return apiFactory.getApiData('gameLogs');
             }
           }
         })
@@ -209,6 +215,9 @@
             },
             managerPlayers: function (apiFactory) {
               return apiFactory.getApiData('managerPlayers');
+            },
+            gameLogs: function (apiFactory) {
+              return apiFactory.getApiData('gameLogs');
             },
             leagueTables: function (apiFactory) {
               return apiFactory.getApiData('leagueTables');

@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, managerData) {
+    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, managerData, managerPlayers,  gameLogs) {
 
       console.log('--> standingsCtrl');
 
@@ -88,6 +88,13 @@
         $rootScope.loading = false;
 
         $scope.managerData = managerData.data;
+
+        _.each($scope.managerData, function(m, key) {
+
+          m.filteredMonthlyGoalsLog = gameLogs.data[key].filteredMonthlyGoalsLog;
+          m.monthlyGoalsLog = gameLogs.data[key].monthlyGoalsLog;
+
+        });
 
         $rootScope.lastSyncDate = managerData._lastSyncedOn;
 

@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService, managerData, managerPlayers, charts) {
+    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService, managerData, managerPlayers, charts, gameLogs) {
 
       console.log('managerData:', managerData);
 
@@ -54,8 +54,9 @@
         _.each($scope.managerData, function(manager, key) {
 
           manager.players = managerPlayers.data[key].players;
-
           manager.chartData = charts.data[key].chartData;
+          manager.filteredMonthlyGoalsLog = gameLogs.data[key].filteredMonthlyGoalsLog;
+          manager.monthlyGoalsLog = gameLogs.data[key].monthlyGoalsLog;
 
         });
 
@@ -285,6 +286,9 @@
         $scope.player.id = $stateParams.playerId;
         $scope.matchingManager = managersService.findPlayerInManagers($stateParams.playerId).manager;
 
+        console.log('manager name', $scope.matchingManager.managerName);
+        console.log('player name', $scope.player.playerName);
+
         apiFactory.getPlayerProfile('soccer', $stateParams.playerId)
           .then(arrayMappers.playerInfo.bind(this, $scope.player))
           .then(arrayMappers.playerMapPersonalInfo.bind(this, $scope.player))
@@ -309,7 +313,7 @@
 
       };
 
-      loadData()
+      loadData();
 
     });
 

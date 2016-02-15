@@ -57,14 +57,12 @@
         $rootScope.loading = false;
 
         $scope.selectedManager = managerData.data[$stateParams.managerId];
-        //$scope.selectedManager = {};
-
         $scope.selectedManager.players = managerPlayers.data[$stateParams.managerId].players;
 
-        // $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog
-        //   .filter(function (log) {
-        //     return log.goals;
-        //   });
+        $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog
+          .filter(function (log) {
+            return log.goals;
+          });
 
         $scope.selectedManagerName = $scope.selectedManager.managerName;
 
