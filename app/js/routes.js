@@ -165,6 +165,9 @@
             },
             managerPlayers: function (apiFactory) {
               return apiFactory.getApiData('managerPlayers');
+            },
+            gameLogs: function (apiFactory) {
+              return apiFactory.getApiData('gameLogs');
             }
           }
         })
@@ -189,6 +192,12 @@
           templateUrl: 'views/transfers.html',
           controller: 'transfersCtrl',
           resolve: {
+            managerData: function (apiFactory) {
+              return apiFactory.getApiData('managerData');
+            },
+            managerPlayers: function (apiFactory) {
+              return apiFactory.getApiData('managerPlayers');
+            },
             playerPoolData: function(apiFactory) {
               return apiFactory.getApiData('playerPoolData');
             }

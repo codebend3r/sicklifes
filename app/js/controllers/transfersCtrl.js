@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, $stateParams, arrayMappers, transferDates, apiFactory, objectUtils, updateDataUtils, momentService, managersService, managerData) {
+    .controller('transfersCtrl', function ($scope, $rootScope, $q, $state, $timeout, $stateParams, arrayMappers, transferDates, apiFactory, objectUtils, updateDataUtils, momentService, managersService, managerData, managerPlayers, playerPoolData) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -262,12 +262,17 @@
         if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
 
         $scope.managerData = managerData.data;
-
         $scope.selectedManager = managerData.data[$stateParams.managerId];
+
+        _.each($scope.managerData, function(manager, key) {
+
+          manager.players = managerPlayers.data[key].players;
+
+        });
 
         $scope.selectedManagerName = $scope.selectedManager.managerName;
 
-        $scope.allPlayers = $rootScope.playerPoolData.allPlayers;
+        $scope.allPlayers = playerPoolData.allPlayers;
 
         console.log('populate transfer history - START');
 

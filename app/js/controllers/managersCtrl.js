@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter,momentService, transferDates, managerData, managerPlayers, updateDataUtils, apiFactory) {
+    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter,momentService, transferDates, managerData, managerPlayers, gameLogs, updateDataUtils, apiFactory) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -58,6 +58,8 @@
 
         $scope.selectedManager = managerData.data[$stateParams.managerId];
         $scope.selectedManager.players = managerPlayers.data[$stateParams.managerId].players;
+        $scope.selectedManager.filteredMonthlyGoalsLog = gameLogs.data[$stateParams.managerId].filteredMonthlyGoalsLog;
+        $scope.selectedManager.monthlyGoalsLog = gameLogs.data[$stateParams.managerId].monthlyGoalsLog;
 
         $scope.currentMonthLog = $scope.selectedManager.filteredMonthlyGoalsLog
           .filter(function (log) {
