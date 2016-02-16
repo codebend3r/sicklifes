@@ -2,7 +2,7 @@
 
   <h2>Managers</h2>
 
-  <select class='form-control' ng-model='selectedManagerName' ng-options='option for option in managersList' ng-change='changeManager(selectedManagerName)'></select>
+  <select class='form-control' ng-model='selectedManagerName' ng-options='option | capitalize for option in managersList' ng-change='changeManager(selectedManagerName)'></select>
   <select class='form-control' ng-model='selectedMonth' ng-options='option.monthName for option in allMonths' ng-change='changeMonth(selectedMonth)'></select>
 
   <div ng-if='admin' class='well'>

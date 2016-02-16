@@ -19,7 +19,7 @@
     <td class="player-column">
       <span ng-switch on="tableParams.draftMode">
         <span ng-switch-when="true">
-          <button ng-click="tableParams.addPlayer({player:player})" type="button" class="btn btn-primary btn-xs">
+          <button ng-click="tableParams.addPlayer(player)" type="button" class="btn btn-primary btn-xs">
             <span class="glyphicon glyphicon-plus"></span>
           </button>
         </span>
@@ -70,8 +70,11 @@
           </button>
         </span>
         <span ng-switch-default>
-          <span ng-switch on="player.managerName">
-            <button ng-switch-when="Free Agent" ng-click="tableParams.addPlayer(player)" type="button" class="btn btn-primary btn-xs btn-plus">
+          <span ng-switch on="player.status">
+            <button ng-switch-when="free agent" ng-click="tableParams.addPlayer(player)" type="button" class="btn btn-primary btn-xs btn-plus">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <button ng-switch-when="dropped" ng-click="tableParams.addPlayer(player)" type="button" class="btn btn-primary btn-xs btn-plus">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
             <button ng-switch-default ng-click="tableParams.dropPlayer(player)" type="button" class="btn btn-danger btn-xs btn-plus">

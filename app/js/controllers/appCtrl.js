@@ -137,7 +137,13 @@
        * @description if admin you can edit information
        * @type {boolean}
        */
-      $scope.edit = $location.search().edit;
+      $rootScope.edit = $location.search().edit;
+
+      $rootScope.$watch(function () {
+        return $location.search().edit;
+      }, function (nv, ov) {
+        $rootScope.edit = angular.isDefined(nv) && !!nv;
+      }, true);
 
       /**
        * @name draftMode
@@ -150,7 +156,7 @@
       // ROSTER
       /////////////////////////////
 
-      $scope.managersList = ['Chester', 'Frank', 'Joe', 'Justin', 'Dan', 'Mike'];
+      //$scope.managersList = ['chester', 'frank', 'joe', 'justin', 'dan', 'mike'];
 
       /**
        * @name chooseManager
@@ -166,23 +172,28 @@
        */
       $scope.saveRoster = function (managerData) {
 
-        var gameLogsObject = {};
-        var chartsObj = {};
+        console.log('//////////////////////////////');
+        console.log('saving managers data');
+        console.log('//////////////////////////////');
+
+        var gameLogs = {};
+        var charts = {};
         var managerPlayers = {};
         var index = 0;
-        var managersList = [ 'Chester', 'Dan', 'Frank', 'Joe', 'Justin', 'Mike' ];
 
         _.each(managerData, function(manager, key) {
 
-          manager.managerName = managersList[index];
+          manager.managerName = key;
           index += 1;
 
-          gameLogsObject[key] = {
+          gameLogs[key] = {
+            managerName: key,
             filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
             monthlyGoalsLog: manager.monthlyGoalsLog
           }
 
-          chartsObj[key] = {
+          charts[key] = {
+            managerName: key,
             chartData: manager.chartData
           }
 
@@ -205,6 +216,7 @@
           });
 
           managerPlayers[key] = {
+            managerName: key,
             players: manager.players
           }
 
@@ -218,19 +230,19 @@
         }, 'managerData');
 
         $scope.saveToFireBase({
-          data: chartsObj,
+          data: managerPlayers,
+          _lastSyncedOn: momentService.syncDate()
+        }, 'managerPlayers');
+
+        $scope.saveToFireBase({
+          data: charts,
           _lastSyncedOn: momentService.syncDate()
         }, 'charts');
 
         $scope.saveToFireBase({
-          data: gameLogsObject,
+          data: gameLogs,
           _lastSyncedOn: momentService.syncDate()
         }, 'gameLogs');
-
-        $scope.saveToFireBase({
-          data: managerPlayers,
-          _lastSyncedOn: momentService.syncDate()
-        }, 'managerPlayers');
 
       };
 

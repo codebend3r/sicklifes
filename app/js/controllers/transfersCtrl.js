@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 09/01/2015
+ * Created by Bouse on 02/16/2016
  */
 
 (function () {
@@ -101,7 +101,10 @@
           var saveObject = $scope.managerData;
           saveObject._lastSyncedOn = momentService.syncDate();
 
-          $scope.saveToFireBase(saveObject, 'managerData');
+          $scope.saveToFireBase({
+            _lastSyncedOn: momentService.syncDate(),
+            data: $scope.managerData
+          }, 'managerData');
 
         } else {
 
@@ -169,7 +172,7 @@
           console.log('droppedPlayerObject: ', $scope.droppedPlayerObject);
           console.log('///////////////////////////////////////////');
 
-          $scope.saveRoster();
+          $scope.saveRoster(managerData.data);
 
         } else {
 
@@ -242,13 +245,11 @@
        */
       $scope.savePlayerPoolData = function () {
 
-        var saveObject = {
+        $scope.saveToFireBase({
           _syncedFrom: 'transfersCtrl',
           _lastSyncedOn: momentService.syncDate(),
           allPlayers: $scope.allPlayers
-        };
-
-        $scope.saveToFireBase(saveObject, 'playerPoolData');
+        }, 'playerPoolData');
 
       };
 
@@ -261,20 +262,17 @@
 
         if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
 
+        // _.each(managerData.data, function(manager, key) {
+        //   angular.isUndefinedOrNull(manager.players) && (manager.players = managerPlayers.data[key].players);
+        // });
+
         $scope.managerData = managerData.data;
         $scope.selectedManager = managerData.data[$stateParams.managerId];
-
-        console.log('managerData', managerData.data);
-        console.log('managerPlayers', managerPlayers.data);
-
-        _.each(managerData.data, function(manager, key) {
-          angular.isUndefinedOrNull(manager.players) && (manager.players = managerPlayers.data[key].players);
-        });
 
         $scope.selectedManagerName = $scope.selectedManager.managerName;
         $scope.allPlayers = playerPoolData.allPlayers;
         $scope.transferHistory = [];
-
+        
         _.each($scope.managerData, function (m) {
           _.each(m.players, function (player) {
             if (player.status !== 'drafted') {

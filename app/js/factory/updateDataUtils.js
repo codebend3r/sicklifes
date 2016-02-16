@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 09/01/2015
+ * Created by Bouse on 02/16/2016
  */
 
 (function () {
@@ -9,9 +9,6 @@
   angular.module('sicklifes')
 
     .factory('updateDataUtils', function ($rootScope, $q, $http, apiFactory, objectUtils, managersService, momentService, fireBaseService, textManipulator, arrayMappers) {
-
-      var current = 0,
-        total = 0;
 
       var updateDataUtils = {};
 
@@ -68,123 +65,52 @@
       };
 
       /**
-       * @name updateManagerData
-       * @description update only one manager
-       * @param cb
-       * @param manager
-       */
-      updateDataUtils.updateManagerData = function (cb, manager) {
-
-        console.log('updating -->', manager.managerName);
-
-        // reset goal counts
-        manager = objectUtils.cleanManager(manager, true);
-        manager._lastSyncedOn = momentService.syncDate();
-
-        total += _.keys(manager.players).length;
-
-        _.each(manager.players, function (player) {
-
-          player = objectUtils.playerResetGoalPoints(player);
-
-          player.managerName = manager.managerName;
-
-          apiFactory.getPlayerProfile('soccer', player.id)
-            .then(arrayMappers.playerInfo.bind(this, player), function () {
-              console.log('failed at player info mapping')
-            })
-            .then(arrayMappers.playerMapPersonalInfo.bind(this, player), function () {
-              console.log('failed at player personal info mapping')
-            })
-            .then(arrayMappers.playerGamesLog.bind(this, {
-              player: player,
-              manager: manager
-            }), function () {
-              console.log('failed at player game logs')
-            })
-            .then(function (result) {
-
-              // TODO make function available in services
-              //console.log(result);
-
-              // if (angular.isUndefinedOrNull(player.status)) {
-              //   player.status = 'drafted';
-              //   player.dateOfTransaction = '08/01/2015';
-              // }
-              //
-              // if (player.dateOfTransaction === '11/9/2015') {
-              //   player.dateOfTransaction = '11/09/2015';
-              // }
-              //
-              // if (player.dateOfTransaction === '08/01/2015') {
-              //   player.dateOfTransaction = '08/01/2015';
-              // }
-
-              current += 1;
-              //$rootScope.percentage = Math.round((current / total) * 100);
-              console.log(current, total, player.playerName, player.status);
-              //console.log(current);
-
-              if (current === total) {
-                if (typeof cb === 'function') {
-                  cb(manager);
-                } else {
-                  throw new Error('cb parameter is not type function');
-                }
-              }
-            }, function () {
-              console.log('fail 4')
-            });
-
-        });
-
-      };
-
-      /**
        * @name filterManagerData
        * @description TODO
        */
       updateDataUtils.mapManagerData = function(managerData) {
 
-        var gameLogsObject = {};
-        var chartsObj = {};
-        var playersObj = {};
-        var index = 0;
+        console.log('OOPS');
 
-        _.each(managerData, function (manager, key) {
-
-          manager.id = index++;
-
-          gameLogsObject[key] = {
-            filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
-            monthlyGoalsLog: manager.monthlyGoalsLog
-          }
-
-          chartsObj[key] = {
-            chartData: manager.chartData
-          }
-
-          playersObj[key] = {
-            players: manager.players
-          }
-
-          angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
-          angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
-          angular.isDefined(manager.chartData) && delete manager.chartData;
-          angular.isDefined(manager.players) && delete manager.players;
-
-          _.each(manager.player, function(player) {
-
-            angular.isDefined(player.seriGameLog) && delete player.seriGameLog;
-            angular.isDefined(player.eplGameLog) && delete player.eplGameLog;
-            angular.isDefined(player.ligaGameLog) && delete player.ligaGameLog;
-            angular.isDefined(player.chlgGameLog) && delete player.chlgGameLog;
-            angular.isDefined(player.euroGameLog) && delete player.euroGameLog;
-            angular.isDefined(player.allLeaguesName) && delete player.allLeaguesName;
-
-          });
-
-        });
+        // var gameLogsObject = {};
+        // var chartsObj = {};
+        // var playersObj = {};
+        // var index = 0;
+        //
+        // _.each(managerData, function (manager, key) {
+        //
+        //   manager.id = index++;
+        //
+        //   gameLogsObject[key] = {
+        //     filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
+        //     monthlyGoalsLog: manager.monthlyGoalsLog
+        //   }
+        //
+        //   chartsObj[key] = {
+        //     chartData: manager.chartData
+        //   }
+        //
+        //   playersObj[key] = {
+        //     players: manager.players
+        //   }
+        //
+        //   angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
+        //   angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
+        //   angular.isDefined(manager.chartData) && delete manager.chartData;
+        //   angular.isDefined(manager.players) && delete manager.players;
+        //
+        //   _.each(manager.player, function(player) {
+        //
+        //     angular.isDefined(player.seriGameLog) && delete player.seriGameLog;
+        //     angular.isDefined(player.eplGameLog) && delete player.eplGameLog;
+        //     angular.isDefined(player.ligaGameLog) && delete player.ligaGameLog;
+        //     angular.isDefined(player.chlgGameLog) && delete player.chlgGameLog;
+        //     angular.isDefined(player.euroGameLog) && delete player.euroGameLog;
+        //     angular.isDefined(player.allLeaguesName) && delete player.allLeaguesName;
+        //
+        //   });
+        //
+        // });
 
       };
 
@@ -225,15 +151,96 @@
       /**
        * @name updateAllManagerData
        * @description gets data from all of the players in all valid leagues
+       * @returns {promise}
        */
-      updateDataUtils.updateAllManagerData = function (managerData, cb) {
+      updateDataUtils.updateAllManagerData = function (managerData) {
 
-        console.log('updateDataUtils --> updateAllManagerData');
+        console.log('updateDataUtils --> updateAllManagerData', managerData);
 
+        var defer = $q.defer();
         var managers = angular.copy(managerData);
-        _.each(managers, updateDataUtils.updateManagerData.bind(updateDataUtils, function () {
-          cb(managers);
-        }));
+        var stupidCount = 0;
+
+        _.each(managers, function(m) {
+          var request = updateDataUtils.updateManagerData(m)
+            .then(function(result) {
+              stupidCount += 1;
+              if (stupidCount === _.keys(managerData).length) {
+                console.log('ALL MANAGERS DATA RESOLVED');
+                defer.resolve(managers);
+              }
+            });
+
+        });
+
+        return defer.promise;
+
+      };
+
+      /**
+       * @name updateManagerData
+       * @description update only one manager
+       * @param cb
+       * @param manager
+       * @returns {promise}
+       */
+      updateDataUtils.updateManagerData = function (manager) {
+
+        console.log('updating -->', manager.managerName);
+
+        var defer = $q.defer();
+        var current = 0;
+        var total = 0;
+        var listOrPromises = [];
+        var requestPromise;
+        var requestPlayer = function (player) {
+
+          player = objectUtils.playerResetGoalPoints(player);
+
+          //player.managerName = manager.managerName;
+
+          apiFactory.getPlayerProfile('soccer', player.id)
+            .then(arrayMappers.playerInfo.bind(this, player), function () {
+              console.log('failed at player info mapping:', player.playerName)
+            })
+            .then(arrayMappers.playerMapPersonalInfo.bind(this, player), function () {
+              console.log('failed at player personal info mapping:', player.playerName);
+            })
+            .then(arrayMappers.playerGamesLog.bind(this, {
+              player: player,
+              manager: manager
+            }), function () {
+              console.log('failed at player game logs', player.playerName)
+            })
+            .then(function (result) {
+              current += 1;
+              console.log('COMPLETED:', player.playerName, Math.round((current / total) * 100));
+              if (current === total) {
+                console.log('///////////////////////////////////////');
+                console.log('RESOLVE PROMISE:', manager.managerName);
+                console.log('///////////////////////////////////////');
+                defer.resolve(manager);
+              }
+            }, function () {
+              console.log('failed at final stage:', player.playerName)
+            });
+
+        };
+
+        if (angular.isDefined(manager.players)) {
+
+          // reset goal counts
+          manager = objectUtils.cleanManager(manager, true);
+          manager._lastSyncedOn = momentService.syncDate();
+
+          total = _.keys(manager.players).length;
+          _.each(manager.players, requestPlayer);
+
+        } else {
+          console.warn('try again');
+        }
+
+        return defer.promise;
 
       };
 
@@ -328,6 +335,50 @@
             });
 
             defer.resolve(allLeagues);
+
+          });
+
+        return defer.promise;
+
+      };
+
+      updateDataUtils.recoverManagerData = function(allPlayers) {
+
+        var defer = $q.defer();
+
+        $q.all([ apiFactory.getApiData('leagueTables'), apiFactory.getApiData('managerCore') ])
+
+          .then(function() {
+
+            var rebuildTeams = {
+              data: {},
+              _lastSyncedOn: momentService.syncDate()
+            };
+
+            _.each(allPlayers, function(player) {
+              if (player.status === 'drafted' || player.status === 'added' || player.status === 'dropped') {
+
+                var managerKey = player.managerName.toLowerCase();
+
+                if (angular.isUndefinedOrNull(rebuildTeams.data[managerKey])) {
+                  rebuildTeams.data[managerKey] = {};
+                  rebuildTeams.data[managerKey].managerName = player.managerName;
+                  rebuildTeams.data[managerKey].players = {};
+                }
+
+                rebuildTeams.data[managerKey].players[player.id] = {
+                  id: player.id,
+                  status: player.status,
+                  managerName: player.managerName,
+                  playerName: player.playerName
+                }
+
+              }
+            });
+
+            defer.resolve(rebuildTeams);
+
+            //$scope.saveToFireBase(rebuildTeams, 'managerCore');
 
           });
 

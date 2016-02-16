@@ -25,6 +25,8 @@
         },
         controller: function ($scope) {
 
+          $scope.edit = $scope.$root.edit;
+
           $scope.ascending = false;
 
           var transferShown = false;

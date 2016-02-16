@@ -1,3 +1,4 @@
+<!-- desktop -->
 <table class='table table-hover table-responsive hidden-sm hidden-xs'>
   <thead>
   <tr>
@@ -24,15 +25,20 @@
       </div>
     </td>
     <td class="small-text"><div class="vertical-center">{{player.leagueName}}</div></td>
-    <td><div class="vertical-center">{{player.goals}}</div></td>
+
+    <td ng-if-start="edit"><div class="vertical-center">status: <input class="form-control" type="text" ng-model="player.status" /></div></td>
+    <td><div class="vertical-center">pickNumber: <input class="form-control" type="text" ng-model="player.pickNumber" /></div></td>
+    <td ng-if-end><div class="vertical-center">date: <input class="form-control" type="text" ng-model="player.dateOfTransaction" /></div></td>
+    <td ng-if-start="!edit"><div class="vertical-center">{{player.goals}}</div></td>
     <td><div class="vertical-center">{{player.domesticGoals}}</div></td>
     <td><div class="vertical-center">{{player.clGoals}}</div></td>
     <td><div class="vertical-center">{{player.eGoals}}</div></td>
-    <td><div class="vertical-center">{{player.points}}</div></td>
+    <td ng-if-end><div class="vertical-center">{{player.points}}</div></td>
   </tr>
   </tbody>
 </table>
 
+<!-- mobile -->
 <table class='table table-hover table-responsive hidden-lg hidden-md'>
   <thead>
   <tr>

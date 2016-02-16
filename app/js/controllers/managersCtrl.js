@@ -1,5 +1,5 @@
 /**
- * Created by Bouse on 01/07/2016
+ * Created by Bouse on 02/16/2016
  */
 
 (function () {
@@ -8,12 +8,22 @@
 
   angular.module('sicklifes')
 
-    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter,momentService, transferDates, managerData, managerPlayers, gameLogs, updateDataUtils, apiFactory) {
+    .filter('capitalize', function() {
+      return function(input) {
+        return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+      }
+    })
+
+    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, momentService, transferDates, managerData, managerPlayers, gameLogs, updateDataUtils, apiFactory) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
+      /**
+       * @name goalsOnlyFilterOn
+       * @description TODO
+       */
       $scope.goalsOnlyFilterOn = true;
 
       /**
@@ -25,6 +35,8 @@
         $rootScope.loading = true;
         $state.go($state.current, {managerId: selectedManagerName.toLowerCase()});
       };
+
+      $scope.managersList = ['chester', 'frank', 'joe', 'justin', 'mike', 'dan'];
 
       /**
        * @name tabData
@@ -55,8 +67,6 @@
         if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
 
         $rootScope.loading = false;
-
-        return;
 
         $scope.selectedManager = managerData.data[$stateParams.managerId];
         $scope.selectedManager.players = managerPlayers.data[$stateParams.managerId].players;
@@ -89,6 +99,19 @@
 
       };
 
+      $scope.recover = function() {
+
+        updateDataUtils.recoverManagerData.then(function(result) {
+
+          console.log('////////////////////////////');
+          console.log('MANAGER DATA RECOVERED');
+          console.log('////////////////////////////');
+          $scope.saveRoster(result);
+
+        });
+
+      };
+
       /**
        * @name updateAllManagerData
        * @description update all managers data
@@ -97,18 +120,16 @@
 
         $rootScope.loading = true;
 
-        var tempManagers = managerPlayers.data;
-
         apiFactory.getApiData('leagueTables').then(function() {
-
-          updateDataUtils.updateAllManagerData(tempManagers, function (result) {
-
-            $scope.loading = false;
-            managerData.data = result;
-            $scope.saveRoster(result);
-
-          });
-
+          updateDataUtils.updateAllManagerData(managerPlayers.data)
+            .then(function (result) {
+              console.log('////////////////////////////');
+              console.log('MANAGER DATA UPDATED');
+              console.log('////////////////////////////');
+              $scope.loading = false;
+              managerData.data = result;
+              $scope.saveRoster(result);
+            });
         });
 
       };
