@@ -56,6 +56,8 @@
 
         $rootScope.loading = false;
 
+        return;
+
         $scope.selectedManager = managerData.data[$stateParams.managerId];
         $scope.selectedManager.players = managerPlayers.data[$stateParams.managerId].players;
         $scope.selectedManager.filteredMonthlyGoalsLog = gameLogs.data[$stateParams.managerId].filteredMonthlyGoalsLog;

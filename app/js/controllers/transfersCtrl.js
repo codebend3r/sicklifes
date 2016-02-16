@@ -264,18 +264,15 @@
         $scope.managerData = managerData.data;
         $scope.selectedManager = managerData.data[$stateParams.managerId];
 
-        _.each($scope.managerData, function(manager, key) {
+        console.log('managerData', managerData.data);
+        console.log('managerPlayers', managerPlayers.data);
 
-          manager.players = managerPlayers.data[key].players;
-
+        _.each(managerData.data, function(manager, key) {
+          angular.isUndefinedOrNull(manager.players) && (manager.players = managerPlayers.data[key].players);
         });
 
         $scope.selectedManagerName = $scope.selectedManager.managerName;
-
         $scope.allPlayers = playerPoolData.allPlayers;
-
-        console.log('populate transfer history - START');
-
         $scope.transferHistory = [];
 
         _.each($scope.managerData, function (m) {
@@ -285,8 +282,6 @@
             }
           });
         });
-
-        console.log('populate transfer history - END');
 
         _.some(transferDates.transfers, function (round) {
           return !round.roundCompleted && ($scope.currentRound = round);

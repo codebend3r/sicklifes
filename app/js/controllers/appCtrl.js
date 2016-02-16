@@ -189,6 +189,7 @@
           angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
           angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
           angular.isDefined(manager.chartData) && delete manager.chartData;
+          angular.isDefined(manager.gameLogs) && delete manager.gameLogs;
 
           _.each(manager.players, function(player) {
 
