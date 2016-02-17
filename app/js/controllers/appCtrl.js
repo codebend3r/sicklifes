@@ -173,11 +173,11 @@
       $scope.saveRoster = function (managerData) {
 
         console.log('//////////////////////////////');
-        console.log('saving managers data');
+        console.log('SAVING MANAGERS DATA');
         console.log('//////////////////////////////');
 
         if (Array.isArray(managerData)) {
-          console.log('managerData can not be an array')
+          console.warn('managerData can not be an array')
           return false;
         }
 
@@ -229,51 +229,60 @@
 
         });
 
-        _.some(gameLogs, function(m) {
+        var a = _.some(gameLogs, function(m) {
 
           return angular.isUndefinedOrNull(m.managerName) && angular.isUndefinedOrNull(m.filteredMonthlyGoalsLog) && angular.isUndefinedOrNull(m.monthlyGoalsLog);
 
         }) && console.log(gameLogs, 'charts does not contain a \'filteredMonthlyGoalsLog\' or \'monthlyGoalsLog\' property');
 
-        _.some(charts, function(m) {
+        var b = _.some(charts, function(m) {
 
           return angular.isUndefinedOrNull(m.managerName) && angular.isUndefinedOrNull(m.chartData);
 
         }) && console.log(charts, 'charts does not contain a \'chartData\' property');
 
-        _.some(managerData, function(m) {
+        var c = _.some(managerData, function(m) {
 
           return angular.isUndefinedOrNull(m.managerName);
 
         }) && console.log(managerData, 'managerData does not contain a \'managerName\' property');
 
-        _.some(managerPlayers, function(m, key) {
+        var d = _.some(managerPlayers, function(m, key) {
 
           return angular.isUndefinedOrNull(m.managerName) && angular.isUndefinedOrNull(m.players);
 
         }) && console.log(managerPlayers, 'managerPlayers does not contain a \'players\' property');
 
+        if (a || b || c || d) {
+
+          console.log('tests failed');
+          return false;
+
+        }
+
+        console.log('GOOD TO GO!');
+
         ///////////////////
 
-        $scope.saveToFireBase({
-          data: managerData,
-          _lastSyncedOn: momentService.syncDate(),
-        }, 'managerData');
-
-        $scope.saveToFireBase({
-          data: managerPlayers,
-          _lastSyncedOn: momentService.syncDate()
-        }, 'managerPlayers');
-
-        $scope.saveToFireBase({
-          data: charts,
-          _lastSyncedOn: momentService.syncDate()
-        }, 'charts');
-
-        $scope.saveToFireBase({
-          data: gameLogs,
-          _lastSyncedOn: momentService.syncDate()
-        }, 'gameLogs');
+        //$scope.saveToFireBase({
+        //  data: managerData,
+        //  _lastSyncedOn: momentService.syncDate(),
+        //}, 'managerData');
+        //
+        //$scope.saveToFireBase({
+        //  data: managerPlayers,
+        //  _lastSyncedOn: momentService.syncDate()
+        //}, 'managerPlayers');
+        //
+        //$scope.saveToFireBase({
+        //  data: charts,
+        //  _lastSyncedOn: momentService.syncDate()
+        //}, 'charts');
+        //
+        //$scope.saveToFireBase({
+        //  data: gameLogs,
+        //  _lastSyncedOn: momentService.syncDate()
+        //}, 'gameLogs');
 
       };
 

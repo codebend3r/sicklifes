@@ -65,97 +65,13 @@
       };
 
       /**
-       * @name filterManagerData
-       * @description TODO
-       */
-      updateDataUtils.mapManagerData = function(managerData) {
-
-        console.log('OOPS');
-
-        // var gameLogsObject = {};
-        // var chartsObj = {};
-        // var playersObj = {};
-        // var index = 0;
-        //
-        // _.each(managerData, function (manager, key) {
-        //
-        //   manager.id = index++;
-        //
-        //   gameLogsObject[key] = {
-        //     filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
-        //     monthlyGoalsLog: manager.monthlyGoalsLog
-        //   }
-        //
-        //   chartsObj[key] = {
-        //     chartData: manager.chartData
-        //   }
-        //
-        //   playersObj[key] = {
-        //     players: manager.players
-        //   }
-        //
-        //   angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
-        //   angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
-        //   angular.isDefined(manager.chartData) && delete manager.chartData;
-        //   angular.isDefined(manager.players) && delete manager.players;
-        //
-        //   _.each(manager.player, function(player) {
-        //
-        //     angular.isDefined(player.seriGameLog) && delete player.seriGameLog;
-        //     angular.isDefined(player.eplGameLog) && delete player.eplGameLog;
-        //     angular.isDefined(player.ligaGameLog) && delete player.ligaGameLog;
-        //     angular.isDefined(player.chlgGameLog) && delete player.chlgGameLog;
-        //     angular.isDefined(player.euroGameLog) && delete player.euroGameLog;
-        //     angular.isDefined(player.allLeaguesName) && delete player.allLeaguesName;
-        //
-        //   });
-        //
-        // });
-
-      };
-
-      /**
-       * @name saveManagerData
-       * @description TODO
-       */
-      updateDataUtils.saveManagerData = function(managerData) {
-
-        // console.log('gameLogsObject', gameLogsObject);
-        // console.log('chartsObj', chartsObj);
-        // console.log('peoplesObj', peoplesObj);
-        // console.log('managerData', managerData.data);
-        //
-        // $timeout(function () {
-        //
-        //   $scope.saveRoster();
-        //
-        //   $scope.saveToFireBase({
-        //     data: chartsObj,
-        //     _lastSyncedOn: momentService.syncDate()
-        //   }, 'charts');
-        //
-        //   $scope.saveToFireBase({
-        //     data: gameLogsObject,
-        //     _lastSyncedOn: momentService.syncDate()
-        //   }, 'gameLogs');
-        //
-        //   $scope.saveToFireBase({
-        //     data: playersObj,
-        //     _lastSyncedOn: momentService.syncDate()
-        //   }, 'managerPlayers');
-        //
-        // }, 1500);
-
-      };
-
-      /**
        * @name updateAllManagerData
        * @description gets data from all of the players in all valid leagues
        * @returns {promise}
        */
       updateDataUtils.updateAllManagerData = function (managerData) {
 
-        console.log('updateDataUtils >> updateAllManagerData()');
+        console.log('updateDataUtils.updateAllManagerData()');
 
         var promises = [];
         apiFactory.getApiData('leagueTables');
@@ -178,18 +94,18 @@
        */
       updateDataUtils.updateManagerData = function (manager) {
 
-        console.log('updateDataUtils >> updateManagerData()',  manager.managerName);
+        console.log('updateDataUtils.updateManagerData()',  manager);
 
         var defer = $q.defer();
         var current = 0;
         var total = 0;
-        var listOrPromises = [];
-        var requestPromise;
         var requestPlayer = function (player) {
 
           player = objectUtils.playerResetGoalPoints(player);
 
-          //player.managerName = manager.managerName;
+          manager.monthlyGoalsLog = [];
+          manager.filteredMonthlyGoalsLog = [];
+          manager.charts = [];
 
           apiFactory.getPlayerProfile('soccer', player.id)
             .then(arrayMappers.playerInfo.bind(this, player), function () {
@@ -237,18 +153,6 @@
       };
 
       /**
-       * @name updateCoreData
-       * @description
-       */
-      updateDataUtils.updateCoreData = function () {
-
-        console.log('updateDataUtils --> updateCoreData');
-
-        return $q.all([apiFactory.getApiData('managerData'), apiFactory.getApiData('leagueTables')])
-
-      };
-
-      /**
        * @name updateLeagueTables
        * @description gets all leagues in teams
        */
@@ -256,15 +160,11 @@
 
         console.log('updateDataUtils --> updateLeagueTables');
 
-        var leagueTables = apiFactory.getLeagueTables(),
-          defer = $q.defer(),
-          leagueTablesData = [],
-          allLeagues = {
-            _lastSyncedOn: momentService.syncDate()
-          };
+        var defer = $q.defer(),
+          leagueTablesData = [];
 
         // returns a list of promise with the end point for each league
-        $q.all(leagueTables)
+        $q.all(apiFactory.getLeagueTables())
           .then(function (promiseData) {
 
             leagueTablesData = _.map(promiseData, function (result, index) {
@@ -331,6 +231,10 @@
 
       };
 
+      /**
+       *
+       * @returns {*|r.promise|promise}
+       */
       updateDataUtils.recoverFromManagerCore = function() {
 
         var defer = $q.defer();

@@ -8,8 +8,8 @@
 
   angular.module('sicklifes')
 
-    .filter('capitalize', function() {
-      return function(input) {
+    .filter('capitalize', function () {
+      return function (input) {
         return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
       }
     })
@@ -99,17 +99,16 @@
 
       };
 
-      $scope.recover = function() {
+      $scope.recover = function () {
 
         updateDataUtils.recoverFromManagerCore()
 
-          .then(function(result) {
+          .then(function (result) {
 
-            console.log(result);
             return updateDataUtils.updateAllManagerData(result.data);
 
           })
-          .then(function(result) {
+          .then(function (result) {
 
             console.log('////////////////////////////');
             console.log('MANAGER DATA RECOVERED', result);
@@ -117,11 +116,9 @@
 
             var mappedManagers = {};
 
-            _.each(result, function(obj) {
+            _.each(result, function (obj) {
               mappedManagers[obj.managerName.toLowerCase()] = obj;
             });
-
-            console.log(mappedManagers);
 
             $scope.saveRoster(mappedManagers);
 
@@ -137,14 +134,14 @@
 
         $rootScope.loading = true;
 
-        apiFactory.getApiData('leagueTables').then(function() {
+        apiFactory.getApiData('leagueTables').then(function () {
           updateDataUtils.updateAllManagerData(managerPlayers.data)
             .then(function (result) {
 
               console.log('////////////////////////////');
               console.log('MANAGER DATA UPDATED');
               console.log('////////////////////////////');
-              
+
               $scope.loading = false;
               managerData.data = result;
               $scope.saveRoster(result);
@@ -157,7 +154,7 @@
        * @name saveCurrentRoster
        * @description TODO
        */
-      $scope.saveCurrentRoster = function() {
+      $scope.saveCurrentRoster = function () {
 
         console.log(managerData.data);
         //$scope.saveRoster(managerData.data);

@@ -484,9 +484,8 @@
        * @description takes previous built object
        * @param dataObj
        * @param game
-       * @param index
        */
-      arrayMapper.computedPoints = function (dataObj, game, index) {
+      arrayMapper.computedPoints = function (dataObj, game) {
 
         var points;
         var player = dataObj.player;
