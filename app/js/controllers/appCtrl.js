@@ -176,6 +176,11 @@
         console.log('saving managers data');
         console.log('//////////////////////////////');
 
+        if (Array.isArray(managerData)) {
+          console.log('managerData can not be an array')
+          return false;
+        }
+
         var gameLogs = {};
         var charts = {};
         var managerPlayers = {};
@@ -223,6 +228,32 @@
           angular.isDefined(manager.players) && delete manager.players;
 
         });
+
+        _.some(gameLogs, function(m) {
+
+          return angular.isUndefinedOrNull(m.managerName) && angular.isUndefinedOrNull(m.filteredMonthlyGoalsLog) && angular.isUndefinedOrNull(m.monthlyGoalsLog);
+
+        }) && console.log(gameLogs, 'charts does not contain a \'filteredMonthlyGoalsLog\' or \'monthlyGoalsLog\' property');
+
+        _.some(charts, function(m) {
+
+          return angular.isUndefinedOrNull(m.managerName) && angular.isUndefinedOrNull(m.chartData);
+
+        }) && console.log(charts, 'charts does not contain a \'chartData\' property');
+
+        _.some(managerData, function(m) {
+
+          return angular.isUndefinedOrNull(m.managerName);
+
+        }) && console.log(managerData, 'managerData does not contain a \'managerName\' property');
+
+        _.some(managerPlayers, function(m, key) {
+
+          return angular.isUndefinedOrNull(m.managerName) && angular.isUndefinedOrNull(m.players);
+
+        }) && console.log(managerPlayers, 'managerPlayers does not contain a \'players\' property');
+
+        ///////////////////
 
         $scope.saveToFireBase({
           data: managerData,

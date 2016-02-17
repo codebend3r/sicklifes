@@ -84,7 +84,6 @@
       var loadData = function () {
 
         $scope.setSelectedLeague();
-        console.log(leagueLeaders.leagues);
         $scope.leagueLeaders = leagueLeaders.leagues[$stateParams.leagueName].goalLeaders;
         $rootScope.loading = false;
 

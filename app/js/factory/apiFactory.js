@@ -92,7 +92,7 @@
           });
           listOrPromises.push(leagueRequest);
         });
-        return listOrPromises;
+        return $q.all(listOrPromises);
       };
 
       /**
@@ -127,7 +127,7 @@
           });
           listOrPromises.push(leagueRequest);
         });
-        return listOrPromises;
+        return $q.all(listOrPromises);
       };
 
       /**

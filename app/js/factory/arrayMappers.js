@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('arrayMappers', function ($rootScope, $q, textManipulator, managersService, scoringLogic, objectUtils, momentService, arrayFilter, apiFactory, statsCorrection) {
+    .factory('arrayMappers', function ($rootScope, $q, textManipulator, managersService, scoringLogic, objectUtils, momentService, arrayFilter, apiFactory, statsCorrection, transferDates) {
 
       var arrayMapper = {};
 
@@ -99,6 +99,10 @@
         player.playedInSeriGames = false;
         player.playedInChlgGames = false;
         player.playedInEuroGames = false;
+
+        if ($rootScope.edit) {
+          player.dateOfTransaction = transferDates.leagueStart.date;
+        }
 
         // reset assists
         player.assists = 0;
@@ -375,8 +379,6 @@
                 player: player,
                 manager: manager
               }));
-
-            console.log(player.playerName, validLeagues);
 
             if (angular.equals(validLeagues, { inEuro: true })) {
               player.leagueName = 'EURO';

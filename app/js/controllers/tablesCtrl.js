@@ -19,45 +19,45 @@
       $rootScope.loading = true;
 
       /**
-       * table sort function
+       * @description table sort function
        */
       $scope.groupPosition = function (team) {
         return ['Group A', 'Group B', 'Group C', 'Group D', 'Group E', 'Group F', 'Group G', 'Group H', 'Group I', 'Group J'].indexOf(team.group);
       };
 
       /**
-       * table sort function
+       * @description table sort function
        */
       $scope.groupByRank = function (team) {
         return team.rank;
       };
 
       /**
-       * makes a request to get all the tables data
+       * @description makes a request to get all the tables data
        */
       $scope.updateTables = function () {
 
-        $scope.updateTablesFromHTTP(httpDataLoaded);
+        $scope.getLeagueTables().then(mapLeagueTables);
 
       };
 
       /**
-       *
+       * @description
        * @param httpData
        */
-      var httpDataLoaded = function (httpData) {
+      var mapLeagueTables = function (result) {
 
         console.log('///////////////////');
-        console.log('httpDataLoaded --> httpData:', httpData);
+        console.log('httpDataLoaded --> result:', result);
         console.log('///////////////////');
 
         $rootScope.loading = false;
 
-        $scope.allLeagues[0].source = httpData[0].data;
-        $scope.allLeagues[1].source = httpData[1].data;
-        $scope.allLeagues[2].source = httpData[2].data;
-        $scope.allLeagues[3].source = httpData[3].data;
-        $scope.allLeagues[4].source = httpData[4].data;
+        $scope.allLeagues[0].source = result[0].data;
+        $scope.allLeagues[1].source = result[1].data;
+        $scope.allLeagues[2].source = result[2].data;
+        $scope.allLeagues[3].source = result[3].data;
+        $scope.allLeagues[4].source = result[4].data;
 
         $scope.setSelectedLeague();
 

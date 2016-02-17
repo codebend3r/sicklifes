@@ -120,31 +120,31 @@
        */
       updateDataUtils.saveManagerData = function(managerData) {
 
-        console.log('gameLogsObject', gameLogsObject);
-        console.log('chartsObj', chartsObj);
-        console.log('peoplesObj', peoplesObj);
-        console.log('managerData', managerData.data);
-
-        $timeout(function () {
-
-          $scope.saveRoster();
-
-          $scope.saveToFireBase({
-            data: chartsObj,
-            _lastSyncedOn: momentService.syncDate()
-          }, 'charts');
-
-          $scope.saveToFireBase({
-            data: gameLogsObject,
-            _lastSyncedOn: momentService.syncDate()
-          }, 'gameLogs');
-
-          $scope.saveToFireBase({
-            data: playersObj,
-            _lastSyncedOn: momentService.syncDate()
-          }, 'managerPlayers');
-
-        }, 1500);
+        // console.log('gameLogsObject', gameLogsObject);
+        // console.log('chartsObj', chartsObj);
+        // console.log('peoplesObj', peoplesObj);
+        // console.log('managerData', managerData.data);
+        //
+        // $timeout(function () {
+        //
+        //   $scope.saveRoster();
+        //
+        //   $scope.saveToFireBase({
+        //     data: chartsObj,
+        //     _lastSyncedOn: momentService.syncDate()
+        //   }, 'charts');
+        //
+        //   $scope.saveToFireBase({
+        //     data: gameLogsObject,
+        //     _lastSyncedOn: momentService.syncDate()
+        //   }, 'gameLogs');
+        //
+        //   $scope.saveToFireBase({
+        //     data: playersObj,
+        //     _lastSyncedOn: momentService.syncDate()
+        //   }, 'managerPlayers');
+        //
+        // }, 1500);
 
       };
 
@@ -155,25 +155,17 @@
        */
       updateDataUtils.updateAllManagerData = function (managerData) {
 
-        console.log('updateDataUtils --> updateAllManagerData', managerData);
+        console.log('updateDataUtils >> updateAllManagerData()');
 
-        var defer = $q.defer();
-        var managers = angular.copy(managerData);
-        var stupidCount = 0;
+        var promises = [];
+        apiFactory.getApiData('leagueTables');
 
-        _.each(managers, function(m) {
-          var request = updateDataUtils.updateManagerData(m)
-            .then(function(result) {
-              stupidCount += 1;
-              if (stupidCount === _.keys(managerData).length) {
-                console.log('ALL MANAGERS DATA RESOLVED');
-                defer.resolve(managers);
-              }
-            });
-
+        _.each(managerData, function(m) {
+          var request = updateDataUtils.updateManagerData(m);
+          promises.push(request);
         });
 
-        return defer.promise;
+        return $q.all(promises);
 
       };
 
@@ -186,7 +178,7 @@
        */
       updateDataUtils.updateManagerData = function (manager) {
 
-        console.log('updating -->', manager.managerName);
+        console.log('updateDataUtils >> updateManagerData()',  manager.managerName);
 
         var defer = $q.defer();
         var current = 0;
@@ -214,7 +206,7 @@
             })
             .then(function (result) {
               current += 1;
-              console.log('COMPLETED:', player.playerName, Math.round((current / total) * 100));
+              //console.log('COMPLETED:', player.playerName, Math.round((current / total) * 100));
               if (current === total) {
                 console.log('///////////////////////////////////////');
                 console.log('RESOLVE PROMISE:', manager.managerName);
@@ -237,7 +229,7 @@
           _.each(manager.players, requestPlayer);
 
         } else {
-          console.warn('try again');
+          console.warn('try again, object does not contain \'players\' property');
         }
 
         return defer.promise;
@@ -248,14 +240,11 @@
        * @name updateCoreData
        * @description
        */
-      updateDataUtils.updateCoreData = function (cb) {
+      updateDataUtils.updateCoreData = function () {
 
         console.log('updateDataUtils --> updateCoreData');
 
-        $q.all([apiFactory.getApiData('managerData'), apiFactory.getApiData('leagueTables')])
-          .then(function () {
-            cb();
-          });
+        return $q.all([apiFactory.getApiData('managerData'), apiFactory.getApiData('leagueTables')])
 
       };
 
@@ -314,9 +303,9 @@
 
         var allLeagues = [],
           defer = $q.defer(),
-        // list of all goal scorers in all leagues
+          // list of all goal scorers in all leagues
           consolidatedGoalScorers = [],
-        // makes a request for all leagues in a loop returns a list of promises
+          // makes a request for all leagues in a loop returns a list of promises
           allPromises = apiFactory.getAllGoalLeaders();
 
         // waits for an array of promises to resolve, sets allLeagues data
@@ -342,11 +331,11 @@
 
       };
 
-      updateDataUtils.recoverManagerData = function(allPlayers) {
+      updateDataUtils.recoverFromManagerCore = function() {
 
         var defer = $q.defer();
 
-        $q.all([ apiFactory.getApiData('leagueTables'), apiFactory.getApiData('managerCore') ])
+        $q.all([ apiFactory.getApiData('managerCore'), apiFactory.getApiData('playerPoolData') ])
 
           .then(function() {
 
@@ -355,7 +344,8 @@
               _lastSyncedOn: momentService.syncDate()
             };
 
-            _.each(allPlayers, function(player) {
+            _.each($rootScope.playerPoolData.allPlayers, function(player) {
+
               if (player.status === 'drafted' || player.status === 'added' || player.status === 'dropped') {
 
                 var managerKey = player.managerName.toLowerCase();
@@ -366,12 +356,7 @@
                   rebuildTeams.data[managerKey].players = {};
                 }
 
-                rebuildTeams.data[managerKey].players[player.id] = {
-                  id: player.id,
-                  status: player.status,
-                  managerName: player.managerName,
-                  playerName: player.playerName
-                }
+                rebuildTeams.data[managerKey].players[player.id] = player;
 
               }
             });

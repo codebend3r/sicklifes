@@ -19,17 +19,17 @@
         <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
       </div>
     </td>
-    <td class="bold small-text">
+    <td ng-if-start="edit"><div class="vertical-center">{{player.id}}</div></td>
+    <td><div class="vertical-center">status: <input class="form-control" type="text" ng-model="player.status" /></div></td>
+    <td><div class="vertical-center">pickNumber: <input class="form-control" type="text" ng-model="player.pickNumber" /></div></td>
+    <td ng-if-end><div class="vertical-center">date: <input class="form-control" type="text" ng-model="player.dateOfTransaction" /></div></td>
+    <td ng-if-start="!edit" class="bold small-text">
       <div class="vertical-center">
         <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a ui-sref="roster({leagueName: player.leagueName.toLowerCase(), teamId: player.teamId})">{{player.teamName}}</a>
       </div>
     </td>
     <td class="small-text"><div class="vertical-center">{{player.leagueName}}</div></td>
-
-    <td ng-if-start="edit"><div class="vertical-center">status: <input class="form-control" type="text" ng-model="player.status" /></div></td>
-    <td><div class="vertical-center">pickNumber: <input class="form-control" type="text" ng-model="player.pickNumber" /></div></td>
-    <td ng-if-end><div class="vertical-center">date: <input class="form-control" type="text" ng-model="player.dateOfTransaction" /></div></td>
-    <td ng-if-start="!edit"><div class="vertical-center">{{player.goals}}</div></td>
+    <td><div class="vertical-center">{{player.goals}}</div></td>
     <td><div class="vertical-center">{{player.domesticGoals}}</div></td>
     <td><div class="vertical-center">{{player.clGoals}}</div></td>
     <td><div class="vertical-center">{{player.eGoals}}</div></td>

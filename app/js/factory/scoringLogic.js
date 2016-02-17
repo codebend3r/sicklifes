@@ -29,7 +29,7 @@
               //console.log('group stage goal');
               return goals * 1;
             } else if (datePlayed.isBetween(roundOf32, quarterFinals)) {
-              console.log('europa round of 16 or 32 goal');
+              //console.log('europa round of 16 or 32 goal');
               return goals * 2;
             } else if (datePlayed.isBetween(quarterFinals, semiFinals)) {
               console.log('europa quarter finals goal');
@@ -55,7 +55,7 @@
               //console.log('group stage goal');
               return goals * 2;
             } else if (datePlayed.isBetween(roundOfSixteen, quarterFinals)) {
-              console.log('chlg round of 16 goal');
+              //console.log('chlg round of 16 goal');
               return goals * 3;
             } else if (datePlayed.isBetween(quarterFinals, semiFinals)) {
               console.log('chlg quarter finals goal');

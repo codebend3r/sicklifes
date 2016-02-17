@@ -101,14 +101,31 @@
 
       $scope.recover = function() {
 
-        updateDataUtils.recoverManagerData.then(function(result) {
+        updateDataUtils.recoverFromManagerCore()
 
-          console.log('////////////////////////////');
-          console.log('MANAGER DATA RECOVERED');
-          console.log('////////////////////////////');
-          $scope.saveRoster(result);
+          .then(function(result) {
 
-        });
+            console.log(result);
+            return updateDataUtils.updateAllManagerData(result.data);
+
+          })
+          .then(function(result) {
+
+            console.log('////////////////////////////');
+            console.log('MANAGER DATA RECOVERED', result);
+            console.log('////////////////////////////');
+
+            var mappedManagers = {};
+
+            _.each(result, function(obj) {
+              mappedManagers[obj.managerName.toLowerCase()] = obj;
+            });
+
+            console.log(mappedManagers);
+
+            $scope.saveRoster(mappedManagers);
+
+          });
 
       };
 
@@ -123,14 +140,27 @@
         apiFactory.getApiData('leagueTables').then(function() {
           updateDataUtils.updateAllManagerData(managerPlayers.data)
             .then(function (result) {
+
               console.log('////////////////////////////');
               console.log('MANAGER DATA UPDATED');
               console.log('////////////////////////////');
+              
               $scope.loading = false;
               managerData.data = result;
               $scope.saveRoster(result);
             });
         });
+
+      };
+
+      /**
+       * @name saveCurrentRoster
+       * @description TODO
+       */
+      $scope.saveCurrentRoster = function() {
+
+        console.log(managerData.data);
+        //$scope.saveRoster(managerData.data);
 
       };
 
