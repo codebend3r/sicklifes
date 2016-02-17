@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, managersService, textManipulator, objectUtils, updateDataUtils) {
+    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, managersService, textManipulator, objectUtils, updateDataUtils, managerData) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -98,14 +98,7 @@
               var numberOfPlayers = _.size(result.data),
                 numberOfRequests = 0;
 
-              console.log('player pool index size:', _.size(playersIndex));
-
               _.each(result.data, function (player) {
-
-                // console.log('---------------------');
-                // console.log('player._lastSyncedOn', player._lastSyncedOn);
-                // console.log('angular.isUndefinedOrNull(player._lastSyncedOn)', angular.isUndefinedOrNull(player._lastSyncedOn));
-                // console.log('momentService.isPastYesterday(player._lastSyncedOn)', momentService.isPastYesterday(player._lastSyncedOn));
 
                 if (angular.isDefined(playersIndex) && angular.isDefined(playersIndex[player.id]) && !Array.isArray(playersIndex) && (!angular.isUndefinedOrNull(player._lastSyncedOn) && !momentService.isPastYesterday(player._lastSyncedOn))) {
 
@@ -171,38 +164,8 @@
 
       };
 
-      /**
-       * @description init
-       */
-      var init = function () {
-
-        updateDataUtils.updateCoreData(function () {
-
-          apiFactory.getApiData('allPlayersIndex')
-            .then(loadData);
-
-        });
-
-        //if (angular.isDefined($rootScope[$scope.dataKeyName])) {
-        //
-        //  console.log('load from $rootScope');
-        //  loadData($rootScope[$scope.dataKeyName]);
-        //
-        //} else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
-        //
-        //  console.log('load from local storage');
-        //  loadData($localStorage[$scope.dataKeyName]);
-        //
-        //} else {
-        //
-        //  apiFactory.getApiData('allTeamsPool')
-        //    .then(loadData);
-        //
-        //}
-
-      };
-
-      init();
+      apiFactory.getApiData('allPlayersIndex')
+        .then(loadData);
 
     });
 

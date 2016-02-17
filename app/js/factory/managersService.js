@@ -15,17 +15,6 @@
        */
       var allManagers = {
 
-        /*
-        player object example:
-         {
-           playerName: 'Lionel MESSI',
-           teamName: 'BARCELONA',
-           league: 'LIGA',
-           id: 1126,
-           status: 'active'
-         }
-         */
-
         chester: {
           managerName: 'Chester',
           teamName: 'Reality Kings'
@@ -62,10 +51,12 @@
           var matchingManager = null;
           var matchingPlayer = null;
 
-          _.some(_.defaults({}, $rootScope.managerData.data, $rootScope.managerPlayers.data), function (m) {
+          //var combinedManagers = _.defaults({}, $rootScope.managerData.data, $rootScope.managerPlayers.data);
 
+          _.some($rootScope.managerPlayers.data, function (m, key) {
+            //var currentManager = _.defaults({}, $rootScope.managerData.data, $rootScope.managerPlayers.data)[key];
+            //console.log('currentManager', currentManager);
             return !angular.isUndefinedOrNull(m.players[id]) && (matchingManager = m) && (matchingPlayer = m.players[id]);
-
           });
 
           return {

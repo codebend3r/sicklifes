@@ -131,12 +131,6 @@
           resolve: {
             managerData: function (apiFactory) {
               return apiFactory.getApiData('managerData');
-            },
-            managerPlayers: function (apiFactory) {
-              return apiFactory.getApiData('managerPlayers');
-            },
-            gameLogs: function (apiFactory) {
-              return apiFactory.getApiData('gameLogs');
             }
           }
         })
@@ -146,7 +140,13 @@
         })
         .state('standings.latestgoals', {
           url: '/latestgoals',
-          templateUrl: 'views/standings-latestgoals.html'
+          templateUrl: 'views/standings-latestgoals.html',
+          controller: 'latestGoalsCtrl',
+          resolve: {
+            gameLogs: function (apiFactory) {
+              return apiFactory.getApiData('gameLogs');
+            }
+          }
         })
         .state('standings.charts', {
           url: '/charts',
@@ -245,7 +245,18 @@
           url: '/roster/:leagueName/:teamId',
           parent: 'app',
           templateUrl: 'views/rosters.html',
-          controller: 'rostersCtrl'
+          controller: 'rostersCtrl',
+          resolve: {
+            managerData: function (apiFactory) {
+              return apiFactory.getApiData('managerData');
+            },
+            managerPlayers: function (apiFactory) {
+              return apiFactory.getApiData('managerPlayers');
+            },
+            leagueTables: function (apiFactory) {
+              return apiFactory.getApiData('leagueTables');
+            }
+          }
         });
     });
 

@@ -535,7 +535,7 @@
         //console.log(game);
 
         if (!angular.isUndefinedOrNull(manager)) {
-          manager.chartData.push({
+          manager.charts.push({
             points: manager.totalPoints,
             goals: manager.totalGoals,
             stepPoints: points,

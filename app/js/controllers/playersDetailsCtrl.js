@@ -29,11 +29,6 @@
       $rootScope.loading = true;
 
       /**
-       * @description player
-       */
-      $scope.player = {};
-
-      /**
        * @description league images
        */
       $scope.leagueImages = textManipulator.leagueImages;
@@ -50,15 +45,6 @@
       var loadData = function () {
 
         $scope.managerData = managerData.data;
-
-        _.each($scope.managerData, function(manager, key) {
-
-          manager.players = managerPlayers.data[key].players;
-          manager.chartData = charts.data[key].chartData;
-          manager.filteredMonthlyGoalsLog = gameLogs.data[key].filteredMonthlyGoalsLog;
-          manager.monthlyGoalsLog = gameLogs.data[key].monthlyGoalsLog;
-
-        });
 
         if (angular.isDefined($rootScope.allPlayersIndex)) {
           console.log('player found in allPlayers index');
@@ -77,30 +63,19 @@
        */
       var findPlayerByID = function () {
 
-        var foundPlayer = false;
+        var findObject = managersService.findPlayerInManagers($stateParams.playerId);
 
-        // check source
-        if (angular.isDefined($scope.allPlayers) && angular.isDefined($scope.allPlayers.data) && angular.isDefined($scope.allPlayers.data[$stateParams.playerId]) && !Array.isArray($scope.allPlayers)) {
+        $scope.player = findObject.player;
+        $scope.matchingManager = findObject.manager;
 
-          $scope.player = $scope.allPlayers.data[$stateParams.playerId];
-          foundPlayer = true;
+        var managerName = $scope.matchingManager.managerName.toLowerCase();
 
-        } else {
-
-          _.some($scope.managerData, function (manager) {
-
-            if (angular.isDefined(manager.players[$stateParams.playerId])) {
-              $scope.player = manager.players[$stateParams.playerId];
-              foundPlayer = true;
-              return true;
-            }
-
-          });
-
-        }
+        $scope.matchingManager.charts = charts.data[managerName].chartData;
+        $scope.matchingManager.filteredMonthlyGoalsLog = gameLogs.data[managerName].filteredMonthlyGoalsLog;
+        $scope.matchingManager.monthlyGoalsLog = gameLogs.data[managerName].monthlyGoalsLog;
 
         // check the data of the source data
-        if (foundPlayer && angular.isDefined($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
+        if (!angular.isUndefinedOrNull($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
 
           console.log('foundPlayer and is up to date', $scope.player.playerName);
           requestUpdateOnPlayer();
@@ -284,7 +259,6 @@
 
         $scope.player = objectUtils.playerResetGoalPoints($scope.player);
         $scope.player.id = $stateParams.playerId;
-        $scope.matchingManager = managersService.findPlayerInManagers($stateParams.playerId).manager;
 
         console.log('manager name', $scope.matchingManager.managerName);
         console.log('player name', $scope.player.playerName);

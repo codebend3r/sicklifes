@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, managerData, managerPlayers,  gameLogs) {
+    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, managerData) {
 
       console.log('--> standingsCtrl');
 
@@ -89,49 +89,30 @@
 
         $scope.managerData = managerData.data;
 
-        _.each($scope.managerData, function(m, key) {
-
-          m.filteredMonthlyGoalsLog = gameLogs.data[key].filteredMonthlyGoalsLog;
-          m.monthlyGoalsLog = gameLogs.data[key].monthlyGoalsLog;
-
-        });
+        // _.each($scope.managerData, function(m, key) {
+        //
+        //   m.filteredMonthlyGoalsLog = gameLogs.data[key].filteredMonthlyGoalsLog;
+        //   m.monthlyGoalsLog = gameLogs.data[key].monthlyGoalsLog;
+        //
+        // });
 
         $rootScope.lastSyncDate = managerData._lastSyncedOn;
-
         $rootScope.source = 'firebase';
 
         if (momentService.isHoursAgo(managerData._lastSyncedOn)) {
-
           console.log('-- data is too old --');
-
-          // TODO - fix, takes too long
-          //updateDataUtils.updateAllManagerData(onManagersRequestFinished);
-
         } else {
-
           console.log('-- data is up to date --');
-
         }
 
         $scope.combinedLogs = [];
 
-        _.each($scope.managerData, function (manager) {
-          $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog
-            .filter(function (log) {
-              return log.goals;
-            }));
-        });
-
-        // $scope.startFireBase(function () {
-        //   console.log('firebase ready');
+        // _.each($scope.managerData, function (manager) {
+        //   $scope.combinedLogs = $scope.combinedLogs.concat(manager.filteredMonthlyGoalsLog
+        //     .filter(function (log) {
+        //       return log.goals;
+        //     }));
         // });
-
-        // var saveObject = {
-        //   _lastSyncedOn: momentService.syncDate(),
-        //   data: $rootScope.managerData
-        // };
-        //
-        // fireBaseService.saveToLocalStorage(saveObject, 'managerData');
 
         $rootScope.$emit('STANDINGS_READY');
         //setTimeout(processChart, 1000);
@@ -283,42 +264,6 @@
           .append('<div class="ct-tooltip"></div>')
           .find('.ct-tooltip')
           .hide();
-
-        // $chart.on('mouseenter', '.ct-point', function () {
-        //   var $point = $(this),
-        //     value = $point.attr('ct:value'),
-        //     seriesName = $point.parent().attr('ct:series-name');
-        //
-        //   $toolTip.html('<b>' + seriesName + '</b> <br>' + value + ' ' + 'POINTS');
-        //   $toolTip.show();
-        // });
-        //
-        // $chart.on('mouseleave', '.ct-point', function () {
-        //   $toolTip.hide();
-        // });
-        //
-        // $chart.on('mousemove', function (event) {
-        //   $toolTip.css({
-        //     left: (event.offsetX || event.originalEvent.layerX) - $toolTip.width() / 2 - 10,
-        //     top: (event.offsetY || event.originalEvent.layerY) - $toolTip.height() - 40
-        //   });
-        // });
-
-        // $timeout(function() {
-        //
-        //   debugger;
-        //   console.log($('.ct-chart .ct-series[ct:series-name]'));
-        //   console.log($('.ct-chart .ct-series[ct]'));
-        //   console.log($('.ct-chart .ct-series[series-name]'));
-        //   //console.log($('.ct-chart .ct-series["ct:series-name"="Frank"]'));
-        //
-        //   _.each($('.ct-chart .ct-series'), function(ele, index) {
-        //
-        //     var currentAttr = $(ele).attr('ct:series-name');
-        //     console.log(index, currentAttr);
-        //
-        //   });
-        // }, 500);
 
       };
 

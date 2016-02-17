@@ -1,4 +1,3 @@
-<h3>LATEST GOALS</h3>
 <!-- desktop table -->
 <table class='table table-hover table-responsive hidden-sm hidden-xs'>
   <thead>
@@ -19,7 +18,7 @@
     <td>
       <img width="40" height="40" ng-src="{{log.teamLogo}}"/>&nbsp;<a class="bold" ui-sref="playerDetails({playerId: log.id})">{{log.playerName}}</a>
     </td>
-    <td>{{log.managerName}}</td>
+    <td>{{log.managerName | capitalize}}</td>
     <td>{{log.goals}}</td>
     <td>{{log.shots}}</td>
     <td>{{log.shotsOnGoal}}</td>
@@ -47,7 +46,7 @@
     <td>
       <a class="bold" ui-sref="playerDetails({playerId: log.id})">{{log.playerName}}</a>
     </td>
-    <td>{{log.managerName}}</td>
+    <td>{{log.managerName | capitalize}}</td>
     <td>{{log.goals}}</td>
     <td class="small-text">{{log.datePlayed}}</td>
   </tr>
