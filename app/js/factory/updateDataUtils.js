@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('updateDataUtils', function ($rootScope, $q, $http, apiFactory, objectUtils, managersService, momentService, fireBaseService, textManipulator, arrayMappers) {
+    .factory('updateDataUtils', function ($rootScope, $q, $http, apiFactory, objectUtils, managersService, momentService, transferDates, textManipulator, arrayMappers) {
 
       var updateDataUtils = {};
 
@@ -74,9 +74,10 @@
         console.log('updateDataUtils.updateAllManagerData()');
 
         var promises = [];
+
         apiFactory.getApiData('leagueTables');
 
-        _.each(managerData, function(m) {
+        _.each(managerData, function (m) {
           var request = updateDataUtils.updateManagerData(m);
           promises.push(request);
         });
@@ -94,7 +95,7 @@
        */
       updateDataUtils.updateManagerData = function (manager) {
 
-        console.log('updateDataUtils.updateManagerData()',  manager);
+        console.log('updateDataUtils.updateManagerData()');
 
         var defer = $q.defer();
         var current = 0;
@@ -122,9 +123,8 @@
             })
             .then(function (result) {
               current += 1;
-              //console.log('COMPLETED:', player.playerName, Math.round((current / total) * 100));
+              console.log('COMPLETED:', player.playerName, Math.round((current / total) * 100));
               if (current === total) {
-                console.log('///////////////////////////////////////');
                 console.log('RESOLVE PROMISE:', manager.managerName);
                 console.log('///////////////////////////////////////');
                 defer.resolve(manager);
@@ -203,9 +203,9 @@
 
         var allLeagues = [],
           defer = $q.defer(),
-          // list of all goal scorers in all leagues
+        // list of all goal scorers in all leagues
           consolidatedGoalScorers = [],
-          // makes a request for all leagues in a loop returns a list of promises
+        // makes a request for all leagues in a loop returns a list of promises
           allPromises = apiFactory.getAllGoalLeaders();
 
         // waits for an array of promises to resolve, sets allLeagues data
@@ -232,23 +232,180 @@
       };
 
       /**
-       *
-       * @returns {*|r.promise|promise}
+       * @name recoverFromManagerCore
+       * @returns {promise}
        */
-      updateDataUtils.recoverFromManagerCore = function() {
+      updateDataUtils.recoverFromManagerCore = function () {
 
         var defer = $q.defer();
 
-        $q.all([ apiFactory.getApiData('managerCore'), apiFactory.getApiData('playerPoolData') ])
+        $q.all([apiFactory.getApiData('managerCore')])
 
-          .then(function() {
+          .then(function () {
 
             var rebuildTeams = {
               data: {},
               _lastSyncedOn: momentService.syncDate()
             };
 
-            _.each($rootScope.playerPoolData.allPlayers, function(player) {
+            _.each($rootScope.managerCore.data, function (manager) {
+
+              _.each(manager.players, function (player) {
+
+                var managerKey = player.managerName.toLowerCase();
+
+                if (angular.isUndefinedOrNull(rebuildTeams.data[managerKey])) {
+                  rebuildTeams.data[managerKey] = {};
+                  rebuildTeams.data[managerKey].managerName = player.managerName;
+                  rebuildTeams.data[managerKey].players = {};
+                }
+
+                angular.isUndefinedOrNull(player.pickNumber) && (player.pickNumber = 999);
+                angular.isUndefinedOrNull(player.dateOfTransaction) && (player.dateOfTransaction = transferDates.leagueStart.date);
+
+                rebuildTeams.data[managerKey].players[player.id] = player;
+
+              });
+
+            });
+
+            /*
+             JOE
+             Cristiano RONALDO
+             Alexis SANCHEZ
+             James RODRIGUEZ
+             Aritz ADURIZ
+             Wilfried BONY
+             Memphis DEPAY
+             Jose Maria CALLEJON
+             Kevin GAMEIRO
+             Saido BERAHINO
+             Manolo GABBIADINI
+             Robert LEWANDOWSKI
+             Domenico BERARDI
+             Mikel ARRUABARRENA
+             Leonardo PAVOLETTI
+             Daniel PAREJO
+             Riyad MAHREZ
+             Ricardo KISHNA
+             Danny INGS
+             Antonio CANDREVA
+             Antonio FLORO FLORES
+             Papiss CISSE
+             JOZABED
+             Franco BRIENZA
+             OSCAR
+             Cheikhou KOUYATE
+             Ivan RAKITIC
+             Ruben ROCHINA
+             Borja BASTON
+             */
+
+            /*
+             JUSTIN
+             Lionel MESSI
+             Wayne ROONEY
+             Olivier GIROUD
+             Mario MANDZUKIC
+             Harry KANE
+             Ciro IMMOBILE
+             Eden HAZARD
+             Paco ALCACER
+             Luiz ADRIANO
+             Juan MATA
+             Iago FALQUE
+             Mario GOTZE
+             Carlos VELA
+             Lorenzo INSIGNE
+             JONATHAS
+             Nordin AMRABAT
+             Yohan CABAYE
+             Andre AYEW
+             Duvan ZAPATA
+             Massimo MACCARONE
+             Keita BALDE
+             Jamie VARDY
+             RODRIGO
+             Javi GUERRA
+             Gregoire DEFREL
+             Marko ARNAUTOVIC
+             Antonio SANABRIA
+             */
+
+            var franksPicks = [
+              'NEYMAR',
+              'Antoine GRIEZMANN',
+              'Gonzalo HIGUAIN',
+              'Mauro ICARDI',
+              'Bafetimbi GOMIS',
+              'NOLITO',
+              'Ruben CASTRO',
+              'Luca TONI',
+              'Fernando TORRES',
+              'Antonio DI NATALE',
+              'Theo WALCOTT',
+              'Zlatan IBRAHIMOVIC',
+              'Mario BALOTELLI',
+              'David SILVA',
+              'Marek HAMSIK',
+              'Luciano VIETTO',
+              'German DENIS',
+              'Rudy GESTEDE',
+              'Jeremain LENS',
+              'Jesse LINGARD',
+              'LUCAS PEREZ',
+              'Josip ILICIC',
+              'KOKE',
+              'Jay RODRIGUEZ',
+              'Ryan MASON',
+              'Miralem PJANIC',
+              'Georginio WIJNALDUM',
+              'WILLIAN'
+            ];
+
+            var frank = rebuildTeams.data['frank'].players;
+
+            _.each(frank, function(p) {
+
+             _.each(franksPicks, function(element, index) {
+
+               if (p.playerName === element) {
+                 console.log('matching', element);
+                 p.pickNumber = index + 1;
+               }
+
+             });
+
+            });
+
+            console.log('> rebuildTeams', rebuildTeams);
+
+            defer.resolve(rebuildTeams);
+
+          });
+
+        return defer.promise;
+
+      };
+
+      /**
+       * @name recoverFromPoolData
+       * @returns {promise}
+       */
+      updateDataUtils.recoverFromPoolData = function () {
+
+        var defer = $q.defer();
+
+        $q.all([apiFactory.getApiData('managerCore'), apiFactory.getApiData('playerPoolData')])
+
+          .then(function () {
+
+            var rebuildTeams = {
+              data: {},
+              _lastSyncedOn: momentService.syncDate()
+            };
+
+            _.each($rootScope.playerPoolData.allPlayers, function (player) {
 
               if (player.status === 'drafted' || player.status === 'added' || player.status === 'dropped') {
 
@@ -261,6 +418,7 @@
                 }
 
                 rebuildTeams.data[managerKey].players[player.id] = player;
+                console.log('> player', player);
 
               }
             });

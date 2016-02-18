@@ -21,23 +21,23 @@
           name: 'Round 1',
           roundCompleted: true,
           pick: 25,
-          date: '2015/11/15'
+          date: '2015/11/16'
         },
         round2: {
           name: 'Round 2',
           roundCompleted: true,
           pick: 26,
-          date: '2015/11/22'
+          date: '2015/11/23'
         },
         round3: {
           name: 'Round 3',
           roundCompleted: true,
           pick: 27,
-          date: '2015/11/29'
+          date: '2015/11/30'
         },
         round4: {
           name: 'Round 4',
-          roundCompleted: false,
+          roundCompleted: true,
           pick: 28,
           date: '2016/02/16'
         },

@@ -92,16 +92,23 @@
        */
       arrayMapper.playerInfo = function (player, result) {
 
-        var profileLeagueSlug = textManipulator.getLeagueSlug(result);
-
         player.playedInLigaGames = false;
         player.playedInEPLGames = false;
         player.playedInSeriGames = false;
         player.playedInChlgGames = false;
         player.playedInEuroGames = false;
 
-        if ($rootScope.edit) {
+        if (player.status === 'drafted') {
           player.dateOfTransaction = transferDates.leagueStart.date;
+        }
+
+        var profileLeagueSlug;
+
+        if (player.outOfScope) {
+          console.log(player.playerName, 'is out of scope');
+          profileLeagueSlug = player.formerLeagueName;
+        } else {
+          profileLeagueSlug = textManipulator.getLeagueSlug(result);
         }
 
         // reset assists
@@ -124,6 +131,7 @@
       };
 
       /**
+       * @name playerMapPersonalInfo
        * @description forEach function - loops through soccer roster
        * @param player - player object
        * @param result
@@ -136,19 +144,27 @@
         player.height = result.data.height_feet + '\'' + result.data.height_inches;
         player.birthdate = result.data.birthdate;
         player.birthplace = result.data.birth_city + ', ' + result.data.birth_country;
-        player.teamId = result.data.team.id;
-        player.teamName = result.data.team.full_name;
-        player.teamLogo = result.data.team.logos.large;
+        player.injured = result.data.injury !== null;
 
-        // if (angular.isUndefinedOrNull(managersService.findPlayerInManagers(player.id).manager)) {
-        //   player.status = 'free agent';
-        // }
+        if (angular.isDefined(result.data.team)) {
+          angular.isUndefinedOrNull(player.teamId) && (player.teamId = result.data.team.id);
+          angular.isUndefinedOrNull(player.teamName) && (player.teamName = result.data.team.full_name);
+          angular.isUndefinedOrNull(player.teamLogo) && (player.teamLogo = result.data.team.logos.large);
+        } else {
+          angular.isUndefinedOrNull(player.teamId) && (player.teamId = '');
+          angular.isUndefinedOrNull(player.teamName) && (player.teamName = '');
+          angular.isUndefinedOrNull(player.teamLogo) && (player.teamLogo = '');
+        }
+
+        if (angular.isUndefinedOrNull(managersService.findPlayerInManagers(player.id).manager)) {
+          player.status = 'free agent';
+        }
 
       };
 
       /**
-       * @description forEach function - loops through soccer roster
        * @name playerGamesLog
+       * @description forEach function - loops through soccer roster
        * @param dataObj - an object containing a reference to a player and a manager
        * @param result
        */
@@ -166,6 +182,9 @@
           euroGamesRequest;
 
         validLeagues = player.validLeagues || {};
+
+        !angular.isUndefinedOrNull(manager) && angular.isUndefinedOrNull(manager.monthlyGoalsLog) && (manager.monthlyGoalsLog = []);
+        !angular.isUndefinedOrNull(manager) && angular.isUndefinedOrNull(manager.filteredMonthlyGoalsLog) && (manager.filteredMonthlyGoalsLog = []);
 
         if (validLeagues.inLiga) {
 
@@ -330,7 +349,7 @@
                 manager: manager
               }));
 
-            if (angular.equals(validLeagues, { inChlg: true })) {
+            if (angular.equals(validLeagues, {inChlg: true})) {
               player.leagueName = 'CHLG';
             }
 
@@ -380,7 +399,7 @@
                 manager: manager
               }));
 
-            if (angular.equals(validLeagues, { inEuro: true })) {
+            if (angular.equals(validLeagues, {inEuro: true})) {
               player.leagueName = 'EURO';
             }
 
@@ -531,9 +550,8 @@
 
         player.assists += game.assists;
 
-        //console.log(game);
-
         if (!angular.isUndefinedOrNull(manager)) {
+          angular.isUndefinedOrNull(manager.charts) && (manager.charts = []);
           manager.charts.push({
             points: manager.totalPoints,
             goals: manager.totalGoals,

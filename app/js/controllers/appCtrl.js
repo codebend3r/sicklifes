@@ -186,7 +186,7 @@
         var managerPlayers = {};
         var index = 0;
 
-        _.each(managerData, function(manager, key) {
+        _.each(managerData, function (manager, key) {
 
           manager.managerName = key;
           index += 1;
@@ -206,8 +206,9 @@
           angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
           angular.isDefined(manager.chartData) && delete manager.chartData;
           angular.isDefined(manager.gameLogs) && delete manager.gameLogs;
+          angular.isDefined(manager.charts) && delete manager.charts;
 
-          _.each(manager.players, function(player) {
+          _.each(manager.players, function (player) {
 
             player.managerName = manager.managerName;
 
@@ -229,60 +230,64 @@
 
         });
 
-        var a = _.some(gameLogs, function(m) {
-
-          return angular.isUndefinedOrNull(m.managerName) && angular.isUndefinedOrNull(m.filteredMonthlyGoalsLog) && angular.isUndefinedOrNull(m.monthlyGoalsLog);
-
-        }) && console.log(gameLogs, 'charts does not contain a \'filteredMonthlyGoalsLog\' or \'monthlyGoalsLog\' property');
-
-        var b = _.some(charts, function(m) {
-
-          return angular.isUndefinedOrNull(m.managerName) && angular.isUndefinedOrNull(m.chartData);
-
-        }) && console.log(charts, 'charts does not contain a \'chartData\' property');
-
-        var c = _.some(managerData, function(m) {
-
-          return angular.isUndefinedOrNull(m.managerName);
-
-        }) && console.log(managerData, 'managerData does not contain a \'managerName\' property');
-
-        var d = _.some(managerPlayers, function(m, key) {
-
-          return angular.isUndefinedOrNull(m.managerName) && angular.isUndefinedOrNull(m.players);
-
-        }) && console.log(managerPlayers, 'managerPlayers does not contain a \'players\' property');
-
-        if (a || b || c || d) {
-
-          console.log('tests failed');
+        if (_.hasDeepProperty(gameLogs, 'managerName') && _.hasDeepProperty(gameLogs, 'filteredMonthlyGoalsLog') && _.hasDeepProperty(gameLogs, 'monthlyGoalsLog')) {
+          console.log('gameLogs test passsed');
+        } else {
+          console.log('gameLogs test failed');
           return false;
-
         }
 
-        console.log('GOOD TO GO!');
+        if (_.hasDeepProperty(charts, 'managerName') && _.hasDeepProperty(charts, 'chartData')) {
+          console.log('charts test passsed');
+        } else {
+          console.log('charts test failed');
+          return false;
+        }
 
-        ///////////////////
+        if (_.hasDeepProperty(managerPlayers, 'managerName') && _.hasDeepProperty(managerPlayers, 'players')) {
+          console.log('managerPlayers test passsed');
 
-        //$scope.saveToFireBase({
-        //  data: managerData,
-        //  _lastSyncedOn: momentService.syncDate(),
-        //}, 'managerData');
-        //
-        //$scope.saveToFireBase({
-        //  data: managerPlayers,
-        //  _lastSyncedOn: momentService.syncDate()
-        //}, 'managerPlayers');
-        //
-        //$scope.saveToFireBase({
-        //  data: charts,
-        //  _lastSyncedOn: momentService.syncDate()
-        //}, 'charts');
-        //
-        //$scope.saveToFireBase({
-        //  data: gameLogs,
-        //  _lastSyncedOn: momentService.syncDate()
-        //}, 'gameLogs');
+          _.some(managerPlayers, function(manager) {
+            console.log('managerName', manager.managerName);
+            var test = _.some(manager.players, function(p) {
+              console.log('pickNumber:', p.pickNumber);
+              return !_.hasDeepProperty(p, 'pickNumber');
+            });
+            console.log('test:', test);
+            return test;
+          });
+
+        } else {
+          console.log('managerPlayers test failed');
+          return false;
+        }
+
+        if (_.hasDeepProperty(managerData, 'managerName') && _.hasDeepProperty(managerData, 'totalPoints') && _.hasDeepProperty(managerData, 'totalGoals')) {
+          console.log('managerData test passsed');
+        } else {
+          console.log('managerData test failed');
+          return false;
+        }
+
+        $scope.saveToFireBase({
+         data: managerData,
+         _lastSyncedOn: momentService.syncDate(),
+        }, 'managerData');
+
+        $scope.saveToFireBase({
+         data: managerPlayers,
+         _lastSyncedOn: momentService.syncDate()
+        }, 'managerPlayers');
+
+        $scope.saveToFireBase({
+         data: charts,
+         _lastSyncedOn: momentService.syncDate()
+        }, 'charts');
+
+        $scope.saveToFireBase({
+         data: gameLogs,
+         _lastSyncedOn: momentService.syncDate()
+        }, 'gameLogs');
 
       };
 

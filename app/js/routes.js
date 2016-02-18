@@ -236,7 +236,7 @@
             },
             charts: function (apiFactory) {
               return apiFactory.getApiData('charts');
-            },
+            }
           }
         })
 
@@ -255,6 +255,9 @@
             },
             leagueTables: function (apiFactory) {
               return apiFactory.getApiData('leagueTables');
+            },
+            charts: function (apiFactory) {
+              return apiFactory.getApiData('charts');
             }
           }
         });

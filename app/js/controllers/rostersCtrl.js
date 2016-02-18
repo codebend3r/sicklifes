@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, managersService, textManipulator, objectUtils, updateDataUtils, managerData) {
+    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, managersService, textManipulator, objectUtils, updateDataUtils, charts, managerData) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -58,7 +58,7 @@
        */
       var httpRequest = function () {
 
-        console.log('rostersCtrl --> httpRequest');
+        console.log('rostersCtrl.httpRequest()');
 
         var playersIndex = $rootScope.allPlayersIndex;
 
@@ -70,23 +70,16 @@
 
           console.log('team id && league name defined');
 
-          $http({
-            url: 'http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId,
-            method: 'GET'
-          })
+          $http.get('http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId)
             .then(function (result) {
 
               // first get team logo, name and record
-
               $scope.teamName = result.data.full_name;
               $scope.largeLogo = result.data.logos.large;
               $scope.record = result.data.standing.short_record;
               $scope.formattedRank = result.data.standing.formatted_rank;
 
-              return $http({
-                url: 'http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId + '/players',
-                method: 'GET'
-              });
+              return $http.get('http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId + '/players');
 
             })
             .then(function (result) {

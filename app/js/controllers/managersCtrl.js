@@ -104,9 +104,7 @@
         updateDataUtils.recoverFromManagerCore()
 
           .then(function (result) {
-
             return updateDataUtils.updateAllManagerData(result.data);
-
           })
           .then(function (result) {
 
@@ -120,6 +118,8 @@
               mappedManagers[obj.managerName.toLowerCase()] = obj;
             });
 
+            managerData.data = mappedManagers;
+            $scope.selectedManager = managerData.data[$stateParams.managerId];
             $scope.saveRoster(mappedManagers);
 
           });
@@ -144,6 +144,7 @@
 
               $scope.loading = false;
               managerData.data = result;
+              $scope.selectedManager = managerData.data[$stateParams.managerId];
               $scope.saveRoster(result);
             });
         });
