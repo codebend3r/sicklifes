@@ -247,12 +247,16 @@
         if (_.hasDeepProperty(managerPlayers, 'managerName') && _.hasDeepProperty(managerPlayers, 'players')) {
           console.log('managerPlayers test passsed');
 
-          var test = _.some(managerPlayers.players, function(p) {
+          var test = _.every(managerPlayers.players, function(p) {
             console.log('pickNumber:', p.pickNumber);
-            return !_.hasDeepProperty(p, 'pickNumber');
+            return _.hasDeepProperty(p, 'pickNumber');
           });
 
           console.log('all have pickNumber property', test);
+          console.log('has property id:', _.hasDeepProperty(managerPlayers.players, 'id'));
+          console.log('has property playerName:', _.hasDeepProperty(managerPlayers.players, 'playerName'));
+          console.log('has property managerName:', _.hasDeepProperty(managerPlayers.players, 'managerName'));
+          console.log('has property pickNumber:', _.hasDeepProperty(managerPlayers.players, 'pickNumber'));
 
         } else {
           console.log('managerPlayers test failed');

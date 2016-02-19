@@ -118,8 +118,8 @@
               mappedManagers[obj.managerName.toLowerCase()] = obj;
             });
 
-            managerData.data = mappedManagers;
-            $scope.selectedManager = managerData.data[$stateParams.managerId];
+            //managerData.data = mappedManagers;
+            $scope.selectedManager = mappedManagers[$stateParams.managerId];
             $scope.saveRoster(mappedManagers);
 
           });
@@ -142,10 +142,16 @@
               console.log('MANAGER DATA UPDATED');
               console.log('////////////////////////////');
 
-              $scope.loading = false;
-              managerData.data = result;
-              $scope.selectedManager = managerData.data[$stateParams.managerId];
-              $scope.saveRoster(result);
+              var mappedManagers = {};
+
+              _.each(result, function (obj) {
+                mappedManagers[obj.managerName.toLowerCase()] = obj;
+              });
+
+              //managerData.data = result;
+              $scope.selectedManager = mappedManagers[$stateParams.managerId];
+              $scope.saveRoster(mappedManagers);
+              
             });
         });
 

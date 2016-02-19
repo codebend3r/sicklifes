@@ -250,9 +250,9 @@
 
             _.each($rootScope.managerCore.data, function (manager) {
 
-              _.each(manager.players, function (player) {
+              var managerKey = manager.managerName.toLowerCase();
 
-                var managerKey = player.managerName.toLowerCase();
+              _.each(manager.players, function (player) {
 
                 if (angular.isUndefinedOrNull(rebuildTeams.data[managerKey])) {
                   rebuildTeams.data[managerKey] = {};
@@ -271,18 +271,17 @@
 
             _.each(rebuildTeams.data, function(manager, key) {
 
-              console.log('key:', key);
-
               _.each(manager.players, function(p) {
 
                 var currentPlayers = dataRecovery.draftOrder[key];
 
-                console.log('currentPlayers:', currentPlayers);
-
                 _.each(currentPlayers, function(element, index) {
 
+                  if (p.id === 20241) {
+                    console.log('>', p.status);
+                  }
+
                   if (p.playerName.toLowerCase() === element.toLowerCase()) {
-                    console.log('matching', element);
                     p.pickNumber = index + 1;
                   }
 
