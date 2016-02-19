@@ -269,24 +269,26 @@
 
             });
 
-            _.each(rebuildTeams.data, function(manager) {
+            _.each(rebuildTeams.data, function(manager, key) {
 
-              _.each(dataRecovery.draftOrder.frank, function(element, index) {
+              console.log('key:', key);
 
-                if (p.playerName === element) {
-                  console.log('matching', element);
-                  p.pickNumber = index + 1;
-                }
+              _.each(manager.players, function(p) {
+
+                var currentPlayers = dataRecovery.draftOrder[key];
+
+                console.log('currentPlayers:', currentPlayers);
+
+                _.each(currentPlayers, function(element, index) {
+
+                  if (p.playerName.toLowerCase() === element.toLowerCase()) {
+                    console.log('matching', element);
+                    p.pickNumber = index + 1;
+                  }
+
+                });
 
               });
-
-            });
-
-            var frank = rebuildTeams.data['frank'].players;
-
-            _.each(frank, function(p) {
-
-
 
             });
 
