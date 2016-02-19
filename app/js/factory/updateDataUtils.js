@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('updateDataUtils', function ($rootScope, $q, $http, apiFactory, objectUtils, managersService, momentService, transferDates, textManipulator, arrayMappers) {
+    .factory('updateDataUtils', function ($rootScope, $q, $http, apiFactory, objectUtils, managersService, momentService, transferDates, textManipulator, arrayMappers, dataRecovery) {
 
       var updateDataUtils = {};
 
@@ -269,112 +269,24 @@
 
             });
 
-            /*
-             JOE
-             Cristiano RONALDO
-             Alexis SANCHEZ
-             James RODRIGUEZ
-             Aritz ADURIZ
-             Wilfried BONY
-             Memphis DEPAY
-             Jose Maria CALLEJON
-             Kevin GAMEIRO
-             Saido BERAHINO
-             Manolo GABBIADINI
-             Robert LEWANDOWSKI
-             Domenico BERARDI
-             Mikel ARRUABARRENA
-             Leonardo PAVOLETTI
-             Daniel PAREJO
-             Riyad MAHREZ
-             Ricardo KISHNA
-             Danny INGS
-             Antonio CANDREVA
-             Antonio FLORO FLORES
-             Papiss CISSE
-             JOZABED
-             Franco BRIENZA
-             OSCAR
-             Cheikhou KOUYATE
-             Ivan RAKITIC
-             Ruben ROCHINA
-             Borja BASTON
-             */
+            _.each(rebuildTeams.data, function(manager) {
 
-            /*
-             JUSTIN
-             Lionel MESSI
-             Wayne ROONEY
-             Olivier GIROUD
-             Mario MANDZUKIC
-             Harry KANE
-             Ciro IMMOBILE
-             Eden HAZARD
-             Paco ALCACER
-             Luiz ADRIANO
-             Juan MATA
-             Iago FALQUE
-             Mario GOTZE
-             Carlos VELA
-             Lorenzo INSIGNE
-             JONATHAS
-             Nordin AMRABAT
-             Yohan CABAYE
-             Andre AYEW
-             Duvan ZAPATA
-             Massimo MACCARONE
-             Keita BALDE
-             Jamie VARDY
-             RODRIGO
-             Javi GUERRA
-             Gregoire DEFREL
-             Marko ARNAUTOVIC
-             Antonio SANABRIA
-             */
+              _.each(dataRecovery.draftOrder.frank, function(element, index) {
 
-            var franksPicks = [
-              'NEYMAR',
-              'Antoine GRIEZMANN',
-              'Gonzalo HIGUAIN',
-              'Mauro ICARDI',
-              'Bafetimbi GOMIS',
-              'NOLITO',
-              'Ruben CASTRO',
-              'Luca TONI',
-              'Fernando TORRES',
-              'Antonio DI NATALE',
-              'Theo WALCOTT',
-              'Zlatan IBRAHIMOVIC',
-              'Mario BALOTELLI',
-              'David SILVA',
-              'Marek HAMSIK',
-              'Luciano VIETTO',
-              'German DENIS',
-              'Rudy GESTEDE',
-              'Jeremain LENS',
-              'Jesse LINGARD',
-              'LUCAS PEREZ',
-              'Josip ILICIC',
-              'KOKE',
-              'Jay RODRIGUEZ',
-              'Ryan MASON',
-              'Miralem PJANIC',
-              'Georginio WIJNALDUM',
-              'WILLIAN'
-            ];
+                if (p.playerName === element) {
+                  console.log('matching', element);
+                  p.pickNumber = index + 1;
+                }
+
+              });
+
+            });
 
             var frank = rebuildTeams.data['frank'].players;
 
             _.each(frank, function(p) {
 
-             _.each(franksPicks, function(element, index) {
 
-               if (p.playerName === element) {
-                 console.log('matching', element);
-                 p.pickNumber = index + 1;
-               }
-
-             });
 
             });
 

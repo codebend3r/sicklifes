@@ -247,15 +247,12 @@
         if (_.hasDeepProperty(managerPlayers, 'managerName') && _.hasDeepProperty(managerPlayers, 'players')) {
           console.log('managerPlayers test passsed');
 
-          _.some(managerPlayers, function(manager) {
-            console.log('managerName', manager.managerName);
-            var test = _.some(manager.players, function(p) {
-              console.log('pickNumber:', p.pickNumber);
-              return !_.hasDeepProperty(p, 'pickNumber');
-            });
-            console.log('test:', test);
-            return test;
+          var test = _.some(managerPlayers.players, function(p) {
+            console.log('pickNumber:', p.pickNumber);
+            return !_.hasDeepProperty(p, 'pickNumber');
           });
+
+          console.log('all have pickNumber property', test);
 
         } else {
           console.log('managerPlayers test failed');
