@@ -234,6 +234,9 @@
             leagueLeaders: function (apiFactory) {
               return apiFactory.getApiData('leagueLeaders');
             },
+            allPlayersIndex: function (apiFactory) {
+              return apiFactory.getApiData('allPlayersIndex');
+            },
             charts: function (apiFactory) {
               return apiFactory.getApiData('charts');
             }
@@ -256,8 +259,8 @@
             leagueTables: function (apiFactory) {
               return apiFactory.getApiData('leagueTables');
             },
-            charts: function (apiFactory) {
-              return apiFactory.getApiData('charts');
+            allPlayersIndex: function (apiFactory) {
+              return apiFactory.getApiData('allPlayersIndex');
             }
           }
         });

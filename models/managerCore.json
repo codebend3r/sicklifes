@@ -559,6 +559,7 @@
           "status": "drafted"
         },
         "540": {
+          "dateOfTransaction": "2015/11/30",
           "id": 540,
           "managerName": "Joe",
           "playerName": "Antonio CANDREVA",
@@ -589,6 +590,7 @@
           "status": "drafted"
         },
         "7582": {
+          "dateOfTransaction": "2016/02/16",
           "id": 7582,
           "managerName": "Joe",
           "playerName": "Papiss CISSE",
@@ -607,6 +609,7 @@
           "status": "drafted"
         },
         "9247": {
+          "dateOfTransaction": "2015/11/30",
           "id": 9247,
           "managerName": "Joe",
           "playerName": "Danny INGS",
@@ -661,6 +664,7 @@
           "status": "drafted"
         },
         "22143": {
+          "dateOfTransaction": "2015/11/23",
           "id": 22143,
           "managerName": "Joe",
           "playerName": "Leonardo PAVOLETTI",
@@ -691,6 +695,7 @@
           "status": "drafted"
         },
         "49817": {
+          "dateOfTransaction": "2015/11/16",
           "id": 49817,
           "managerName": "Joe",
           "playerName": "RUBEN ROCHINA",
@@ -702,7 +707,14 @@
           "playerName": "Daniel PAREJO",
           "status": "drafted"
         },
+        "49914": {
+          "id": 49914,
+          "managerName": "Joe",
+          "playerName": "JOZABED",
+          "status": "added"
+        },
         "54935": {
+          "dateOfTransaction": "2015/11/16",
           "id": 54935,
           "managerName": "Joe",
           "playerName": "BORJA BASTON",

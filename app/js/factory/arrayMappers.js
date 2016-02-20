@@ -105,7 +105,6 @@
         var profileLeagueSlug;
 
         if (player.outOfScope) {
-          console.log(player.playerName, 'is out of scope');
           profileLeagueSlug = player.formerLeagueName;
         } else {
           profileLeagueSlug = textManipulator.getLeagueSlug(result);
@@ -113,6 +112,8 @@
 
         // reset assists
         player.assists = 0;
+        player.shots = 0;
+        player.shotsOnGoal = 0;
 
         // url for player image
         player.playerImage = result.data.headshots.original;
@@ -207,10 +208,10 @@
                 manager: manager
               }));
 
-            player.leagueName = 'LIGA';
             var foundTeam = _.where($rootScope.leagueTables.liga, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.ligaCompleteLog.length)) {
               player.playedInLigaGames = true;
+              player.leagueName = 'LIGA';
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'liga' : '/liga';
               if (!angular.isUndefinedOrNull(manager)) {
                 if (player.playedInLigaGames && player.status !== 'dropped') manager.ligaCount += 1;
@@ -251,9 +252,9 @@
                 manager: manager
               }));
 
-            player.leagueName = 'EPL';
             var foundTeam = _.where($rootScope.leagueTables.epl, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.eplCompleteLog.length)) {
+              player.leagueName = 'EPL';
               player.playedInEPLGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'epl' : '/epl';
               if (!angular.isUndefinedOrNull(manager)) {
@@ -304,10 +305,10 @@
                 manager: manager
               }));
 
-            player.leagueName = 'SERI';
             var foundTeam = _.where($rootScope.leagueTables.seri, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.seriCompleteLog.length)) {
               player.playedInSeriGames = true;
+              player.leagueName = 'SERI';
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'seri' : '/seri';
               if (!angular.isUndefinedOrNull(manager)) {
                 if (player.playedInSeriGames && player.status !== 'dropped') manager.seriCount += 1;
@@ -549,6 +550,8 @@
         }
 
         player.assists += game.assists;
+        player.shots += game.shots;
+        player.shotsOnGoal += game.shotsOnGoal;
 
         if (!angular.isUndefinedOrNull(manager)) {
           angular.isUndefinedOrNull(manager.charts) && (manager.charts = []);

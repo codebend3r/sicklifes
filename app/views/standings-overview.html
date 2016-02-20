@@ -18,7 +18,7 @@
           <circle class="manager-circle" cx="10" cy="10" r="10"/>
           Sorry, your browser does not support inline SVG.
         </svg>
-        &nbsp;&nbsp;<a class="manager-name" ui-sref="managers.overview({managerId: manager.managerName.toLowerCase()})">{{manager.managerName}}</a>
+        &nbsp;&nbsp;<a class="manager-name" ui-sref="managers.overview({managerId: manager.managerName.toLowerCase()})">{{manager.managerName | capitalize}}</a>
       </div>
     </td>
     <td>{{manager.domesticGoals}}</td>

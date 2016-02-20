@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, managersService, textManipulator, objectUtils, updateDataUtils, charts, managerData) {
+    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, managersService, textManipulator, objectUtils, allPlayersIndex) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -60,7 +60,7 @@
 
         console.log('rostersCtrl.httpRequest()');
 
-        var playersIndex = $rootScope.allPlayersIndex;
+        var playersIndex = allPlayersIndex.data;
 
         console.log('$stateParams.teamId:', $stateParams.teamId);
         console.log('$stateParams.leagueName:', $stateParams.leagueName);
@@ -93,7 +93,7 @@
 
               _.each(result.data, function (player) {
 
-                if (angular.isDefined(playersIndex) && angular.isDefined(playersIndex[player.id]) && !Array.isArray(playersIndex) && (!angular.isUndefinedOrNull(player._lastSyncedOn) && !momentService.isPastYesterday(player._lastSyncedOn))) {
+                if (angular.isDefined(allPlayersIndex.data[player.id]) && (!angular.isUndefinedOrNull(player._lastSyncedOn) && !momentService.isPastYesterday(player._lastSyncedOn))) {
 
                   console.log('synced data found for', player.full_name);
 
@@ -137,8 +137,9 @@
                       numberOfRequests += 1;
 
                       if (numberOfRequests === numberOfPlayers) {
-                        $rootScope.loading = false;
-                        //$scope.saveTeamToPlayerIndex($scope.players);
+                        console.log('DONE');
+                        //$rootScope.loading = false;
+                        $scope.saveTeamToPlayerIndex($scope.players);
                       }
 
                     });

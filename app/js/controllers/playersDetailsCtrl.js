@@ -8,9 +8,23 @@
 
   angular.module('sicklifes')
 
-    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService, managerData, managerPlayers, charts, gameLogs) {
+    .directive('dot', function() {
 
-      console.log('managerData:', managerData);
+      return  {
+        restrict: 'E',
+        replace: true,
+        scope: {
+          className: '@'
+        },
+        template: '<svg class="dot-container" height="10" width="10">' +
+        '<circle class="dot" ng-class="className" cx="5" cy="5" r="5"/>' +
+        'Sorry, your browser does not support inline SVG.' +
+        '</svg>'
+      }
+
+    })
+
+    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService, managerData, managerPlayers, charts, gameLogs, allPlayersIndex) {
 
       var lastDays = $scope.lastDays($scope.selectedRange);
 
@@ -39,53 +53,67 @@
 
       /**
        * @name loadData
-       * @description defines $scope.managerData - call when firebase data has loaded
-       * @param result
+       * @description find more data on a player by id in the route
        */
       var loadData = function () {
 
-        $scope.managerData = managerData.data;
-
-        if (angular.isDefined($rootScope.allPlayersIndex)) {
-          console.log('player found in allPlayers index');
-          $scope.allPlayers = $rootScope.allPlayersIndex;
-        }
-
-        //////////////////
-
-        findPlayerByID();
-
-      };
-
-      /**
-       * @name findPlayerByID
-       * @description find more data on a player by id in the route
-       */
-      var findPlayerByID = function () {
-
         var findObject = managersService.findPlayerInManagers($stateParams.playerId);
 
-        $scope.player = findObject.player;
-        $scope.matchingManager = findObject.manager;
+        if (!angular.isUndefinedOrNull(findObject.player) && !angular.isUndefinedOrNull(findObject.manager)) {
 
-        var managerName = $scope.matchingManager.managerName.toLowerCase();
+          console.log('player found in manager data');
 
-        $scope.matchingManager.charts = charts.data[managerName].chartData;
-        $scope.matchingManager.filteredMonthlyGoalsLog = gameLogs.data[managerName].filteredMonthlyGoalsLog;
-        $scope.matchingManager.monthlyGoalsLog = gameLogs.data[managerName].monthlyGoalsLog;
+          $scope.player = findObject.player;
+          $scope.matchingManager = findObject.manager;
 
-        // check the data of the source data
-        if (!angular.isUndefinedOrNull($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
+          var managerName = $scope.matchingManager.managerName.toLowerCase();
 
-          console.log('foundPlayer and is up to date', $scope.player.playerName);
-          requestUpdateOnPlayer();
+          $scope.matchingManager.charts = charts.data[managerName].chartData;
+          $scope.matchingManager.filteredMonthlyGoalsLog = gameLogs.data[managerName].filteredMonthlyGoalsLog;
+          $scope.matchingManager.monthlyGoalsLog = gameLogs.data[managerName].monthlyGoalsLog;
+
+          if (!angular.isUndefinedOrNull($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
+
+            console.log('player data up to date');
+            $scope.changeRange($scope.selectedRange);
+
+          } else {
+
+            console.log('player data NOT up to date');
+            requestUpdateOnPlayer();
+
+          }
+
+        } else if (!angular.isUndefinedOrNull(allPlayersIndex.data[$stateParams.playerId])) {
+
+          console.log('player found in player index');
+
+          $scope.player = allPlayersIndex.data[$stateParams.playerId];
+
+          // check the data of the source data
+          if (!angular.isUndefinedOrNull($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
+
+            console.log('player data up to date');
+            $scope.changeRange($scope.selectedRange);
+
+          } else {
+
+            console.log('player data NOT up to date');
+            requestUpdateOnPlayer();
+
+          }
 
         } else {
 
-          console.log('not found player and/or is out of date');
+          console.log('player not in player index and not in any manager');
+          $scope.player = objectUtils.playerResetGoalPoints({});
           requestUpdateOnPlayer();
 
         }
+
+
+
+
 
       };
 
@@ -120,7 +148,7 @@
        * @name selectedRange
        * @description
        */
-      $scope.selectedRange = $scope.ranges[0];
+      $scope.selectedRange = $scope.ranges[4];
 
       /**
        * @name types
@@ -158,8 +186,9 @@
 
         if ($scope.selectedRange.days === -1) {
           var a = moment();
-          var b = moment(transferDates.leagueStart.days);
+          var b = moment(new Date(transferDates.leagueStart.date));
           var difference = a.diff(b, 'days');
+          console.log(difference, 'day in fantasy league player');
           lastDays = $scope.lastDays(difference);
         } else {
           lastDays = $scope.lastDays($scope.selectedRange.days);
@@ -257,11 +286,8 @@
           throw new Error('$stateParams.playerId was not defined, don\'t do that');
         }
 
-        $scope.player = objectUtils.playerResetGoalPoints($scope.player);
-        $scope.player.id = $stateParams.playerId;
 
-        console.log('manager name', $scope.matchingManager.managerName);
-        console.log('player name', $scope.player.playerName);
+        $scope.player.id = $stateParams.playerId;
 
         apiFactory.getPlayerProfile('soccer', $stateParams.playerId)
           .then(arrayMappers.playerInfo.bind(this, $scope.player))
@@ -277,11 +303,14 @@
 
             $scope.changeRange($scope.selectedRange);
 
-            console.log('player', $scope.player);
-
             $rootScope.loading = false;
 
-            //$scope.saveToPlayerIndex($scope.player.id , $scope.player);
+            if (momentService.isHoursAgo($scope.player._lastSyncedOn)) {
+              $scope.saveToPlayerIndex($scope.player.id , $scope.player);
+            } else {
+              console.log('wait 24 hours to update this player');
+            }
+
 
           });
 

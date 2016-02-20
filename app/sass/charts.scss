@@ -47,7 +47,8 @@ $chartColor6: #A35AF2;
 }
 
 .ct-chart, .sick-line-chart {
-  position: relative;
+  position: static;
+  margin-left: -50px;
   .sick-series {
     .ct-point {
       stroke-width: 5px;
@@ -55,8 +56,28 @@ $chartColor6: #A35AF2;
   }
 }
 
-.ct-line.sick-line {
+.sick-line {
   stroke-width: 2px;
+}
+
+.sick-chart-line {
+  .sick-series {
+    &.shots {
+      .ct-line {
+        stroke: #ff8b23;
+      }
+    }
+    &.shotsOnGoal {
+      .ct-line {
+        stroke: #ff6a88;
+      }
+    }
+    &.goals {
+      .ct-line {
+        stroke: #00ff5f;
+      }
+    }
+  }
 }
 
 .sick-series {
@@ -99,6 +120,21 @@ $chartColor6: #A35AF2;
 }
 
 /////////////////////
+
+svg.dot-container {
+  padding: 0 20px 0 0;
+  .dot {
+    &.shots {
+      fill: #ff8b23;
+    }
+    &.shots-on-goal {
+      fill: #ff6a88;
+    }
+    &.goals {
+      fill: #00ff5f;
+    }
+  }
+}
 
 .legend {
   list-style: none;

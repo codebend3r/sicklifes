@@ -416,11 +416,19 @@
        */
       $scope.saveToPlayerIndex = function (playerId, player) {
 
-        var allPlayers = $rootScope.allPlayersIndex || {};
-        allPlayers.data[playerId] = player;
-        allPlayers._lastSyncedOn = momentService.syncDate();
+        var allPlayersIndex = $rootScope.allPlayersIndex || {};
 
-        $scope.saveToFireBase(allPlayers, 'allPlayersIndex');
+        allPlayersIndex.data = allPlayersIndex.data || {};
+
+        allPlayersIndex.data[playerId] = player;
+
+        console.log('allPlayersIndex', allPlayersIndex);
+
+        $scope.saveToFireBase({
+          _lastSyncedOn: momentService.syncDate(),
+          //data: {}
+          data: allPlayersIndex
+        }, 'allPlayersIndex');
 
       };
 
@@ -431,16 +439,20 @@
        */
       $scope.saveTeamToPlayerIndex = function (teamArray) {
 
-        var allPlayers = $rootScope.allPlayersIndex || {};
+        var allPlayersIndex = $rootScope.allPlayersIndex || {};
+        allPlayersIndex.data = allPlayersIndex.data || {};
         var teamObj = {};
 
         _.each(teamArray, function (player) {
           teamObj[player.id] = player;
         });
 
-        var combinedPlayers = _.defaults({}, allPlayers, teamObj);
+        var combinedPlayers = _.defaults({}, allPlayersIndex.data, teamObj);
 
-        $scope.saveToFireBase(combinedPlayers, 'allPlayersIndex');
+        $scope.saveToFireBase({
+          _lastSyncedOn: momentService.syncDate(),
+          data: combinedPlayers
+        }, 'allPlayersIndex');
 
       };
 
