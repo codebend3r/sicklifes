@@ -277,10 +277,6 @@
 
                 _.each(currentPlayers, function(element, index) {
 
-                  if (p.id === 20241) {
-                    console.log('>', p.status);
-                  }
-
                   if (p.playerName.toLowerCase() === element.toLowerCase()) {
                     p.pickNumber = index + 1;
                   }

@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('arrayFilter', function (momentService) {
+    .factory('arrayFilter', function (momentService, transferDates) {
 
       var arrayFilter = {};
 
@@ -34,11 +34,11 @@
       arrayFilter.filterOnValidGoals = function (player, game) {
         var gameDate = moment(new Date(game.datePlayed).toISOString());
         if (player.status === 'added') {
-         return gameDate.isAfter(new Date(game.datePlayed).toISOString());
+          return gameDate.isAfter(new Date(player.dateOfTransaction).toISOString());
         } else if (player.status === 'dropped') {
-         return gameDate.isBefore(new Date(game.datePlayed).toISOString());
+         return gameDate.isBefore(new Date(player.dateOfTransaction).toISOString());
         } else {
-         return gameDate.isAfter(new Date(arrayFilter.leagueStartDate).toISOString());
+         return gameDate.isAfter(new Date(transferDates.leagueStart.date).toISOString());
         }
       };
 
