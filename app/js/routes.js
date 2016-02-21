@@ -119,7 +119,12 @@
         .state('leagues.leaders', {
           url: '/leaders',
           templateUrl: 'views/leagues-leaders.html',
-          controller: 'leadersCtrl'
+          controller: 'leadersCtrl',
+          resolve: {
+            managerPlayers: function (apiFactory) {
+              return apiFactory.getApiData('managerPlayers');
+            }
+          }
         })
 
         // standings
@@ -198,7 +203,7 @@
             managerPlayers: function (apiFactory) {
               return apiFactory.getApiData('managerPlayers');
             },
-            playerPoolData: function(apiFactory) {
+            playerPoolData: function (apiFactory) {
               return apiFactory.getApiData('playerPoolData');
             }
           }

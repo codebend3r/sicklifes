@@ -80,7 +80,7 @@
           } else {
 
             console.log('player data NOT up to date');
-            requestUpdateOnPlayer();
+            $scope.requestUpdateOnPlayer();
 
           }
 
@@ -99,15 +99,15 @@
           } else {
 
             console.log('player data NOT up to date');
-            requestUpdateOnPlayer();
+            $scope.requestUpdateOnPlayer();
 
           }
 
         } else {
 
           console.log('player not in player index and not in any manager');
-          $scope.player = objectUtils.playerResetGoalPoints({});
-          requestUpdateOnPlayer();
+          $scope.player = {};
+          $scope.requestUpdateOnPlayer();
 
         }
 
@@ -280,13 +280,13 @@
        * @name requestUpdateOnPlayer
        * @description makes a new http request from thescore api
        */
-      var requestUpdateOnPlayer = function () {
+      $scope.requestUpdateOnPlayer = function () {
 
         if (angular.isUndefinedOrNull($stateParams.playerId)) {
           throw new Error('$stateParams.playerId was not defined, don\'t do that');
         }
 
-
+        $scope.player = objectUtils.playerResetGoalPoints($scope.player);
         $scope.player.id = $stateParams.playerId;
 
         apiFactory.getPlayerProfile('soccer', $stateParams.playerId)

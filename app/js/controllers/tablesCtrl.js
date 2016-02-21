@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('tablesCtrl', function ($scope, $rootScope, $stateParams, $localStorage, apiFactory, updateDataUtils, textManipulator, momentService, leagueTables) {
+    .controller('tablesCtrl', function ($scope, $rootScope, $stateParams, $localStorage, apiFactory, updateDataUtils, textManipulator, arrayMappers, momentService, leagueTables) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -37,7 +37,7 @@
        */
       $scope.updateTables = function () {
 
-        $scope.getLeagueTables().then(mapLeagueTables);
+        apiFactory.getLeagueTables().then(mapLeagueTables);
 
       };
 
@@ -53,11 +53,11 @@
 
         $rootScope.loading = false;
 
-        $scope.allLeagues[0].source = result[0].data;
-        $scope.allLeagues[1].source = result[1].data;
-        $scope.allLeagues[2].source = result[2].data;
-        $scope.allLeagues[3].source = result[3].data;
-        $scope.allLeagues[4].source = result[4].data;
+        $scope.allLeagues[0].source = _.map(result[0].data, arrayMappers.tableMap);
+        $scope.allLeagues[1].source = _.map(result[1].data, arrayMappers.tableMap);
+        $scope.allLeagues[2].source = _.map(result[2].data, arrayMappers.tableMap);
+        $scope.allLeagues[3].source = _.map(result[3].data, arrayMappers.tableMap);
+        $scope.allLeagues[4].source = _.map(result[4].data, arrayMappers.tableMap);
 
         $scope.setSelectedLeague();
 
@@ -70,6 +70,8 @@
           chlg: $scope.allLeagues[3].source,
           uefa: $scope.allLeagues[4].source
         };
+
+        //debugger;
 
         $scope.saveToFireBase(saveObject, 'leagueTables');
 

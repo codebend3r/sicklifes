@@ -17,7 +17,7 @@
         <tr><td>SHOTS</td><td><dot class-name="shots"></dot>{{player.shots}}</td></tr>
         <tr><td>SOG</td><td><dot class-name="shots-on-goal"></dot>{{player.shotsOnGoal}}</td></tr>
         <tr><td>GOALS</td><td><dot class-name="goals"></dot>{{player.goals}}</td></tr>
-        <tr><td>POINTS</td><td><dot class-name="points"></dot>{{player.points}}</td></tr>
+        <tr><td>POINTS</td><td>{{player.points}}</td></tr>
         <tr ng-if='player.leagueName'><td>DOMESTIC LEAGUE</td><td>{{player.leagueName}}</td></tr>
         <tr ng-if='player.tournamentLeagueName'><td>TOURNAMENT LEAGUE</td><td>{{player.tournamentLeagueName}}</td></tr>
         <tr><td>POSITION</td><td>{{player.position}}</td></tr>
@@ -44,7 +44,7 @@
   </div>
 
   <div ng-if='admin' class='well'>
-    <button type='button' class='btn btn-danger' ng-click='getAllGameLogs()'>Update Data</button>
+    <button type='button' class='btn btn-danger' ng-click='requestUpdateOnPlayer()'>Update Data</button>
     <button type='button' class='btn btn-danger' ng-click='saveToFireBase()'>Save Data to Firebase</button>
   </div>
 

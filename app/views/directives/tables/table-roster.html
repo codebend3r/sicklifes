@@ -4,6 +4,8 @@
       <th>Pos</th>
       <th>Player</th>
       <th>G</th>
+      <th>SOG</th>
+      <th>S</th>
       <th>A</th>
     </tr>
   </thead>
@@ -12,6 +14,8 @@
       <td>{{player.pos}}</td>
       <td><a class='bold' ui-sref='playerDetails({playerId: player.id})'>{{player.playerName}}</a></td>
       <td>{{player.domesticGoals}}</td>
+      <td>{{player.shots}}</td>
+      <td>{{player.shotsOnGoal}}</td>
       <td>{{player.assists}}</td>
     </tr>
   </tbody>

@@ -41,7 +41,7 @@
        */
         apiFactory.getApiData = function (namespace) {
           var defer = $q.defer();
-          $http.get(apiFactory.firebaseUrl + namespace + '.json')
+          $http.get(apiFactory.firebaseUrl + namespace + '.json', { cache: true })
             .then(function (result) {
               $rootScope[namespace] = result.data;
               console.log('rootScope variable saved:', namespace);

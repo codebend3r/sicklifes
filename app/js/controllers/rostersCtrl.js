@@ -93,13 +93,11 @@
 
               _.each(result.data, function (player) {
 
-                if (angular.isDefined(allPlayersIndex.data[player.id]) && (!angular.isUndefinedOrNull(player._lastSyncedOn) && !momentService.isPastYesterday(player._lastSyncedOn))) {
+                if (!angular.isUndefinedOrNull(allPlayersIndex.data[player.id]) && !angular.isUndefinedOrNull(allPlayersIndex.data[player.id]._lastSyncedOn) && !momentService.isPastYesterday(allPlayersIndex.data[player.id]._lastSyncedOn)) {
 
                   console.log('synced data found for', player.full_name);
 
-                  var indexPlayer = playersIndex[player.id];
-
-                  $scope.players.push(indexPlayer);
+                  $scope.players.push(allPlayersIndex.data[player.id]);
 
                   numberOfRequests += 1;
 
@@ -139,7 +137,7 @@
                       if (numberOfRequests === numberOfPlayers) {
                         console.log('DONE');
                         //$rootScope.loading = false;
-                        $scope.saveTeamToPlayerIndex($scope.players);
+                        //$scope.saveTeamToPlayerIndex($scope.players);
                       }
 
                     });
