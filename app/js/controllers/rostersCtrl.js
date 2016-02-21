@@ -97,22 +97,35 @@
 
                   console.log('synced data found for', player.full_name);
 
-                  $scope.players.push(allPlayersIndex.data[player.id]);
+                  var playerFromIndex = allPlayersIndex.data[player.id];
+
+                  var matchingManager = managersService.findPlayerInManagers(player.id).manager;
+
+                  if (!angular.isUndefinedOrNull(matchingManager)) {
+                    playerFromIndex.managerName = matchingManager.managerName;
+                  }
+
+                  $scope.players.push(playerFromIndex);
 
                   numberOfRequests += 1;
 
                   if (numberOfRequests === numberOfPlayers) {
-                    $rootScope.loading = false;
+                    console.log('DONE through player index');
+                    //$rootScope.loading = false;
                     //$scope.saveTeamToPlayerIndex($scope.players);
                   }
 
                 } else {
 
-                  console.log('new request for', player.full_name);
+                  console.log('request for', player.full_name);
 
                   var matchingManager = managersService.findPlayerInManagers(player.id).manager;
 
                   player = objectUtils.playerResetGoalPoints(player);
+
+                  if (!angular.isUndefinedOrNull(matchingManager)) {
+                    player.managerName = matchingManager.managerName;
+                  }
 
                   apiFactory.getPlayerProfile('soccer', player.id)
                     .then(function (playerResult) {
@@ -135,9 +148,9 @@
                       numberOfRequests += 1;
 
                       if (numberOfRequests === numberOfPlayers) {
-                        console.log('DONE');
+                        console.log('DONE through new requests');
                         //$rootScope.loading = false;
-                        //$scope.saveTeamToPlayerIndex($scope.players);
+                        $scope.saveTeamToPlayerIndex($scope.players);
                       }
 
                     });
