@@ -181,7 +181,7 @@
           'Edinson CAVANI',
           'Felipe ANDERSON',
           'HERNANES',
-          'Adrian GONZALEZ',
+          'Adrian',
           'Riccardo SAPONARA',
           'Goran PANDEV',
           'Mohamed SALAH',

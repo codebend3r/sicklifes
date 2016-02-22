@@ -118,8 +118,8 @@
               mappedManagers[obj.managerName.toLowerCase()] = obj;
             });
 
-            //managerData.data = mappedManagers;
             $scope.selectedManager = mappedManagers[$stateParams.managerId];
+            console.log('selectedManager', $scope.selectedManager);
             $scope.saveRoster(mappedManagers);
 
           });
@@ -151,7 +151,7 @@
               //managerData.data = result;
               $scope.selectedManager = mappedManagers[$stateParams.managerId];
               $scope.saveRoster(mappedManagers);
-              
+
             });
         });
 

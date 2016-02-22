@@ -1,6 +1,6 @@
 <div class='panel-body'>
 
-  <h3>Transaction for: <b>{{ selectedManager.managerName }}</b></h3>
+  <h3>Transaction for: <b>{{ selectedManager.managerName | capitalize }}</b></h3>
 
   <div ng-if='admin' class='well'>
     <button type='button' class='btn btn-danger' ng-click='updatePlayerPoolData()'>Update Player Pool Data</button>
@@ -9,7 +9,7 @@
   </div>
 
   <div class='well'>
-    <select class='form-control' ng-model='selectedManager' ng-options='option.managerName for option in managerData' ng-change='changeManager(selectedManager)'></select>
+    <select class='form-control' ng-model='selectedManager' ng-options='option.managerName | capitalize for option in managerData' ng-change='changeManager(selectedManager)'></select>
   </div>
 
   <uib-tabset>

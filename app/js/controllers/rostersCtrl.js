@@ -74,6 +74,7 @@
             .then(function (result) {
 
               // first get team logo, name and record
+              debugger;
               $scope.teamName = result.data.full_name;
               $scope.largeLogo = result.data.logos.large;
               $scope.record = result.data.standing.short_record;

@@ -34,9 +34,9 @@
       arrayFilter.filterOnValidGoals = function (player, game) {
         var gameDate = moment(new Date(game.datePlayed).toISOString());
         if (player.status === 'added') {
-          return gameDate.isAfter(new Date(player.dateOfTransaction).toISOString());
+          return angular.isDefined(player.dateOfTransaction) && gameDate.isAfter(new Date(player.dateOfTransaction).toISOString());
         } else if (player.status === 'dropped') {
-         return gameDate.isBefore(new Date(player.dateOfTransaction).toISOString());
+         return angular.isDefined(player.dateOfTransaction) && gameDate.isBefore(new Date(player.dateOfTransaction).toISOString());
         } else {
          return gameDate.isAfter(new Date(transferDates.leagueStart.date).toISOString());
         }

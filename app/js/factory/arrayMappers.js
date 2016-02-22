@@ -116,7 +116,7 @@
         player.shotsOnGoal = 0;
 
         // url for player image
-        player.playerImage = result.data.headshots.original;
+        player.playerImage = result.data.headshots.w192xh192;
 
         // returns a concat string with all valid leagues
         player.allLeaguesName = textManipulator.validLeagueNamesFormatted(result);
@@ -159,6 +159,8 @@
 
         if (angular.isUndefinedOrNull(managersService.findPlayerInManagers(player.id).manager)) {
           player.status = 'free agent';
+        } else {
+          player.status = managersService.findPlayerInManagers(player.id).player.status;
         }
 
       };
@@ -208,6 +210,7 @@
                 manager: manager
               }));
 
+            player.leagueName = 'LIGA';
             var foundTeam = _.where($rootScope.leagueTables.liga, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.ligaCompleteLog.length)) {
               player.playedInLigaGames = true;
@@ -252,10 +255,11 @@
                 manager: manager
               }));
 
+            player.leagueName = 'EPL';
             var foundTeam = _.where($rootScope.leagueTables.epl, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.eplCompleteLog.length)) {
-              player.leagueName = 'EPL';
               player.playedInEPLGames = true;
+              player.leagueName = 'EPL';
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'epl' : '/epl';
               if (!angular.isUndefinedOrNull(manager)) {
                 if (player.playedInEPLGames && player.status !== 'dropped') manager.eplCount += 1;
@@ -305,6 +309,7 @@
                 manager: manager
               }));
 
+            player.leagueName = 'SERI';
             var foundTeam = _.where($rootScope.leagueTables.seri, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.seriCompleteLog.length)) {
               player.playedInSeriGames = true;

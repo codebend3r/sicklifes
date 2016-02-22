@@ -181,6 +181,7 @@
           return false;
         }
 
+        var managerCore = {};
         var gameLogs = {};
         var charts = {};
         var managerPlayers = {};
@@ -190,6 +191,11 @@
 
           manager.managerName = key;
           index += 1;
+
+          managerCore[key] = {
+            managerName: key,
+            players: {}
+          };
 
           gameLogs[key] = {
             managerName: key,
@@ -211,6 +217,19 @@
           _.each(manager.players, function (player) {
 
             player.managerName = manager.managerName;
+
+            managerCore[key].players = player;
+            
+            // managerCore[key].players = {
+            //   id: player.id,
+            //   playerName: player.playerName,
+            //   teamName: player.teamName,
+            //   teamId: player.teamId,
+            //   teamLogo: player.teamLogo,
+            //   leagueName: player.leagueName,
+            //   pickNumber: player.pickNumber,
+            //   managerName: player.managerName
+            // };
 
             angular.isDefined(player.seriGameLog) && delete player.seriGameLog;
             angular.isDefined(player.eplGameLog) && delete player.eplGameLog;
@@ -247,16 +266,18 @@
         if (_.hasDeepProperty(managerPlayers, 'managerName') && _.hasDeepProperty(managerPlayers, 'players')) {
           console.log('managerPlayers test passsed');
 
-          var test = _.every(managerPlayers.players, function(p) {
-            console.log('pickNumber:', p.pickNumber);
-            return _.hasDeepProperty(p, 'pickNumber');
+          var test = _.every(managerPlayers, function(m) {
+            return _.every(m.players, function(p) {
+              return _.has(p, 'pickNumber');
+            });
           });
 
-          console.log('all have pickNumber property', test);
-          console.log('has property id:', _.hasDeepProperty(managerPlayers.players, 'id'));
-          console.log('has property playerName:', _.hasDeepProperty(managerPlayers.players, 'playerName'));
-          console.log('has property managerName:', _.hasDeepProperty(managerPlayers.players, 'managerName'));
-          console.log('has property pickNumber:', _.hasDeepProperty(managerPlayers.players, 'pickNumber'));
+          if (test) {
+            console.log('all have pickNumber property')
+          } else {
+            console.log('players DO NOT all have pickNumber property');
+            return false;
+          }
 
         } else {
           console.log('managerPlayers test failed');
@@ -269,6 +290,8 @@
           console.log('managerData test failed');
           return false;
         }
+
+        console.log('managerCore', managerCore);
 
         $scope.saveToFireBase({
          data: managerData,
