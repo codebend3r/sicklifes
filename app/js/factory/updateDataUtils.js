@@ -277,8 +277,12 @@
 
                 _.each(currentPlayers, function(element, index) {
 
-                  if (p.playerName.toLowerCase() === element.toLowerCase()) {
-                    p.pickNumber = index + 1;
+                  if (angular.isUndefinedOrNull(p.playerName)) {
+                    console.log('player name not found', p);
+                  } else {
+                    if (p.playerName.toLowerCase() === element.toLowerCase()) {
+                      p.pickNumber = index + 1;
+                    }
                   }
 
                 });
