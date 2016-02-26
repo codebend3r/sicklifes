@@ -359,6 +359,10 @@
               player.leagueName = 'CHLG';
             }
 
+            if (player.id === '9563') {
+              console.log('VALID LEAGUES:', player, validLeagues);
+            }
+
             var foundTeam = _.where($rootScope.leagueTables.chlg, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.chlgCompleteLogs.length)) {
               player.playedInChlgGames = true;

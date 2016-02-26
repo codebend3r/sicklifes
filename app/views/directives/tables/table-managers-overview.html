@@ -16,7 +16,7 @@
   <tr ng-repeat="player in list | orderObjectBy:sortKey:ascending">
     <td class="player-column" ng-class="{dropped: player.status === 'dropped', added: player.status === 'added'}">
       <div class="vertical-center">
-        <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+        <a ui-sref="playerDetails({playerId: player.id})">{{player.pickNumber}} - {{player.playerName}}</a>
       </div>
     </td>
     <td ng-if-start="edit"><div class="vertical-center">{{player.id}}</div></td>

@@ -81,7 +81,7 @@
           'Aritz ADURIZ',
           'Wilfried BONY',
           'Memphis DEPAY',
-          'Jose Maria CALLEJON',
+          'Jose CALLEJON',
           'Kevin GAMEIRO',
           'Saido BERAHINO',
           'Manolo GABBIADINI',

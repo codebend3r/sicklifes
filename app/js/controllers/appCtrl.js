@@ -216,20 +216,32 @@
 
           _.each(manager.players, function (player) {
 
-            player.managerName = manager.managerName;
+            //managerCore[key].players = player;
 
-            managerCore[key].players = player;
-            
-            // managerCore[key].players = {
-            //   id: player.id,
-            //   playerName: player.playerName,
-            //   teamName: player.teamName,
-            //   teamId: player.teamId,
-            //   teamLogo: player.teamLogo,
-            //   leagueName: player.leagueName,
-            //   pickNumber: player.pickNumber,
-            //   managerName: player.managerName
-            // };
+            if (angular.isUndefinedOrNull(managerCore[key])) {
+              managerCore[key] = {
+                players: {}
+              };
+            }
+
+            managerCore[key].players[player.id] = {
+              id: player.id,
+              playerName: player.playerName,
+              status: player.status,
+              team: {
+                teamName: player.teamName,
+                teamId: player.teamId,
+                teamLogo: player.teamLogo,
+              },
+              league: {
+                leagueName: player.leagueName,
+                leagueSlugs: player.leagueSlugs,
+              },
+              pickNumber: player.pickNumber,
+              injured: player.injured,
+              dateOfTransaction: player.dateOfTransaction,
+              managerName: key
+            };
 
             angular.isDefined(player.seriGameLog) && delete player.seriGameLog;
             angular.isDefined(player.eplGameLog) && delete player.eplGameLog;
@@ -253,6 +265,7 @@
           console.log('gameLogs test passsed');
         } else {
           console.log('gameLogs test failed');
+          debugger;
           return false;
         }
 
@@ -260,22 +273,20 @@
           console.log('charts test passsed');
         } else {
           console.log('charts test failed');
+          debugger;
           return false;
         }
 
         if (_.hasDeepProperty(managerPlayers, 'managerName') && _.hasDeepProperty(managerPlayers, 'players')) {
           console.log('managerPlayers test passsed');
 
-          var test = _.every(managerPlayers, function(m) {
-            return _.every(m.players, function(p) {
-              return _.has(p, 'pickNumber');
-            });
-          });
+          var hasPickNumber = _.allHaveProperty(managerPlayers, 'pickNumber');
 
-          if (test) {
-            console.log('all have pickNumber property')
+          if (hasPickNumber) {
+            console.log('all players have a pickNumber property')
           } else {
-            console.log('players DO NOT all have pickNumber property');
+            console.log('all players DO NOT have pickNumber property');
+            debugger;
             return false;
           }
 
@@ -291,7 +302,39 @@
           return false;
         }
 
+        if (_.hasDeepProperty(managerCore, 'managerName') && _.hasDeepProperty(managerCore, 'players')) {
+
+          console.log('managerCore test passsed');
+
+          _.each(managerCore, function(m) {
+            console.log('# of players', _.keys(m.players).length);
+          });
+
+          var hasId = _.allHaveProperty(managerCore, 'id');
+          var hasStatus = _.allHaveProperty(managerCore, 'status');
+          var hasPickNumber = _.allHaveProperty(managerCore, 'pickNumber');
+          var hasManagerName = _.allHaveProperty(managerCore, 'managerName');
+          var hasDateOfTransaction = _.allHaveProperty(managerCore, 'dateOfTransaction');
+          var hasLeague = _.allHaveProperty(managerCore, 'league');
+          var hasTeam = _.allHaveProperty(managerCore, 'team');
+
+          if (hasId && hasStatus && hasPickNumber && hasManagerName && hasDateOfTransaction && hasLeague && hasTeam) {
+            console.log('all players have the correct 9 properties')
+          } else {
+            console.log('all players DO NOT 9 properties', hasNineProperties, hasId, hasStatus, hasPickNumber, hasManagerName);
+            debugger;
+            return false;
+          }
+
+        } else {
+          console.log('managerCore test failed');
+          debugger;
+          return false;
+        }
+
+        console.log('===============================');
         console.log('managerCore', managerCore);
+        console.log('===============================');
 
         $scope.saveToFireBase({
          data: managerData,
@@ -312,6 +355,11 @@
          data: gameLogs,
          _lastSyncedOn: momentService.syncDate()
         }, 'gameLogs');
+
+        $scope.saveToFireBase({
+          data: managerCore,
+          _lastSyncedOn: momentService.syncDate()
+        }, 'managerCore');
 
       };
 

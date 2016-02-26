@@ -123,7 +123,7 @@
             })
             .then(function (result) {
               current += 1;
-              console.log('COMPLETED:', player.playerName, Math.round((current / total) * 100));
+              //console.log('COMPLETED:', player.playerName, Math.round((current / total) * 100));
               if (current === total) {
                 console.log('RESOLVE PROMISE:', manager.managerName);
                 console.log('///////////////////////////////////////');
@@ -265,6 +265,10 @@
 
                 rebuildTeams.data[managerKey].players[player.id] = player;
 
+                if (player.id === 1743) {
+                  console.log('PLAYER', player.playerName, player.status);
+                }
+
               });
 
             });
@@ -331,14 +335,11 @@
                 }
 
                 rebuildTeams.data[managerKey].players[player.id] = player;
-                console.log('> player', player);
 
               }
             });
 
             defer.resolve(rebuildTeams);
-
-            //$scope.saveToFireBase(rebuildTeams, 'managerCore');
 
           });
 
