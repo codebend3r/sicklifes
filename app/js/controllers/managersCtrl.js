@@ -118,13 +118,9 @@
             });
 
             $scope.selectedManager = mappedManagers[$stateParams.managerId];
-            $scope.selectedManager.players = mappedManagers[$stateParams.managerId].players;
-            $scope.selectedManager.filteredMonthlyGoalsLog = mappedManagers[$stateParams.managerId].filteredMonthlyGoalsLog;
-            $scope.selectedManager.monthlyGoalsLog = mappedManagers[$stateParams.managerId].monthlyGoalsLog;
-
-            console.log('selectedManager', $scope.selectedManager);
-
-            console.log('CHECK', mappedManagers);
+            // $scope.selectedManager.players = mappedManagers[$stateParams.managerId].players;
+            // $scope.selectedManager.filteredMonthlyGoalsLog = mappedManagers[$stateParams.managerId].filteredMonthlyGoalsLog;
+            // $scope.selectedManager.monthlyGoalsLog = mappedManagers[$stateParams.managerId].monthlyGoalsLog;
 
             $scope.saveRoster(mappedManagers);
 

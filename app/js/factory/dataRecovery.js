@@ -72,7 +72,10 @@
           'Ryan MASON',
           'Miralem PJANIC',
           'Georginio WIJNALDUM',
-          'WILLIAN'
+          'WILLIAN',
+          'Jesse LINGARD',
+          '',
+          ''
         ],
         joe: [
           'Cristiano RONALDO',

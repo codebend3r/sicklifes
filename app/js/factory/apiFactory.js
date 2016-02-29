@@ -35,6 +35,7 @@
        * @description makes a request from the firebase api by namespace and saves the response to the $rootScope
        *      supported requests are:
        *           - managerData
+       *           - managerCore
        *           - leagueLeaders
        *           - leagueTables
        * @returns {Promise}
