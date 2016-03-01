@@ -226,6 +226,7 @@
 
             managerCore[key].players[player.id] = {
               id: player.id,
+              active: !angular.isUndefinedOrNull(player.active) ? player.active : false,
               playerName: player.playerName,
               status: player.status,
               team: {
@@ -310,25 +311,93 @@
             console.log('# of players', _.keys(m.players).length);
           });
 
+          // _.each(managerCore, function(m) {
+          //   return _.each(m.players, function(p) {
+          //     console.log(p.playerName, 'leagueName', p.league);
+          //   });
+          // });
+
           var hasId = _.allHaveProperty(managerCore, 'id');
+
+          if (hasId) {
+            console.log('all players have \'id\' property')
+          } else {
+            console.log('all players DO NOT have \'id\' property');
+            debugger;
+            return false;
+          }
+
+          var hasActive = _.allHaveProperty(managerCore, 'active');
+
+          if (hasActive) {
+            console.log('all players have \'active\' property')
+          } else {
+            console.log('all players DO NOT have \'active\' property');
+            debugger;
+            return false;
+          }
+
           var hasStatus = _.allHaveProperty(managerCore, 'status');
+
+          if (hasStatus) {
+            console.log('all players have \'status\' property')
+          } else {
+            console.log('all players DO NOT have \'status\' property');
+            debugger;
+            return false;
+          }
+
           var hasPickNumber = _.allHaveProperty(managerCore, 'pickNumber');
+
+          if (hasPickNumber) {
+            console.log('all players have \'pickNumber\' property')
+          } else {
+            console.log('all players DO NOT have \'pickNumber\' property');
+            debugger;
+            return false;
+          }
+
           var hasManagerName = _.allHaveProperty(managerCore, 'managerName');
+
+          if (hasManagerName) {
+            console.log('all players have \'managerName\' property')
+          } else {
+            console.log('all players DO NOT have \'managerName\' property');
+            debugger;
+            return false;
+          }
           var hasDateOfTransaction = _.allHaveProperty(managerCore, 'dateOfTransaction');
+
+          if (hasDateOfTransaction) {
+            console.log('all players have \'dateOfTransaction\' property')
+          } else {
+            console.log('all players DO NOT have \'dateOfTransaction\' property');
+            debugger;
+            return false;
+          }
+
           var hasLeague = _.allHaveProperty(managerCore, 'league');
+
+          if (hasLeague) {
+            console.log('all players have \'league\' property')
+          } else {
+            console.log('all players DO NOT have \'league\' property');
+            debugger;
+            return false;
+          }
+
           var hasTeam = _.allHaveProperty(managerCore, 'team');
 
-          if (hasId && hasStatus && hasPickNumber && hasManagerName && hasDateOfTransaction && hasLeague && hasTeam) {
-            console.log('all players have the correct 9 properties')
+          if (hasTeam) {
+            console.log('all players have \'team\' property')
           } else {
-            console.log('all players DO NOT 9 properties', hasNineProperties, hasId, hasStatus, hasPickNumber, hasManagerName);
+            console.log('all players DO NOT have \'team\' property');
             debugger;
             return false;
           }
 
         } else {
           console.log('managerCore test failed');
-          debugger;
           return false;
         }
 
@@ -336,30 +405,30 @@
         console.log('managerCore', managerCore);
         console.log('===============================');
 
-        $scope.saveToFireBase({
-         data: managerData,
-         _lastSyncedOn: momentService.syncDate(),
-        }, 'managerData');
-
-        $scope.saveToFireBase({
-         data: managerPlayers,
-         _lastSyncedOn: momentService.syncDate()
-        }, 'managerPlayers');
-
-        $scope.saveToFireBase({
-         data: charts,
-         _lastSyncedOn: momentService.syncDate()
-        }, 'charts');
-
-        $scope.saveToFireBase({
-         data: gameLogs,
-         _lastSyncedOn: momentService.syncDate()
-        }, 'gameLogs');
-
-        $scope.saveToFireBase({
-          data: managerCore,
-          _lastSyncedOn: momentService.syncDate()
-        }, 'managerCore');
+        // $scope.saveToFireBase({
+        //  data: managerData,
+        //  _lastSyncedOn: momentService.syncDate(),
+        // }, 'managerData');
+        //
+        // $scope.saveToFireBase({
+        //  data: managerPlayers,
+        //  _lastSyncedOn: momentService.syncDate()
+        // }, 'managerPlayers');
+        //
+        // $scope.saveToFireBase({
+        //  data: charts,
+        //  _lastSyncedOn: momentService.syncDate()
+        // }, 'charts');
+        //
+        // $scope.saveToFireBase({
+        //  data: gameLogs,
+        //  _lastSyncedOn: momentService.syncDate()
+        // }, 'gameLogs');
+        //
+        // $scope.saveToFireBase({
+        //   data: managerCore,
+        //   _lastSyncedOn: momentService.syncDate()
+        // }, 'managerCore');
 
       };
 

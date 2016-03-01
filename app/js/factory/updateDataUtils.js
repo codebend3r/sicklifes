@@ -248,6 +248,8 @@
               _lastSyncedOn: momentService.syncDate()
             };
 
+            console.log('CORE DATA', $rootScope.managerCore.data);
+
             _.each($rootScope.managerCore.data, function (manager) {
 
               var managerKey = manager.managerName.toLowerCase();
@@ -297,7 +299,7 @@
 
             console.log('> rebuildTeams', rebuildTeams);
 
-            defer.resolve(rebuildTeams);
+            //defer.resolve(rebuildTeams);
 
           });
 

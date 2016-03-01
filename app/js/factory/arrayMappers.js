@@ -104,8 +104,8 @@
 
         var profileLeagueSlug;
 
-        if (player.outOfScope) {
-          profileLeagueSlug = player.formerLeagueName;
+        if (!player.active) {
+          profileLeagueSlug = player.league.leagueName;
         } else {
           profileLeagueSlug = textManipulator.getLeagueSlug(result);
         }
@@ -355,15 +355,8 @@
                 manager: manager
               }));
 
-            if (angular.equals(validLeagues, {inChlg: true})) {
-              player.leagueName = 'CHLG';
-            }
-
-            if (player.id === '9563') {
-              console.log('VALID LEAGUES:', player, validLeagues);
-            }
-
             var foundTeam = _.where($rootScope.leagueTables.chlg, {teamName: player.teamName});
+            foundTeam && !angular.isUndefinedOrNull(validLeagues.inChlg) && (player.leagueName = 'CHLG');
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.chlgCompleteLogs.length)) {
               player.playedInChlgGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'chlg' : '/chlg';
@@ -409,11 +402,8 @@
                 manager: manager
               }));
 
-            if (angular.equals(validLeagues, {inEuro: true})) {
-              player.leagueName = 'EURO';
-            }
-
             var foundTeam = _.where($rootScope.leagueTables.uefa, {teamName: player.teamName});
+            foundTeam && !angular.isUndefinedOrNull(validLeagues.inEuro) && (player.leagueName = 'EURO');
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.euroCompleteLogs.length)) {
               player.playedInEuroGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'euro' : '/euro';
