@@ -92,11 +92,13 @@
        */
       arrayMapper.playerInfo = function (player, result) {
 
-        player.playedInLigaGames = false;
-        player.playedInEPLGames = false;
-        player.playedInSeriGames = false;
-        player.playedInChlgGames = false;
-        player.playedInEuroGames = false;
+        player.activeLeagues = {
+          playedInLigaGames: false,
+          playedInEPLGames: false,
+          playedInSeriGames: false,
+          playedInChlgGames: false,
+          playedInEuroGames: false
+        };
 
         if (player.status === 'drafted') {
           player.dateOfTransaction = transferDates.leagueStart.date;
@@ -104,8 +106,10 @@
 
         var profileLeagueSlug;
 
-        if (!player.active) {
+        if (!angular.isUndefinedOrNull(player.active) && player.active === false) {
+          console.log('NOT ACTIVE', player.playerName, player.league.leagueName);
           profileLeagueSlug = player.league.leagueName;
+          //profileLeagueSlug = 'fmf';
         } else {
           profileLeagueSlug = textManipulator.getLeagueSlug(result);
         }
@@ -139,28 +143,38 @@
        */
       arrayMapper.playerMapPersonalInfo = function (player, result) {
 
-        player.position = result.data.position;
-        player.pos = result.data.position_abbreviation;
-        player.weight = result.data.weight;
-        player.height = result.data.height_feet + '\'' + result.data.height_inches;
-        player.birthdate = result.data.birthdate;
-        player.birthplace = result.data.birth_city + ', ' + result.data.birth_country;
+        player.bio = {
+          position: result.data.position,
+          pos: result.data.position_abbreviation,
+          weight: result.data.weight,
+          height: result.data.height_feet + '\'' + result.data.height_inches,
+          birthdate: result.data.birthdate,
+          birthplace: result.data.birth_city + ', ' + result.data.birth_country
+        };
+
         player.injured = result.data.injury !== null;
 
         if (angular.isDefined(result.data.team)) {
-          angular.isUndefinedOrNull(player.teamId) && (player.teamId = result.data.team.id);
-          angular.isUndefinedOrNull(player.teamName) && (player.teamName = result.data.team.full_name);
-          angular.isUndefinedOrNull(player.teamLogo) && (player.teamLogo = result.data.team.logos.large);
-        } else {
-          angular.isUndefinedOrNull(player.teamId) && (player.teamId = '');
-          angular.isUndefinedOrNull(player.teamName) && (player.teamName = '');
-          angular.isUndefinedOrNull(player.teamLogo) && (player.teamLogo = '');
+          player.team = player.team || {};
+          angular.isUndefinedOrNull(player.team.teamId) && (player.team.teamId = result.data.team.id);
+          angular.isUndefinedOrNull(player.team.teamName) && (player.team.teamName = result.data.team.full_name);
+          angular.isUndefinedOrNull(player.team.teamLogo) && (player.team.teamLogo = result.data.team.logos.large);
+        } else if (!angular.isUndefinedOrNull(player.active) && player.active === false) {
+          player.team = player.team || {};
+          angular.isUndefinedOrNull(player.team.teamId) && (player.team.teamId = result.data.team.id);
+          angular.isUndefinedOrNull(player.team.teamName) && (player.team.teamName = result.data.team.full_name);
+          angular.isUndefinedOrNull(player.team.teamLogo) && (player.team.teamLogo = result.data.team.logos.large);
+        }
+
+        if (player.id === 1792) {
+          console.log('player', player);
         }
 
         if (angular.isUndefinedOrNull(managersService.findPlayerInManagers(player.id).manager)) {
           player.status = 'free agent';
         } else {
-          player.status = managersService.findPlayerInManagers(player.id).player.status;
+          //player.status = managersService.findPlayerInManagers(player.id).player.status;
+          player.status = player.status;
         }
 
       };
@@ -356,7 +370,10 @@
               }));
 
             var foundTeam = _.where($rootScope.leagueTables.chlg, {teamName: player.teamName});
-            foundTeam && !angular.isUndefinedOrNull(validLeagues.inChlg) && (player.leagueName = 'CHLG');
+            if (foundTeam && angular.isUndefinedOrNull(validLeagues.inSeri) && angular.isUndefinedOrNull(validLeagues.inLiga) && angular.isUndefinedOrNull(validLeagues.inEPL)) {
+              console.log(player.playerName, 'is CHLG', _.keys(validLeagues));
+              player.leagueName = 'CHLG';
+            }
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.chlgCompleteLogs.length)) {
               player.playedInChlgGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'chlg' : '/chlg';
@@ -403,7 +420,11 @@
               }));
 
             var foundTeam = _.where($rootScope.leagueTables.uefa, {teamName: player.teamName});
-            foundTeam && !angular.isUndefinedOrNull(validLeagues.inEuro) && (player.leagueName = 'EURO');
+            //if (foundTeam && _.keys(validLeagues) === ['inEuro'] && angular.isUndefinedOrNull(validLeagues.inSeri) && angular.isUndefinedOrNull(validLeagues.inLiga) && angular.isUndefinedOrNull(validLeagues.inEPL)) {
+            if (foundTeam && _.keys(validLeagues) === ['inEuro']) {
+              console.log(player.playerName, 'is EURO', _.keys(validLeagues));
+              player.leagueName = 'EURO';
+            }
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.euroCompleteLogs.length)) {
               player.playedInEuroGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'euro' : '/euro';

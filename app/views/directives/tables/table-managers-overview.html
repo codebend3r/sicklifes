@@ -25,10 +25,10 @@
     <td ng-if-end><div class="vertical-center">date: <input class="form-control" type="text" ng-model="player.dateOfTransaction" /></div></td>
     <td ng-if-start="!edit" class="bold small-text">
       <div class="vertical-center">
-        <img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;<a ui-sref="roster({leagueName: player.leagueName.toLowerCase(), teamId: player.teamId})">{{player.teamName}}</a>
+        <img width="40" height="40" ng-src="{{player.team.teamLogo}}"/>&nbsp;<a ui-sref="roster({leagueName: player.league.leagueName.toLowerCase(), teamId: player.team.teamId})">{{player.team.teamName}}</a>
       </div>
     </td>
-    <td class="small-text"><div class="vertical-center">{{player.leagueName}}</div></td>
+    <td class="small-text"><div class="vertical-center">{{player.league.leagueName}}</div></td>
     <td><div class="vertical-center">{{player.goals}}</div></td>
     <td><div class="vertical-center">{{player.domesticGoals}}</div></td>
     <td><div class="vertical-center">{{player.clGoals}}</div></td>
@@ -55,7 +55,7 @@
       </div>
     </td>
     <td class="bold small-text">
-      <div class="vertical-center">{{player.teamName}}</div>
+      <div class="vertical-center">{{player.team.teamName}}</div>
     </td>
     <td>
       <div class="vertical-center">{{player.points}}</div>

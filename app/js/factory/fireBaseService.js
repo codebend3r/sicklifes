@@ -70,7 +70,8 @@
 
           console.log('saveToFireBase -- START | key:', key);
 
-          var cleanedData = angular.copy(saveObject),
+          var defer = $q.defer(),
+            cleanedData = angular.copy(saveObject),
             usersRef = ref.child(key);
 
           // save to local storage
@@ -80,7 +81,9 @@
           $rootScope[key] = cleanedData;
 
           usersRef.set(cleanedData);
-          console.log('saveToFireBase -- COMPLETE');
+          defer.resolve(true);
+          console.log('saveToFireBase -- COMPLETE', key);
+          return defer.promise;
 
         }
 

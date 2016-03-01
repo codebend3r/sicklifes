@@ -110,7 +110,7 @@
 
           apiFactory.getPlayerProfile('soccer', player.id)
             .then(arrayMappers.playerInfo.bind(this, player), function () {
-              console.log('failed at player info mapping:', player.playerName)
+              console.log('failed at player info mapping:', player.playerName);
             })
             .then(arrayMappers.playerMapPersonalInfo.bind(this, player), function () {
               console.log('failed at player personal info mapping:', player.playerName);
@@ -119,7 +119,7 @@
               player: player,
               manager: manager
             }), function () {
-              console.log('failed at player game logs', player.playerName)
+              console.log('failed at player game logs', player.playerName);
             })
             .then(function (result) {
               current += 1;
@@ -130,7 +130,7 @@
                 defer.resolve(manager);
               }
             }, function () {
-              console.log('failed at final stage:', player.playerName)
+              console.log('failed at final stage:', player.playerName);
             });
 
         };
@@ -267,10 +267,6 @@
 
                 rebuildTeams.data[managerKey].players[player.id] = player;
 
-                if (player.id === 1743) {
-                  console.log('PLAYER', player.playerName, player.status);
-                }
-
               });
 
             });
@@ -284,7 +280,7 @@
                 _.each(currentPlayers, function(element, index) {
 
                   if (angular.isUndefinedOrNull(p.playerName)) {
-                    console.log('player name not found', p);
+                    console.log('> player name not found', p);
                   } else {
                     if (p.playerName.toLowerCase() === element.toLowerCase()) {
                       p.pickNumber = index + 1;
@@ -297,9 +293,7 @@
 
             });
 
-            console.log('> rebuildTeams', rebuildTeams);
-
-            //defer.resolve(rebuildTeams);
+            defer.resolve(rebuildTeams);
 
           });
 

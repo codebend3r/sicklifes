@@ -41,8 +41,9 @@
           'Odion IGHALO',
           'Inaki WILLIAMS',
           'Roberto FIRMINO',
-          'MBaye NIANG',
-          'Alvaro NEGREDO'
+          'Mbaye NIANG',
+          'Alvaro NEGREDO',
+          'John GUIDETTI'
         ],
         frank: [
           'NEYMAR',
@@ -74,8 +75,8 @@
           'Georginio WIJNALDUM',
           'WILLIAN',
           'Jesse LINGARD',
-          '',
-          ''
+          'Gylfi SIGURDSSON',
+          'Giampaolo PAZZINI'
         ],
         joe: [
           'Cristiano RONALDO',
@@ -105,7 +106,9 @@
           'Borja BASTON',
           'Leonardo PAVOLETTI',
           'Antonio CANDREVA',
-          'JOZABED'
+          'JOZABED',
+          'GIACCHERINI',
+          'RASHFORD'
         ],
         justin: [
           'Lionel MESSI',
@@ -196,7 +199,9 @@
           'GERVINHO',
           'Khouma BABACAR',
           'Ross BARKLEY',
-          'Stephan EL SHAARAWY'
+          'Stephan EL SHAARAWY',
+          'DANIEL CIOFANI',
+          'Emmanuel ADEBAYOR'
         ]
       };
 

@@ -177,9 +177,9 @@
         console.log('//////////////////////////////');
 
         if (Array.isArray(managerData)) {
-          console.warn('managerData can not be an array')
+          console.warn('managerData can not be an array');
           return false;
-        }
+        };
 
         var managerCore = {};
         var gameLogs = {};
@@ -201,12 +201,12 @@
             managerName: key,
             filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
             monthlyGoalsLog: manager.monthlyGoalsLog
-          }
+          };
 
           charts[key] = {
             managerName: key,
             chartData: manager.chartData
-          }
+          };
 
           angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
           angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
@@ -225,23 +225,27 @@
             }
 
             managerCore[key].players[player.id] = {
-              id: player.id,
+              player: {
+                id: player.id,
+                playerName: player.playerName,
+                injured: player.injured,
+                status: player.status,
+                pickNumber: player.pickNumber
+              },
+              manager: {
+                managerName: key
+              },
+              stats: {},
               active: !angular.isUndefinedOrNull(player.active) ? player.active : false,
-              playerName: player.playerName,
-              status: player.status,
-              team: {
-                teamName: player.teamName,
-                teamId: player.teamId,
-                teamLogo: player.teamLogo,
-              },
-              league: {
-                leagueName: player.leagueName,
-                leagueSlugs: player.leagueSlugs,
-              },
-              pickNumber: player.pickNumber,
-              injured: player.injured,
               dateOfTransaction: player.dateOfTransaction,
-              managerName: key
+              transactions: !angular.isUndefinedOrNull(player.transactions) ? player.transactions : [
+                {
+                  date: player.dateOfTransaction,
+                  status: player.status
+                }
+              ],
+              team: player.team,
+              league: player.league
             };
 
             angular.isDefined(player.seriGameLog) && delete player.seriGameLog;
@@ -256,7 +260,7 @@
           managerPlayers[key] = {
             managerName: key,
             players: manager.players
-          }
+          };
 
           angular.isDefined(manager.players) && delete manager.players;
 
@@ -266,7 +270,6 @@
           console.log('gameLogs test passsed');
         } else {
           console.log('gameLogs test failed');
-          debugger;
           return false;
         }
 
@@ -274,7 +277,6 @@
           console.log('charts test passsed');
         } else {
           console.log('charts test failed');
-          debugger;
           return false;
         }
 
@@ -284,10 +286,9 @@
           var hasPickNumber = _.allHaveProperty(managerPlayers, 'pickNumber');
 
           if (hasPickNumber) {
-            console.log('all players have a pickNumber property')
+            console.log('all players have a \'pickNumber\' property');
           } else {
-            console.log('all players DO NOT have pickNumber property');
-            debugger;
+            console.log('all players DO NOT have \'pickNumber\' property');
             return false;
           }
 
@@ -307,9 +308,9 @@
 
           console.log('managerCore test passsed');
 
-          _.each(managerCore, function(m) {
-            console.log('# of players', _.keys(m.players).length);
-          });
+          // _.each(managerCore, function(m) {
+          //   console.log('# of players', _.keys(m.players).length);
+          // });
 
           // _.each(managerCore, function(m) {
           //   return _.each(m.players, function(p) {
@@ -317,12 +318,42 @@
           //   });
           // });
 
-          var hasId = _.allHaveProperty(managerCore, 'id');
+          var hasPlayer = _.allHaveProperty(managerCore, 'player');
+
+          if (hasPlayer) {
+            console.log('all players have \'player\' property');
+          } else {
+            console.log('all players DO NOT have \'player\' property');
+            debugger;
+            return false;
+          }
+
+          var hasId = _.allHaveProperty(managerCore, 'player.id');
 
           if (hasId) {
-            console.log('all players have \'id\' property')
+            console.log('all players have \'player.id\' property');
           } else {
-            console.log('all players DO NOT have \'id\' property');
+            console.log('all players DO NOT have \'player.id\' property');
+            debugger;
+            return false;
+          }
+
+          var hasStatus = _.allHaveProperty(managerCore, 'player.status');
+
+          if (hasStatus) {
+            console.log('all players have \'player.status\' property');
+          } else {
+            console.log('all players DO NOT have \'player.status\' property');
+            debugger;
+            return false;
+          }
+
+          var hasPickNumber = _.allHaveProperty(managerCore, 'player.pickNumber');
+
+          if (hasPickNumber) {
+            console.log('all players have \'player.pickNumber\' property');
+          } else {
+            console.log('all players DO NOT have \'player.pickNumber\' property');
             debugger;
             return false;
           }
@@ -330,46 +361,26 @@
           var hasActive = _.allHaveProperty(managerCore, 'active');
 
           if (hasActive) {
-            console.log('all players have \'active\' property')
+            console.log('all players have \'active\' property');
           } else {
             console.log('all players DO NOT have \'active\' property');
             debugger;
             return false;
           }
 
-          var hasStatus = _.allHaveProperty(managerCore, 'status');
-
-          if (hasStatus) {
-            console.log('all players have \'status\' property')
-          } else {
-            console.log('all players DO NOT have \'status\' property');
-            debugger;
-            return false;
-          }
-
-          var hasPickNumber = _.allHaveProperty(managerCore, 'pickNumber');
-
-          if (hasPickNumber) {
-            console.log('all players have \'pickNumber\' property')
-          } else {
-            console.log('all players DO NOT have \'pickNumber\' property');
-            debugger;
-            return false;
-          }
-
-          var hasManagerName = _.allHaveProperty(managerCore, 'managerName');
+          var hasManagerName = _.allHaveProperty(managerCore, 'manager.managerName');
 
           if (hasManagerName) {
-            console.log('all players have \'managerName\' property')
+            console.log('all players have \'manager.managerName\' property');
           } else {
-            console.log('all players DO NOT have \'managerName\' property');
+            console.log('all players DO NOT have \'manager.managerName\' property');
             debugger;
             return false;
           }
           var hasDateOfTransaction = _.allHaveProperty(managerCore, 'dateOfTransaction');
 
           if (hasDateOfTransaction) {
-            console.log('all players have \'dateOfTransaction\' property')
+            console.log('all players have \'dateOfTransaction\' property');
           } else {
             console.log('all players DO NOT have \'dateOfTransaction\' property');
             debugger;
@@ -379,9 +390,29 @@
           var hasLeague = _.allHaveProperty(managerCore, 'league');
 
           if (hasLeague) {
-            console.log('all players have \'league\' property')
+            console.log('all players have \'league\' property');
           } else {
             console.log('all players DO NOT have \'league\' property');
+            debugger;
+            return false;
+          }
+
+          var hasLeagueName = _.allHaveProperty(managerCore, 'league.leagueName');
+
+          if (hasLeagueName) {
+            console.log('all players have \'league.leagueName\' property');
+          } else {
+            console.log('all players DO NOT have \'league.leagueName\' property');
+            debugger;
+            return false;
+          }
+
+          var hasLeagueSlugs = _.allHaveProperty(managerCore, 'league.leagueSlugs');
+
+          if (hasLeagueSlugs) {
+            console.log('all players have \'league.leagueSlugs\' property');
+          } else {
+            console.log('all players DO NOT have \'league.leagueSlugs\' property');
             debugger;
             return false;
           }
@@ -389,9 +420,49 @@
           var hasTeam = _.allHaveProperty(managerCore, 'team');
 
           if (hasTeam) {
-            console.log('all players have \'team\' property')
+            console.log('all players have \'team\' property');
           } else {
             console.log('all players DO NOT have \'team\' property');
+            debugger;
+            return false;
+          }
+
+          var hasTeamId = _.allHaveProperty(managerCore, 'team.teamId');
+
+          if (hasTeamId) {
+            console.log('all players have \'team.teamId\' property');
+          } else {
+            console.log('all players DO NOT have \'team.teamId\' property');
+            debugger;
+            return false;
+          }
+
+          var hasTeamName = _.allHaveProperty(managerCore, 'team.teamName');
+
+          if (hasTeamName) {
+            console.log('all players have \'team.teamName\' property');
+          } else {
+            console.log('all players DO NOT have \'team.teamName\' property');
+            debugger;
+            return false;
+          }
+
+          var hasTeamLogo = _.allHaveProperty(managerCore, 'team.teamLogo');
+
+          if (hasTeamLogo) {
+            console.log('all players have \'team.teamLogo\' property');
+          } else {
+            console.log('all players DO NOT have \'team.teamLogo\' property');
+            debugger;
+            return false;
+          }
+
+          var hasTransactions = _.allHaveProperty(managerCore, 'transactions');
+
+          if (hasTransactions) {
+            console.log('all players have \'transactions\' property');
+          } else {
+            console.log('all players DO NOT have \'transactions\' property');
             debugger;
             return false;
           }
@@ -405,30 +476,43 @@
         console.log('managerCore', managerCore);
         console.log('===============================');
 
-        // $scope.saveToFireBase({
-        //  data: managerData,
-        //  _lastSyncedOn: momentService.syncDate(),
-        // }, 'managerData');
+        $scope.saveToFireBase({
+          data: managerCore,
+          _lastSyncedOn: momentService.syncDate()
+        }, 'managerCore');
+
+        // .then(function() {
         //
-        // $scope.saveToFireBase({
-        //  data: managerPlayers,
-        //  _lastSyncedOn: momentService.syncDate()
-        // }, 'managerPlayers');
+        //   return $scope.saveToFireBase({
+        //     data: managerData,
+        //     _lastSyncedOn: momentService.syncDate(),
+        //   }, 'managerData');
         //
-        // $scope.saveToFireBase({
-        //  data: charts,
-        //  _lastSyncedOn: momentService.syncDate()
-        // }, 'charts');
+        // })
+        // .then(function() {
         //
-        // $scope.saveToFireBase({
-        //  data: gameLogs,
-        //  _lastSyncedOn: momentService.syncDate()
-        // }, 'gameLogs');
+        //   return $scope.saveToFireBase({
+        //    data: managerPlayers,
+        //    _lastSyncedOn: momentService.syncDate()
+        //   }, 'managerPlayers');
         //
-        // $scope.saveToFireBase({
-        //   data: managerCore,
-        //   _lastSyncedOn: momentService.syncDate()
-        // }, 'managerCore');
+        // })
+        // .then(function() {
+        //
+        //   return $scope.saveToFireBase({
+        //    data: charts,
+        //    _lastSyncedOn: momentService.syncDate()
+        //   }, 'charts');
+        //
+        // })
+        // .then(function() {
+        //
+        //   return $scope.saveToFireBase({
+        //    data: gameLogs,
+        //    _lastSyncedOn: momentService.syncDate()
+        //   }, 'gameLogs');
+        //
+        // });
 
       };
 
