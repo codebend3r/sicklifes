@@ -227,13 +227,14 @@
             managerCore[key].players[player.id] = {
               player: {
                 id: player.id,
-                playerName: player.playerName,
+                name: player.playerName,
+                image: player.playerImage,
                 injured: player.injured,
                 status: player.status,
                 pickNumber: player.pickNumber
               },
               manager: {
-                managerName: key
+                name: key
               },
               stats: {},
               active: !angular.isUndefinedOrNull(player.active) ? player.active : false,
@@ -328,7 +329,25 @@
             return false;
           }
 
-          var hasId = _.allHaveProperty(managerCore, 'player.id');
+          //var hasId = _.allHaveProperty(managerCore, 'player.id');
+          // var replaceKey = old.replace('.', '"]["');
+          // console.log('replaceKey:', replaceKey);
+          // var objectKeys = '[\'player\'][\'id\']';
+
+          var hasId = _.each(managerCore, function(m) {
+            var parentKey = key.split('.')[0];
+            var childKey = key.split('.')[1];
+            var checkChild = function(subObject) {
+              return !angular.isUndefinedOrNull(subObject);
+            };
+            return _.every(m.players, function(p) {
+              if (key.split('.').length > 1) {
+                return _.has(p, parentKey) && _.every(p[parentKey], checkChild);
+              } else {
+                return _.has(p, key);
+              }
+            });
+          });
 
           if (hasId) {
             console.log('all players have \'player.id\' property');
@@ -742,11 +761,38 @@
 
       };
 
+      var content;
+
+      $scope.showSpinner = function() {
+
+        $('#ui-view').addClass('hidden');
+        $('.page-loading').removeClass('hidden');
+
+      };
+
+      $scope.hideSpinner = function() {
+
+        $('#ui-view').removeClass('hidden');
+        $('.page-loading').addClass('hidden');
+
+      };
+
+      // $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      //   if (toState.resolve) {
+      //     $scope.showSpinner();
+      //   }
+      // });
+      // $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+      //   if (toState.resolve) {
+      //     $scope.hideSpinner();
+      //   }
+      // });
+
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
 
         console.log('state changed start');
 
-        $scope.loading = true;
+        $scope.showSpinner();
 
         if (toState.name === 'leagues') {
           if (!_.has(toParams, 'leagueName') || toParams.leagueName === '') {
@@ -755,8 +801,8 @@
           //console.log('go to league', toParams.leagueName);
           $state.go('leagues.tables', {leagueName: toParams.leagueName});
         } else if (toState.name === 'standings') {
-          console.log('toState', toState);
-          console.log('toParams:', toParams);
+          //console.log('toState', toState);
+          //console.log('toParams:', toParams);
           //if (!_.has(toParams, 'leagueName') || toParams.leagueName === '') {
           //  toParams.leagueName = 'epl';
           //}
@@ -767,10 +813,12 @@
       $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 
         console.log('state changed success');
-        $scope.loading = false;
+
+        $scope.hideSpinner();
 
       });
 
+      $scope.hideSpinner();
 
     });
 

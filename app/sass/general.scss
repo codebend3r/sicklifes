@@ -71,6 +71,11 @@ table.table {
 
 }
 
+.hidden {
+  display: none !important;
+  visibility: hidden !important;
+}
+
 .vertical-center {
   min-height: 100%; /* Fallback for browsers do NOT support vh unit */
   min-height: 3vh; /* These two lines are counted as one :-)       */

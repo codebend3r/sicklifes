@@ -29,6 +29,7 @@
     "angular-ui-router": "~0.2.15",
     "angular-ui-router-tabs": "~1.7.0",
     "chartist": "~0.9.4",
-    "slideout.js": "https://github.com/mango/slideout.git#^0.1.12"
+    "slideout.js": "https://github.com/mango/slideout.git#^0.1.12",
+    "underscore": "~1.8.3"
   }
 }

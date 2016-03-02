@@ -107,7 +107,7 @@
         var profileLeagueSlug;
 
         if (!angular.isUndefinedOrNull(player.active) && player.active === false) {
-          console.log('NOT ACTIVE', player.playerName, player.league.leagueName);
+          console.log('inactive:', player.playerName, player.league.leagueName);
           profileLeagueSlug = player.league.leagueName;
           //profileLeagueSlug = 'fmf';
         } else {
@@ -115,6 +115,13 @@
         }
 
         // reset assists
+        // player.stats = {
+        //   assists: 0,
+        //   shots: 0,
+        //   shotsOnGoal: 0,
+        //   goals: 0
+        // };
+
         player.assists = 0;
         player.shots = 0;
         player.shotsOnGoal = 0;
