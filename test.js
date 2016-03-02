@@ -16,29 +16,34 @@ var testObject = {
   }
 };
 
-var testKey = 'player.id.injuries';
+_.allHaveProperty = function(obj, key) {
 
-var allHaveProperty = function(testObject, testKey) {
-
-  var maxLevels = testKey.split('.').length;
+  var maxLevels = key.indexOf('.') !== -1 ? key.split('.').length : 1;
   var level = 0;
-  var currentObjectKey = testKey.split('.')[ level ];
-  var parentObj = testObject;
+  var currentObjectKey = key.split('.')[ level ];
+  var parentObj = obj;
+  var hasEverything = false;
 
   var checkObject = function() {
-    currentObjectKey = testKey.split('.')[ level ];
-    //console.log(parentObj, 'has', currentObjectKey, _.has(parentObj, currentObjectKey));
-    if (_.has(parentObj, currentObjectKey)) {
+    currentObjectKey = key.indexOf('.') !== -1 ? key.split('.')[ level ] : testKey;
+    if (!_.has(parentObj, currentObjectKey)) {
+      console.log('FAILED:', currentObjectKey, 'not found');
+      return false;
+    } else {
       parentObj = parentObj[currentObjectKey];
-    }
-    level += 1;
-    if (level < maxLevels) {
-      checkObject();
+      level += 1;
+      if (level < maxLevels) {
+        checkObject();
+      } else {
+        console.log('PASSED');
+        return true;
+      }
     }
   };
 
-  checkObject();
+  return checkObject();
 
 };
 
-hasId();
+var test1 = _.allHaveProperty(testObject, 'player.id.injuries');
+console.log(test1);

@@ -96,6 +96,22 @@
 
       };
 
+      /**
+       * @name allManagersPlayersHave
+       * @description TODO
+       */
+      var allManagersPlayersHave = function(obj, key) {
+        return _.every(obj, function(m) {
+          if (_.isUndefined(m.players)) {
+            console.log('this manager does not have players', m);
+          };
+          return !_.isUndefined(m.players) && _.every(m.players, function(p) {
+            //console.log(p.player.name, p.team, _.allHaveProperty(p, key));
+            return _.allHaveProperty(p, key);
+          });
+        });
+      };
+
       /*user.getCurrent().then(function (currentUser) {
        //console.log('currentUser:', currentUser);
        $rootScope.user = currentUser;
@@ -224,6 +240,11 @@
               };
             }
 
+            // if (angular.isUndefinedOrNull(player.league) || angular.isUndefinedOrNull(player.league.leagueName) || angular.isUndefinedOrNull(player.league.leagueSlugs)) {
+            //   console.log('player', player);
+            //   debugger;
+            // }
+
             managerCore[key].players[player.id] = {
               player: {
                 id: player.id,
@@ -245,16 +266,35 @@
                   status: player.status
                 }
               ],
-              team: player.team,
-              league: player.league
+              team: {
+                id: player.teamId || player.team.teamId,
+                name: player.teamName || player.team.teamName,
+                logo: player.teamLogo || player.team.teamLogo
+              },
+              league: {
+                name: player.leagueName || player.league.leagueName,
+                slugs: player.leagueSlugs || player.league.leagueSlugs
+              }
             };
 
+            // clean up
             angular.isDefined(player.seriGameLog) && delete player.seriGameLog;
             angular.isDefined(player.eplGameLog) && delete player.eplGameLog;
             angular.isDefined(player.ligaGameLog) && delete player.ligaGameLog;
             angular.isDefined(player.chlgGameLog) && delete player.chlgGameLog;
             angular.isDefined(player.euroGameLog) && delete player.euroGameLog;
             angular.isDefined(player.allLeaguesName) && delete player.allLeaguesName;
+            angular.isDefined(player.id) && delete player.id;
+            angular.isDefined(player.playerName) && delete player.playerName;
+            angular.isDefined(player.playerImage) && delete player.playerImage;
+            angular.isDefined(player.injured) && delete player.injured;
+            angular.isDefined(player.status) && delete player.status;
+            angular.isDefined(player.pickNumber) && delete player.pickNumber;
+            angular.isDefined(player.teamId) && delete player.teamId;
+            angular.isDefined(player.teamName) && delete player.teamName;
+            angular.isDefined(player.teamLogo) && delete player.teamLogo;
+            angular.isDefined(player.leagueName) && delete player.leagueName;
+            angular.isDefined(player.leagueSlugs) && delete player.leagueSlugs;
 
           });
 
@@ -267,43 +307,52 @@
 
         });
 
-        if (_.hasDeepProperty(gameLogs, 'managerName') && _.hasDeepProperty(gameLogs, 'filteredMonthlyGoalsLog') && _.hasDeepProperty(gameLogs, 'monthlyGoalsLog')) {
-          console.log('gameLogs test passsed');
-        } else {
-          console.log('gameLogs test failed');
-          return false;
-        }
+        //////////////////////////////////
 
-        if (_.hasDeepProperty(charts, 'managerName') && _.hasDeepProperty(charts, 'chartData')) {
-          console.log('charts test passsed');
-        } else {
-          console.log('charts test failed');
-          return false;
-        }
+        console.log('===============================');
+        console.log('managerCore', managerCore);
+        console.log('===============================');
 
-        if (_.hasDeepProperty(managerPlayers, 'managerName') && _.hasDeepProperty(managerPlayers, 'players')) {
-          console.log('managerPlayers test passsed');
-
-          var hasPickNumber = _.allHaveProperty(managerPlayers, 'pickNumber');
-
-          if (hasPickNumber) {
-            console.log('all players have a \'pickNumber\' property');
-          } else {
-            console.log('all players DO NOT have \'pickNumber\' property');
-            return false;
-          }
-
-        } else {
-          console.log('managerPlayers test failed');
-          return false;
-        }
-
-        if (_.hasDeepProperty(managerData, 'managerName') && _.hasDeepProperty(managerData, 'totalPoints') && _.hasDeepProperty(managerData, 'totalGoals')) {
-          console.log('managerData test passsed');
-        } else {
-          console.log('managerData test failed');
-          return false;
-        }
+        // if (_.hasDeepProperty(gameLogs, 'managerName') && _.hasDeepProperty(gameLogs, 'filteredMonthlyGoalsLog') && _.hasDeepProperty(gameLogs, 'monthlyGoalsLog')) {
+        //   console.log('gameLogs test passsed');
+        // } else {
+        //   console.log('gameLogs test failed');
+        //   return false;
+        // }
+        //
+        // if (_.hasDeepProperty(charts, 'managerName') && _.hasDeepProperty(charts, 'chartData')) {
+        //   console.log('charts test passsed');
+        // } else {
+        //   console.log('charts test failed');
+        //   return false;
+        // }
+        //
+        // if (_.hasDeepProperty(managerPlayers, 'managerName') && _.hasDeepProperty(managerPlayers, 'players')) {
+        //   console.log('managerPlayers test passsed');
+        //
+        //   var hasPickNumber = allManagersPlayersHave(managerPlayers, 'player');
+        //
+        //   if (hasPickNumber) {
+        //     console.log('all players have a \'player\' property');
+        //   } else {
+        //     console.log('all players DO NOT have \'player\' property');
+        //     debugger;
+        //     return false;
+        //   }
+        //
+        // } else {
+        //   console.log('managerPlayers test failed');
+        //   debugger;
+        //   return false;
+        // }
+        //
+        // if (_.hasDeepProperty(managerData, 'managerName') && _.hasDeepProperty(managerData, 'totalPoints') && _.hasDeepProperty(managerData, 'totalGoals')) {
+        //   console.log('managerData test passsed');
+        // } else {
+        //   console.log('managerData test failed');
+        //   debugger;
+        //   return false;
+        // }
 
         if (_.hasDeepProperty(managerCore, 'managerName') && _.hasDeepProperty(managerCore, 'players')) {
 
@@ -319,7 +368,7 @@
           //   });
           // });
 
-          var hasPlayer = _.allHaveProperty(managerCore, 'player');
+          var hasPlayer = allManagersPlayersHave(managerCore, 'player');
 
           if (hasPlayer) {
             console.log('all players have \'player\' property');
@@ -329,27 +378,9 @@
             return false;
           }
 
-          //var hasId = _.allHaveProperty(managerCore, 'player.id');
-          // var replaceKey = old.replace('.', '"]["');
-          // console.log('replaceKey:', replaceKey);
-          // var objectKeys = '[\'player\'][\'id\']';
+          var hasPlayerId = allManagersPlayersHave(managerCore, 'player.id');
 
-          var hasId = _.each(managerCore, function(m) {
-            var parentKey = key.split('.')[0];
-            var childKey = key.split('.')[1];
-            var checkChild = function(subObject) {
-              return !angular.isUndefinedOrNull(subObject);
-            };
-            return _.every(m.players, function(p) {
-              if (key.split('.').length > 1) {
-                return _.has(p, parentKey) && _.every(p[parentKey], checkChild);
-              } else {
-                return _.has(p, key);
-              }
-            });
-          });
-
-          if (hasId) {
+          if (hasPlayerId) {
             console.log('all players have \'player.id\' property');
           } else {
             console.log('all players DO NOT have \'player.id\' property');
@@ -357,7 +388,17 @@
             return false;
           }
 
-          var hasStatus = _.allHaveProperty(managerCore, 'player.status');
+          var hasPlayerName = allManagersPlayersHave(managerCore, 'player.name');
+
+          if (hasPlayerName) {
+            console.log('all players have \'player.name\' property');
+          } else {
+            console.log('all players DO NOT have \'player.name\' property');
+            debugger;
+            return false;
+          }
+
+          var hasStatus = allManagersPlayersHave(managerCore, 'player.status');
 
           if (hasStatus) {
             console.log('all players have \'player.status\' property');
@@ -367,7 +408,7 @@
             return false;
           }
 
-          var hasPickNumber = _.allHaveProperty(managerCore, 'player.pickNumber');
+          var hasPickNumber = allManagersPlayersHave(managerCore, 'player.pickNumber');
 
           if (hasPickNumber) {
             console.log('all players have \'player.pickNumber\' property');
@@ -377,7 +418,27 @@
             return false;
           }
 
-          var hasActive = _.allHaveProperty(managerCore, 'active');
+          var hasManager = allManagersPlayersHave(managerCore, 'manager');
+
+          if (hasManager) {
+            console.log('all players have \'manager\' property');
+          } else {
+            console.log('all players DO NOT have \'manager\' property');
+            debugger;
+            return false;
+          }
+
+          var hasManagerName = allManagersPlayersHave(managerCore, 'manager.name');
+
+          if (hasManagerName) {
+            console.log('all players have \'manager.name\' property');
+          } else {
+            console.log('all players DO NOT have \'manager.name\' property');
+            debugger;
+            return false;
+          }
+
+          var hasActive = allManagersPlayersHave(managerCore, 'active');
 
           if (hasActive) {
             console.log('all players have \'active\' property');
@@ -387,16 +448,8 @@
             return false;
           }
 
-          var hasManagerName = _.allHaveProperty(managerCore, 'manager.managerName');
 
-          if (hasManagerName) {
-            console.log('all players have \'manager.managerName\' property');
-          } else {
-            console.log('all players DO NOT have \'manager.managerName\' property');
-            debugger;
-            return false;
-          }
-          var hasDateOfTransaction = _.allHaveProperty(managerCore, 'dateOfTransaction');
+          var hasDateOfTransaction = allManagersPlayersHave(managerCore, 'dateOfTransaction');
 
           if (hasDateOfTransaction) {
             console.log('all players have \'dateOfTransaction\' property');
@@ -406,7 +459,7 @@
             return false;
           }
 
-          var hasLeague = _.allHaveProperty(managerCore, 'league');
+          var hasLeague = allManagersPlayersHave(managerCore, 'league');
 
           if (hasLeague) {
             console.log('all players have \'league\' property');
@@ -416,27 +469,27 @@
             return false;
           }
 
-          var hasLeagueName = _.allHaveProperty(managerCore, 'league.leagueName');
+          var hasLeagueName = allManagersPlayersHave(managerCore, 'league.name');
 
           if (hasLeagueName) {
-            console.log('all players have \'league.leagueName\' property');
+            console.log('all players have \'league.name\' property');
           } else {
-            console.log('all players DO NOT have \'league.leagueName\' property');
+            console.log('all players DO NOT have \'league.name\' property');
             debugger;
             return false;
           }
 
-          var hasLeagueSlugs = _.allHaveProperty(managerCore, 'league.leagueSlugs');
+          var hasLeagueSlugs = allManagersPlayersHave(managerCore, 'league.slugs');
 
           if (hasLeagueSlugs) {
-            console.log('all players have \'league.leagueSlugs\' property');
+            console.log('all players have \'league.slugs\' property');
           } else {
-            console.log('all players DO NOT have \'league.leagueSlugs\' property');
+            console.log('all players DO NOT have \'league.slugs\' property');
             debugger;
             return false;
           }
 
-          var hasTeam = _.allHaveProperty(managerCore, 'team');
+          var hasTeam = allManagersPlayersHave(managerCore, 'team');
 
           if (hasTeam) {
             console.log('all players have \'team\' property');
@@ -446,37 +499,37 @@
             return false;
           }
 
-          var hasTeamId = _.allHaveProperty(managerCore, 'team.teamId');
+          var hasTeamId = allManagersPlayersHave(managerCore, 'team.id');
 
           if (hasTeamId) {
-            console.log('all players have \'team.teamId\' property');
+            console.log('all players have \'team.id\' property');
           } else {
-            console.log('all players DO NOT have \'team.teamId\' property');
+            console.log('all players DO NOT have \'team.id\' property');
             debugger;
             return false;
           }
 
-          var hasTeamName = _.allHaveProperty(managerCore, 'team.teamName');
+          var hasTeamName = allManagersPlayersHave(managerCore, 'team.name');
 
           if (hasTeamName) {
-            console.log('all players have \'team.teamName\' property');
+            console.log('all players have \'team.name\' property');
           } else {
-            console.log('all players DO NOT have \'team.teamName\' property');
+            console.log('all players DO NOT have \'team.name\' property');
             debugger;
             return false;
           }
 
-          var hasTeamLogo = _.allHaveProperty(managerCore, 'team.teamLogo');
+          var hasTeamLogo = allManagersPlayersHave(managerCore, 'team.logo');
 
           if (hasTeamLogo) {
-            console.log('all players have \'team.teamLogo\' property');
+            console.log('all players have \'team.logo\' property');
           } else {
-            console.log('all players DO NOT have \'team.teamLogo\' property');
+            console.log('all players DO NOT have \'team.logo\' property');
             debugger;
             return false;
           }
 
-          var hasTransactions = _.allHaveProperty(managerCore, 'transactions');
+          var hasTransactions = allManagersPlayersHave(managerCore, 'transactions');
 
           if (hasTransactions) {
             console.log('all players have \'transactions\' property');
@@ -491,14 +544,12 @@
           return false;
         }
 
-        console.log('===============================');
-        console.log('managerCore', managerCore);
-        console.log('===============================');
+        //////////////////////////////////
 
-        $scope.saveToFireBase({
-          data: managerCore,
-          _lastSyncedOn: momentService.syncDate()
-        }, 'managerCore');
+        // $scope.saveToFireBase({
+        //   data: managerCore,
+        //   _lastSyncedOn: momentService.syncDate()
+        // }, 'managerCore');
 
         // .then(function() {
         //
