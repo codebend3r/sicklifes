@@ -256,7 +256,7 @@
             angular.isDefined(p.id) && delete p.id;
             angular.isDefined(p.playerName) && delete p.playerName;
             angular.isDefined(p.playerImage) && delete p.playerImage;
-            angular.isDefined(p.injured) && delete p.injured;
+            //angular.isDefined(p.injured) && delete p.injured;
             angular.isDefined(p.status) && delete p.status;
             angular.isDefined(p.pickNumber) && delete p.pickNumber;
             angular.isDefined(p.teamId) && delete p.teamId;
@@ -353,7 +353,7 @@
           //   });
           // });
 
-          var hasPlayer = _.allManagersPlayersHave(managerCore, 'player');
+          var hasPlayer = _.allHaveProperty(managerCore, 'player');
 
           if (hasPlayer) {
             console.log('all players have \'player\' property');
@@ -363,7 +363,7 @@
             return false;
           }
 
-          var hasPlayerId = _.allManagersPlayersHave(managerCore, 'player.id');
+          var hasPlayerId = _.allHaveProperty(managerCore, 'player.id');
 
           if (hasPlayerId) {
             console.log('all players have \'player.id\' property');
@@ -373,7 +373,7 @@
             return false;
           }
 
-          var hasPlayerName = _.allManagersPlayersHave(managerCore, 'player.name');
+          var hasPlayerName = _.allHaveProperty(managerCore, 'player.name');
 
           if (hasPlayerName) {
             console.log('all players have \'player.name\' property');
@@ -383,7 +383,7 @@
             return false;
           }
 
-          var hasStatus = _.allManagersPlayersHave(managerCore, 'player.status');
+          var hasStatus = _.allHaveProperty(managerCore, 'player.status');
 
           if (hasStatus) {
             console.log('all players have \'player.status\' property');
@@ -393,12 +393,22 @@
             return false;
           }
 
-          var hasImage = _.allManagersPlayersHave(managerCore, 'player.image');
+          var hasImage = _.allHaveProperty(managerCore, 'player.image');
 
           if (hasImage) {
             console.log('all players have \'player.image\' property');
           } else {
             console.log('all players DO NOT have \'player.image\' property');
+            debugger;
+            return false;
+          }
+
+          var shouldFail = _.allHaveProperty(managerCore, 'player.dfsfsfs');
+
+          if (shouldFail) {
+            console.log('all players have \'player.dfsfsfs\' property');
+          } else {
+            console.log('all players DO NOT have \'player.dfsfsfs\' property');
             debugger;
             return false;
           }
