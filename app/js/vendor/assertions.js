@@ -6,6 +6,22 @@
       });
   };
 
+  /**
+   * @name allManagersPlayersHave
+   * @description TODO
+   */
+  _.allManagersPlayersHave = function(obj, key) {
+    return _.every(obj, function(m) {
+      if (_.isUndefined(m.players)) {
+        console.log('this manager does not have players', m);
+        throw new Error('this player does have the property', key, p.player.name);
+      };
+      return !_.isUndefined(m.players) && _.every(m.players, function(p) {
+        return _.allHaveProperty(p, key);
+      });
+    });
+  };
+
   _.allHaveProperty = function(obj, key) {
     var maxLevels = key.indexOf('.') !== -1 ? key.split('.').length : 1,
       level = 0,

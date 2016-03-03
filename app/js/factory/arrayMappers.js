@@ -90,9 +90,9 @@
        * @param player - the player object, used in the loop to get sub property
        * @param result - result data passed in from api call
        */
-      arrayMapper.playerInfo = function (player, result) {
+      arrayMapper.playerInfo = function (p, result) {
 
-        player.activeLeagues = {
+        p.activeLeagues = {
           playedInLigaGames: false,
           playedInEPLGames: false,
           playedInSeriGames: false,
@@ -100,45 +100,58 @@
           playedInEuroGames: false
         };
 
-        if (player.status === 'drafted') {
-          player.dateOfTransaction = transferDates.leagueStart.date;
+        if (p.status === 'drafted') {
+          p.dateOfTransaction = transferDates.leagueStart.date;
         }
 
         var profileLeagueSlug;
 
-        if (!angular.isUndefinedOrNull(player.active) && player.active === false) {
-          console.log('inactive:', player.playerName, player.league.leagueName);
-          profileLeagueSlug = player.league.leagueName;
+        if (!angular.isUndefinedOrNull(p.active) && p.active === false) {
+          console.log('inactive:', p.playerName, p.league.leagueName);
+          profileLeagueSlug = p.league.leagueName;
           //profileLeagueSlug = 'fmf';
         } else {
           profileLeagueSlug = textManipulator.getLeagueSlug(result);
         }
 
         // reset assists
-        // player.stats = {
-        //   assists: 0,
-        //   shots: 0,
-        //   shotsOnGoal: 0,
-        //   goals: 0
-        // };
+        p.stats = {
+          assists: 0,
+          shots: 0,
+          shotsOnGoal: 0,
+          goals: 0
+        };
 
-        player.assists = 0;
-        player.shots = 0;
-        player.shotsOnGoal = 0;
+        if (!angular.isUndefinedOrNull(p.team) && _.keys(p.team) !== ['id', 'name', 'image', 'injured', 'status', 'pickNumber']) {
+          p.player = {
+            id: result.data.id,
+            name: textManipulator.formattedFullName(result.data.first_name, result.data.last_name),
+            status: p.status,
+            image: result.data.headshots.w192xh192,
+            pickNumber: p.pickNumber
+          };
 
-        // url for player image
-        player.playerImage = result.data.headshots.w192xh192;
+          // if (result.data.headshots.w192xh192) {
+          //   p.player.image = result.data.headshots.w192xh192;
+          // } else {
+          //   cnsole.log('image not defined', p.player.name);
+          // }
+        }
+
+        if (!angular.isUndefinedOrNull(p.league) && _.keys(p.league) !== ['name', 'slugs']) {
+          p.league = {
+            name: p.leagueName || p.league.leagueName,
+            slugs: p.leagueSlugs || p.league.leagueSlugs
+          };
+        }
 
         // returns a concat string with all valid leagues
-        player.allLeaguesName = textManipulator.validLeagueNamesFormatted(result);
+        p.allLeaguesName = textManipulator.validLeagueNamesFormatted(result);
 
         // based on player result data return an object with the valid leagues for this player
-        player.validLeagues = textManipulator.getPlayerValidLeagues(result);
+        p.validLeagues = textManipulator.getPlayerValidLeagues(result);
 
-        // set player name
-        player.playerName = textManipulator.formattedFullName(result.data.first_name, result.data.last_name);
-
-        return apiFactory.getPlayerProfile(profileLeagueSlug, player.id);
+        return apiFactory.getPlayerProfile(profileLeagueSlug, result.data.id);
 
       };
 
@@ -148,9 +161,9 @@
        * @param player - player object
        * @param result
        */
-      arrayMapper.playerMapPersonalInfo = function (player, result) {
+      arrayMapper.playerMapPersonalInfo = function (p, result) {
 
-        player.bio = {
+        p.bio = {
           position: result.data.position,
           pos: result.data.position_abbreviation,
           weight: result.data.weight,
@@ -159,30 +172,28 @@
           birthplace: result.data.birth_city + ', ' + result.data.birth_country
         };
 
-        player.injured = result.data.injury !== null;
+        // console.log('injured is undefined', _.isUndefined(result.data.injury), p.player.name);
+        // p.player.injured = !_.isUndefined(result.data.injury) && result.data.injury !== null;
 
-        if (angular.isDefined(result.data.team)) {
-          player.team = player.team || {};
-          angular.isUndefinedOrNull(player.team.teamId) && (player.team.teamId = result.data.team.id);
-          angular.isUndefinedOrNull(player.team.teamName) && (player.team.teamName = result.data.team.full_name);
-          angular.isUndefinedOrNull(player.team.teamLogo) && (player.team.teamLogo = result.data.team.logos.large);
-        } else if (!angular.isUndefinedOrNull(player.active) && player.active === false) {
-          player.team = player.team || {};
-          angular.isUndefinedOrNull(player.team.teamId) && (player.team.teamId = result.data.team.id);
-          angular.isUndefinedOrNull(player.team.teamName) && (player.team.teamName = result.data.team.full_name);
-          angular.isUndefinedOrNull(player.team.teamLogo) && (player.team.teamLogo = result.data.team.logos.large);
+        p.team = p.team || {};
+
+        if (result.data.team) {
+          p.team.id = result.data.team.id;
+          p.team.name = result.data.team.full_name;
+          if (result.data.team.logos.large) {
+            p.team.logo = result.data.team.logos.large;
+          } else {
+            console.log('not defined', result.data.team.logos.large);
+            p.team.logo = '';
+          }
         }
 
-        if (player.id === 1792) {
-          console.log('player', player);
-        }
-
-        if (angular.isUndefinedOrNull(managersService.findPlayerInManagers(player.id).manager)) {
-          player.status = 'free agent';
-        } else {
-          //player.status = managersService.findPlayerInManagers(player.id).player.status;
-          player.status = player.status;
-        }
+        // if (angular.isUndefinedOrNull(managersService.findPlayerInManagers(p.player.id).manager)) {
+        //   p.status = 'free agent';
+        // } else {
+        //   //player.status = managersService.findPlayerInManagers(player.id).player.status;
+        //   p.status = p.status;
+        // }
 
       };
 
@@ -234,11 +245,11 @@
             player.leagueName = 'LIGA';
             var foundTeam = _.where($rootScope.leagueTables.liga, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.ligaCompleteLog.length)) {
-              player.playedInLigaGames = true;
+              player.activeLeagues.playedInLigaGames = true;
               player.leagueName = 'LIGA';
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'liga' : '/liga';
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.playedInLigaGames && player.status !== 'dropped') manager.ligaCount += 1;
+                if (player.activeLeagues.playedInLigaGames && player.status !== 'dropped') manager.ligaCount += 1;
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.ligaCompleteLog).filter(arrayFilter.filterOutUndefined);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.ligaFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
@@ -279,11 +290,11 @@
             player.leagueName = 'EPL';
             var foundTeam = _.where($rootScope.leagueTables.epl, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.eplCompleteLog.length)) {
-              player.playedInEPLGames = true;
+              player.activeLeagues.playedInEPLGames = true;
               player.leagueName = 'EPL';
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'epl' : '/epl';
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.playedInEPLGames && player.status !== 'dropped') manager.eplCount += 1;
+                if (player.activeLeagues.playedInEPLGames && player.status !== 'dropped') manager.eplCount += 1;
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.eplCompleteLog).filter(arrayFilter.filterOutUndefined);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.eplFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
@@ -333,11 +344,11 @@
             player.leagueName = 'SERI';
             var foundTeam = _.where($rootScope.leagueTables.seri, {teamName: player.teamName});
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.seriCompleteLog.length)) {
-              player.playedInSeriGames = true;
+              player.activeLeagues.playedInSeriGames = true;
               player.leagueName = 'SERI';
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'seri' : '/seri';
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.playedInSeriGames && player.status !== 'dropped') manager.seriCount += 1;
+                if (player.activeLeagues.playedInSeriGames && player.status !== 'dropped') manager.seriCount += 1;
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.seriCompleteLog).filter(arrayFilter.filterOutUndefined);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.seriFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
@@ -382,11 +393,11 @@
               player.leagueName = 'CHLG';
             }
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.chlgCompleteLogs.length)) {
-              player.playedInChlgGames = true;
+              player.activeLeagues.playedInChlgGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'chlg' : '/chlg';
               player.tournamentLeagueName = textManipulator.formattedLeagueName('chlg');
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.playedInChlgGames) manager.chlgCount += 1;
+                if (player.activeLeagues.playedInChlgGames) manager.chlgCount += 1;
                 manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.chlgCompleteLogs).filter(arrayFilter.filterOutUndefined);
                 manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.chlgFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
@@ -427,13 +438,12 @@
               }));
 
             var foundTeam = _.where($rootScope.leagueTables.uefa, {teamName: player.teamName});
-            //if (foundTeam && _.keys(validLeagues) === ['inEuro'] && angular.isUndefinedOrNull(validLeagues.inSeri) && angular.isUndefinedOrNull(validLeagues.inLiga) && angular.isUndefinedOrNull(validLeagues.inEPL)) {
             if (foundTeam && _.keys(validLeagues) === ['inEuro']) {
               console.log(player.playerName, 'is EURO', _.keys(validLeagues));
               player.leagueName = 'EURO';
             }
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.euroCompleteLogs.length)) {
-              player.playedInEuroGames = true;
+              player.activeLeagues.playedInEuroGames = true;
               player.leagueSlugs += player.leagueSlugs.length === 0 ? 'euro' : '/euro';
               player.tournamentLeagueName = textManipulator.formattedLeagueName('uefa');
             } else if (player.gameLogs.euroCompleteLogs.length === 0) {
@@ -442,7 +452,7 @@
             }
 
             if (!angular.isUndefinedOrNull(manager)) {
-              if (player.playedInEuroGames) manager.euroCount += 1;
+              if (player.activeLeagues.playedInEuroGames) manager.euroCount += 1;
               manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.euroCompleteLogs).filter(arrayFilter.filterOutUndefined);
               manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.euroFilteredGameLog).filter(arrayFilter.filterOutUndefined);
             }
