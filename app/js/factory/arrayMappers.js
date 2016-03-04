@@ -172,9 +172,6 @@
           birthplace: result.data.birth_city + ', ' + result.data.birth_country
         };
 
-        // console.log('injured is undefined', _.isUndefined(result.data.injury), p.player.name);
-        // p.player.injured = !_.isUndefined(result.data.injury) && result.data.injury !== null;
-
         p.team = p.team || {};
 
         if (result.data.team) {
@@ -483,10 +480,10 @@
 
         var owner = 'Free Agent';
 
-        _.some($rootScope.managerData.data, function (manager) {
-          _.some(manager.players, function (p) {
+        _.some($rootScope.managerData.data, function (m) {
+          _.some(m.players, function (p) {
             if (p.id === id) {
-              owner = manager.managerName;
+              owner = m.manager.name;
               return true;
             }
           });

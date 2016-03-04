@@ -353,7 +353,7 @@
           //   });
           // });
 
-          var hasPlayer = _.allHaveProperty(managerCore, 'player');
+          var hasPlayer = _.allManagersPlayersHave(managerCore, 'player');
 
           if (hasPlayer) {
             console.log('all players have \'player\' property');
@@ -363,7 +363,7 @@
             return false;
           }
 
-          var hasPlayerId = _.allHaveProperty(managerCore, 'player.id');
+          var hasPlayerId = _.allManagersPlayersHave(managerCore, 'player.id');
 
           if (hasPlayerId) {
             console.log('all players have \'player.id\' property');

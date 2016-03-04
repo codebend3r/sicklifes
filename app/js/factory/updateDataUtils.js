@@ -93,56 +93,61 @@
        * @param manager
        * @returns {promise}
        */
-      updateDataUtils.updateManagerData = function (manager) {
+      updateDataUtils.updateManagerData = function (m) {
 
         console.log('updateDataUtils.updateManagerData()');
 
         var defer = $q.defer();
         var current = 0;
         var total = 0;
-        var requestPlayer = function (player) {
+        var requestPlayer = function (p) {
 
-          player = objectUtils.playerResetGoalPoints(player);
+          p = objectUtils.playerResetGoalPoints(p);
 
-          manager.monthlyGoalsLog = [];
-          manager.filteredMonthlyGoalsLog = [];
-          manager.charts = [];
+          p.manager = {
+            id: p.manager && p.manager.id || Math.round((Math.random() * 100)),
+            name: m.managerName
+          };
 
-          apiFactory.getPlayerProfile('soccer', player.id)
-            .then(arrayMappers.playerInfo.bind(this, player), function () {
-              console.log('failed at player info mapping:', player.playerName);
+          m.monthlyGoalsLog = [];
+          m.filteredMonthlyGoalsLog = [];
+          m.charts = [];
+
+          apiFactory.getPlayerProfile('soccer', p.id)
+            .then(arrayMappers.playerInfo.bind(this, p), function () {
+              console.log('failed at player info mapping:', p.player.name);
             })
-            .then(arrayMappers.playerMapPersonalInfo.bind(this, player), function () {
-              console.log('failed at player personal info mapping:', player.playerName);
+            .then(arrayMappers.playerMapPersonalInfo.bind(this, p), function () {
+              console.log('failed at player personal info mapping:', p.player.name);
             })
             .then(arrayMappers.playerGamesLog.bind(this, {
-              player: player,
-              manager: manager
+              player: p,
+              manager: m
             }), function () {
-              console.log('failed at player game logs', player.playerName);
+              console.log('failed at player game logs', p.player.name);
             })
             .then(function (result) {
               current += 1;
-              //console.log('COMPLETED:', player.playerName, Math.round((current / total) * 100));
+              //console.log('COMPLETED:', p.playerName, Math.round((current / total) * 100));
               if (current === total) {
-                console.log('RESOLVE PROMISE:', manager.managerName);
+                console.log('RESOLVE PROMISE:', p.manager.name);
                 console.log('///////////////////////////////////////');
-                defer.resolve(manager);
+                defer.resolve(m);
               }
             }, function () {
-              console.log('failed at final stage:', player.playerName);
+              console.log('failed at final stage:', p.player.name);
             });
 
         };
 
-        if (angular.isDefined(manager.players)) {
+        if (angular.isDefined(m.players)) {
 
           // reset goal counts
-          manager = objectUtils.cleanManager(manager, true);
-          manager._lastSyncedOn = momentService.syncDate();
+          m = objectUtils.cleanManager(m, true);
+          m._lastSyncedOn = momentService.syncDate();
 
-          total = _.keys(manager.players).length;
-          _.each(manager.players, requestPlayer);
+          total = _.keys(m.players).length;
+          _.each(m.players, requestPlayer);
 
         } else {
           console.warn('try again, object does not contain \'players\' property');
