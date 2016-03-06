@@ -353,7 +353,13 @@
           //   });
           // });
 
-          var hasPlayer = _.allManagersPlayersHave(managerCore, 'player');
+          // var hasPlayer = _.allManagersPlayersHave(managerCore, 'player');
+          var hasPlayer = _.every(managerCore, function(m) {
+            return !angular.isUndefinedOrNull(m.players) && _.every(m.players, function(eachPlayer) {
+              return !angular.isUndefinedOrNull(eachPlayer['player']);
+            });
+          });
+
 
           if (hasPlayer) {
             console.log('all players have \'player\' property');
@@ -363,7 +369,33 @@
             return false;
           }
 
-          var hasPlayerId = _.allManagersPlayersHave(managerCore, 'player.id');
+          var key = 'player.id';
+          var obj = managerCore;
+
+          // var hasPlayerId = _.allManagersPlayersHave(managerCore, 'player.id');
+          var hasPlayerId = _.every(obj, function(m) {
+
+            var maxLevels = key.indexOf('.') !== -1 && key.split('.').length,
+              level = 0,
+              currentObjectKey = key.split('.')[ level ];
+
+            var checkObject = function(parentObj) {
+              currentObjectKey = key.indexOf('.') !== -1 ? key.split('.')[ level ] : key;
+              console.log(parentObj, currentObjectKey, parentObj[currentObjectKey]);
+              if (angular.isUndefinedOrNull(parentObj[currentObjectKey])) {
+                throw new Error('FAILED: could not find property', currentObjectKey, 'in', parentObj);
+                return false;
+              } else {
+                level += 1;
+                if (level < maxLevels) {
+                  return !angular.isUndefinedOrNull(parentObj[currentObjectKey]) && (console.log(parentObj[currentObjectKey])) && checkObject(parentObj[currentObjectKey]);
+                } else {
+                  return true;
+                }
+              }
+            };
+            return checkObject(m.players);
+          });
 
           if (hasPlayerId) {
             console.log('all players have \'player.id\' property');
@@ -373,7 +405,13 @@
             return false;
           }
 
-          var hasPlayerName = _.allHaveProperty(managerCore, 'player.name');
+          //var hasPlayerName = _.allManagersPlayersHave(managerCore, 'player.name');
+          var hasPlayerName = _.every(managerCore, function(m) {
+            return !angular.isUndefinedOrNull(m.players) && _.every(m.players, function(eachPlayer) {
+              console.log(!angular.isUndefinedOrNull(eachPlayer['player.name']), eachPlayer['player.name']);
+              return !angular.isUndefinedOrNull(eachPlayer['player.name']);
+            });
+          });
 
           if (hasPlayerName) {
             console.log('all players have \'player.name\' property');
@@ -383,7 +421,7 @@
             return false;
           }
 
-          var hasStatus = _.allHaveProperty(managerCore, 'player.status');
+          var hasStatus = _.allManagersPlayersHave(managerCore, 'player.status');
 
           if (hasStatus) {
             console.log('all players have \'player.status\' property');
@@ -393,7 +431,7 @@
             return false;
           }
 
-          var hasImage = _.allHaveProperty(managerCore, 'player.image');
+          var hasImage = _.allManagersPlayersHave(managerCore, 'player.image');
 
           if (hasImage) {
             console.log('all players have \'player.image\' property');
@@ -403,7 +441,7 @@
             return false;
           }
 
-          var shouldFail = _.allHaveProperty(managerCore, 'player.dfsfsfs');
+          var shouldFail = _.allManagersPlayersHave(managerCore, 'player.dfsfsfs');
 
           if (shouldFail) {
             console.log('all players have \'player.dfsfsfs\' property');

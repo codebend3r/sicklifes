@@ -129,6 +129,26 @@
             .then(function (result) {
               current += 1;
               //console.log('COMPLETED:', p.playerName, Math.round((current / total) * 100));
+
+              if (angular.isUndefinedOrNull(p.league)) {
+                console.warn('no p.league property', p);
+              }
+
+              if (angular.isUndefinedOrNull(p.league.name)) {
+                console.warn('no p.league.name property', p);
+                debugger;
+              }
+
+              if (angular.isUndefinedOrNull(p.league.slugs)) {
+                console.warn('no p.league.slugs property', p);
+                debugger;
+              }
+
+              // if (p.player.id === 1792) {
+              //   console.log(p.player.name, p);
+              //   debugger;
+              // }
+
               if (current === total) {
                 console.log('RESOLVE PROMISE:', p.manager.name);
                 console.log('///////////////////////////////////////');

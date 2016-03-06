@@ -101,6 +101,8 @@
 
       $scope.recover = function () {
 
+        $scope.showSpinner();
+
         updateDataUtils.recoverFromManagerCore()
           .then(function (result) {
             return updateDataUtils.updateAllManagerData(result.data);
@@ -134,7 +136,7 @@
        */
       $scope.updateAllManagerData = function () {
 
-        $rootScope.loading = true;
+        $scope.showSpinner();
 
         apiFactory.getApiData('leagueTables').then(function () {
           updateDataUtils.updateAllManagerData(managerPlayers.data)

@@ -244,6 +244,7 @@
         },
 
         /**
+         * @name validLeagueNamesFormatted
          * @description
          */
         validLeagueNamesFormatted: function (result) {
@@ -261,6 +262,7 @@
         },
 
         /**
+         * @name getLeagueSlug
          * @description
          */
         getLeagueSlug: function (result) {
@@ -268,10 +270,7 @@
           var leagueString = '';
           result.data.teams.some(function (team, i) {
             team.leagues.some(function (league, j) {
-              if (textManipulator.acceptedLeague(league.slug)) {
-                leagueString = league.slug;
-                return true;
-              }
+              return textManipulator.acceptedLeague(league.slug) && (leagueString = league.slug);
             });
           });
           return leagueString;
@@ -279,6 +278,7 @@
         },
 
         /**
+         * @name finalScore
          * @description
          */
         finalScore: function (game) {
@@ -293,6 +293,10 @@
           return final;
         },
 
+        /**
+         * @name acceptedLeague
+         * @description
+         */
         acceptedLeague: function (league) {
           league = league.toLocaleLowerCase();
           return league === 'liga' || league === 'epl' || league === 'seri' || league === 'chlg' || league === 'europa' || league === 'uefa';
