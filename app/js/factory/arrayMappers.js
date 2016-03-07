@@ -123,9 +123,9 @@
         p.player = {
           id: result.data.id,
           name: textManipulator.formattedFullName(result.data.first_name, result.data.last_name),
-          status: p.status,
+          status: p.player.status,
           image: result.data.headshots.w192xh192,
-          pickNumber: p.pickNumber
+          pickNumber: p.player.pickNumber
         };
 
         if (angular.isUndefinedOrNull(p.player)) {
@@ -158,14 +158,12 @@
         var profileLeagueSlug;
 
         if (!angular.isUndefinedOrNull(p.active) && p.active === false) {
-          console.log('league slug for inactive player', p);
+          //console.log('league slug for inactive player', p);
           profileLeagueSlug = p.league.name;
         } else {
           profileLeagueSlug = p.league.name;
           //profileLeagueSlug = textManipulator.getLeagueSlug(result);
         }
-
-        console.log('profileLeagueSlug', profileLeagueSlug);
 
         if (angular.isUndefinedOrNull(profileLeagueSlug)) {
           debugger;

@@ -345,9 +345,13 @@
           console.log('---------------------------');
           console.log('managerCore test passsed');
 
-          // _.each(managerCore, function(m) {
-          //   console.log('# of players', _.keys(m.players).length);
-          // });
+          _.each(managerCore, function(m) {
+            if (_.keys(m.players).length < 26) {
+              console.log('does NOT have at least 26 players');
+              debugger;
+              return false;
+            }
+          });
 
           // _.each(managerCore, function(m) {
           //   return _.each(m.players, function(p) {
@@ -593,10 +597,16 @@
 
         //////////////////////////////////
 
-        $scope.saveToFireBase({
-          data: managerCore,
-          _lastSyncedOn: momentService.syncDate()
-        }, 'managerCore');
+        if (_.keys(managerCore.data).length === 6) {
+          console.log('has 6 managers');
+        } else {
+          console.log('does NOT have 6 managers');
+        }
+
+        // $scope.saveToFireBase({
+        //   data: managerCore,
+        //   _lastSyncedOn: momentService.syncDate()
+        // }, 'managerCore');
 
         // .then(function() {
         //

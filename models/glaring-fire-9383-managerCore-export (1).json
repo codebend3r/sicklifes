@@ -1,0 +1,1121 @@
+{
+  "_lastSyncedOn" : "2016/02/20 6:00:00 pm",
+  "data" : {
+    "chester" : {
+      "managerName" : "Chester",
+      "players" : {
+        "123" : {
+          "id" : 123,
+          "managerName" : "Chester",
+          "pickNumber" : 3,
+          "playerName" : "Stevan JOVETIC",
+          "status" : "drafted"
+        },
+        "326" : {
+          "dateOfTransaction" : "2016/02/16",
+          "id" : 326,
+          "managerName" : "Chester",
+          "pickNumber" : 19,
+          "playerName" : "Jeremy MENEZ",
+          "status" : "dropped"
+        },
+        "1103" : {
+          "dateOfTransaction" : "2016/02/29",
+          "id" : 1103,
+          "managerName" : "Chester",
+          "pickNumber" : 16,
+          "playerName" : "Iker MUNIAIN",
+          "status" : "dropped"
+        },
+        "1365" : {
+          "id" : 1365,
+          "managerName" : "Chester",
+          "pickNumber" : 1,
+          "playerName" : "DIEGO COSTA",
+          "status" : "drafted"
+        },
+        "1453" : {
+          "dateOfTransaction" : "2016/02/23",
+          "id" : 1453,
+          "pickNumber" : 29,
+          "playerName" : "Alvaro NEGREDO",
+          "status" : "added"
+        },
+        "2081" : {
+          "dateOfTransaction" : "2015/11/23",
+          "id" : 2081,
+          "managerName" : "Chester",
+          "pickNumber" : 24,
+          "playerName" : "Scott SINCLAIR",
+          "status" : "dropped"
+        },
+        "2204" : {
+          "id" : 2204,
+          "managerName" : "Chester",
+          "pickNumber" : 5,
+          "playerName" : "Romelu LUKAKU",
+          "status" : "drafted"
+        },
+        "2239" : {
+          "dateOfTransaction" : "2015/11/16",
+          "id" : 2239,
+          "managerName" : "Chester",
+          "pickNumber" : 17,
+          "playerName" : "Bastian SCHWEINSTEIGER",
+          "status" : "dropped"
+        },
+        "2474" : {
+          "dateOfTransaction" : "2015/11/30",
+          "id" : 2474,
+          "managerName" : "Chester",
+          "pickNumber" : 11,
+          "playerName" : "Steven NAISMITH",
+          "status" : "dropped"
+        },
+        "4839" : {
+          "id" : 4839,
+          "managerName" : "Chester",
+          "pickNumber" : 22,
+          "playerName" : "Valter BIRSA",
+          "status" : "drafted"
+        },
+        "6933" : {
+          "id" : 6933,
+          "managerName" : "Chester",
+          "pickNumber" : 9,
+          "playerName" : "Callum WILSON",
+          "status" : "drafted"
+        },
+        "8990" : {
+          "dateOfTransaction" : "2016/02/23",
+          "formerLeagueName" : "liga",
+          "id" : 8990,
+          "managerName" : "Chester",
+          "outOfScope" : true,
+          "pickNumber" : 4,
+          "playerName" : "Jackson MARTINEZ",
+          "status" : "dropped",
+          "teamId" : 51,
+          "teamLogo" : "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/51/logo.png",
+          "teamName" : "Atlético Madrid"
+        },
+        "10877" : {
+          "dateOfTransaction" : "2015/11/16",
+          "id" : 10877,
+          "managerName" : "Chester",
+          "pickNumber" : 25,
+          "playerName" : "Odion IGHALO",
+          "status" : "added"
+        },
+        "10916" : {
+          "id" : 10916,
+          "managerName" : "Chester",
+          "pickNumber" : 15,
+          "playerName" : "Leonardo ULLOA",
+          "status" : "drafted"
+        },
+        "11284" : {
+          "id" : 11284,
+          "managerName" : "Chester",
+          "pickNumber" : 20,
+          "playerName" : "Philippe COUTINHO",
+          "status" : "drafted"
+        },
+        "12676" : {
+          "dateOfTransaction" : "2016/02/29",
+          "id" : 12676,
+          "pickNumber" : 30,
+          "playerName" : "John GUIDETTI",
+          "status" : "added"
+        },
+        "16629" : {
+          "id" : 16629,
+          "managerName" : "Chester",
+          "pickNumber" : 8,
+          "playerName" : "Franco VAZQUEZ",
+          "status" : "drafted"
+        },
+        "16834" : {
+          "id" : 16834,
+          "managerName" : "Chester",
+          "pickNumber" : 6,
+          "playerName" : "Carlos BACCA",
+          "status" : "drafted"
+        },
+        "18403" : {
+          "id" : 18403,
+          "managerName" : "Chester",
+          "pickNumber" : 2,
+          "playerName" : "Paulo DYBALA",
+          "status" : "drafted"
+        },
+        "18509" : {
+          "id" : 18509,
+          "managerName" : "Chester",
+          "pickNumber" : 13,
+          "playerName" : "LEO BAPTISTAO",
+          "status" : "drafted"
+        },
+        "20241" : {
+          "dateOfTransaction" : "2016/02/16",
+          "id" : 20241,
+          "pickNumber" : 28,
+          "playerName" : "Mbaye NIANG",
+          "status" : "added"
+        },
+        "22535" : {
+          "id" : 22535,
+          "managerName" : "Chester",
+          "pickNumber" : 7,
+          "playerName" : "Daniele BASELLI",
+          "status" : "drafted"
+        },
+        "30235" : {
+          "id" : 30235,
+          "managerName" : "Chester",
+          "pickNumber" : 10,
+          "playerName" : "AYOZE PEREZ",
+          "status" : "drafted"
+        },
+        "37332" : {
+          "dateOfTransaction" : "2015/11/23",
+          "id" : 37332,
+          "managerName" : "Chester",
+          "pickNumber" : 26,
+          "playerName" : "Inaki WILLIAMS",
+          "status" : "added"
+        },
+        "49292" : {
+          "id" : 49292,
+          "managerName" : "Chester",
+          "pickNumber" : 12,
+          "playerName" : "Salomon RONDON",
+          "status" : "drafted"
+        },
+        "49497" : {
+          "id" : 49497,
+          "managerName" : "Chester",
+          "pickNumber" : 21,
+          "playerName" : "DOUGLAS COSTA",
+          "status" : "drafted"
+        },
+        "49781" : {
+          "dateOfTransaction" : "2015/11/30",
+          "id" : 49781,
+          "managerName" : "Chester",
+          "pickNumber" : 27,
+          "playerName" : "ROBERTO FIRMINO",
+          "status" : "added"
+        },
+        "49820" : {
+          "id" : 49820,
+          "managerName" : "Chester",
+          "pickNumber" : 14,
+          "playerName" : "Imanol AGIRRETXE",
+          "status" : "drafted"
+        },
+        "49902" : {
+          "id" : 49902,
+          "managerName" : "Chester",
+          "pickNumber" : 23,
+          "playerName" : "CHARLES",
+          "status" : "drafted"
+        },
+        "52157" : {
+          "id" : 52157,
+          "managerName" : "Chester",
+          "pickNumber" : 18,
+          "playerName" : "Giuseppe ROSSI",
+          "status" : "drafted"
+        }
+      }
+    },
+    "dan" : {
+      "managerName" : "Dan",
+      "players" : {
+        "113" : {
+          "dateOfTransaction" : "2015/11/23",
+          "id" : 113,
+          "managerName" : "Dan",
+          "playerName" : "Khouma BABACAR",
+          "status" : "added"
+        },
+        "182" : {
+          "dateOfTransaction" : "2015/11/23",
+          "id" : 182,
+          "managerName" : "Dan",
+          "playerName" : "Claudio MARCHISIO",
+          "status" : "dropped"
+        },
+        "299" : {
+          "id" : 299,
+          "managerName" : "Dan",
+          "playerName" : "Alberto PALOSCHI",
+          "status" : "drafted"
+        },
+        "403" : {
+          "dateOfTransaction" : "2016/02/16",
+          "id" : 403,
+          "managerName" : "Dan",
+          "pickNumber" : 29,
+          "playerName" : "Stephen EL SHAARAWY",
+          "status" : "added",
+          "teamName" : "Roma"
+        },
+        "490" : {
+          "id" : 490,
+          "managerName" : "Dan",
+          "playerName" : "Edinson CAVANI",
+          "status" : "drafted"
+        },
+        "1102" : {
+          "id" : 1102,
+          "managerName" : "Dan",
+          "playerName" : "Fernando LLORENTE",
+          "status" : "drafted"
+        },
+        "1132" : {
+          "id" : 1132,
+          "managerName" : "Dan",
+          "playerName" : "PEDRO",
+          "status" : "drafted"
+        },
+        "1137" : {
+          "id" : 1137,
+          "managerName" : "Dan",
+          "playerName" : "YAYA TOURE",
+          "status" : "drafted"
+        },
+        "1308" : {
+          "id" : 1308,
+          "managerName" : "Dan",
+          "playerName" : "Karim BENZEMA",
+          "status" : "drafted"
+        },
+        "1499" : {
+          "id" : 1499,
+          "managerName" : "Dan",
+          "playerName" : "Sergio AGUERO",
+          "status" : "drafted"
+        },
+        "1898" : {
+          "id" : 1898,
+          "managerName" : "Dan",
+          "playerName" : "Jermain DEFOE",
+          "status" : "drafted"
+        },
+        "2716" : {
+          "id" : 2716,
+          "managerName" : "Dan",
+          "playerName" : "Graziano PELLE",
+          "status" : "drafted"
+        },
+        "3436" : {
+          "id" : 3436,
+          "managerName" : "Dan",
+          "playerName" : "Arturo VIDAL",
+          "status" : "drafted"
+        },
+        "4818" : {
+          "dateOfTransaction" : "2015/11/30",
+          "id" : 4818,
+          "managerName" : "Dan",
+          "playerName" : "Xherdan SHAQIRI",
+          "status" : "dropped"
+        },
+        "4910" : {
+          "dateOfTransaction" : "2015/11/16",
+          "formerLeagueName" : "seri",
+          "id" : 4910,
+          "managerName" : "Dan",
+          "outOfScope" : true,
+          "pickNumber" : 26,
+          "playerImage" : "https://d1si3tbndbzwz9.cloudfront.net/soccer/player/4910/w192xh192_headshot.jpg",
+          "playerName" : "GERVINHO",
+          "status" : "dropped",
+          "teamId" : 11,
+          "teamLogo" : "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/11/logo.png",
+          "teamName" : "Roma",
+          "transactionHistory" : {
+            "added" : "2015/11/16",
+            "dropped" : "2016/02/16"
+          }
+        },
+        "7987" : {
+          "id" : 7987,
+          "managerName" : "Dan",
+          "playerName" : "ISCO",
+          "status" : "drafted"
+        },
+        "11926" : {
+          "id" : 11926,
+          "managerName" : "Dan",
+          "playerName" : "Cyril THEREAU",
+          "status" : "drafted"
+        },
+        "12642" : {
+          "dateOfTransaction" : "2015/11/30",
+          "id" : 12642,
+          "managerName" : "Dan",
+          "playerName" : "Ross BARKLEY",
+          "status" : "added"
+        },
+        "13168" : {
+          "id" : 13168,
+          "managerName" : "Dan",
+          "playerName" : "Alvaro MORATA",
+          "status" : "drafted"
+        },
+        "17673" : {
+          "id" : 17673,
+          "managerName" : "Dan",
+          "playerName" : "Mohamed SALAH",
+          "status" : "drafted"
+        },
+        "22531" : {
+          "id" : 22531,
+          "managerName" : "Dan",
+          "playerName" : "Riccardo SAPONARA",
+          "status" : "drafted"
+        },
+        "49297" : {
+          "dateOfTransaction" : "2015/11/16",
+          "id" : 49297,
+          "managerName" : "Dan",
+          "playerName" : "HERNANES",
+          "status" : "dropped"
+        },
+        "49732" : {
+          "id" : 49732,
+          "managerName" : "Dan",
+          "playerName" : "FELIPE ANDERSON",
+          "status" : "drafted"
+        },
+        "49761" : {
+          "id" : 49761,
+          "managerName" : "Dan",
+          "playerName" : "EDER",
+          "status" : "drafted"
+        },
+        "49797" : {
+          "id" : 49797,
+          "managerName" : "Dan",
+          "playerName" : "ADRIAN",
+          "status" : "drafted"
+        },
+        "49928" : {
+          "id" : 49928,
+          "managerName" : "Dan",
+          "playerName" : "ALVARO VAZQUEZ",
+          "status" : "drafted"
+        },
+        "52429" : {
+          "id" : 52429,
+          "managerName" : "Dan",
+          "playerName" : "Goran PANDEV",
+          "status" : "drafted"
+        },
+        "55024" : {
+          "id" : 55024,
+          "managerName" : "Dan",
+          "playerName" : "Cedric BAKAMBU",
+          "status" : "drafted"
+        }
+      }
+    },
+    "frank" : {
+      "managerName" : "Frank",
+      "players" : {
+        "137" : {
+          "id" : 137,
+          "managerName" : "Frank",
+          "playerName" : "Mario BALOTELLI",
+          "status" : "drafted"
+        },
+        "267" : {
+          "id" : 267,
+          "managerName" : "Frank",
+          "playerName" : "Marek HAMSIK",
+          "status" : "drafted"
+        },
+        "349" : {
+          "id" : 349,
+          "managerName" : "Frank",
+          "playerName" : "Antonio DI NATALE",
+          "status" : "drafted"
+        },
+        "1119" : {
+          "id" : 1119,
+          "managerName" : "Frank",
+          "playerName" : "Zlatan IBRAHIMOVIC",
+          "status" : "drafted"
+        },
+        "1318" : {
+          "id" : 1318,
+          "managerName" : "Frank",
+          "playerName" : "Gonzalo HIGUAIN",
+          "status" : "drafted"
+        },
+        "1354" : {
+          "id" : 1354,
+          "managerName" : "Frank",
+          "playerName" : "David SILVA",
+          "status" : "drafted"
+        },
+        "1635" : {
+          "id" : 1635,
+          "managerName" : "Frank",
+          "playerName" : "Theo WALCOTT",
+          "status" : "drafted"
+        },
+        "1789" : {
+          "id" : 1789,
+          "managerName" : "Frank",
+          "playerName" : "Fernando TORRES",
+          "status" : "drafted"
+        },
+        "2241" : {
+          "id" : 2241,
+          "managerName" : "Frank",
+          "playerName" : "Luca TONI",
+          "status" : "drafted"
+        },
+        "2456" : {
+          "id" : 2456,
+          "managerName" : "Frank",
+          "playerName" : "WILLIAN",
+          "status" : "added"
+        },
+        "2709" : {
+          "id" : 2709,
+          "managerName" : "Frank",
+          "playerName" : "Jeremain LENS",
+          "status" : "drafted"
+        },
+        "3015" : {
+          "id" : 3015,
+          "managerName" : "Frank",
+          "playerName" : "Bafetimbi GOMIS",
+          "status" : "drafted"
+        },
+        "3027" : {
+          "id" : 3027,
+          "managerName" : "Frank",
+          "playerName" : "Miralem PJANIC",
+          "status" : "added"
+        },
+        "3585" : {
+          "id" : 3585,
+          "managerName" : "Frank",
+          "playerName" : "Ryan MASON",
+          "status" : "dropped"
+        },
+        "10181" : {
+          "id" : 10181,
+          "managerName" : "Frank",
+          "playerName" : "Antoine GRIEZMANN",
+          "status" : "drafted"
+        },
+        "10448" : {
+          "id" : 10448,
+          "managerName" : "Frank",
+          "playerName" : "Georginio WIJNALDUM",
+          "status" : "added"
+        },
+        "11946" : {
+          "id" : 11946,
+          "managerName" : "Frank",
+          "playerName" : "Josip ILICIC",
+          "status" : "drafted"
+        },
+        "14263" : {
+          "id" : 14263,
+          "managerName" : "Frank",
+          "playerName" : "NEYMAR",
+          "status" : "drafted"
+        },
+        "15056" : {
+          "id" : 15056,
+          "managerName" : "Frank",
+          "playerName" : "Rudy GESTEDE",
+          "status" : "drafted"
+        },
+        "17567" : {
+          "id" : 17567,
+          "managerName" : "Frank",
+          "playerName" : "Mauro ICARDI",
+          "status" : "drafted"
+        },
+        "28103" : {
+          "id" : 28103,
+          "managerName" : "Frank",
+          "playerName" : "Ruben CASTRO",
+          "status" : "drafted"
+        },
+        "30896" : {
+          "id" : 30896,
+          "managerName" : "Frank",
+          "playerName" : "Luciano VIETTO",
+          "status" : "dropped"
+        },
+        "49467" : {
+          "dateOfTransaction" : "2016/02/16",
+          "id" : 49467,
+          "playerName" : "Jessi LINGARD",
+          "status" : "added"
+        },
+        "49539" : {
+          "id" : 49539,
+          "managerName" : "Frank",
+          "playerName" : "KOKE",
+          "status" : "drafted"
+        },
+        "49837" : {
+          "id" : 49837,
+          "managerName" : "Frank",
+          "playerName" : "LUCAS PEREZ",
+          "status" : "drafted"
+        },
+        "49907" : {
+          "id" : 49907,
+          "managerName" : "Frank",
+          "playerName" : "NOLITO",
+          "status" : "drafted"
+        },
+        "53462" : {
+          "id" : 53462,
+          "managerName" : "Frank",
+          "playerName" : "Jay RODRIGUEZ",
+          "status" : "dropped"
+        }
+      }
+    },
+    "joe" : {
+      "managerName" : "Joe",
+      "players" : {
+        "353" : {
+          "id" : 353,
+          "managerName" : "Joe",
+          "playerName" : "Antonio FLORO FLORES",
+          "status" : "drafted"
+        },
+        "540" : {
+          "id" : 540,
+          "managerName" : "Joe",
+          "playerName" : "Antonio CANDREVA",
+          "status" : "added"
+        },
+        "1310" : {
+          "id" : 1310,
+          "managerName" : "Joe",
+          "playerName" : "CRISTIANO RONALDO",
+          "status" : "drafted"
+        },
+        "2200" : {
+          "id" : 2200,
+          "managerName" : "Joe",
+          "playerName" : "Cheikhou KOUYATE",
+          "status" : "drafted"
+        },
+        "3463" : {
+          "id" : 3463,
+          "managerName" : "Joe",
+          "playerName" : "Ivan RAKITIC",
+          "status" : "drafted"
+        },
+        "4364" : {
+          "id" : 4364,
+          "managerName" : "Joe",
+          "playerName" : "Alexis SANCHEZ",
+          "status" : "drafted"
+        },
+        "7582" : {
+          "dateOfTransaction" : "2016/02/16",
+          "id" : 7582,
+          "managerName" : "Joe",
+          "playerName" : "Papiss CISSE",
+          "status" : "dropped"
+        },
+        "7600" : {
+          "id" : 7600,
+          "managerName" : "Joe",
+          "playerName" : "Manolo GABBIADINI",
+          "status" : "drafted"
+        },
+        "8603" : {
+          "id" : 8603,
+          "managerName" : "Joe",
+          "playerName" : "Wilfried BONY",
+          "status" : "drafted"
+        },
+        "9247" : {
+          "id" : 9247,
+          "managerName" : "Joe",
+          "playerName" : "Danny INGS",
+          "status" : "dropped"
+        },
+        "9563" : {
+          "id" : 9563,
+          "managerName" : "Joe",
+          "playerName" : "Robert LEWANDOWSKI",
+          "status" : "drafted"
+        },
+        "12229" : {
+          "id" : 12229,
+          "managerName" : "Joe",
+          "playerName" : "James RODRIGUEZ",
+          "status" : "drafted"
+        },
+        "13165" : {
+          "id" : 13165,
+          "managerName" : "Joe",
+          "playerName" : "Saido BERAHINO",
+          "status" : "drafted"
+        },
+        "13859" : {
+          "id" : 13859,
+          "managerName" : "Joe",
+          "playerName" : "Memphis DEPAY",
+          "status" : "drafted"
+        },
+        "14458" : {
+          "dateOfTransaction" : "2016/02/23",
+          "id" : 14458,
+          "managerName" : "Joe",
+          "playerName" : "Franco BRIENZA",
+          "status" : "dropped"
+        },
+        "15143" : {
+          "id" : 15143,
+          "managerName" : "Joe",
+          "playerName" : "Kevin GAMEIRO",
+          "status" : "drafted"
+        },
+        "16228" : {
+          "id" : 16228,
+          "managerName" : "Joe",
+          "playerName" : "OSCAR",
+          "status" : "drafted"
+        },
+        "22137" : {
+          "id" : 22137,
+          "managerName" : "Joe",
+          "playerName" : "Domenico BERARDI",
+          "status" : "drafted"
+        },
+        "22143" : {
+          "id" : 22143,
+          "managerName" : "Joe",
+          "playerName" : "Leonardo PAVOLETTI",
+          "status" : "added"
+        },
+        "28518" : {
+          "id" : 28518,
+          "managerName" : "Joe",
+          "playerName" : "Riyad MAHREZ",
+          "status" : "drafted"
+        },
+        "29136" : {
+          "id" : 29136,
+          "managerName" : "Joe",
+          "playerName" : "Ricardo KISHNA",
+          "status" : "drafted"
+        },
+        "49405" : {
+          "id" : 49405,
+          "managerName" : "Joe",
+          "playerName" : "Jose CALLEJON",
+          "status" : "drafted"
+        },
+        "49549" : {
+          "id" : 49549,
+          "managerName" : "Joe",
+          "playerName" : "Aritz ADURIZ",
+          "status" : "drafted"
+        },
+        "49817" : {
+          "id" : 49817,
+          "managerName" : "Joe",
+          "playerName" : "RUBEN ROCHINA",
+          "status" : "dropped"
+        },
+        "49934" : {
+          "id" : 49934,
+          "managerName" : "Joe",
+          "playerName" : "Daniel PAREJO",
+          "status" : "drafted"
+        },
+        "54935" : {
+          "id" : 54935,
+          "managerName" : "Joe",
+          "playerName" : "BORJA BASTON",
+          "status" : "added"
+        }
+      }
+    },
+    "justin" : {
+      "managerName" : "Justin",
+      "players" : {
+        "85" : {
+          "dateOfTransaction" : "2016/02/23",
+          "id" : 85,
+          "managerName" : "Justin",
+          "playerName" : "Iago FALQUE",
+          "status" : "dropped",
+          "transactionHistory" : {
+            "dropped" : "2016/02/23"
+          }
+        },
+        "136" : {
+          "id" : 136,
+          "managerName" : "Justin",
+          "playerName" : "Marko ARNAUTOVIC",
+          "status" : "drafted"
+        },
+        "471" : {
+          "id" : 471,
+          "managerName" : "Justin",
+          "playerName" : "Massimo MACCARONE",
+          "status" : "added"
+        },
+        "1126" : {
+          "id" : 1126,
+          "managerName" : "Justin",
+          "playerName" : "Lionel MESSI",
+          "status" : "drafted"
+        },
+        "1345" : {
+          "id" : 1345,
+          "managerName" : "Justin",
+          "playerName" : "Juan MATA",
+          "status" : "drafted"
+        },
+        "1633" : {
+          "id" : 1633,
+          "managerName" : "Justin",
+          "playerName" : "Carlos VELA",
+          "status" : "drafted"
+        },
+        "1743" : {
+          "dateOfTransaction" : "2016/02/23",
+          "id" : 1743,
+          "managerName" : "Justin",
+          "pickNumber" : 29,
+          "playerName" : "Daniel STURRIDGE",
+          "status" : "added"
+        },
+        "1851" : {
+          "id" : 1851,
+          "managerName" : "Justin",
+          "playerName" : "Wayne ROONEY",
+          "status" : "drafted"
+        },
+        "3722" : {
+          "id" : 3722,
+          "managerName" : "Justin",
+          "playerName" : "ANDRE AYEW",
+          "status" : "drafted"
+        },
+        "3747" : {
+          "id" : 3747,
+          "managerName" : "Justin",
+          "playerName" : "Ciro IMMOBILE",
+          "status" : "drafted"
+        },
+        "3804" : {
+          "id" : 3804,
+          "managerName" : "Justin",
+          "playerName" : "Harry KANE",
+          "status" : "drafted"
+        },
+        "3860" : {
+          "id" : 3860,
+          "managerName" : "Justin",
+          "playerName" : "Mario GOTZE",
+          "status" : "drafted"
+        },
+        "7611" : {
+          "id" : 7611,
+          "managerName" : "Justin",
+          "playerName" : "Lorenzo INSIGNE",
+          "status" : "drafted"
+        },
+        "8492" : {
+          "id" : 8492,
+          "managerName" : "Justin",
+          "playerName" : "Mario MANDZUKIC",
+          "status" : "drafted"
+        },
+        "8644" : {
+          "id" : 8644,
+          "managerName" : "Justin",
+          "playerName" : "Yohan CABAYE",
+          "status" : "added"
+        },
+        "8653" : {
+          "id" : 8653,
+          "managerName" : "Justin",
+          "playerName" : "Eden HAZARD",
+          "status" : "drafted"
+        },
+        "10689" : {
+          "id" : 10689,
+          "managerName" : "Justin",
+          "playerName" : "Olivier GIROUD",
+          "status" : "drafted"
+        },
+        "13900" : {
+          "id" : 13900,
+          "managerName" : "Justin",
+          "playerName" : "Gregoire DEFREL",
+          "status" : "drafted"
+        },
+        "16498" : {
+          "id" : 16498,
+          "managerName" : "Justin",
+          "playerName" : "Jamie VARDY",
+          "status" : "drafted"
+        },
+        "23354" : {
+          "id" : 23354,
+          "managerName" : "Justin",
+          "playerName" : "Duvan ZAPATA",
+          "status" : "addded",
+          "transactionHistory" : {
+            "added" : "2016/02/16",
+            "dropped" : "2015/11/30"
+          }
+        },
+        "49496" : {
+          "id" : 49496,
+          "managerName" : "Justin",
+          "playerName" : "LUIZ ADRIANO",
+          "status" : "dropped",
+          "transactionHistory" : {
+            "dropped" : "2016/02/16"
+          }
+        },
+        "49733" : {
+          "id" : 49733,
+          "managerName" : "Justin",
+          "playerName" : "KEITA",
+          "status" : "drafted"
+        },
+        "49802" : {
+          "id" : 49802,
+          "managerName" : "Justin",
+          "playerName" : "JONATHAS",
+          "status" : "drafted"
+        },
+        "49875" : {
+          "id" : 49875,
+          "managerName" : "Justin",
+          "playerName" : "Nordin AMRABAT",
+          "status" : "dropped"
+        },
+        "49876" : {
+          "id" : 49876,
+          "managerName" : "Justin",
+          "playerName" : "JAVI GUERRA",
+          "status" : "added"
+        },
+        "49937" : {
+          "id" : 49937,
+          "managerName" : "Justin",
+          "playerName" : "PACO ALCACER",
+          "status" : "drafted"
+        },
+        "49939" : {
+          "id" : 49939,
+          "managerName" : "Justin",
+          "playerName" : "RODRIGO",
+          "status" : "dropped"
+        },
+        "54677" : {
+          "id" : 54677,
+          "managerName" : "Justin",
+          "playerName" : "Antonio SANABRIA",
+          "status" : "drafted"
+        }
+      }
+    },
+    "mike" : {
+      "managerName" : "Mike",
+      "players" : {
+        "121" : {
+          "id" : 121,
+          "managerName" : "Mike",
+          "playerName" : "Alberto GILARDINO",
+          "status" : "drafted"
+        },
+        "274" : {
+          "id" : 274,
+          "managerName" : "Mike",
+          "playerName" : "Fabio QUAGLIARELLA",
+          "status" : "drafted"
+        },
+        "529" : {
+          "id" : 529,
+          "managerName" : "Mike",
+          "playerName" : "Alessandro MATRI",
+          "status" : "dropped"
+        },
+        "1453" : {
+          "id" : 1453,
+          "managerName" : "Mike",
+          "playerName" : "Alvaro NEGREDO",
+          "status" : "dropped"
+        },
+        "1536" : {
+          "id" : 1536,
+          "managerName" : "Mike",
+          "playerName" : "Roberto SOLDADO",
+          "status" : "drafted"
+        },
+        "1890" : {
+          "id" : 1890,
+          "managerName" : "Mike",
+          "playerName" : "Gareth BALE",
+          "status" : "drafted"
+        },
+        "2100" : {
+          "id" : 2100,
+          "managerName" : "Mike",
+          "playerName" : "Nikola KALINIC",
+          "status" : "drafted"
+        },
+        "2232" : {
+          "id" : 2232,
+          "managerName" : "Mike",
+          "playerName" : "Thomas MULLER",
+          "status" : "drafted"
+        },
+        "2328" : {
+          "id" : 2328,
+          "managerName" : "Mike",
+          "playerName" : "Radamel FALCAO",
+          "status" : "dropped"
+        },
+        "2349" : {
+          "id" : 2349,
+          "managerName" : "Mike",
+          "playerName" : "Felipe CAICEDO",
+          "status" : "drafted"
+        },
+        "2857" : {
+          "id" : 2857,
+          "managerName" : "Mike",
+          "playerName" : "Edin DZEKO",
+          "status" : "drafted"
+        },
+        "3729" : {
+          "id" : 3729,
+          "managerName" : "Mike",
+          "playerName" : "Mattia DESTRO",
+          "status" : "drafted"
+        },
+        "3921" : {
+          "dateOfTransaction" : "2016/02/23",
+          "id" : 3921,
+          "managerName" : "Mike",
+          "playerName" : "Mame DIOUF",
+          "status" : "dropped"
+        },
+        "4433" : {
+          "id" : 4433,
+          "managerName" : "Mike",
+          "playerName" : "Luis SUAREZ",
+          "status" : "drafted"
+        },
+        "4755" : {
+          "id" : 4755,
+          "managerName" : "Mike",
+          "playerName" : "Christian ERIKSEN",
+          "status" : "drafted"
+        },
+        "9965" : {
+          "id" : 9965,
+          "managerName" : "Mike",
+          "playerName" : "Kevin DE BRUYNE",
+          "status" : "added",
+          "transactionHistory" : {
+            "added" : "2015/11/16",
+            "dropped" : "2016/02/16"
+          }
+        },
+        "10712" : {
+          "id" : 10712,
+          "managerName" : "Mike",
+          "playerName" : "Mauricio PINILLA",
+          "status" : "drafted"
+        },
+        "13749" : {
+          "id" : 13749,
+          "managerName" : "Mike",
+          "playerName" : "Raheem STERLING",
+          "status" : "drafted"
+        },
+        "13802" : {
+          "id" : 13802,
+          "managerName" : "Mike",
+          "playerName" : "Paul POGBA",
+          "status" : "drafted"
+        },
+        "14082" : {
+          "id" : 14082,
+          "managerName" : "Mike",
+          "playerName" : "Luis MURIEL",
+          "status" : "drafted"
+        },
+        "15086" : {
+          "id" : 15086,
+          "managerName" : "Mike",
+          "playerName" : "Christian BENTEKE",
+          "status" : "drafted"
+        },
+        "17598" : {
+          "id" : 17598,
+          "managerName" : "Mike",
+          "playerName" : "IAGO ASPAS",
+          "status" : "drafted"
+        },
+        "21258" : {
+          "id" : 21258,
+          "managerName" : "Mike",
+          "playerName" : "Anthony MARTIAL",
+          "status" : "drafted"
+        },
+        "30349" : {
+          "id" : 30349,
+          "playerName" : "Andrea BELOTTI",
+          "status" : "added",
+          "teamName" : "Torino"
+        },
+        "31352" : {
+          "id" : 31352,
+          "managerName" : "Mike",
+          "playerName" : "Diafra SAKHO",
+          "status" : "drafted"
+        },
+        "49537" : {
+          "id" : 49537,
+          "managerName" : "Mike",
+          "playerName" : "RAUL GARCIA",
+          "status" : "added"
+        },
+        "49668" : {
+          "id" : 49668,
+          "managerName" : "Mike",
+          "playerName" : "Troy DEENEY",
+          "status" : "added"
+        },
+        "49814" : {
+          "id" : 49814,
+          "managerName" : "Mike",
+          "playerName" : "Youssef EL-ARABI",
+          "status" : "drafted"
+        }
+      }
+    }
+  }
+}
