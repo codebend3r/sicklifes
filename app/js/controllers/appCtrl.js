@@ -347,25 +347,13 @@
 
           _.each(managerCore, function(m) {
             if (_.keys(m.players).length < 26) {
-              console.log('does NOT have at least 26 players');
+              console.warn('does NOT have at least 26 players', _.keys(m.players).length);
               debugger;
               return false;
             }
           });
 
-          // _.each(managerCore, function(m) {
-          //   return _.each(m.players, function(p) {
-          //     console.log(p.playerName, 'leagueName', p.league);
-          //   });
-          // });
-
-          // var hasPlayer = _.allManagersPlayersHave(managerCore, 'player');
-          var hasPlayer = _.every(managerCore, function (m) {
-            return !angular.isUndefinedOrNull(m.players) && _.every(m.players, function (eachPlayer) {
-                return !angular.isUndefinedOrNull(eachPlayer['player']);
-              });
-          });
-
+          var hasPlayer = _.allHaveProperty(managerCore, 'player');
 
           if (hasPlayer) {
             console.log('all players have \'player\' property');
@@ -375,41 +363,7 @@
             return false;
           }
 
-          //var key = 'player.id';
-          //var obj = managerCore;
-
           var hasPlayerId = _.allHaveProperty(managerCore, 'player.id');
-          //var hasPlayerId = _.every(obj, function (m) {
-          //
-          //  return !angular.isUndefinedOrNull(m.players) && _.every(m.players, function (eachPlayer) {
-          //
-          //      if (key.indexOf('.') !== -1) {
-          //
-          //        var maxLevels = key.split('.').length,
-          //          level = 0,
-          //          currentObjectKey = key.split('.')[level];
-          //
-          //        var checkObject = function (parentObj, childKey) {
-          //          console.log('checking for', childKey, 'in', parentObj);
-          //          if (angular.isUndefinedOrNull(parentObj[childKey])) {
-          //            console.warn('FAILED: could not find property \'', childKey, '\' in', parentObj);
-          //            return false;
-          //          } else {
-          //            level += 1;
-          //            if (level < maxLevels) {
-          //              return !angular.isUndefinedOrNull(parentObj[childKey]) && checkObject(parentObj[childKey], key.split('.')[level]);
-          //            } else {
-          //              return true;
-          //            }
-          //          }
-          //        };
-          //        return checkObject(eachPlayer, currentObjectKey);
-          //      } else {
-          //        return !angular.isUndefinedOrNull(eachPlayer[key]);
-          //      }
-          //    });
-          //
-          //});
 
           if (hasPlayerId) {
             console.log('all players have \'player.id\' property');
@@ -600,7 +554,7 @@
         if (_.keys(managerCore.data).length === 6) {
           console.log('has 6 managers');
         } else {
-          console.log('does NOT have 6 managers');
+          console.log('does NOT have 6 managers:', _.keys(managerCore.data).length);
         }
 
         // $scope.saveToFireBase({
@@ -640,6 +594,8 @@
         //   }, 'gameLogs');
         //
         // });
+
+        $scope.hideSpinner();
 
       };
 

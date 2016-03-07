@@ -120,9 +120,6 @@
             });
 
             $scope.selectedManager = mappedManagers[$stateParams.managerId];
-            // $scope.selectedManager.players = mappedManagers[$stateParams.managerId].players;
-            // $scope.selectedManager.filteredMonthlyGoalsLog = mappedManagers[$stateParams.managerId].filteredMonthlyGoalsLog;
-            // $scope.selectedManager.monthlyGoalsLog = mappedManagers[$stateParams.managerId].monthlyGoalsLog;
 
             $scope.saveRoster(mappedManagers);
 
@@ -153,8 +150,9 @@
               });
 
               //managerData.data = result;
+              
               $scope.selectedManager = mappedManagers[$stateParams.managerId];
-              //$scope.saveRoster(mappedManagers);
+              $scope.saveRoster(mappedManagers);
 
             });
         });
