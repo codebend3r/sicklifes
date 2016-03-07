@@ -99,7 +99,61 @@
 
       };
 
-      $scope.recover = function () {
+      $scope.recoverFromManagerPlayers = function () {
+
+        var managerCore = {};
+
+        _.each(managerPlayers.data, function(m, key) {
+
+          managerCore[key] = {
+            managerName: key,
+            players: {}
+          };
+
+          _.each(m.players, function(p) {
+
+            if (angular.isUndefinedOrNull(managerCore[key])) {
+              managerCore[key] = {
+                players: {}
+              };
+            }
+
+            managerCore[key].players[p.id] = {
+              player: {
+                id: p.id,
+                name: p.playerName,
+                status: p.status,
+                image: p.image
+              },
+              team: {
+                name: p.teamName,
+                logo: p.teamLogo,
+                id: p.teamId
+              },
+              league: {
+                name: p.leagueName,
+                slugs: p.leagueSlugs
+              },
+              manager: {
+                name: key.capitalize()
+              },
+              //stats: {},
+              // active: !angular.isUndefinedOrNull(p.active) ? p.active === false : false,
+              active: true,
+              dateOfTransaction: p.dateOfTransaction
+            };
+
+          });
+
+        });
+
+        console.log('managerCore', managerCore);
+
+        $scope.saveCoreData(managerCore);
+
+      };
+
+      $scope.recoverFromCore = function () {
 
         $scope.showSpinner();
 
@@ -150,7 +204,7 @@
               });
 
               //managerData.data = result;
-              
+
               $scope.selectedManager = mappedManagers[$stateParams.managerId];
               $scope.saveRoster(mappedManagers);
 

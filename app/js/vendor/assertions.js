@@ -41,7 +41,7 @@
             currentObjectKey = key.split('.')[level];
 
           var checkObject = function (parentObj, childKey) {
-            console.log('checking for', childKey, 'in', parentObj);
+            //console.log('checking for', childKey, 'in', parentObj);
             if (angular.isUndefinedOrNull(parentObj[childKey])) {
               console.warn('FAILED: could not find property \'', childKey, '\' in', parentObj);
               return false;

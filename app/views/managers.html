@@ -7,8 +7,8 @@
 
   <div ng-if='admin' class='well'>
     <button type='button' class='btn btn-danger' ng-click='updateAllManagerData()'>Update All Managers Data</button>
-    <button type='button' class='btn btn-danger' ng-click='saveCurrentRoster()'>Save Roster</button>
-    <button type='button' class='btn btn-danger' ng-click='recover()'>Recover Managers</button>
+    <button type='button' class='btn btn-danger' ng-click='recoverFromCore()'>Recover From Manager Core</button>
+    <button type='button' class='btn btn-danger' ng-click='recoverFromManagerPlayers()'>Recover From Manager Players</button>
   </div>
 
   <manager-jumbotron manager='selectedManager'></manager-jumbotron>
