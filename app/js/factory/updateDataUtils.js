@@ -113,7 +113,7 @@
           m.filteredMonthlyGoalsLog = [];
           m.charts = [];
 
-          apiFactory.getPlayerProfile('soccer', p.id)
+          apiFactory.getPlayerProfile('soccer', p.player.id)
             .then(arrayMappers.playerInfo.bind(this, p), function () {
               console.log('failed at player info mapping:', p.player.name);
             })
@@ -136,12 +136,10 @@
 
               if (angular.isUndefinedOrNull(p.league.name)) {
                 console.warn('no p.league.name property', p);
-                debugger;
               }
 
               if (angular.isUndefinedOrNull(p.league.slugs)) {
                 console.warn('no p.league.slugs property', p);
-                debugger;
               }
 
               // if (p.player.id === 1792) {
@@ -275,22 +273,22 @@
 
             console.log('CORE DATA', $rootScope.managerCore.data);
 
-            _.each($rootScope.managerCore.data, function (manager) {
+            _.each($rootScope.managerCore.data, function (m) {
 
-              var managerKey = manager.managerName.toLowerCase();
+              var managerKey = m.managerName.toLowerCase();
 
-              _.each(manager.players, function (player) {
+              _.each(m.players, function (p) {
 
                 if (angular.isUndefinedOrNull(rebuildTeams.data[managerKey])) {
                   rebuildTeams.data[managerKey] = {};
-                  rebuildTeams.data[managerKey].managerName = player.managerName;
+                  rebuildTeams.data[managerKey].managerName = managerKey.capitalize();
                   rebuildTeams.data[managerKey].players = {};
                 }
 
-                angular.isUndefinedOrNull(player.pickNumber) && (player.pickNumber = 999);
-                angular.isUndefinedOrNull(player.dateOfTransaction) && (player.dateOfTransaction = transferDates.leagueStart.date);
+                // angular.isUndefinedOrNull(player.pickNumber) && (player.pickNumber = 999);
+                angular.isUndefinedOrNull(p.dateOfTransaction) && (p.dateOfTransaction = transferDates.leagueStart.date);
 
-                rebuildTeams.data[managerKey].players[player.id] = player;
+                rebuildTeams.data[managerKey].players[p.player.id] = p;
 
               });
 
@@ -304,10 +302,10 @@
 
                 _.each(currentPlayers, function(element, index) {
 
-                  if (angular.isUndefinedOrNull(p.playerName)) {
+                  if (angular.isUndefinedOrNull(p.player.name)) {
                     console.log('> player name not found', p);
                   } else {
-                    if (p.playerName.toLowerCase() === element.toLowerCase()) {
+                    if (p.player.name.toLowerCase() === element.toLowerCase()) {
                       p.pickNumber = index + 1;
                     }
                   }

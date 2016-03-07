@@ -160,27 +160,16 @@
         if (!angular.isUndefinedOrNull(p.active) && p.active === false) {
           console.log('league slug for inactive player', p);
           profileLeagueSlug = p.league.name;
-          // if (p.id === 2474) {
-          //   debugger;
-          // }
         } else {
-          profileLeagueSlug = textManipulator.getLeagueSlug(result);
-          // if (p.id === 2474) {
-          //   debugger;
-          // }
+          profileLeagueSlug = p.league.name;
+          //profileLeagueSlug = textManipulator.getLeagueSlug(result);
         }
 
-        console.log('>', profileLeagueSlug, p.player.name, p.league.name);
+        console.log('profileLeagueSlug', profileLeagueSlug);
 
         if (angular.isUndefinedOrNull(profileLeagueSlug)) {
           debugger;
         }
-
-        // if (result.data.headshots.w192xh192) {
-        //   p.player.image = result.data.headshots.w192xh192;
-        // } else {
-        //   cnsole.log('image not defined', p.player.name);
-        // }
 
         // returns a concat string with all valid leagues
         p.allLeaguesName = textManipulator.validLeagueNamesFormatted(result);
@@ -188,7 +177,7 @@
         // based on player result data return an object with the valid leagues for this player
         p.validLeagues = textManipulator.getPlayerValidLeagues(result);
 
-        return apiFactory.getPlayerProfile(profileLeagueSlug, result.data.id);
+        return apiFactory.getPlayerProfile(profileLeagueSlug, p.player.id);
 
       };
 
@@ -275,7 +264,7 @@
         if (validLeagues.inLiga) {
 
           // LA LIGA
-          ligaGamesRequest = apiFactory.getPlayerLog('liga', player.id);
+          ligaGamesRequest = apiFactory.getPlayerLog('liga', player.player.id);
           ligaGamesRequest.then(function (result) {
 
             player.gameLogs.ligaCompleteLog = result.data
@@ -320,7 +309,7 @@
         if (validLeagues.inEPL) {
 
           // EPL
-          eplGamesRequest = apiFactory.getPlayerLog('epl', player.id);
+          eplGamesRequest = apiFactory.getPlayerLog('epl', player.player.id);
           eplGamesRequest.then(function (result) {
 
             player.gameLogs.eplCompleteLog = result.data
@@ -365,13 +354,13 @@
         if (validLeagues.inSeri) {
 
           // SERIE A
-          seriGamesRequest = apiFactory.getPlayerLog('seri', player.id);
+          seriGamesRequest = apiFactory.getPlayerLog('seri', player.player.id);
           seriGamesRequest.then(function (result) {
 
             result.data
               .forEach(function (gameData) {
                 _.each(statsCorrection.events.seri, function (game) {
-                  if (player.id === game.playerId && gameData.id === game.gameId) {
+                  if (player.player.id === game.playerId && gameData.id === game.gameId) {
                     gameData[game.statType] = game.goals;
                   }
                 });
@@ -420,7 +409,7 @@
 
           // CHAMPIONS LEAGUE
 
-          chlgGamesRequest = apiFactory.getPlayerLog('chlg', player.id);
+          chlgGamesRequest = apiFactory.getPlayerLog('chlg', player.player.id);
           chlgGamesRequest.then(function (result) {
 
             player.gameLogs.chlgCompleteLogs = result.data
@@ -469,7 +458,7 @@
 
           // EUROPA LEAGUE
 
-          euroGamesRequest = apiFactory.getPlayerLog('uefa', player.id);
+          euroGamesRequest = apiFactory.getPlayerLog('uefa', player.player.id);
 
           euroGamesRequest.then(function (result) {
 
@@ -668,7 +657,7 @@
         var gameMapsObj = {};
 
         gameMapsObj.index = index;
-        gameMapsObj.id = dataObj.player.id;
+        gameMapsObj.id = dataObj.player.player.id;
         gameMapsObj.playerName = dataObj.player.playerName;
         gameMapsObj.alignment = game.alignment === 'away' ? '@' : 'vs';
         gameMapsObj.vsTeam = game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name;

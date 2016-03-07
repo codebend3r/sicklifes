@@ -116,7 +116,7 @@
             var mappedManagers = {};
 
             _.each(result, function (obj) {
-              mappedManagers[obj.managerName.toLowerCase()] = obj;
+              mappedManagers[obj.manager.name.toLowerCase()] = obj;
             });
 
             $scope.selectedManager = mappedManagers[$stateParams.managerId];
