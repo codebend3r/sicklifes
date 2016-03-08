@@ -43,7 +43,7 @@
           var checkObject = function (parentObj, childKey) {
             //console.log(eachPlayer.playerName, 'checking for', childKey, 'in', parentObj);
             if (angular.isUndefinedOrNull(parentObj[childKey])) {
-              console.warn(eachPlayer.playerName, 'FAILED: could not find property \'', childKey, '\' in', parentObj);
+              console.warn(eachPlayer.playerName, 'FAILED: could not find property \'' + childKey + '\' in', parentObj);
               return false;
             } else {
               level += 1;

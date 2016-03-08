@@ -366,15 +366,15 @@
             return false;
           }
 
-          var hasTransactions = _.allHaveProperty(coreData, 'transactions');
-
-          if (hasTransactions) {
-            console.log('all players have \'transactions\' property');
-          } else {
-            console.log('all players DO NOT have \'transactions\' property');
-            debugger;
-            return false;
-          }
+          // var hasTransactions = _.allHaveProperty(coreData, 'transactions');
+          //
+          // if (hasTransactions) {
+          //   console.log('all players have \'transactions\' property');
+          // } else {
+          //   console.log('all players DO NOT have \'transactions\' property');
+          //   debugger;
+          //   return false;
+          // }
 
         } else {
           console.log('coreData test failed');
@@ -383,16 +383,22 @@
 
         //////////////////////////////////
 
-        if (_.keys(coreData.data).length === 6) {
+        if (_.keys(coreData).length === 6) {
           console.log('has 6 managers');
         } else {
-          console.log('does NOT have 6 managers:', _.keys(coreData.data).length);
+          console.log('does NOT have 6 managers:', _.keys(coreData).length);
         }
 
-        // $scope.saveToFireBase({
-        //   data: coreData,
-        //   _lastSyncedOn: momentService.syncDate()
-        // }, 'managerCore');
+        if (_.keys(coreData) === ['chester', 'dan', 'frank', 'joe', 'justin', 'mike']) {
+          console.log('has exact managers', ['chester', 'dan', 'frank', 'joe', 'justin', 'mike']);
+        } else {
+          console.log('does NOT have exact managers:', _.keys(coreData));
+        }
+
+        $scope.saveToFireBase({
+          data: coreData,
+          _lastSyncedOn: momentService.syncDate()
+        }, 'managerCore');
 
         $scope.hideSpinner();
 
@@ -463,8 +469,8 @@
               league: p.league,
               manager: p.manager,
               stats: {},
-              // active: !angular.isUndefinedOrNull(p.active) ? p.active === false : false,
-              active: true,
+              active: !angular.isUndefinedOrNull(p.active) ? p.active === false : false,
+              //active: true,
               dateOfTransaction: p.dateOfTransaction,
               transactions: []
               // transactions: !angular.isUndefinedOrNull(p.transactions) ? p.transactions : [
@@ -508,7 +514,9 @@
         //////////////////////////////////
 
         console.log('===============================');
-        console.log('managerCore', managerCore);
+        console.log('gameLogs:', gameLogs);
+        console.log('charts:', charts);
+        console.log('managerPlayers:', managerPlayers);
         console.log('===============================');
 
         if (_.hasDeepProperty(gameLogs, 'managerName') && _.hasDeepProperty(gameLogs, 'filteredMonthlyGoalsLog') && _.hasDeepProperty(gameLogs, 'monthlyGoalsLog')) {
@@ -527,18 +535,15 @@
 
         if (_.hasDeepProperty(managerPlayers, 'players')) {
 
-          console.log('---------------------------');
-          console.log('managerPlayers test passsed');
+          var hasPlayerId = _.allHaveProperty(managerPlayers, 'player.id');
 
-          // var hasPlayerId = _.allManagersPlayersHave(managerPlayers, 'player.id');
-          //
-          // if (hasPlayerId) {
-          //   console.log('all players have a \'player.id\' property');
-          // } else {
-          //   console.log('all players DO NOT have \'player.id\' property');
-          //   debugger;
-          //   return false;
-          // }
+          if (hasPlayerId) {
+            console.log('all players have a \'player.id\' property');
+          } else {
+            console.log('all players DO NOT have \'player.id\' property');
+            debugger;
+            return false;
+          }
 
         } else {
           console.log('managerPlayers test failed');
@@ -546,26 +551,26 @@
           return false;
         }
 
-        // if (_.hasDeepProperty(managerPlayers, 'manager')) {
-        //
-        //   var hasPlayerId = _.allManagersPlayersHave(managerPlayers, 'manager.name');
-        //
-        //   if (hasPlayerId) {
-        //     console.log('all players have a \'manager.name\' property');
-        //   } else {
-        //     console.log('all players DO NOT have \'manager.name\' property');
-        //     debugger;
-        //     return false;
-        //   }
-        // }
+        if (_.hasDeepProperty(managerPlayers, 'manager')) {
 
-        // if (_.hasDeepProperty(managerData, 'managerName') && _.hasDeepProperty(managerData, 'totalPoints') && _.hasDeepProperty(managerData, 'totalGoals')) {
-        //   console.log('managerData test passsed');
-        // } else {
-        //   console.log('managerData test failed');
-        //   debugger;
-        //   return false;
-        // }
+          var hasPlayerId = _.allHaveProperty(managerPlayers, 'manager.name');
+
+          if (hasPlayerId) {
+            console.log('all players have a \'manager.name\' property');
+          } else {
+            console.log('all players DO NOT have \'manager.name\' property');
+            debugger;
+            return false;
+          }
+        }
+
+        if (_.hasDeepProperty(managerData, 'managerName') && _.hasDeepProperty(managerData, 'totalPoints') && _.hasDeepProperty(managerData, 'totalGoals')) {
+          console.log('managerData test passsed');
+        } else {
+          console.log('managerData test failed');
+          debugger;
+          return false;
+        }
 
         // .then(function() {
         //

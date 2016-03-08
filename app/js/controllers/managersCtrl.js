@@ -143,7 +143,11 @@
               dateOfTransaction: p.dateOfTransaction
             };
 
-            console.log(p.playerName, managerCore[key].players[p.id].league);
+            // if (angular.isUndefinedOrNull(managerCore[key].players[p.id].league)) {
+            //   console.log(p.playerName, managerCore[key].players[p.id].league);
+            // }
+
+            console.log(p.playerName, managerCore[key].players[p.id].league.name);
 
             var currentPlayers = dataRecovery.draftOrder[key];
 
