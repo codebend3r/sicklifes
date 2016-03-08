@@ -25,7 +25,7 @@
           'Callum WILSON',
           'Ayoze PEREZ',
           'Steven NAISMITH',
-          'Jose Salomon RONDON',
+          'Salomon RONDON',
           'Leo BAPTISTAO',
           'Imanol AGIRRETXE',
           'Leonardo ULLOA',
@@ -138,7 +138,8 @@
           'Antonio SANABRIA',
           'Javi GUERRA',
           'Yohan CABAYE',
-          'Massimo MACCARONE'
+          'Massimo MACCARONE',
+          'Daniel STURRIDGE'
         ],
         mike: [
           'Luis SUAREZ',

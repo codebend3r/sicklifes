@@ -11,10 +11,10 @@
     .filter('capitalize', function () {
       return function (input) {
         return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
-      }
+      };
     })
 
-    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, momentService, transferDates, managerData, managerPlayers, gameLogs, updateDataUtils, apiFactory) {
+    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, momentService, transferDates, managerData, managerPlayers, gameLogs, updateDataUtils, apiFactory, dataRecovery) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -123,12 +123,12 @@
                 id: p.id,
                 name: p.playerName,
                 status: p.status,
-                image: p.image
+                image: p.playerImage
               },
               team: {
+                id: p.teamId,
                 name: p.teamName,
-                logo: p.teamLogo,
-                id: p.teamId
+                logo: p.teamLogo
               },
               league: {
                 name: p.leagueName,
@@ -142,6 +142,20 @@
               active: true,
               dateOfTransaction: p.dateOfTransaction
             };
+
+            console.log(p.playerName, managerCore[key].players[p.id].league);
+
+            var currentPlayers = dataRecovery.draftOrder[key];
+
+            _.each(currentPlayers, function(element, index) {
+
+              if (!angular.isUndefinedOrNull(p.playerName)) {
+                if (p.playerName.toLowerCase() === element.toLowerCase()) {
+                  managerCore[key].players[p.id].player.pickNumber = index + 1;
+                }
+              }
+
+            });
 
           });
 
