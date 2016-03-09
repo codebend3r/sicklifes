@@ -198,18 +198,9 @@
 
         p.team = p.team || {};
 
-        if (result.data.team) {
-          p.team.id = result.data.team.id || p.team.id;
-          p.team.name = result.data.team.full_name || p.team.name;
-          if (result.data.team.logos.large) {
-            p.team.logo = result.data.team.logos.large;
-          } else {
-            console.log('not defined', result.data.team.logos.large);
-            p.team.logo = p.team.logo;
-          }
-        } else {
-          console.warn(p.player.name, 'does not have result.data.team property, add it manually');
-        }
+        p.team.id = result.data.team && result.data.team.id || p.team.id || '';
+        p.team.name = result.data.team && result.data.team.full_name || p.team.name || '';
+        p.team.logo = result.data.team && result.data.team.logos.large || p.team.logo;
 
         if (angular.isUndefinedOrNull(p.team)) {
           console.warn('no p.team property', p);
@@ -427,7 +418,6 @@
 
             var foundTeam = _.where($rootScope.leagueTables.chlg, {teamName: player.teamName});
             if (foundTeam && angular.isUndefinedOrNull(validLeagues.inSeri) && angular.isUndefinedOrNull(validLeagues.inLiga) && angular.isUndefinedOrNull(validLeagues.inEPL)) {
-              console.log(player.playerName, 'is CHLG', _.keys(validLeagues));
               player.league.name = 'CHLG';
             }
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.chlgCompleteLogs.length)) {
@@ -477,7 +467,6 @@
 
             var foundTeam = _.where($rootScope.leagueTables.uefa, {teamName: player.teamName});
             if (foundTeam && _.keys(validLeagues) === ['inEuro']) {
-              console.log(player.playerName, 'is EURO', _.keys(validLeagues));
               player.league.name = 'EURO';
             }
             if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.euroCompleteLogs.length)) {

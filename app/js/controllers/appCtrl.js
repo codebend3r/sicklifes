@@ -404,10 +404,14 @@
 
       };
 
+      /**
+       * @name saveRoster
+       * @description
+       */
       $scope.saveRoster = function (managerData) {
 
         console.log('//////////////////////////////');
-        console.log('SAVING MANAGERS DATA');
+        console.log('SAVING MANAGERS DATA', managerData);
         console.log('//////////////////////////////');
 
         if (Array.isArray(managerData)) {
@@ -431,6 +435,11 @@
             players: {}
           };
 
+          managerPlayers[key] = {
+            managerName: key,
+            players: {}
+          };
+
           gameLogs[key] = {
             managerName: key,
             filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
@@ -450,20 +459,13 @@
 
           _.each(manager.players, function (p) {
 
-            //managerCore[key].players = player;
-
-            if (angular.isUndefinedOrNull(managerCore[key])) {
-              managerCore[key] = {
+            if (angular.isUndefinedOrNull(managerPlayers[key])) {
+              managerPlayers[key] = {
                 players: {}
               };
             }
 
-            // if (angular.isUndefinedOrNull(player.league) || angular.isUndefinedOrNull(player.league.leagueName) || angular.isUndefinedOrNull(player.league.leagueSlugs)) {
-            //   console.log('player', player);
-            //   debugger;
-            // }
-
-            managerCore[key].players[p.id] = {
+            managerPlayers[key].players[p.id] = {
               player: p.player,
               team: p.team,
               league: p.league,
@@ -480,6 +482,16 @@
               //   }
               // ]
             };
+
+            // if (angular.isUndefinedOrNull(managerPlayers[key])) {
+            //   managerPlayers[key] = {
+            //     players: {}
+            //   };
+            // }
+            //
+            // managerPlayers[key].players[p.id] = {
+            //   gameLogs: p.gameLogs
+            // };
 
             // clean up
             angular.isDefined(p.seriGameLog) && delete p.seriGameLog;
@@ -502,22 +514,11 @@
 
           });
 
-          managerPlayers[key] = {
-            managerName: key,
-            players: manager.players
-          };
-
           angular.isDefined(manager.players) && delete manager.players;
 
         });
 
         //////////////////////////////////
-
-        console.log('===============================');
-        console.log('gameLogs:', gameLogs);
-        console.log('charts:', charts);
-        console.log('managerPlayers:', managerPlayers);
-        console.log('===============================');
 
         if (_.hasDeepProperty(gameLogs, 'managerName') && _.hasDeepProperty(gameLogs, 'filteredMonthlyGoalsLog') && _.hasDeepProperty(gameLogs, 'monthlyGoalsLog')) {
           console.log('gameLogs test passsed');
@@ -533,7 +534,9 @@
           return false;
         }
 
-        if (_.hasDeepProperty(managerPlayers, 'players')) {
+        ////////////////////////////////
+
+        if (_.hasDeepProperty(managerPlayers, 'managerName') && _.hasDeepProperty(managerPlayers, 'players')) {
 
           var hasPlayerId = _.allHaveProperty(managerPlayers, 'player.id');
 
@@ -545,23 +548,6 @@
             return false;
           }
 
-        } else {
-          console.log('managerPlayers test failed');
-          debugger;
-          return false;
-        }
-
-        if (_.hasDeepProperty(managerPlayers, 'manager')) {
-
-          var hasPlayerId = _.allHaveProperty(managerPlayers, 'manager.name');
-
-          if (hasPlayerId) {
-            console.log('all players have a \'manager.name\' property');
-          } else {
-            console.log('all players DO NOT have \'manager.name\' property');
-            debugger;
-            return false;
-          }
         }
 
         if (_.hasDeepProperty(managerData, 'managerName') && _.hasDeepProperty(managerData, 'totalPoints') && _.hasDeepProperty(managerData, 'totalGoals')) {
@@ -572,14 +558,30 @@
           return false;
         }
 
-        // .then(function() {
+        console.log('===============================');
+        console.log('gameLogs:', gameLogs);
+        console.log('charts:', charts);
+        console.log('managerPlayers:', managerPlayers);
+        console.log('===============================');
+
+        // $scope.saveToFireBase({
+        //   data: managerData,
+        //   _lastSyncedOn: momentService.syncDate(),
+        // }, 'managerData').then(function() {
         //
-        //   return $scope.saveToFireBase({
-        //     data: managerData,
-        //     _lastSyncedOn: momentService.syncDate(),
-        //   }, 'managerData');
+        //   console.log('managerData DONE');
         //
-        // })
+        // });
+
+        // $scope.saveToFireBase({
+        //   data: managerPlayers,
+        //   _lastSyncedOn: momentService.syncDate()
+        // }, 'managerPlayers').then(function() {
+        //
+        //   console.log('managerPlayers DONE');
+        //
+        // });
+
         // .then(function() {
         //
         //   return $scope.saveToFireBase({
