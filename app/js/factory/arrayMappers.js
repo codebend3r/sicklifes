@@ -645,7 +645,7 @@
 
         gameMapsObj.index = index;
         gameMapsObj.id = dataObj.player.player.id;
-        gameMapsObj.playerName = dataObj.player.playerName;
+        gameMapsObj.playerName = dataObj.player.player.name;
         gameMapsObj.alignment = game.alignment === 'away' ? '@' : 'vs';
         gameMapsObj.vsTeam = game.alignment === 'away' ? game.box_score.event.home_team.full_name : game.box_score.event.away_team.full_name;
         gameMapsObj.leagueSlug = game.box_score.event.league.slug;
@@ -656,8 +656,8 @@
         gameMapsObj.shotsOnGoal = game.shots_on_goal || 0;
         gameMapsObj.minutesPlayed = game.minutes_played || 0;
         gameMapsObj.teamName = game.team.full_name;
-        gameMapsObj.teamId = game.team.id;
-        gameMapsObj.teamLogo = dataObj.player.teamLogo;
+        gameMapsObj.teamId = dataObj.player.team.id;
+        gameMapsObj.teamLogo = dataObj.player.team.logo;
         gameMapsObj.datePlayed = momentService.goalLogDate(game.box_score.event.game_date);
         gameMapsObj.originalDate = game.box_score.event.game_date;
         //gameMapsObj.managerName = dataObj.manager ? dataObj.manager.managerName : 'N/A';

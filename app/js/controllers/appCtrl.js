@@ -422,7 +422,7 @@
         var managerCore = {};
         var gameLogs = {};
         var charts = {};
-        var managerPlayers = {};
+        var players = {};
         var index = 0;
 
         _.each(managerData, function (manager, key) {
@@ -431,90 +431,67 @@
           index += 1;
 
           managerCore[key] = {
-            managerName: key,
+            managerName: key.capitalize(),
             players: {}
           };
 
-          managerPlayers[key] = {
-            managerName: key,
-            players: {}
+          players[key] = {
+            managerName: key.capitalize(),
+            players: _.map(manager.players, function(p) {
+              return {
+                player: p.player,
+                team: p.team,
+                league: p.league,
+                manager: p.manager,
+                stats: p.stats,
+                active: !angular.isUndefinedOrNull(p.active) ? p.active === false : false,
+                gameLogs: p.gameLogs,
+                dateOfTransaction: p.dateOfTransaction
+              };
+            })
           };
 
           gameLogs[key] = {
-            managerName: key,
+            managerName: key.capitalize(),
             filteredMonthlyGoalsLog: manager.filteredMonthlyGoalsLog,
             monthlyGoalsLog: manager.monthlyGoalsLog
           };
 
           charts[key] = {
-            managerName: key,
+            managerName: key.capitalize(),
             chartData: manager.chartData
           };
 
-          angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
-          angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
-          angular.isDefined(manager.chartData) && delete manager.chartData;
-          angular.isDefined(manager.gameLogs) && delete manager.gameLogs;
-          angular.isDefined(manager.charts) && delete manager.charts;
-
-          _.each(manager.players, function (p) {
-
-            if (angular.isUndefinedOrNull(managerPlayers[key])) {
-              managerPlayers[key] = {
-                players: {}
-              };
-            }
-
-            managerPlayers[key].players[p.id] = {
-              player: p.player,
-              team: p.team,
-              league: p.league,
-              manager: p.manager,
-              stats: {},
-              active: !angular.isUndefinedOrNull(p.active) ? p.active === false : false,
-              //active: true,
-              dateOfTransaction: p.dateOfTransaction,
-              transactions: []
-              // transactions: !angular.isUndefinedOrNull(p.transactions) ? p.transactions : [
-              //   {
-              //     date: p.dateOfTransaction,
-              //     status: p.player.status
-              //   }
-              // ]
-            };
-
-            // if (angular.isUndefinedOrNull(managerPlayers[key])) {
-            //   managerPlayers[key] = {
-            //     players: {}
-            //   };
-            // }
-            //
-            // managerPlayers[key].players[p.id] = {
-            //   gameLogs: p.gameLogs
-            // };
-
-            // clean up
-            angular.isDefined(p.seriGameLog) && delete p.seriGameLog;
-            angular.isDefined(p.eplGameLog) && delete p.eplGameLog;
-            angular.isDefined(p.ligaGameLog) && delete p.ligaGameLog;
-            angular.isDefined(p.chlgGameLog) && delete p.chlgGameLog;
-            angular.isDefined(p.euroGameLog) && delete p.euroGameLog;
-            angular.isDefined(p.allLeaguesName) && delete p.allLeaguesName;
-            angular.isDefined(p.id) && delete p.id;
-            angular.isDefined(p.playerName) && delete p.playerName;
-            angular.isDefined(p.playerImage) && delete p.playerImage;
-            //angular.isDefined(p.injured) && delete p.injured;
-            angular.isDefined(p.status) && delete p.status;
-            angular.isDefined(p.pickNumber) && delete p.pickNumber;
-            angular.isDefined(p.teamId) && delete p.teamId;
-            angular.isDefined(p.teamName) && delete p.teamName;
-            angular.isDefined(p.teamLogo) && delete p.teamLogo;
-            angular.isDefined(p.leagueName) && delete p.leagueName;
-            angular.isDefined(p.leagueSlugs) && delete p.leagueSlugs;
-
-          });
-
-          angular.isDefined(manager.players) && delete manager.players;
+          // angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
+          // angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
+          // angular.isDefined(manager.chartData) && delete manager.chartData;
+          // angular.isDefined(manager.gameLogs) && delete manager.gameLogs;
+          // angular.isDefined(manager.charts) && delete manager.charts;
+          //
+          // _.each(manager.players, function (p) {
+          //
+          //   // clean up
+          //   angular.isDefined(p.seriGameLog) && delete p.seriGameLog;
+          //   angular.isDefined(p.eplGameLog) && delete p.eplGameLog;
+          //   angular.isDefined(p.ligaGameLog) && delete p.ligaGameLog;
+          //   angular.isDefined(p.chlgGameLog) && delete p.chlgGameLog;
+          //   angular.isDefined(p.euroGameLog) && delete p.euroGameLog;
+          //   angular.isDefined(p.allLeaguesName) && delete p.allLeaguesName;
+          //   angular.isDefined(p.id) && delete p.id;
+          //   angular.isDefined(p.playerName) && delete p.playerName;
+          //   angular.isDefined(p.playerImage) && delete p.playerImage;
+          //   //angular.isDefined(p.injured) && delete p.injured;
+          //   angular.isDefined(p.status) && delete p.status;
+          //   angular.isDefined(p.pickNumber) && delete p.pickNumber;
+          //   angular.isDefined(p.teamId) && delete p.teamId;
+          //   angular.isDefined(p.teamName) && delete p.teamName;
+          //   angular.isDefined(p.teamLogo) && delete p.teamLogo;
+          //   angular.isDefined(p.leagueName) && delete p.leagueName;
+          //   angular.isDefined(p.leagueSlugs) && delete p.leagueSlugs;
+          //
+          // });
+          //
+          // angular.isDefined(manager.players) && delete manager.players;
 
         });
 
@@ -536,32 +513,193 @@
 
         ////////////////////////////////
 
-        if (_.hasDeepProperty(managerPlayers, 'managerName') && _.hasDeepProperty(managerPlayers, 'players')) {
+        if (_.hasDeepProperty(players, 'managerName') && _.hasDeepProperty(players, 'players')) {
 
-          var hasPlayerId = _.allHaveProperty(managerPlayers, 'player.id');
+          var hasPlayer = _.allHaveProperty(players, 'player');
+
+          if (hasPlayer) {
+            console.log('all players have \'player\' property');
+          } else {
+            console.log('all players DO NOT have \'player\' property');
+            debugger;
+            return false;
+          }
+
+          var hasPlayerId = _.allHaveProperty(players, 'player.id');
 
           if (hasPlayerId) {
-            console.log('all players have a \'player.id\' property');
+            console.log('all players have \'player.id\' property');
           } else {
             console.log('all players DO NOT have \'player.id\' property');
             debugger;
             return false;
           }
 
+          var hasPlayerName = _.allHaveProperty(players, 'player.name');
+
+          if (hasPlayerName) {
+            console.log('all players have \'player.name\' property');
+          } else {
+            console.log('all players DO NOT have \'player.name\' property');
+            debugger;
+            return false;
+          }
+
+          var hasStatus = _.allHaveProperty(players, 'player.status');
+
+          if (hasStatus) {
+            console.log('all players have \'player.status\' property');
+          } else {
+            console.log('all players DO NOT have \'player.status\' property');
+            debugger;
+            return false;
+          }
+
+          var hasImage = _.allHaveProperty(players, 'player.image');
+
+          if (hasImage) {
+            console.log('all players have \'player.image\' property');
+          } else {
+            console.log('all players DO NOT have \'player.image\' property');
+            debugger;
+            return false;
+          }
+
+          var hasPickNumber = _.allHaveProperty(players, 'player.pickNumber');
+
+          if (hasPickNumber) {
+            console.log('all players have \'player.pickNumber\' property');
+          } else {
+            console.log('all players DO NOT have \'player.pickNumber\' property');
+            debugger;
+            return false;
+          }
+
+          var hasTeam = _.allHaveProperty(players, 'team');
+
+          if (hasTeam) {
+            console.log('all players have \'team\' property');
+          } else {
+            console.log('all players DO NOT have \'team\' property');
+            debugger;
+            return false;
+          }
+
+          var hasTeamId = _.allHaveProperty(players, 'team.id');
+
+          if (hasTeamId) {
+            console.log('all players have \'team.id\' property');
+          } else {
+            console.log('all players DO NOT have \'team.id\' property');
+            debugger;
+            return false;
+          }
+
+          var hasTeamName = _.allHaveProperty(players, 'team.name');
+
+          if (hasTeamName) {
+            console.log('all players have \'team.name\' property');
+          } else {
+            console.log('all players DO NOT have \'team.name\' property');
+            debugger;
+            return false;
+          }
+
+          var hasTeamLogo = _.allHaveProperty(players, 'team.logo');
+
+          if (hasTeamLogo) {
+            console.log('all players have \'team.logo\' property');
+          } else {
+            console.log('all players DO NOT have \'team.logo\' property');
+            debugger;
+            return false;
+          }
+
+          var hasManager = _.allHaveProperty(players, 'manager');
+
+          if (hasManager) {
+            console.log('all players have \'manager\' property');
+          } else {
+            console.log('all players DO NOT have \'manager\' property');
+            debugger;
+            return false;
+          }
+
+          var hasManagerName = _.allHaveProperty(players, 'manager.name');
+
+          if (hasManagerName) {
+            console.log('all players have \'manager.name\' property');
+          } else {
+            console.log('all players DO NOT have \'manager.name\' property');
+            debugger;
+            return false;
+          }
+
+          var hasLeague = _.allHaveProperty(players, 'league');
+
+          if (hasLeague) {
+            console.log('all players have \'league\' property');
+          } else {
+            console.log('all players DO NOT have \'league\' property');
+            debugger;
+            return false;
+          }
+
+          var hasLeagueName = _.allHaveProperty(players, 'league.name');
+
+          if (hasLeagueName) {
+            console.log('all players have \'league.name\' property');
+          } else {
+            console.log('all players DO NOT have \'league.name\' property');
+            debugger;
+            return false;
+          }
+
+          var hasLeagueSlugs = _.allHaveProperty(players, 'league.slugs');
+
+          if (hasLeagueSlugs) {
+            console.log('all players have \'league.slugs\' property');
+          } else {
+            console.log('all players DO NOT have \'league.slugs\' property');
+            debugger;
+            return false;
+          }
+
+          var hasActive = _.allHaveProperty(players, 'active');
+
+          if (hasActive) {
+            console.log('all players have \'active\' property');
+          } else {
+            console.log('all players DO NOT have \'active\' property');
+            debugger;
+            return false;
+          }
+
+
+          var hasDateOfTransaction = _.allHaveProperty(players, 'dateOfTransaction');
+
+          if (hasDateOfTransaction) {
+            console.log('all players have \'dateOfTransaction\' property');
+          } else {
+            console.log('all players DO NOT have \'dateOfTransaction\' property');
+            debugger;
+            return false;
+          }
+
         }
 
-        if (_.hasDeepProperty(managerData, 'managerName') && _.hasDeepProperty(managerData, 'totalPoints') && _.hasDeepProperty(managerData, 'totalGoals')) {
-          console.log('managerData test passsed');
-        } else {
-          console.log('managerData test failed');
-          debugger;
-          return false;
-        }
+        // if (_.hasDeepProperty(managerData, 'managerName') && _.hasDeepProperty(managerData, 'totalPoints') && _.hasDeepProperty(managerData, 'totalGoals')) {
+        //   console.log('managerData test passsed');
+        // } else {
+        //   console.log('managerData test failed');
+        //   debugger;
+        //   return false;
+        // }
 
         console.log('===============================');
         console.log('gameLogs:', gameLogs);
         console.log('charts:', charts);
-        console.log('managerPlayers:', managerPlayers);
+        console.log('players:', players);
         console.log('===============================');
 
         // $scope.saveToFireBase({
@@ -573,14 +711,10 @@
         //
         // });
 
-        // $scope.saveToFireBase({
-        //   data: managerPlayers,
-        //   _lastSyncedOn: momentService.syncDate()
-        // }, 'managerPlayers').then(function() {
-        //
-        //   console.log('managerPlayers DONE');
-        //
-        // });
+        $scope.saveToFireBase({
+          data: players,
+          _lastSyncedOn: momentService.syncDate()
+        }, 'managerPlayers');
 
         // .then(function() {
         //
