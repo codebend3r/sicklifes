@@ -1,5 +1,7 @@
 <div class='panel-body'>
 
-	<custom-table table-body-template='managers-overview' list='selectedManager.players' sort-key="pickNumber" table-params="{selectedManager: selectedManager}" table-header='tableHeader'></custom-table>
+	<!-- <pre>{{selectedManager.players | json}}</pre> -->
+
+	<custom-table table-body-template='managers-overview' list='selectedManager.players' sort-key="player.pickNumber" table-params="{selectedManager: selectedManager}" table-header='tableHeader'></custom-table>
 
 </div>

@@ -437,8 +437,8 @@
 
           players[key] = {
             managerName: key.capitalize(),
-            players: _.map(manager.players, function(p) {
-              return {
+            players: _.object(_.map(manager.players, function(p, key) {
+              return [key, {
                 player: p.player,
                 team: p.team,
                 league: p.league,
@@ -447,8 +447,8 @@
                 active: !angular.isUndefinedOrNull(p.active) ? p.active === false : false,
                 gameLogs: p.gameLogs,
                 dateOfTransaction: p.dateOfTransaction
-              };
-            })
+              }];
+            }))
           };
 
           gameLogs[key] = {

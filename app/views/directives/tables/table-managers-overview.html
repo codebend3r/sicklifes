@@ -2,7 +2,7 @@
 <table class='table table-hover table-responsive hidden-sm hidden-xs'>
   <thead>
   <tr>
-    <th title="player name"><a ng-click="setSortKey('playerName')">Player</a></th>
+    <th title="player name"><a ng-click="setSortKey('player.name')">Player</a></th>
     <th title="team name"><a ng-click="setSortKey('teamName')">Team</a></th>
     <th title="league name"><a ng-click="setSortKey('leagueName')">League</a></th>
     <th title="total goals"><a ng-click="setSortKey('goals')">TG</a></th>
@@ -14,26 +14,26 @@
   </thead>
   <tbody>
   <tr ng-repeat="player in list | orderObjectBy:sortKey:ascending">
-    <td class="player-column" ng-class="{dropped: player.status === 'dropped', added: player.status === 'added'}">
+    <td class="player-column" ng-class="{dropped: player.player.status === 'dropped', added: player.player.status === 'added'}">
       <div class="vertical-center">
-        <a ui-sref="playerDetails({playerId: player.id})">{{player.pickNumber}} - {{player.playerName}}</a>
+        <a ui-sref="playerDetails({playerId: player.id})">{{player.player.pickNumber}} - {{player.player.name}}</a>
       </div>
     </td>
     <td ng-if-start="edit"><div class="vertical-center">{{player.id}}</div></td>
-    <td><div class="vertical-center">status: <input class="form-control" type="text" ng-model="player.status" /></div></td>
-    <td><div class="vertical-center">pickNumber: <input class="form-control" type="text" ng-model="player.pickNumber" /></div></td>
+    <td><div class="vertical-center">status: <input class="form-control" type="text" ng-model="player.player.status" /></div></td>
+    <td><div class="vertical-center">player.player.pickNumber: <input class="form-control" type="text" ng-model="player.player.pickNumber" /></div></td>
     <td ng-if-end><div class="vertical-center">date: <input class="form-control" type="text" ng-model="player.dateOfTransaction" /></div></td>
     <td ng-if-start="!edit" class="bold small-text">
       <div class="vertical-center">
-        <img width="40" height="40" ng-src="{{player.team.teamLogo}}"/>&nbsp;<a ui-sref="roster({leagueName: player.league.leagueName.toLowerCase(), teamId: player.team.teamId})">{{player.team.teamName}}</a>
+        <img width="40" height="40" ng-src="{{player.team.logo}}"/>&nbsp;<a ui-sref="roster({leagueName: player.league.name.toLowerCase(), teamId: player.team.id})">{{player.team.name}}</a>
       </div>
     </td>
-    <td class="small-text"><div class="vertical-center">{{player.league.leagueName}}</div></td>
-    <td><div class="vertical-center">{{player.goals}}</div></td>
-    <td><div class="vertical-center">{{player.domesticGoals}}</div></td>
-    <td><div class="vertical-center">{{player.clGoals}}</div></td>
-    <td><div class="vertical-center">{{player.eGoals}}</div></td>
-    <td ng-if-end><div class="vertical-center">{{player.points}}</div></td>
+    <td class="small-text"><div class="vertical-center">{{player.league.name}}</div></td>
+    <td><div class="vertical-center">{{player.stats.goals}}</div></td>
+    <td><div class="vertical-center">{{player.stats.domesticGoals}}</div></td>
+    <td><div class="vertical-center">{{player.stats.clGoals}}</div></td>
+    <td><div class="vertical-center">{{player.stats.eGoals}}</div></td>
+    <td ng-if-end><div class="vertical-center">{{player.stats.points}}</div></td>
   </tr>
   </tbody>
 </table>
@@ -42,23 +42,23 @@
 <table class='table table-hover table-responsive hidden-lg hidden-md'>
   <thead>
   <tr>
-    <th title="player name"><a ng-click="setSortKey('playerName')">Player</a></th>
+    <th title="player name"><a ng-click="setSortKey('player.name')">Player</a></th>
     <th title="team name"><a ng-click="setSortKey('teamName')">Team</a></th>
     <th title="total points"><a ng-click="setSortKey('points')">Points</a></th>
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="player in list | orderObjectBy:'pickNumber':false">
-    <td class="player-column" ng-class="{dropped: player.status === 'dropped', added: player.status === 'added'}">
+  <tr ng-repeat="player in list | orderObjectBy:'player.player.pickNumber':false">
+    <td class="player-column" ng-class="{dropped: player.player.status === 'dropped', added: player.player.status === 'added'}">
       <div class="vertical-center">
-        <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
+        <a ui-sref="playerDetails({playerId: player.id})">{{player.player.name}}</a>
       </div>
     </td>
     <td class="bold small-text">
-      <div class="vertical-center">{{player.team.teamName}}</div>
+      <div class="vertical-center">{{player.team.name}}</div>
     </td>
     <td>
-      <div class="vertical-center">{{player.points}}</div>
+      <div class="vertical-center">{{player.stats.points}}</div>
     </td>
   </tr>
   </tbody>
