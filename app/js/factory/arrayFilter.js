@@ -31,12 +31,12 @@
        * @description filters out any games after from players added or dropped aug 1
        * @returns {boolean}
        */
-      arrayFilter.filterOnValidGoals = function (player, game) {
+      arrayFilter.filterOnValidGoals = function (p, game) {
         var gameDate = moment(new Date(game.datePlayed).toISOString());
-        if (player.status === 'added') {
-          return angular.isDefined(player.dateOfTransaction) && gameDate.isAfter(new Date(player.dateOfTransaction).toISOString());
-        } else if (player.status === 'dropped') {
-         return angular.isDefined(player.dateOfTransaction) && gameDate.isBefore(new Date(player.dateOfTransaction).toISOString());
+        if (p.player.status === 'added') {
+          return angular.isDefined(p.dateOfTransaction) && gameDate.isAfter(new Date(p.dateOfTransaction).toISOString());
+        } else if (p.player.status === 'dropped') {
+         return angular.isDefined(p.dateOfTransaction) && gameDate.isBefore(new Date(p.dateOfTransaction).toISOString());
         } else {
          return gameDate.isAfter(new Date(transferDates.leagueStart.date).toISOString());
         }

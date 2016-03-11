@@ -258,7 +258,7 @@
 
             player.gameLogs.ligaCompleteLog = result.data
               .filter(arrayFilter.filterOutUndefined)
-              .map(arrayMapper.monthlyMapper.bind(this, {
+              .map(arrayMapper.gameLogMapper.bind(this, {
                 player: player,
                 manager: manager
               }))
@@ -303,7 +303,7 @@
 
             player.gameLogs.eplCompleteLog = result.data
               .filter(arrayFilter.filterOutUndefined)
-              .map(arrayMapper.monthlyMapper.bind(this, {
+              .map(arrayMapper.gameLogMapper.bind(this, {
                 player: player,
                 manager: manager || null
               }))
@@ -357,7 +357,7 @@
 
             player.gameLogs.seriCompleteLog = result.data
               .filter(arrayFilter.filterOutUndefined)
-              .map(arrayMapper.monthlyMapper.bind(this, {
+              .map(arrayMapper.gameLogMapper.bind(this, {
                 player: player,
                 manager: manager || null
               }))
@@ -403,7 +403,7 @@
 
             player.gameLogs.chlgCompleteLogs = result.data
               .filter(arrayFilter.filterOutUndefined)
-              .map(arrayMapper.monthlyMapper.bind(this, {
+              .map(arrayMapper.gameLogMapper.bind(this, {
                 player: player,
                 manager: manager || null
               }))
@@ -452,7 +452,7 @@
 
             player.gameLogs.euroCompleteLogs = result.data
               .filter(arrayFilter.filterOutUndefined)
-              .map(arrayMapper.monthlyMapper.bind(this, {
+              .map(arrayMapper.gameLogMapper.bind(this, {
                 player: player,
                 manager: manager || null
               }))
@@ -636,10 +636,10 @@
       };
 
       /**
-       * @name monthlyMapper
+       * @name gameLogMapper
        * @description called by playerGamesLog map function, builds the object per each player
        */
-      arrayMapper.monthlyMapper = function (dataObj, game, index) {
+      arrayMapper.gameLogMapper = function (dataObj, game, index) {
 
         var gameMapsObj = {};
 

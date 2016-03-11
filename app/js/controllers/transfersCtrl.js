@@ -272,11 +272,11 @@
         $scope.selectedManagerName = $scope.selectedManager.managerName;
         $scope.allPlayers = playerPoolData.allPlayers;
         $scope.transferHistory = [];
-        
+
         _.each($scope.managerData, function (m) {
-          _.each(m.players, function (player) {
-            if (player.status !== 'drafted') {
-              $scope.transferHistory.push(player);
+          _.each(m.players, function (p) {
+            if (p.player.status !== 'drafted') {
+              $scope.transferHistory.push(p);
             }
           });
         });

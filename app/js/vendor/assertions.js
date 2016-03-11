@@ -27,8 +27,11 @@
    * @description will recursively check all manager data for a specific key
    * @param obj - target object for inspection
    * @param key - a single key value or multiple key values as a string delmited by a dot
+   * @param debug - to show debug info
    */
-  _.allHaveProperty = function (obj, key) {
+  _.allHaveProperty = function (obj, key, debug) {
+
+    debug = typeof debug === undefined ? false : debug;
 
     return _.every(obj, function (m) {
 
@@ -41,9 +44,9 @@
             currentObjectKey = key.split('.')[level];
 
           var checkObject = function (parentObj, childKey) {
-            //console.log(eachPlayer.playerName, 'checking for', childKey, 'in', parentObj);
+            debug && console.log(eachPlayer.player.name, 'checking for', childKey, 'in', parentObj);
             if (angular.isUndefinedOrNull(parentObj[childKey])) {
-              console.warn(eachPlayer.playerName, 'FAILED: could not find property \'' + childKey + '\' in', parentObj);
+              console.warn(eachPlayer.player.name, 'FAILED: could not find property \'' + childKey + '\' in', parentObj);
               return false;
             } else {
               level += 1;
@@ -56,6 +59,7 @@
           };
           return checkObject(eachPlayer, currentObjectKey);
         } else {
+          debug && console.log(eachPlayer.player.name, 'checking for', key, 'in', eachPlayer, !angular.isUndefinedOrNull(eachPlayer[key]));
           return !angular.isUndefinedOrNull(eachPlayer[key]);
         }
       });

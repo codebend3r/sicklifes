@@ -3,27 +3,27 @@
   <div class='jumbotron'>
 
     <div class='col-md-4 col-sm-4 hidden-xs'>
-      <img class='profile-pic' ng-src='{{player.playerImage}}'/>
+      <img class='profile-pic' ng-src='{{player.player.image}}'/>
     </div>
 
     <div class='col-md-8 col-sm-8 col-xs-12 manager-jumbotron'>
 
-      <h1 class='player-name'>{{player.playerName | capitalize}}</h1>
-      <h3 class='player-team'><img class='background-logo inline-image' ng-src='{{player.teamLogo}}'/><a ui-sref="roster({leagueName: player.leagueName.toLowerCase(), teamId: player.teamId})">{{player.teamName}}</a></h3><br/>
-      <h4 class='player-status' ng-class="{drafted: player.status === 'drafted', dropped: player.status === 'dropped', added: player.status === 'added', 'free-agent': player.status === 'free agent'}">{{player.status | uppercase}} {{player.pickNumber | ordinal}}</h4><br/>
+      <h1 class='player-name'>{{player.player.name | capitalize}}</h1>
+      <h3 class='player-team'><img class='background-logo inline-image' ng-src='{{player.team.logo}}'/><a ui-sref="roster({leagueName: player.league.name.toLowerCase(), teamId: player.team.id})">{{player.teamName}}</a></h3><br/>
+      <h4 class='player-status' ng-class="{drafted: player.player.status === 'drafted', dropped: player.player.status === 'dropped', added: player.player.status === 'added', 'free-agent': player.status === 'free agent'}">{{player.player.status | uppercase}} {{player.pickNumber | ordinal}}</h4><br/>
       <h4 ng-if="matchingManager !== undefined" class='manager-name'>Manager Name: <span><a ui-sref="managers.overview({managerId: matchingManager.managerName.toLowerCase()})">{{matchingManager.managerName | capitalize}}</a></span></h4><br/>
 
       <table class="table borderless">
-        <tr><td>SHOTS</td><td><dot class-name="shots"></dot>{{player.shots}}</td></tr>
-        <tr><td>SOG</td><td><dot class-name="shots-on-goal"></dot>{{player.shotsOnGoal}}</td></tr>
-        <tr><td>GOALS</td><td><dot class-name="goals"></dot>{{player.goals}}</td></tr>
-        <tr><td>POINTS</td><td>{{player.points}}</td></tr>
-        <tr ng-if='player.leagueName'><td>DOMESTIC LEAGUE</td><td>{{player.leagueName}}</td></tr>
-        <tr ng-if='player.tournamentLeagueName'><td>TOURNAMENT LEAGUE</td><td>{{player.tournamentLeagueName}}</td></tr>
-        <tr><td>POSITION</td><td>{{player.position}}</td></tr>
-        <tr><td>WEIGHT/HEIGHT</td><td>{{player.weight}}lbs/{{player.height}}</td></tr>
-        <tr><td>BIRTHPLACE</td><td>{{player.birthplace}}</td></tr>
-        <tr><td>BIRTHDATE</td><td>{{player.birthdate}}</td></tr>
+        <tr><td>SHOTS</td><td><dot class-name="shots"></dot>{{player.stats.shots}}</td></tr>
+        <tr><td>SOG</td><td><dot class-name="shots-on-goal"></dot>{{player.stats.shotsOnGoal}}</td></tr>
+        <tr><td>GOALS</td><td><dot class-name="goals"></dot>{{player.stats.goals}}</td></tr>
+        <tr><td>POINTS</td><td>{{player.stats.points}}</td></tr>
+        <tr ng-if='player.leagueName'><td>DOMESTIC LEAGUE</td><td>{{player.league.name}}</td></tr>
+        <tr ng-if='player.tournamentLeagueName'><td>TOURNAMENT LEAGUE</td><td>{{player.league.tournamentLeagueName}}</td></tr>
+        <tr><td>POSITION</td><td>{{player.bio.position}}</td></tr>
+        <tr><td>WEIGHT/HEIGHT</td><td>{{player.bio.weight}}lbs/{{player.bio.height}}</td></tr>
+        <tr><td>BIRTHPLACE</td><td>{{player.bio.birthplace}}</td></tr>
+        <tr><td>BIRTHDATE</td><td>{{player.bio.birthdate}}</td></tr>
       </table>
 
     </div>

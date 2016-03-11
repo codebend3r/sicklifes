@@ -203,23 +203,23 @@
 
         _.each(lastDays, function (calendarDay) {
 
-          if ($scope.player.playedInEPLGames) {
+          if ($scope.player.activeLeagues.playedInEPLGames) {
             $scope.player.gameLogs.eplCompleteLog.forEach(logLoop.bind(self, calendarDay, targetObject));
           }
 
-          if ($scope.player.playedInSeriGames) {
+          if ($scope.player.activeLeagues.playedInSeriGames) {
             $scope.player.gameLogs.seriCompleteLog.forEach(logLoop.bind(self, calendarDay, targetObject));
           }
 
-          if ($scope.player.playedInLigaGames) {
+          if ($scope.player.activeLeagues.playedInLigaGames) {
             $scope.player.gameLogs.ligaCompleteLog.forEach(logLoop.bind(self, calendarDay, targetObject));
           }
 
-          if ($scope.player.playedInChlgGames) {
+          if ($scope.player.activeLeagues.playedInChlgGames) {
             $scope.player.gameLogs.chlgCompleteLogs.forEach(logLoop.bind(self, calendarDay, targetObject));
           }
 
-          if ($scope.player.playedInEuroGames) {
+          if ($scope.player.activeLeagues.playedInEuroGames) {
             $scope.player.gameLogs.euroCompleteLogs.forEach(logLoop.bind(self, calendarDay, targetObject));
           }
 

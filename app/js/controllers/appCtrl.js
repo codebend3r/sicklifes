@@ -423,6 +423,7 @@
         var gameLogs = {};
         var charts = {};
         var players = {};
+        var playersGameLogs = {};
         var index = 0;
 
         _.each(managerData, function (manager, key) {
@@ -444,9 +445,19 @@
                 league: p.league,
                 manager: p.manager,
                 stats: p.stats,
+                bio: p.bio,
+                activeLeagues: p.activeLeagues,
                 active: !angular.isUndefinedOrNull(p.active) ? p.active === false : false,
-                gameLogs: p.gameLogs,
                 dateOfTransaction: p.dateOfTransaction
+              }];
+            }))
+          };
+
+          playersGameLogs[key] = {
+            managerName: key.capitalize(),
+            players: _.object(_.map(manager.players, function(p, key) {
+              return [key, {
+                gameLogs: p.gameLogs
               }];
             }))
           };
@@ -461,37 +472,6 @@
             managerName: key.capitalize(),
             chartData: manager.chartData
           };
-
-          // angular.isDefined(manager.filteredMonthlyGoalsLog) && delete manager.filteredMonthlyGoalsLog;
-          // angular.isDefined(manager.monthlyGoalsLog) && delete manager.monthlyGoalsLog;
-          // angular.isDefined(manager.chartData) && delete manager.chartData;
-          // angular.isDefined(manager.gameLogs) && delete manager.gameLogs;
-          // angular.isDefined(manager.charts) && delete manager.charts;
-          //
-          // _.each(manager.players, function (p) {
-          //
-          //   // clean up
-          //   angular.isDefined(p.seriGameLog) && delete p.seriGameLog;
-          //   angular.isDefined(p.eplGameLog) && delete p.eplGameLog;
-          //   angular.isDefined(p.ligaGameLog) && delete p.ligaGameLog;
-          //   angular.isDefined(p.chlgGameLog) && delete p.chlgGameLog;
-          //   angular.isDefined(p.euroGameLog) && delete p.euroGameLog;
-          //   angular.isDefined(p.allLeaguesName) && delete p.allLeaguesName;
-          //   angular.isDefined(p.id) && delete p.id;
-          //   angular.isDefined(p.playerName) && delete p.playerName;
-          //   angular.isDefined(p.playerImage) && delete p.playerImage;
-          //   //angular.isDefined(p.injured) && delete p.injured;
-          //   angular.isDefined(p.status) && delete p.status;
-          //   angular.isDefined(p.pickNumber) && delete p.pickNumber;
-          //   angular.isDefined(p.teamId) && delete p.teamId;
-          //   angular.isDefined(p.teamName) && delete p.teamName;
-          //   angular.isDefined(p.teamLogo) && delete p.teamLogo;
-          //   angular.isDefined(p.leagueName) && delete p.leagueName;
-          //   angular.isDefined(p.leagueSlugs) && delete p.leagueSlugs;
-          //
-          // });
-          //
-          // angular.isDefined(manager.players) && delete manager.players;
 
         });
 
@@ -571,6 +551,16 @@
             console.log('all players have \'player.pickNumber\' property');
           } else {
             console.log('all players DO NOT have \'player.pickNumber\' property');
+            debugger;
+            return false;
+          }
+
+          var hasBio = _.allHaveProperty(players, 'bio');
+
+          if (hasBio) {
+            console.log('all players have \'bio\' property');
+          } else {
+            console.log('all players DO NOT have \'bio\' property');
             debugger;
             return false;
           }
@@ -688,58 +678,43 @@
 
         }
 
-        // if (_.hasDeepProperty(managerData, 'managerName') && _.hasDeepProperty(managerData, 'totalPoints') && _.hasDeepProperty(managerData, 'totalGoals')) {
-        //   console.log('managerData test passsed');
-        // } else {
-        //   console.log('managerData test failed');
-        //   debugger;
-        //   return false;
-        // }
+        ///////////////////////////////////////
+
+        if (_.hasDeepProperty(playersGameLogs, 'managerName') && _.hasDeepProperty(playersGameLogs, 'players')) {
+
+          var hasGameLogs = _.allHaveProperty(playersGameLogs, 'gameLogs');
+
+          if (hasGameLogs) {
+            console.log('all players have \'gameLogs\' property');
+          } else {
+            console.log('all players DO NOT have \'gameLogs\' property');
+            debugger;
+            return false;
+          }
+
+        };
 
         console.log('===============================');
         console.log('gameLogs:', gameLogs);
         console.log('charts:', charts);
         console.log('players:', players);
+        console.log('playersGameLogs:', playersGameLogs);
         console.log('===============================');
-
-        // $scope.saveToFireBase({
-        //   data: managerData,
-        //   _lastSyncedOn: momentService.syncDate(),
-        // }, 'managerData').then(function() {
-        //
-        //   console.log('managerData DONE');
-        //
-        // });
-
+        
         $scope.saveToFireBase({
           data: players,
           _lastSyncedOn: momentService.syncDate()
         }, 'managerPlayers');
 
-        // .then(function() {
-        //
-        //   return $scope.saveToFireBase({
-        //    data: managerPlayers,
-        //    _lastSyncedOn: momentService.syncDate()
-        //   }, 'managerPlayers');
-        //
-        // })
-        // .then(function() {
-        //
-        //   return $scope.saveToFireBase({
-        //    data: charts,
-        //    _lastSyncedOn: momentService.syncDate()
-        //   }, 'charts');
-        //
-        // })
-        // .then(function() {
-        //
-        //   return $scope.saveToFireBase({
-        //    data: gameLogs,
-        //    _lastSyncedOn: momentService.syncDate()
-        //   }, 'gameLogs');
-        //
-        // });
+        $scope.saveToFireBase({
+          data: playersGameLogs,
+          _lastSyncedOn: momentService.syncDate()
+        }, 'managerPlayersLogs');
+
+        $scope.saveToFireBase({
+         data: gameLogs,
+         _lastSyncedOn: momentService.syncDate()
+        }, 'gameLogs');
 
         $scope.hideSpinner();
 
@@ -899,14 +874,14 @@
       /**
        * @name checkForWildCard
        * @description computed function to determine manager wildcard count
-       * @param player
+       * @param p
        * @param manager
        */
-      $scope.checkForWildCard = function (player, manager) {
+      $scope.checkForWildCard = function (p, manager) {
 
         // if player is not dropped then count on active roster
-        if (player.status !== 'dropped' && angular.isDefined(manager) && (player.playedInChlgGames || player.playedInEuroGames)) {
-          if (!player.playedInLigaGames && !player.playedInEPLGames && !player.playedInSeriGames) {
+        if (p.player.status !== 'dropped' && angular.isDefined(manager) && (p.playedInChlgGames || p.playedInEuroGames)) {
+          if (!p.playedInLigaGames && !p.playedInEPLGames && !p.playedInSeriGames) {
             manager.wildCardCount += 1;
           }
         }

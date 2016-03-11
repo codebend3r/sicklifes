@@ -15,7 +15,12 @@
           filtered.push(item);
         });
         filtered.sort(function (a, b) {
-          return (a[field] > b[field] ? 1 : -1);
+          if (field.indexOf('.')) {
+            var keys = field.split('.');
+            return (a[keys[0]][keys[1]] > b[keys[0]][keys[1]] ? 1 : -1);
+          } else {
+            return (a[field] > b[field] ? 1 : -1);
+          }
         });
         if (reverse) filtered.reverse();
         return filtered;

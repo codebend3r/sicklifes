@@ -3,37 +3,37 @@
   <thead>
   <tr>
     <th title="player name"><a ng-click="setSortKey('player.name')">Player</a></th>
-    <th title="team name"><a ng-click="setSortKey('teamName')">Team</a></th>
-    <th title="league name"><a ng-click="setSortKey('leagueName')">League</a></th>
-    <th title="total goals"><a ng-click="setSortKey('goals')">TG</a></th>
-    <th title="domestic goals"><a ng-click="setSortKey('domesticGoals')">DG</a></th>
-    <th title="champions league goals"><a ng-click="setSortKey('clGoals')">CLG</a></th>
-    <th title="europa league goals"><a ng-click="setSortKey('eGoals')">ELG</a></th>
-    <th title="total points"><a ng-click="setSortKey('points')">TP</a></th>
+    <th title="team name"><a ng-click="setSortKey('team.name')">Team</a></th>
+    <th title="league name"><a ng-click="setSortKey('league.name')">League</a></th>
+    <th title="total goals"><a ng-click="setSortKey('stats.goals')">TG</a></th>
+    <th title="domestic goals"><a ng-click="setSortKey('stats.domesticGoals')">DG</a></th>
+    <th title="champions league goals"><a ng-click="setSortKey('stats.clGoals')">CLG</a></th>
+    <th title="europa league goals"><a ng-click="setSortKey('stats.eGoals')">ELG</a></th>
+    <th title="total points"><a ng-click="setSortKey('stats.points')">TP</a></th>
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="player in list | orderObjectBy:sortKey:ascending">
-    <td class="player-column" ng-class="{dropped: player.player.status === 'dropped', added: player.player.status === 'added'}">
+  <tr ng-repeat="p in list | orderObjectBy:sortKey:ascending">
+    <td class="player-column" ng-class="{dropped: p.player.status === 'dropped', added: p.player.status === 'added'}">
       <div class="vertical-center">
-        <a ui-sref="playerDetails({playerId: player.id})">{{player.player.pickNumber}} - {{player.player.name}}</a>
+        <a ui-sref="playerDetails({playerId: p.player.id})">{{p.player.name}}</a>
       </div>
     </td>
-    <td ng-if-start="edit"><div class="vertical-center">{{player.id}}</div></td>
-    <td><div class="vertical-center">status: <input class="form-control" type="text" ng-model="player.player.status" /></div></td>
-    <td><div class="vertical-center">player.player.pickNumber: <input class="form-control" type="text" ng-model="player.player.pickNumber" /></div></td>
-    <td ng-if-end><div class="vertical-center">date: <input class="form-control" type="text" ng-model="player.dateOfTransaction" /></div></td>
+    <td ng-if-start="edit"><div class="vertical-center">{{p.player.id}}</div></td>
+    <td><div class="vertical-center">status: <input class="form-control" type="text" ng-model="p.player.status" /></div></td>
+    <td><div class="vertical-center">p.player.pickNumber: <input class="form-control" type="text" ng-model="p.player.pickNumber" /></div></td>
+    <td ng-if-end><div class="vertical-center">date: <input class="form-control" type="text" ng-model="p.dateOfTransaction" /></div></td>
     <td ng-if-start="!edit" class="bold small-text">
       <div class="vertical-center">
-        <img width="40" height="40" ng-src="{{player.team.logo}}"/>&nbsp;<a ui-sref="roster({leagueName: player.league.name.toLowerCase(), teamId: player.team.id})">{{player.team.name}}</a>
+        <img width="40" height="40" ng-src="{{p.team.logo}}"/>&nbsp;<a ui-sref="roster({leagueName: p.league.name.toLowerCase(), teamId: p.team.id})">{{player.team.name}}</a>
       </div>
     </td>
-    <td class="small-text"><div class="vertical-center">{{player.league.name}}</div></td>
-    <td><div class="vertical-center">{{player.stats.goals}}</div></td>
-    <td><div class="vertical-center">{{player.stats.domesticGoals}}</div></td>
-    <td><div class="vertical-center">{{player.stats.clGoals}}</div></td>
-    <td><div class="vertical-center">{{player.stats.eGoals}}</div></td>
-    <td ng-if-end><div class="vertical-center">{{player.stats.points}}</div></td>
+    <td class="small-text"><div class="vertical-center">{{p.league.name}}</div></td>
+    <td><div class="vertical-center">{{p.stats.goals}}</div></td>
+    <td><div class="vertical-center">{{p.stats.domesticGoals}}</div></td>
+    <td><div class="vertical-center">{{p.stats.clGoals}}</div></td>
+    <td><div class="vertical-center">{{p.stats.eGoals}}</div></td>
+    <td ng-if-end><div class="vertical-center">{{p.stats.points}}</div></td>
   </tr>
   </tbody>
 </table>
@@ -43,22 +43,22 @@
   <thead>
   <tr>
     <th title="player name"><a ng-click="setSortKey('player.name')">Player</a></th>
-    <th title="team name"><a ng-click="setSortKey('teamName')">Team</a></th>
-    <th title="total points"><a ng-click="setSortKey('points')">Points</a></th>
+    <th title="team name"><a ng-click="setSortKey('team.name')">Team</a></th>
+    <th title="total points"><a ng-click="setSortKey('stats.points')">Points</a></th>
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="player in list | orderObjectBy:'player.player.pickNumber':false">
-    <td class="player-column" ng-class="{dropped: player.player.status === 'dropped', added: player.player.status === 'added'}">
+  <tr ng-repeat="p in list | orderObjectBy:'player.pickNumber':false">
+    <td class="player-column" ng-class="{dropped: p.player.status === 'dropped', added: p.player.status === 'added'}">
       <div class="vertical-center">
-        <a ui-sref="playerDetails({playerId: player.id})">{{player.player.name}}</a>
+        <a ui-sref="playerDetails({playerId: p.player.id})">{{p.player.name}}</a>
       </div>
     </td>
     <td class="bold small-text">
-      <div class="vertical-center">{{player.team.name}}</div>
+      <div class="vertical-center">{{p.team.name}}</div>
     </td>
     <td>
-      <div class="vertical-center">{{player.stats.points}}</div>
+      <div class="vertical-center">{{p.stats.points}}</div>
     </td>
   </tr>
   </tbody>
