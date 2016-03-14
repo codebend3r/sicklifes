@@ -14,8 +14,6 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      $rootScope.loading = true;
-
       /**
        * @name tabData
        * @description tabs data
@@ -110,17 +108,18 @@
 
           var addedPlayer = objectUtils.playerResetGoalPoints(player);
 
-          apiFactory.getPlayerProfile('soccer', addedPlayer.id)
+          console.log('addedPlayer', addedPlayer);
+
+          apiFactory.getPlayerProfile('soccer', addedPlayer.player.id)
             .then(function (result) {
               return arrayMappers.playerInfo(addedPlayer, result);
             })
             .then(function () {
               $scope.addedPlayerObject = addedPlayer;
-              $scope.addedPlayerObject.pickNumber = $scope.currentRound.pick;
+              $scope.addedPlayerObject.player.pickNumber = pickNumber;
               $scope.addedPlayerObject.dateOfTransaction = $scope.currentRound.date;
-              console.log('pickNumber', pickNumber);
               $scope.transactionPlayerAdded = true;
-            })
+            });
 
         }
 
@@ -228,28 +227,16 @@
        */
       $scope.updatePlayerPoolData = function () {
 
-        $rootScope.loading = true;
+        updateDataUtils.updatePlayerPoolData().then(function (result) {
 
-        updateDataUtils.updatePlayerPoolData(function (result) {
           console.log('PLAYER POOL DATA UPDATED');
           $scope.allPlayers = result;
-          $rootScope.loading = false;
-          $scope.savePlayerPoolData();
+
+          // $scope.saveToFireBase({
+          //   _lastSyncedOn: momentService.syncDate(),
+          //   allPlayers: result
+          // }, 'playerPoolData');
         });
-
-      };
-
-      /**
-       * @name savePlayerPoolData
-       * @description
-       */
-      $scope.savePlayerPoolData = function () {
-
-        $scope.saveToFireBase({
-          _syncedFrom: 'transfersCtrl',
-          _lastSyncedOn: momentService.syncDate(),
-          allPlayers: $scope.allPlayers
-        }, 'playerPoolData');
 
       };
 
@@ -276,6 +263,7 @@
         _.each($scope.managerData, function (m) {
           _.each(m.players, function (p) {
             if (p.player.status !== 'drafted') {
+              console.log('p:', p);
               $scope.transferHistory.push(p);
             }
           });

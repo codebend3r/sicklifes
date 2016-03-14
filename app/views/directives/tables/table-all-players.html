@@ -46,7 +46,7 @@
       <div class="vertical-center">{{player.leagueName}}&nbsp;<span class='player-status' ng-class="{drafted: player.status === 'drafted', dropped: player.status === 'dropped', added: player.status === 'added', 'free-agent': player.status === 'free agent'}">{{player.status | uppercase}}</span></div>
     </td>
     <td class="bold">
-      <div class="vertical-center"><img width="40" height="40" ng-src="{{player.teamLogo}}"/>&nbsp;{{player.teamName}}</div>
+      <div class="vertical-center"><img width="40" height="40" ng-src="{{player.teamLogo}}"/>{{player.teamId}}&nbsp;{{player.teamName}}</div>
     </td>
   </tr>
   </tbody>
@@ -86,7 +86,7 @@
       <a ui-sref="playerDetails({playerId: player.id})">{{player.playerName}}</a>
     </td>
     <td class="bold small-text">
-      <div class="vertical-center">{{player.teamName}}</div>
+      <div class="vertical-center">{{player.teamId}}&nbsp;{{player.teamName}}</div>
     </td>
   </tr>
   </tbody>

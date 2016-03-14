@@ -50,15 +50,29 @@
          */
         playerResetGoalPoints: function (p) {
 
-          p.goals = 0;
-          p.assists = 0;
-          p.points = 0;
-          p.domesticGoals = 0;
-          p.clGoals = 0;
-          p.eGoals = 0;
-          p.gameLogs = {};
-          p.leagueSlugs = '';
-          return p;
+          var cleanedPlayer = {};
+          cleanedPlayer.player = {
+            id: p.id,
+            name: p.playerName
+          };
+          cleanedPlayer.league = {
+            name: p.leagueName
+          };
+          cleanedPlayer.manager = {};
+          cleanedPlayer.team = {
+            id: p.teamId,
+            logo: p.teamLogo,
+            name: p.teamName
+          };
+          cleanedPlayer.stats = {};
+          cleanedPlayer.stats.goals = 0;
+          cleanedPlayer.stats.assists = 0;
+          cleanedPlayer.stats.points = 0;
+          cleanedPlayer.stats.domesticGoals = 0;
+          cleanedPlayer.stats.clGoals = 0;
+          cleanedPlayer.stats.eGoals = 0;
+
+          return cleanedPlayer;
 
         },
 

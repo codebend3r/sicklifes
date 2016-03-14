@@ -16,51 +16,40 @@
        * @name updatePlayerPoolData
        * @description gets data from all of the players in all valid leagues
        */
-      updateDataUtils.updatePlayerPoolData = function (callback) {
+      updateDataUtils.updatePlayerPoolData = function () {
 
         console.log('updateDataUtils -- updatePlayerPoolData');
 
-        var allTeams = apiFactory.getAllTeams(),
+        var defer = $q.defer(),
           allTeamsPromise = [],
           allPlayers = [];
 
         // returns a list of promise with the end point for each league
-        $q.all(allTeams)
-          .then(function (result) {
-
-            //loop through each result
-            _.each(result, function (leagueData) {
-
-              _.each(leagueData.data, function (teamData) {
-
-                console.log('LEAGUE:', leagueData.slug, ', TEAM:', teamData.full_name);
-
-                // returns a promise with the end point for each team
-                var rosterRequest = apiFactory.getTeamRosterURL(leagueData.slug, teamData.id);
-
-                allTeamsPromise.push(rosterRequest);
-
-                rosterRequest.then(function (playerData) {
-
-                  _.each(playerData.data, function (eachPlayer) {
-                    console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
-                  });
-
-                  // each player on each team
-                  var rosterArray = _.map(playerData.data, arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
-                  allPlayers = allPlayers.concat(rosterArray);
-
+        apiFactory.getAllTeams().then(function (result) {
+          //loop through each result
+          _.each(result, function (leagueData) {
+            _.each(leagueData.data, function (teamData) {
+              // console.log('LEAGUE:', leagueData.slug, ', TEAM:', teamData.full_name);
+              // returns a promise with the end point for each team
+              var rosterRequest = apiFactory.getTeamRosterURL(leagueData.slug, teamData.id);
+              allTeamsPromise.push(rosterRequest);
+              rosterRequest.then(function (playerData) {
+                _.each(playerData.data, function (eachPlayer) {
+                  console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
                 });
-
+                // each player on each team
+                var rosterArray = _.map(playerData.data, arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
+                allPlayers = allPlayers.concat(rosterArray);
               });
-
             });
-
-            $q.all(allTeamsPromise).then(function () {
-              callback(allPlayers);
+            $q.all(allTeamsPromise).then(function(data) {
+              console.log('resolve promise');
+              defer.resolve(data);
             });
-
           });
+        });
+
+        return defer.promise;
 
       };
 
@@ -141,11 +130,6 @@
               if (angular.isUndefinedOrNull(p.league.slugs)) {
                 console.warn('no p.league.slugs property', p);
               }
-
-              // if (p.player.id === 1792) {
-              //   console.log(p.player.name, p);
-              //   debugger;
-              // }
 
               if (current === total) {
                 console.log('RESOLVE PROMISE:', p.manager.name);
@@ -303,7 +287,7 @@
                 _.each(currentPlayers, function(element, index) {
 
                   if (angular.isUndefinedOrNull(p.player.name)) {
-                    console.log('> player name not found', p);
+                    //console.log('> player name not found', p);
                   } else {
                     if (p.player.name.toLowerCase() === element.toLowerCase()) {
                       p.pickNumber = index + 1;

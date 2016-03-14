@@ -20,7 +20,7 @@
         '<circle class="dot" ng-class="className" cx="5" cy="5" r="5"/>' +
         'Sorry, your browser does not support inline SVG.' +
         '</svg>'
-      }
+      };
 
     })
 

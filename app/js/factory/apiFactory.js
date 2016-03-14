@@ -112,7 +112,7 @@
        */
       apiFactory.getTeamRosterURL = function (slug, id) {
         return $http.get(apiFactory.baseUrl + slug.toLowerCase() + '/teams/' + id + '/players/?rpp=-1');
-      }
+      };
 
       /**
        * @name getAllTeams

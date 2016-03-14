@@ -136,6 +136,10 @@
           console.warn('no p.player.name property', p);
         }
 
+        if (angular.isUndefinedOrNull(p.player.name)) {
+          console.warn('no p.player.name property', p);
+        }
+
         if (angular.isUndefinedOrNull(p.player.status)) {
           console.warn('no p.player.status property', p);
         }
@@ -534,29 +538,39 @@
        */
       arrayMapper.transferPlayersMap = function (leagueData, teamData, result, index) {
 
-        var obj = {
-          index: index,
+        var obj = {};
+
+        obj.player = {
           id: result.id,
-          injured: result.injury !== null,
-          playerName: textManipulator.formattedFullName(result.first_name, result.last_name),
-          managerName: $rootScope.draftMode ? 'Free Agent' : arrayMapper.getOwnerByID(result.id),
-          teamName: textManipulator.teamNameFormatted(teamData.full_name),
-          teamLogo: teamData.logos.small,
-          leagueName: leagueData.slug.toUpperCase()
+          name: textManipulator.formattedFullName(result.first_name, result.last_name)
+        };
+
+        obj.manager =  {
+          name: $rootScope.draftMode ? 'Free Agent' : arrayMapper.getOwnerByID(result.id)
+        };
+
+        obj.league =  {
+          name: leagueData.slug.toUpperCase()
+        };
+
+        obj.team = {
+          id: teamData.id,
+          name: textManipulator.teamNameFormatted(teamData.full_name),
+          logo: teamData.logos.small,
         };
 
         var match = managersService.findPlayerInManagers(result.id);
 
         if (!angular.isUndefinedOrNull(match.player)) {
-          obj.status = match.player.status;
+          obj.player.status = match.player.status;
         } else {
-          obj.status = 'free agent';
+          obj.player.status = 'free agent';
         }
 
         if (!angular.isUndefinedOrNull(match.manager)) {
-          obj.managerName = match.manager.managerName;
+          obj.manager.name = match.manager.managerName;
         } else {
-          obj.managerName = '';
+          obj.manager.name = '';
         }
 
         return obj;

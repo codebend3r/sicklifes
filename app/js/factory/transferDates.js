@@ -43,13 +43,13 @@
         },
         round5: {
           name: 'Round 5',
-          roundCompleted: false,
+          roundCompleted: true,
           pick: 29,
           date: '2016/02/23'
         },
         round6: {
           name: 'Round 6',
-          roundCompleted: false,
+          roundCompleted: true,
           pick: 30,
           date: '2016/03/01'
         }
