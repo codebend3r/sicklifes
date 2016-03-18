@@ -52,17 +52,20 @@
 
           var cleanedPlayer = {};
           cleanedPlayer.player = {
-            id: p.id,
-            name: p.playerName
+            id: p.player.id || p.id,
+            name: p.player.name || p.playerName || null,
+            pickNumber: p.player.pickNumber,
+            image: p.player.image || null,
+            status: p.player.status
           };
           cleanedPlayer.league = {
-            name: p.leagueName
+            name: p.league.name || p.leagueName || null
           };
           cleanedPlayer.manager = {};
           cleanedPlayer.team = {
-            id: p.teamId,
-            logo: p.teamLogo,
-            name: p.teamName
+            id: p.team.id || p.teamId || null,
+            logo: p.team.logo || p.teamLogo || null,
+            name: p.team.name || p.teamName || null
           };
           cleanedPlayer.stats = {};
           cleanedPlayer.stats.goals = 0;

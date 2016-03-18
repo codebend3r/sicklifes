@@ -94,13 +94,15 @@
           p = objectUtils.playerResetGoalPoints(p);
 
           p.manager = {
-            id: p.manager && p.manager.id || Math.round((Math.random() * 100)),
-            name: m.managerName
+            // id: p.manager && p.manager.id || Math.round((Math.random() * 100)),
+            name: m.managerName.capitalize()
           };
 
           m.monthlyGoalsLog = [];
           m.filteredMonthlyGoalsLog = [];
           m.charts = [];
+
+          console.log('>', p.player.id, p.player.name);
 
           apiFactory.getPlayerProfile('soccer', p.player.id)
             .then(arrayMappers.playerInfo.bind(this, p), function () {

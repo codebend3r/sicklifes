@@ -515,7 +515,7 @@
             return false;
           }
 
-          var hasPlayerName = _.allHaveProperty(players, 'player.name');
+          var hasPlayerName = _.allHaveProperty(players, 'player.name', true);
 
           if (hasPlayerName) {
             console.log('all players have \'player.name\' property');
@@ -700,7 +700,7 @@
         console.log('players:', players);
         console.log('playersGameLogs:', playersGameLogs);
         console.log('===============================');
-        
+
         $scope.saveToFireBase({
           data: players,
           _lastSyncedOn: momentService.syncDate()

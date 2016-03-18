@@ -130,26 +130,32 @@
 
         if (angular.isUndefinedOrNull(p.player)) {
           console.warn('no p.player property', p);
+          debugger;
         }
 
         if (angular.isUndefinedOrNull(p.player.id)) {
           console.warn('no p.player.name property', p);
+          debugger;
         }
 
         if (angular.isUndefinedOrNull(p.player.name)) {
           console.warn('no p.player.name property', p);
+          debugger;
         }
 
         if (angular.isUndefinedOrNull(p.player.status)) {
           console.warn('no p.player.status property', p);
+          debugger;
         }
 
         if (angular.isUndefinedOrNull(p.player.image)) {
           console.warn('no p.player.image property', p);
+          debugger;
         }
 
         if (angular.isUndefinedOrNull(p.player.pickNumber)) {
           console.warn('no p.player.pickNumber property', p);
+          debugger;
         }
 
         p.league = p.league || {};
@@ -254,6 +260,8 @@
         !angular.isUndefinedOrNull(manager) && angular.isUndefinedOrNull(manager.monthlyGoalsLog) && (manager.monthlyGoalsLog = []);
         !angular.isUndefinedOrNull(manager) && angular.isUndefinedOrNull(manager.filteredMonthlyGoalsLog) && (manager.filteredMonthlyGoalsLog = []);
 
+        player.gameLogs = {};
+
         if (validLeagues.inLiga) {
 
           // LA LIGA
@@ -305,6 +313,10 @@
           eplGamesRequest = apiFactory.getPlayerLog('epl', player.player.id);
           eplGamesRequest.then(function (result) {
 
+            if (angular.isUndefinedOrNull(result.data)) {
+              debugger;
+            }
+
             player.gameLogs.eplCompleteLog = result.data
               .filter(arrayFilter.filterOutUndefined)
               .map(arrayMapper.gameLogMapper.bind(this, {
@@ -350,14 +362,18 @@
           seriGamesRequest = apiFactory.getPlayerLog('seri', player.player.id);
           seriGamesRequest.then(function (result) {
 
-            result.data
-              .forEach(function (gameData) {
-                _.each(statsCorrection.events.seri, function (game) {
-                  if (player.player.id === game.playerId && gameData.id === game.gameId) {
-                    gameData[game.statType] = game.goals;
-                  }
-                });
-              });
+            if (angular.isUndefinedOrNull(result.data)) {
+              debugger;
+            }
+
+            // result.data
+            //   .forEach(function (gameData) {
+            //     _.each(statsCorrection.events.seri, function (game) {
+            //       if (player.player.id === game.playerId && gameData.id === game.gameId) {
+            //         gameData[game.statType] = game.goals;
+            //       }
+            //     });
+            //   });
 
             player.gameLogs.seriCompleteLog = result.data
               .filter(arrayFilter.filterOutUndefined)
@@ -404,6 +420,10 @@
 
           chlgGamesRequest = apiFactory.getPlayerLog('chlg', player.player.id);
           chlgGamesRequest.then(function (result) {
+
+            if (angular.isUndefinedOrNull(result.data)) {
+              debugger;
+            }
 
             player.gameLogs.chlgCompleteLogs = result.data
               .filter(arrayFilter.filterOutUndefined)
