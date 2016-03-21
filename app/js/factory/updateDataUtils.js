@@ -130,13 +130,10 @@
                 console.warn('no p.league.slugs property', p);
               }
 
+              m.players[p.player.id] = _.defaults(p, m.players[p.player.id]);
+
               if (current === total) {
                 console.log('RESOLVE PROMISE:', p.manager.name);
-                console.log('///////////////////////////////////////');
-                if (p.player.id === 11246) {
-                  console.log('COMPLETED:', p.player.name, p);
-                  debugger;
-                }
                 defer.resolve(m);
               }
             }, function () {

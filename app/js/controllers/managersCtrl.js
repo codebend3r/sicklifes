@@ -182,14 +182,12 @@
           .then(function (result) {
 
             console.log('////////////////////////////');
-            console.log('MANAGER DATA RECOVERED', result);
+            console.log('MANAGER DATA RECOVERED');
             console.log('////////////////////////////');
 
-            var mappedManagers = {};
-
-            _.each(result, function (obj) {
-              mappedManagers[obj.managerName.toLowerCase()] = obj;
-            });
+            var mappedManagers = _.object(_.map(result, function(obj) {
+              return [obj.managerName.toLowerCase(), obj];
+            }));
 
             $scope.selectedManager = mappedManagers[$stateParams.managerId];
 
@@ -215,11 +213,9 @@
               console.log('MANAGER DATA UPDATED');
               console.log('////////////////////////////');
 
-              var mappedManagers = {};
-
-              _.each(result, function (obj) {
-                mappedManagers[obj.managerName.toLowerCase()] = obj;
-              });
+              var mappedManagers = _.object(_.map(result, function(obj) {
+                return [obj.managerName.toLowerCase(), obj];
+              }));
 
               //managerData.data = result;
 
