@@ -1,0 +1,199 @@
+{
+  "_lastSyncedOn": "2016/03/07 2:53:34 pm",
+  "data": {
+    "chester": {
+      "managerName": "chester",
+      "players": {
+        "undefined": {
+          "active": true,
+          "dateOfTransaction": "2015/08/01",
+          "league": {
+            "name": "SERI",
+            "slugs": "liga/seri/euro",
+            "tournamentName": "EURO"
+          },
+          "manager": {
+            "id": 92,
+            "name": "Chester"
+          },
+          "player": {
+            "id": 52157,
+            "image": "http://d1si3tbndbzwz9.cloudfront.net/dark_default_headshot_w192xh192.png",
+            "name": "Giuseppe ROSSI",
+            "pickNumber": 18,
+            "status": "drafted"
+          },
+          "team": {
+            "id": 360,
+            "logo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/360/logo.png",
+            "name": "Levante",
+            "teamId": 360,
+            "teamLogo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/360/logo.png",
+            "teamName": "Levante"
+          }
+        }
+      }
+    },
+    "dan": {
+      "managerName": "dan",
+      "players": {
+        "undefined": {
+          "active": true,
+          "dateOfTransaction": "2015/08/01",
+          "league": {
+            "name": "LIGA",
+            "slugs": "liga/euro",
+            "tournamentName": "EURO"
+          },
+          "manager": {
+            "id": 37,
+            "name": "Dan"
+          },
+          "player": {
+            "id": 55024,
+            "image": "http://d1si3tbndbzwz9.cloudfront.net/dark_default_headshot_w192xh192.png",
+            "name": "Cedric BAKAMBU",
+            "pickNumber": 12,
+            "status": "drafted"
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/47/logo.png",
+            "name": "Villarreal",
+            "teamId": 47,
+            "teamLogo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/47/logo.png",
+            "teamName": "Villarreal"
+          }
+        }
+      }
+    },
+    "frank": {
+      "managerName": "frank",
+      "players": {
+        "undefined": {
+          "active": true,
+          "dateOfTransaction": "2015/08/01",
+          "league": {
+            "name": "EPL",
+            "slugs": "epl"
+          },
+          "manager": {
+            "id": 56,
+            "name": "Frank"
+          },
+          "player": {
+            "id": 53462,
+            "image": "https://d1si3tbndbzwz9.cloudfront.net/soccer/player/53462/w192xh192_headshot.jpg",
+            "name": "Jay RODRIGUEZ",
+            "pickNumber": 24,
+            "status": "dropped"
+          },
+          "team": {
+            "id": 166,
+            "logo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/166/logo.png",
+            "name": "Southampton",
+            "teamId": 166,
+            "teamLogo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/166/logo.png",
+            "teamName": "Southampton"
+          }
+        }
+      }
+    },
+    "joe": {
+      "managerName": "joe",
+      "players": {
+        "undefined": {
+          "active": true,
+          "dateOfTransaction": "2015/08/01",
+          "league": {
+            "name": "LIGA",
+            "slugs": "liga"
+          },
+          "manager": {
+            "id": 54,
+            "name": "Joe"
+          },
+          "player": {
+            "id": 54935,
+            "image": "http://d1si3tbndbzwz9.cloudfront.net/dark_default_headshot_w192xh192.png",
+            "name": "BORJA BASTON",
+            "pickNumber": 25,
+            "status": "added"
+          },
+          "team": {
+            "id": 1051,
+            "logo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/1051/logo.png",
+            "name": "SD Eibar",
+            "teamId": 1051,
+            "teamLogo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/1051/logo.png",
+            "teamName": "SD Eibar"
+          }
+        }
+      }
+    },
+    "justin": {
+      "managerName": "justin",
+      "players": {
+        "undefined": {
+          "active": true,
+          "dateOfTransaction": "2015/08/01",
+          "league": {
+            "name": "LIGA",
+            "slugs": "liga"
+          },
+          "manager": {
+            "id": 29,
+            "name": "Justin"
+          },
+          "player": {
+            "id": 54677,
+            "image": "http://d1si3tbndbzwz9.cloudfront.net/dark_default_headshot_w192xh192.png",
+            "name": "Antonio SANABRIA",
+            "pickNumber": 25,
+            "status": "drafted"
+          },
+          "team": {
+            "id": 55,
+            "logo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/55/logo.png",
+            "name": "Sporting Gijon",
+            "teamId": 55,
+            "teamLogo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/55/logo.png",
+            "teamName": "Sporting Gijon"
+          }
+        }
+      }
+    },
+    "mike": {
+      "managerName": "mike",
+      "players": {
+        "undefined": {
+          "active": true,
+          "dateOfTransaction": "2015/08/01",
+          "league": {
+            "name": "LIGA",
+            "slugs": "liga"
+          },
+          "manager": {
+            "id": 68,
+            "name": "Mike"
+          },
+          "player": {
+            "id": 49814,
+            "image": "http://d1si3tbndbzwz9.cloudfront.net/dark_default_headshot_w192xh192.png",
+            "name": "Youssef EL-ARABI",
+            "pickNumber": 16,
+            "status": "drafted"
+          },
+          "team": {
+            "id": 566,
+            "logo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/566/logo.png",
+            "name": "Granada CF",
+            "teamId": 566,
+            "teamLogo": "https://d1si3tbndbzwz9.cloudfront.net/soccer/team/566/logo.png",
+            "teamName": "Granada CF"
+          }
+        }
+      }
+    }
+  }
+}
