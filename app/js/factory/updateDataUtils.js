@@ -102,8 +102,6 @@
           m.filteredMonthlyGoalsLog = [];
           m.charts = [];
 
-          console.log('>', p.player.id, p.player.name);
-
           apiFactory.getPlayerProfile('soccer', p.player.id)
             .then(arrayMappers.playerInfo.bind(this, p), function () {
               console.log('failed at player info mapping:', p.player.name);
@@ -119,7 +117,6 @@
             })
             .then(function (result) {
               current += 1;
-              //console.log('COMPLETED:', p.playerName, Math.round((current / total) * 100));
 
               if (angular.isUndefinedOrNull(p.league)) {
                 console.warn('no p.league property', p);
@@ -136,6 +133,10 @@
               if (current === total) {
                 console.log('RESOLVE PROMISE:', p.manager.name);
                 console.log('///////////////////////////////////////');
+                if (p.player.id === 11246) {
+                  console.log('COMPLETED:', p.player.name, p);
+                  debugger;
+                }
                 defer.resolve(m);
               }
             }, function () {

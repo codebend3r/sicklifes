@@ -515,7 +515,7 @@
             return false;
           }
 
-          var hasPlayerName = _.allHaveProperty(players, 'player.name', true);
+          var hasPlayerName = _.allHaveProperty(players, 'player.name');
 
           if (hasPlayerName) {
             console.log('all players have \'player.name\' property');

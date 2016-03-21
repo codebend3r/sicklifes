@@ -116,10 +116,6 @@
           points: 0
         };
 
-        if (angular.isUndefinedOrNull(result.data.headshots.w192xh192)) {
-          debugger;
-        }
-
         p.player = {
           id: result.data.id,
           name: textManipulator.formattedFullName(result.data.first_name, result.data.last_name),
@@ -214,14 +210,17 @@
 
         if (angular.isUndefinedOrNull(p.team)) {
           console.warn('no p.team property', p);
+          debugger;
         }
 
         if (angular.isUndefinedOrNull(p.team.id)) {
           console.warn('no p.team.id property', p);
+          debugger;
         }
 
         if (angular.isUndefinedOrNull(p.team.name)) {
           console.warn('no p.team.name property', p);
+          debugger;
         }
 
         // if (angular.isUndefinedOrNull(managersService.findPlayerInManagers(p.player.id).manager)) {
