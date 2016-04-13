@@ -208,7 +208,7 @@
         .pipe(gulp.dest('builds/' + gutil.env.build + '/js/'))
         .pipe($.size({
           title: 'js',
-          showFiles: true
+          showFiles: false
         }))
         .on('error', gutil.log);
 

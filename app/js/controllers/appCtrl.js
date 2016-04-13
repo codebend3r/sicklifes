@@ -456,6 +456,7 @@
           playersGameLogs[key] = {
             managerName: key.capitalize(),
             players: _.object(_.map(manager.players, function(p, key) {
+              console.log('player game logs', p.gameLogs);
               return [key, {
                 gameLogs: p.gameLogs
               }];
@@ -707,9 +708,14 @@
         }, 'managerPlayers');
 
         $scope.saveToFireBase({
-          data: playersGameLogs,
+          data: gameLogs,
           _lastSyncedOn: momentService.syncDate()
         }, 'managerPlayersLogs');
+
+        $scope.saveToFireBase({
+          data: gameLogs,
+          _lastSyncedOn: momentService.syncDate()
+        }, 'gameLogPlayers');
 
         $scope.saveToFireBase({
          data: gameLogs,

@@ -19,11 +19,11 @@
     'firebase',
     'angular.filter'
 
-  ])
+  ]);
 
   angular.module('sicklifes')
-  
-    .constant('$moment', moment)
+
+    .constant('$moment', moment);
 
 
   // $(function () {
