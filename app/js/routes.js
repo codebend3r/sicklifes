@@ -10,8 +10,6 @@
 
     .config(function ($stateProvider, $urlRouterProvider) {
 
-      console.log('-- config routes --');
-
       //var self = this;
 
       /**
@@ -23,16 +21,16 @@
         //  var defer = $q.defer();
         //
         //  if (angular.isDefined($rootScope['managerData'])) {
-        //    console.log('$rootScope');
+        //    $log.debug('$rootScope');
         //    defer.resolve($rootScope['managerData']);
         //    return defer.promise;
         //  } else if (angular.isDefined($localStorage['managerData'])) {
-        //    console.log('$localStorage');
+        //    $log.debug('$localStorage');
         //    $rootScope['managerData'] = $localStorage['managerData'];
         //    defer.resolve($localStorage['managerData']);
         //    return defer.promise;
         //  } else {
-        //    console.log('$http');
+        //    $log.debug('$http');
         //    return apiFactory.getApiData('managerData');
         //  }
         //

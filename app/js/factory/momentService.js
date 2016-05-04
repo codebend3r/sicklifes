@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('momentService', function ($moment, $log) {
+    .factory('momentService', function ($moment) {
 
       return {
 
@@ -55,8 +55,8 @@
 
         /**
          * @description compares two dates and returns true if past 4 hours ago
-         * @param syncDate
-         * @returns {boolean}
+         * @param {date} syncDate - TODO
+         * @returns {boolean} - if the difference in minutes is greater than 240
          */
         isHoursAgo: function (syncDate) {
 
@@ -70,8 +70,8 @@
 
         /**
          * @description checks to see if the current date and the sync date is past 22 hours
-         * @param syncDate
-         * @returns {boolean}
+         * @param {date} syncDate - TODO
+         * @returns {boolean} - if the difference in hours is greater than 22
          */
         isPastYesterday: function (syncDate) {
 

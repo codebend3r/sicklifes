@@ -67,6 +67,7 @@
             logo: p.team.logo || p.teamLogo || null,
             name: p.team.name || p.teamName || null
           };
+          cleanedPlayer.gameLogs = {};
           cleanedPlayer.stats = {};
           cleanedPlayer.stats.goals = 0;
           cleanedPlayer.stats.assists = 0;
@@ -74,6 +75,8 @@
           cleanedPlayer.stats.domesticGoals = 0;
           cleanedPlayer.stats.clGoals = 0;
           cleanedPlayer.stats.eGoals = 0;
+          cleanedPlayer.stats.shots = 0;
+          cleanedPlayer.stats.shotsOnGoal = 0;
 
           return cleanedPlayer;
 

@@ -10,7 +10,7 @@
 
     .controller('statsCtrl', function ($scope, $rootScope, $stateParams) {
 
-      console.log('-- statsCtrl --');
+      $log.debug('-- statsCtrl --');
 
 
 

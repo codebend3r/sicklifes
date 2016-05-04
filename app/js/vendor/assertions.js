@@ -44,9 +44,9 @@
             currentObjectKey = key.split('.')[level];
 
           var checkObject = function (parentObj, childKey) {
-            debug && console.log(eachPlayer.player.name, 'checking for', childKey, 'in', parentObj);
+            debug && $log.debug(eachPlayer.player.name, 'checking for', childKey, 'in', parentObj);
             if (angular.isUndefinedOrNull(parentObj[childKey])) {
-              console.warn(eachPlayer.player.name, 'FAILED: could not find property \'' + childKey + '\' in', parentObj);
+              $log.warn(eachPlayer.player.name, 'FAILED: could not find property \'' + childKey + '\' in', parentObj);
               return false;
             } else {
               level += 1;
@@ -59,7 +59,7 @@
           };
           return checkObject(eachPlayer, currentObjectKey);
         } else {
-          debug && console.log(eachPlayer.player.name, 'checking for', key, 'in', eachPlayer, !angular.isUndefinedOrNull(eachPlayer[key]));
+          debug && $log.debug(eachPlayer.player.name, 'checking for', key, 'in', eachPlayer, !angular.isUndefinedOrNull(eachPlayer[key]));
           return !angular.isUndefinedOrNull(eachPlayer[key]);
         }
       });

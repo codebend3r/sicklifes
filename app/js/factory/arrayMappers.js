@@ -125,32 +125,32 @@
         };
 
         if (angular.isUndefinedOrNull(p.player)) {
-          console.warn('no p.player property', p);
+          $log.warn('no p.player property', p);
           debugger;
         }
 
         if (angular.isUndefinedOrNull(p.player.id)) {
-          console.warn('no p.player.name property', p);
+          $log.warn('no p.player.name property', p);
           debugger;
         }
 
         if (angular.isUndefinedOrNull(p.player.name)) {
-          console.warn('no p.player.name property', p);
+          $log.warn('no p.player.name property', p);
           debugger;
         }
 
         if (angular.isUndefinedOrNull(p.player.status)) {
-          console.warn('no p.player.status property', p);
+          $log.warn('no p.player.status property', p);
           debugger;
         }
 
         if (angular.isUndefinedOrNull(p.player.image)) {
-          console.warn('no p.player.image property', p);
+          $log.warn('no p.player.image property', p);
           debugger;
         }
 
         if (angular.isUndefinedOrNull(p.player.pickNumber)) {
-          console.warn('no p.player.pickNumber property', p);
+          $log.warn('no p.player.pickNumber property', p);
           debugger;
         }
 
@@ -164,7 +164,7 @@
         var profileLeagueSlug;
 
         if (!angular.isUndefinedOrNull(p.active) && p.active === false) {
-          //console.log('league slug for inactive player', p);
+          //$log.debug('league slug for inactive player', p);
           profileLeagueSlug = p.league.name;
         } else {
           profileLeagueSlug = p.league.name;
@@ -209,17 +209,17 @@
         p.team.logo = result.data.team && result.data.team.logos.large || p.team.logo;
 
         if (angular.isUndefinedOrNull(p.team)) {
-          console.warn('no p.team property', p);
+          $log.warn('no p.team property', p);
           debugger;
         }
 
         if (angular.isUndefinedOrNull(p.team.id)) {
-          console.warn('no p.team.id property', p);
+          $log.warn('no p.team.id property', p);
           debugger;
         }
 
         if (angular.isUndefinedOrNull(p.team.name)) {
-          console.warn('no p.team.name property', p);
+          $log.warn('no p.team.name property', p);
           debugger;
         }
 
@@ -241,7 +241,7 @@
       arrayMapper.playerGamesLog = function (dataObj, result) {
 
         var deferred = $q.defer(),
-          player = dataObj.player || null,
+          p = dataObj.player || null,
           manager = dataObj.manager || null,
           validLeagues,
           allPromises = [],
@@ -251,55 +251,64 @@
           chlgGamesRequest,
           euroGamesRequest;
 
-        validLeagues = player.validLeagues || {};
+
+        validLeagues = p.validLeagues || {};
+        // p = objectUtils.playerResetGoalPoints(p);
+        p.stats = {};
+        p.stats.goals = 0;
+        p.stats.assists = 0;
+        p.stats.points = 0;
+        p.stats.domesticGoals = 0;
+        p.stats.clGoals = 0;
+        p.stats.eGoals = 0;
+        p.stats.shots = 0;
+        p.stats.shotsOnGoal = 0;
 
         // reset slugs
-        player.league.slugs = '';
+        p.league.slugs = '';
 
         !angular.isUndefinedOrNull(manager) && angular.isUndefinedOrNull(manager.monthlyGoalsLog) && (manager.monthlyGoalsLog = []);
         !angular.isUndefinedOrNull(manager) && angular.isUndefinedOrNull(manager.filteredMonthlyGoalsLog) && (manager.filteredMonthlyGoalsLog = []);
 
-        player.gameLogs = {};
-
         if (validLeagues.inLiga) {
 
           // LA LIGA
-          ligaGamesRequest = apiFactory.getPlayerLog('liga', player.player.id);
+          ligaGamesRequest = apiFactory.getPlayerLog('liga', p.player.id);
           ligaGamesRequest.then(function (result) {
 
-            player.gameLogs.ligaCompleteLog = result.data
+            p.gameLogs.ligaCompleteLog = result.data
               .filter(arrayFilter.filterOutUndefined)
               .map(arrayMapper.gameLogMapper.bind(this, {
-                player: player,
+                player: p,
                 manager: manager
               }))
               .filter(arrayFilter.filterAfterDate);
 
-            player.gameLogs.ligaFilteredGameLog = player.gameLogs.ligaCompleteLog
-              .filter(arrayFilter.filterOnValidGoals.bind(this, player))
+            p.gameLogs.ligaFilteredGameLog = p.gameLogs.ligaCompleteLog
+              .filter(arrayFilter.filterOnValidGoals.bind(this, p))
               .map(arrayMapper.computedPoints.bind(this, {
-                player: player,
+                player: p,
                 manager: manager
               }));
 
-            //player.league.name = 'LIGA';
-            var foundTeam = _.where($rootScope.leagueTables.liga, {teamName: player.teamName});
-            if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.ligaCompleteLog.length)) {
-              player.activeLeagues.playedInLigaGames = true;
-              player.league.name = 'LIGA';
-              player.league.slugs += player.league.slugs.length === 0 ? 'liga' : '/liga';
+            //p.league.name = 'LIGA';
+            var foundTeam = _.where($rootScope.leagueTables.liga, {teamName: p.team.name});
+            if (p.status !== 'dropped' && (foundTeam.length || p.gameLogs.ligaCompleteLog.length)) {
+              p.activeLeagues.playedInLigaGames = true;
+              p.league.name = 'LIGA';
+              p.league.slugs += p.league.slugs.length === 0 ? 'liga' : '/liga';
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.activeLeagues.playedInLigaGames && player.status !== 'dropped') manager.ligaCount += 1;
-                manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.ligaCompleteLog).filter(arrayFilter.filterOutUndefined);
-                manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.ligaFilteredGameLog).filter(arrayFilter.filterOutUndefined);
+                if (p.activeLeagues.playedInLigaGames && p.status !== 'dropped') manager.ligaCount += 1;
+                manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(p.gameLogs.ligaCompleteLog).filter(arrayFilter.filterOutUndefined);
+                manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(p.gameLogs.ligaFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
-            } else if (player.gameLogs.ligaCompleteLog.length === 0) {
-              delete player.gameLogs.ligaCompleteLog;
-              delete player.gameLogs.ligaFilteredGameLog;
+            } else if (p.gameLogs.ligaCompleteLog.length === 0) {
+              delete p.gameLogs.ligaCompleteLog;
+              delete p.gameLogs.ligaFilteredGameLog;
             }
 
           }, function () {
-            console.log('LIGA failed', player.playerName);
+            $log.debug('LIGA failed', p.player.name);
           });
 
           allPromises.push(ligaGamesRequest);
@@ -309,46 +318,46 @@
         if (validLeagues.inEPL) {
 
           // EPL
-          eplGamesRequest = apiFactory.getPlayerLog('epl', player.player.id);
+          eplGamesRequest = apiFactory.getPlayerLog('epl', p.player.id);
           eplGamesRequest.then(function (result) {
 
-            if (angular.isUndefinedOrNull(result.data)) {
-              debugger;
-            }
+            // if (angular.isUndefinedOrNull(result.data)) {
+            //   debugger;
+            // }
 
-            player.gameLogs.eplCompleteLog = result.data
+            p.gameLogs.eplCompleteLog = result.data
               .filter(arrayFilter.filterOutUndefined)
               .map(arrayMapper.gameLogMapper.bind(this, {
-                player: player,
+                player: p,
                 manager: manager || null
               }))
               .filter(arrayFilter.filterAfterDate);
 
-            player.gameLogs.eplFilteredGameLog = player.gameLogs.eplCompleteLog
-              .filter(arrayFilter.filterOnValidGoals.bind(this, player))
+            p.gameLogs.eplFilteredGameLog = p.gameLogs.eplCompleteLog
+              .filter(arrayFilter.filterOnValidGoals.bind(this, p))
               .map(arrayMapper.computedPoints.bind(this, {
-                player: player,
+                player: p,
                 manager: manager
               }));
 
-            // player.league.name = 'EPL';
-            var foundTeam = _.where($rootScope.leagueTables.epl, {teamName: player.teamName});
-            if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.eplCompleteLog.length)) {
-              player.activeLeagues.playedInEPLGames = true;
-              player.league.name = 'EPL';
-              player.league.slugs += player.league.slugs.length === 0 ? 'epl' : '/epl';
+            // p.league.name = 'EPL';
+            var foundTeam = _.where($rootScope.leagueTables.epl, {teamName: p.team.name});
+            if (p.status !== 'dropped' && (foundTeam.length || p.gameLogs.eplCompleteLog.length)) {
+              p.activeLeagues.playedInEPLGames = true;
+              p.league.name = 'EPL';
+              p.league.slugs += p.league.slugs.length === 0 ? 'epl' : '/epl';
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.activeLeagues.playedInEPLGames && player.status !== 'dropped') manager.eplCount += 1;
-                manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.eplCompleteLog).filter(arrayFilter.filterOutUndefined);
-                manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.eplFilteredGameLog).filter(arrayFilter.filterOutUndefined);
+                if (p.activeLeagues.playedInEPLGames && p.status !== 'dropped') manager.eplCount += 1;
+                manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(p.gameLogs.eplCompleteLog).filter(arrayFilter.filterOutUndefined);
+                manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(p.gameLogs.eplFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
-            } else if (player.gameLogs.eplCompleteLog.length === 0) {
-              delete player.gameLogs.eplCompleteLog;
-              delete player.gameLogs.eplFilteredGameLog;
+            } else if (p.gameLogs.eplCompleteLog.length === 0) {
+              delete p.gameLogs.eplCompleteLog;
+              delete p.gameLogs.eplFilteredGameLog;
             }
 
           }, function () {
-            console.log('EPL failed', player.playerName);
+            $log.debug('EPL failed', p.player.name);
           });
 
           allPromises.push(eplGamesRequest);
@@ -358,7 +367,7 @@
         if (validLeagues.inSeri) {
 
           // SERIE A
-          seriGamesRequest = apiFactory.getPlayerLog('seri', player.player.id);
+          seriGamesRequest = apiFactory.getPlayerLog('seri', p.player.id);
           seriGamesRequest.then(function (result) {
 
             if (angular.isUndefinedOrNull(result.data)) {
@@ -368,45 +377,45 @@
             // result.data
             //   .forEach(function (gameData) {
             //     _.each(statsCorrection.events.seri, function (game) {
-            //       if (player.player.id === game.playerId && gameData.id === game.gameId) {
+            //       if (p.player.id === game.playerId && gameData.id === game.gameId) {
             //         gameData[game.statType] = game.goals;
             //       }
             //     });
             //   });
 
-            player.gameLogs.seriCompleteLog = result.data
+            p.gameLogs.seriCompleteLog = result.data
               .filter(arrayFilter.filterOutUndefined)
               .map(arrayMapper.gameLogMapper.bind(this, {
-                player: player,
+                player: p,
                 manager: manager || null
               }))
               .filter(arrayFilter.filterAfterDate);
 
-            player.gameLogs.seriFilteredGameLog = player.gameLogs.seriCompleteLog
-              .filter(arrayFilter.filterOnValidGoals.bind(this, player))
+            p.gameLogs.seriFilteredGameLog = p.gameLogs.seriCompleteLog
+              .filter(arrayFilter.filterOnValidGoals.bind(this, p))
               .map(arrayMapper.computedPoints.bind(this, {
-                player: player,
+                player: p,
                 manager: manager
               }));
 
-            // player.league.name = 'SERI';
-            var foundTeam = _.where($rootScope.leagueTables.seri, {teamName: player.teamName});
-            if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.seriCompleteLog.length)) {
-              player.activeLeagues.playedInSeriGames = true;
-              player.league.name = 'SERI';
-              player.league.slugs += player.league.slugs.length === 0 ? 'seri' : '/seri';
+            // p.league.name = 'SERI';
+            var foundTeam = _.where($rootScope.leagueTables.seri, {teamName: p.team.name});
+            if (p.status !== 'dropped' && (foundTeam.length || p.gameLogs.seriCompleteLog.length)) {
+              p.activeLeagues.playedInSeriGames = true;
+              p.league.name = 'SERI';
+              p.league.slugs += p.league.slugs.length === 0 ? 'seri' : '/seri';
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.activeLeagues.playedInSeriGames && player.status !== 'dropped') manager.seriCount += 1;
-                manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.seriCompleteLog).filter(arrayFilter.filterOutUndefined);
-                manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.seriFilteredGameLog).filter(arrayFilter.filterOutUndefined);
+                if (p.activeLeagues.playedInSeriGames && p.status !== 'dropped') manager.seriCount += 1;
+                manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(p.gameLogs.seriCompleteLog).filter(arrayFilter.filterOutUndefined);
+                manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(p.gameLogs.seriFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
-            } else if (player.gameLogs.seriCompleteLog.length === 0) {
-              delete player.gameLogs.seriCompleteLog;
-              delete player.gameLogs.seriFilteredGameLog;
+            } else if (p.gameLogs.seriCompleteLog.length === 0) {
+              delete p.gameLogs.seriCompleteLog;
+              delete p.gameLogs.seriFilteredGameLog;
             }
 
           }, function () {
-            console.log('EPL failed', player.playerName);
+            $log.debug('EPL failed', p.player.name);
           });
 
           allPromises.push(seriGamesRequest);
@@ -417,48 +426,48 @@
 
           // CHAMPIONS LEAGUE
 
-          chlgGamesRequest = apiFactory.getPlayerLog('chlg', player.player.id);
+          chlgGamesRequest = apiFactory.getPlayerLog('chlg', p.player.id);
           chlgGamesRequest.then(function (result) {
 
             if (angular.isUndefinedOrNull(result.data)) {
               debugger;
             }
 
-            player.gameLogs.chlgCompleteLogs = result.data
+            p.gameLogs.chlgCompleteLogs = result.data
               .filter(arrayFilter.filterOutUndefined)
               .map(arrayMapper.gameLogMapper.bind(this, {
-                player: player,
+                player: p,
                 manager: manager || null
               }))
               .filter(arrayFilter.filterAfterDate);
 
-            player.gameLogs.chlgFilteredGameLog = player.gameLogs.chlgCompleteLogs
-              .filter(arrayFilter.filterOnValidGoals.bind(this, player))
+            p.gameLogs.chlgFilteredGameLog = p.gameLogs.chlgCompleteLogs
+              .filter(arrayFilter.filterOnValidGoals.bind(this, p))
               .map(arrayMapper.computedPoints.bind(this, {
-                player: player,
+                player: p,
                 manager: manager
               }));
 
-            var foundTeam = _.where($rootScope.leagueTables.chlg, {teamName: player.teamName});
+            var foundTeam = _.where($rootScope.leagueTables.chlg, {teamName: p.team.name});
             if (foundTeam && angular.isUndefinedOrNull(validLeagues.inSeri) && angular.isUndefinedOrNull(validLeagues.inLiga) && angular.isUndefinedOrNull(validLeagues.inEPL)) {
-              player.league.name = 'CHLG';
+              p.league.name = 'CHLG';
             }
-            if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.chlgCompleteLogs.length)) {
-              player.activeLeagues.playedInChlgGames = true;
-              player.league.slugs += player.league.slugs.length === 0 ? 'chlg' : '/chlg';
-              player.league.tournamentName = textManipulator.formattedLeagueName('chlg');
+            if (p.status !== 'dropped' && (foundTeam.length || p.gameLogs.chlgCompleteLogs.length)) {
+              p.activeLeagues.playedInChlgGames = true;
+              p.league.slugs += p.league.slugs.length === 0 ? 'chlg' : '/chlg';
+              p.league.tournamentName = textManipulator.formattedLeagueName('chlg');
               if (!angular.isUndefinedOrNull(manager)) {
-                if (player.activeLeagues.playedInChlgGames) manager.chlgCount += 1;
-                manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.chlgCompleteLogs).filter(arrayFilter.filterOutUndefined);
-                manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.chlgFilteredGameLog).filter(arrayFilter.filterOutUndefined);
+                if (p.activeLeagues.playedInChlgGames) manager.chlgCount += 1;
+                manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(p.gameLogs.chlgCompleteLogs).filter(arrayFilter.filterOutUndefined);
+                manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(p.gameLogs.chlgFilteredGameLog).filter(arrayFilter.filterOutUndefined);
               }
-            } else if (player.gameLogs.chlgCompleteLogs.length === 0) {
-              delete player.gameLogs.chlgCompleteLogs;
-              delete player.gameLogs.chlgFilteredGameLog;
+            } else if (p.gameLogs.chlgCompleteLogs.length === 0) {
+              delete p.gameLogs.chlgCompleteLogs;
+              delete p.gameLogs.chlgFilteredGameLog;
             }
 
           }, function () {
-            console.log('CHLG failed', player.playerName);
+            $log.debug('CHLG failed', p.player.name);
           });
 
           allPromises.push(chlgGamesRequest);
@@ -469,46 +478,46 @@
 
           // EUROPA LEAGUE
 
-          euroGamesRequest = apiFactory.getPlayerLog('uefa', player.player.id);
+          euroGamesRequest = apiFactory.getPlayerLog('uefa', p.player.id);
 
           euroGamesRequest.then(function (result) {
 
-            player.gameLogs.euroCompleteLogs = result.data
+            p.gameLogs.euroCompleteLogs = result.data
               .filter(arrayFilter.filterOutUndefined)
               .map(arrayMapper.gameLogMapper.bind(this, {
-                player: player,
+                player: p,
                 manager: manager || null
               }))
               .filter(arrayFilter.filterAfterDate);
 
-            player.gameLogs.euroFilteredGameLog = player.gameLogs.euroCompleteLogs
-              .filter(arrayFilter.filterOnValidGoals.bind(this, player))
+            p.gameLogs.euroFilteredGameLog = p.gameLogs.euroCompleteLogs
+              .filter(arrayFilter.filterOnValidGoals.bind(this, p))
               .map(arrayMapper.computedPoints.bind(this, {
-                player: player,
+                player: p,
                 manager: manager
               }));
 
-            var foundTeam = _.where($rootScope.leagueTables.uefa, {teamName: player.teamName});
+            var foundTeam = _.where($rootScope.leagueTables.uefa, {teamName: p.team.name});
             if (foundTeam && _.keys(validLeagues) === ['inEuro']) {
-              player.league.name = 'EURO';
+              p.league.name = 'EURO';
             }
-            if (player.status !== 'dropped' && (foundTeam.length || player.gameLogs.euroCompleteLogs.length)) {
-              player.activeLeagues.playedInEuroGames = true;
-              player.league.slugs += player.league.slugs.length === 0 ? 'euro' : '/euro';
-              player.league.tournamentName = textManipulator.formattedLeagueName('uefa');
-            } else if (player.gameLogs.euroCompleteLogs.length === 0) {
-              delete player.gameLogs.euroCompleteLogs;
-              delete player.gameLogs.euroFilteredGameLog;
+            if (p.status !== 'dropped' && (foundTeam.length || p.gameLogs.euroCompleteLogs.length)) {
+              p.activeLeagues.playedInEuroGames = true;
+              p.league.slugs += p.league.slugs.length === 0 ? 'euro' : '/euro';
+              p.league.tournamentName = textManipulator.formattedLeagueName('uefa');
+            } else if (p.gameLogs.euroCompleteLogs.length === 0) {
+              delete p.gameLogs.euroCompleteLogs;
+              delete p.gameLogs.euroFilteredGameLog;
             }
 
             if (!angular.isUndefinedOrNull(manager)) {
-              if (player.activeLeagues.playedInEuroGames) manager.euroCount += 1;
-              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(player.gameLogs.euroCompleteLogs).filter(arrayFilter.filterOutUndefined);
-              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(player.gameLogs.euroFilteredGameLog).filter(arrayFilter.filterOutUndefined);
+              if (p.activeLeagues.playedInEuroGames) manager.euroCount += 1;
+              manager.monthlyGoalsLog = manager.monthlyGoalsLog.concat(p.gameLogs.euroCompleteLogs).filter(arrayFilter.filterOutUndefined);
+              manager.filteredMonthlyGoalsLog = manager.filteredMonthlyGoalsLog.concat(p.gameLogs.euroFilteredGameLog).filter(arrayFilter.filterOutUndefined);
             }
 
           }, function () {
-            console.log('EURO failed', player.playerName);
+            $log.debug('EURO failed', p.player.name);
           });
 
           allPromises.push(euroGamesRequest);
@@ -516,9 +525,9 @@
         }
 
         $q.all(allPromises).then(function () {
-          deferred.resolve(player);
+          deferred.resolve(p);
         }, function () {
-          console.log('FAIL');
+          $log.debug('FAIL');
         });
 
         return deferred.promise;

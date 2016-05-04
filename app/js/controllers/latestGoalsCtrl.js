@@ -8,9 +8,9 @@
 
   angular.module('sicklifes')
 
-    .controller('latestGoalsCtrl', function ($scope, $rootScope, $timeout, momentService, managerData, gameLogs) {
+    .controller('latestGoalsCtrl', function ($scope, $log, $rootScope, $timeout, momentService, managerData, gameLogs) {
 
-      console.log('--> latestGoalsCtrl');
+      $log.debug('--> latestGoalsCtrl');
 
       /**
        * @name loadData
@@ -33,9 +33,9 @@
         $rootScope.source = 'firebase';
 
         if (momentService.isHoursAgo(managerData._lastSyncedOn)) {
-          console.log('-- data is too old --');
+          $log.debug('-- data is too old --');
         } else {
-          console.log('-- data is up to date --');
+          $log.debug('-- data is up to date --');
         }
 
         $scope.combinedLogs = [];

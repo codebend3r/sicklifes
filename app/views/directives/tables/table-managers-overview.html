@@ -17,6 +17,7 @@
     <td class="player-column" ng-class="{dropped: p.player.status === 'dropped', added: p.player.status === 'added'}">
       <div class="vertical-center">
         <a ui-sref="playerDetails({playerId: p.player.id})">{{p.player.name}}</a>
+        &nbsp;<button class="btn btn-warning" ng-click="tableParams.updatePlayer(p)">Update Player</button>
       </div>
     </td>
     <td ng-if-start="edit"><div class="vertical-center">{{p.player.id}}</div></td>

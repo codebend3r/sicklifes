@@ -8,24 +8,13 @@
 
   angular.module('sicklifes')
 
-    .controller('leadersCtrl', function ($scope, $state, $stateParams, $localStorage, updateDataUtils, $rootScope, momentService, apiFactory, textManipulator, managersService, leagueLeaders) {
+    .controller('leadersCtrl', function ($scope, $log, $state, $stateParams, $localStorage, updateDataUtils, $rootScope, momentService, apiFactory, textManipulator, managersService, leagueLeaders) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      console.log('--> leadersCtrl');
-
-      /**
-       * TODO
-       */
-      $scope.updateLeaders = function () {
-
-        console.log('leadersCtrl --> updateLeaders');
-
-        apiFactory.getAllGoalLeaders().then(mapLeagueLeaders);
-
-      };
+      $log.debug('--> leadersCtrl');
 
       var mapLeaders = function (data) {
         return {
@@ -37,6 +26,14 @@
           playerName: textManipulator.formattedFullName(data.player.first_name, data.player.last_name),
           teamName: data.team.full_name
         };
+      };
+
+      var loadData = function () {
+
+        $scope.setSelectedLeague();
+        $scope.leagueLeaders = leagueLeaders.leagues[$stateParams.leagueName].goalLeaders;
+        $rootScope.loading = false;
+
       };
 
       /**
@@ -66,17 +63,20 @@
 
         $rootScope.loading = false;
 
-        console.log('saveObject', saveObject);
+        $log.debug('saveObject', saveObject);
 
         $scope.saveToFireBase(saveObject, 'leagueLeaders');
 
       };
 
-      var loadData = function () {
+      /**
+       * TODO
+       */
+      $scope.updateLeaders = function () {
 
-        $scope.setSelectedLeague();
-        $scope.leagueLeaders = leagueLeaders.leagues[$stateParams.leagueName].goalLeaders;
-        $rootScope.loading = false;
+        $log.debug('leadersCtrl --> updateLeaders');
+
+        apiFactory.getAllGoalLeaders().then(mapLeagueLeaders);
 
       };
 

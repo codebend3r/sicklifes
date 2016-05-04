@@ -1,5 +1,7 @@
 (function () {
 
+  'use strict';
+
   // polyfill
   if (!String.prototype.contains) {
     String.prototype.contains = function () {
@@ -10,11 +12,15 @@
   if (!String.prototype.capitalize) {
     String.prototype.capitalize = function() {
       return this.charAt(0).toUpperCase() + this.slice(1);
-    }
+    };
   }
 
-  angular.isUndefinedOrNull = function (val) {
-    return angular.isUndefined(val) || val === null;
+  _.isDefined = function (val) {
+    return !_.isUndefined(val) && !_.isNull(val);
+  };
+
+  _.isFalsey = function(val) {
+    return _.isUndefined(val) || _.isNull(val) || (typeof val === 'string' && val.trim() === '');
   };
 
 })();

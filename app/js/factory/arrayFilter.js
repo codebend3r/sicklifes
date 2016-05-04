@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .factory('arrayFilter', function (momentService, transferDates) {
+    .factory('arrayFilter', function (momentService, transferDates, $moment) {
 
       var arrayFilter = {};
 
@@ -23,7 +23,7 @@
        * @returns {boolean}
        */
       arrayFilter.filterAfterDate = function (game) {
-        var gameDate = moment(new Date(game.datePlayed).toISOString());
+        var gameDate = $moment(new Date(game.datePlayed).toISOString());
         return gameDate.isAfter(arrayFilter.leagueStartDate);
       };
 
@@ -32,7 +32,7 @@
        * @returns {boolean}
        */
       arrayFilter.filterOnValidGoals = function (p, game) {
-        var gameDate = moment(new Date(game.datePlayed).toISOString());
+        var gameDate = $moment(new Date(game.datePlayed).toISOString());
         if (p.player.status === 'added') {
           return angular.isDefined(p.dateOfTransaction) && gameDate.isAfter(new Date(p.dateOfTransaction).toISOString());
         } else if (p.player.status === 'dropped') {
@@ -49,10 +49,10 @@
        * @returns {boolean}
        */
       arrayFilter.isSelectedMonth = function (selectedMonth, game) {
-        var gameDate = moment(game.rawDatePlayed.toISOString()) || moment(new Date(game.box_score.event.game_date).toISOString());
+        var gameDate = $moment(game.rawDatePlayed.toISOString()) || $moment(new Date(game.box_score.event.game_date).toISOString());
         var scoredAGoal = game.goals ? true : false;
-        var start = moment(new Date(selectedMonth.range[0]).toISOString());
-        var end = moment(new Date(selectedMonth.range[1]).toISOString());
+        var start = $moment(new Date(selectedMonth.range[0]).toISOString());
+        var end = $moment(new Date(selectedMonth.range[1]).toISOString());
         var isBetween = gameDate.isBetween(start, end);
         return isBetween && scoredAGoal;
       };
@@ -64,9 +64,9 @@
        * @returns {boolean}
        */
       arrayFilter.filterOnMonth = function (selectedMonth, game) {
-        var gameDate = moment(new Date(game.originalDate).toISOString()); // momentService.getDate(game.originalDate),
-        var start = moment(new Date(selectedMonth.range[0]).toISOString());
-        var end = moment(new Date(selectedMonth.range[1]).toISOString());
+        var gameDate = $moment(new Date(game.originalDate).toISOString()); // momentService.getDate(game.originalDate),
+        var start = $moment(new Date(selectedMonth.range[0]).toISOString());
+        var end = $moment(new Date(selectedMonth.range[1]).toISOString());
         var isBetween = gameDate.isBetween(start, end);
         return isBetween;
       };

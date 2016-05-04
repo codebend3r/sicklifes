@@ -14,7 +14,7 @@
       /////////////// public /////////////////
       ////////////////////////////////////////
 
-      console.log('--> tablesCtrl');
+      $log.debug('--> tablesCtrl');
 
       $rootScope.loading = true;
 
@@ -47,9 +47,9 @@
        */
       var mapLeagueTables = function (result) {
 
-        console.log('///////////////////');
-        console.log('httpDataLoaded --> result:', result);
-        console.log('///////////////////');
+        $log.debug('///////////////////');
+        $log.debug('httpDataLoaded --> result:', result);
+        $log.debug('///////////////////');
 
         $rootScope.loading = false;
 
@@ -103,12 +103,12 @@
 
         if (momentService.isHoursAgo(leagueTables._lastSyncedOn, saveObject)) {
 
-          console.log('-- data is too old --');
+          $log.debug('-- data is too old --');
           //$scope.updateTablesFromHTTP(httpDataLoaded);
 
         } else {
 
-          console.log('-- data is up to date --');
+          $log.debug('-- data is up to date --');
 
         }
 
@@ -122,7 +122,7 @@
 
         if ($scope.selectedLeague.slug === 'uefa') {
 
-          console.log('EURO LEAGUE');
+          $log.debug('EURO LEAGUE');
 
           var groupA = _.filter(saveObject.uefa, function (team) {
             return team.group === 'Group A';
@@ -225,7 +225,7 @@
 
         } else if ($scope.selectedLeague.slug === 'chlg') {
 
-          console.log('CHAMPIONS LEAGUE');
+          $log.debug('CHAMPIONS LEAGUE');
 
           var groupA = _.filter(saveObject.chlg, function (team) {
             return team.group === 'Group A';

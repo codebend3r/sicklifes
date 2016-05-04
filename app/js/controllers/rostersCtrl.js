@@ -58,17 +58,17 @@
        */
       var httpRequest = function () {
 
-        console.log('rostersCtrl.httpRequest()');
+        $log.debug('rostersCtrl.httpRequest()');
 
         var playersIndex = allPlayersIndex.data;
 
-        console.log('$stateParams.teamId:', $stateParams.teamId);
-        console.log('$stateParams.leagueName:', $stateParams.leagueName);
-        //console.log('playersIndex:', playersIndex);
+        $log.debug('$stateParams.teamId:', $stateParams.teamId);
+        $log.debug('$stateParams.leagueName:', $stateParams.leagueName);
+        //$log.debug('playersIndex:', playersIndex);
 
         if (angular.isDefined($stateParams.teamId) && angular.isDefined($stateParams.leagueName)) {
 
-          console.log('team id && league name defined');
+          $log.debug('team id && league name defined');
 
           $http.get('http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId)
             .then(function (result) {
@@ -96,7 +96,7 @@
 
                 if (!angular.isUndefinedOrNull(allPlayersIndex.data[player.id]) && !angular.isUndefinedOrNull(allPlayersIndex.data[player.id]._lastSyncedOn) && !momentService.isPastYesterday(allPlayersIndex.data[player.id]._lastSyncedOn)) {
 
-                  console.log('synced data found for', player.full_name);
+                  $log.debug('synced data found for', player.full_name);
 
                   var playerFromIndex = allPlayersIndex.data[player.id];
 
@@ -111,14 +111,14 @@
                   numberOfRequests += 1;
 
                   if (numberOfRequests === numberOfPlayers) {
-                    console.log('DONE through player index');
+                    $log.debug('DONE through player index');
                     //$rootScope.loading = false;
                     //$scope.saveTeamToPlayerIndex($scope.players);
                   }
 
                 } else {
 
-                  console.log('request for', player.full_name);
+                  $log.debug('request for', player.full_name);
 
                   var matchingManager = managersService.findPlayerInManagers(player.id).manager;
 
@@ -149,7 +149,7 @@
                       numberOfRequests += 1;
 
                       if (numberOfRequests === numberOfPlayers) {
-                        console.log('DONE through new requests');
+                        $log.debug('DONE through new requests');
                         //$rootScope.loading = false;
                         $scope.saveTeamToPlayerIndex($scope.players);
                       }
@@ -164,7 +164,7 @@
 
         } else {
 
-          console.warn('no teamId or leagueId specified');
+          $log.warn('no teamId or leagueId specified');
 
         }
 

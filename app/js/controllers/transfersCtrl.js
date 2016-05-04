@@ -93,7 +93,7 @@
 
           draftedPlayer.pickNumber = pickNumber;
 
-          console.log('pick #', pickNumber);
+          $log.debug('pick #', pickNumber);
           $scope.selectedManager.players[draftedPlayer.id] = draftedPlayer;
 
           var saveObject = $scope.managerData;
@@ -108,7 +108,7 @@
 
           var addedPlayer = objectUtils.playerResetGoalPoints(player);
 
-          console.log('addedPlayer', addedPlayer);
+          $log.debug('addedPlayer', addedPlayer);
 
           apiFactory.getPlayerProfile('soccer', addedPlayer.player.id)
             .then(function (result) {
@@ -149,7 +149,7 @@
 
           $scope.selectedManager.transactions = $scope.selectedManager.transactions || [];
 
-          console.log('# of transactions for manager', _.keys($scope.selectedManager.transactions).length);
+          $log.debug('# of transactions for manager', _.keys($scope.selectedManager.transactions).length);
 
           $scope.addedPlayerObject.status = 'added';
 
@@ -166,16 +166,16 @@
             add: $scope.addedPlayerObject
           });
 
-          console.log('///////////////////////////////////////////');
-          console.log('addedPlayerObject: ', $scope.addedPlayerObject);
-          console.log('droppedPlayerObject: ', $scope.droppedPlayerObject);
-          console.log('///////////////////////////////////////////');
+          $log.debug('///////////////////////////////////////////');
+          $log.debug('addedPlayerObject: ', $scope.addedPlayerObject);
+          $log.debug('droppedPlayerObject: ', $scope.droppedPlayerObject);
+          $log.debug('///////////////////////////////////////////');
 
           $scope.saveRoster(managerData.data);
 
         } else {
 
-          console.warn('no player to add and/or drop has been specified');
+          $log.warn('no player to add and/or drop has been specified');
 
         }
 
@@ -229,7 +229,7 @@
 
         updateDataUtils.updatePlayerPoolData().then(function (result) {
 
-          console.log('PLAYER POOL DATA UPDATED');
+          $log.debug('PLAYER POOL DATA UPDATED');
           $scope.allPlayers = result;
 
           // $scope.saveToFireBase({
@@ -263,7 +263,7 @@
         _.each($scope.managerData, function (m) {
           _.each(m.players, function (p) {
             if (p.player.status !== 'drafted') {
-              console.log('p:', p);
+              $log.debug('p:', p);
               $scope.transferHistory.push(p);
             }
           });

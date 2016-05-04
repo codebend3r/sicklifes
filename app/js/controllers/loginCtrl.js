@@ -8,20 +8,20 @@
 
   angular.module('sicklifes')
 
-    .controller('loginCtrl', function ($scope, user, $http) {
+    .controller('loginCtrl', function ($scope, $log, $http, user) {
 
-      console.log('--> loginCtrl');
+      $log.debug('--> loginCtrl');
 
       $scope.loading = false;
 
       // /var currenUser = user.init({ appId: '55e67bdde35f9' });
       //user.init({ appId: '5482b3c1ebdc7' });
 
-      //console.log('currenUser >', currenUser);
+      //$log.debug('currenUser >', currenUser);
 
       // user.getCurrent().then(function(currentUser) {
-      //   console.log('currentUser:', currentUser);
-      //   console.log('currentUser:', currentUser.user_id);
+      //   $log.debug('currentUser:', currentUser);
+      //   $log.debug('currentUser:', currentUser.user_id);
       // });
 
       // $http({
@@ -30,42 +30,42 @@
       //   url: 'https://api.userapp.io/v1/user.login'
       // }).then(function(d) {
       //
-      //   console.log('success', d);
+      //   $log.debug('success', d);
       //
       // }, function(d) {
       //
-      //   console.log('error', d);
+      //   $log.debug('error', d);
       //
       // });
 
       // user.login({ login: 'chester.rivas@gmail.com', password: 'Souldier82' }, function(error, result) {
-      //   console.log('error:', error);
-      //   console.log('result:', result);
+      //   $log.debug('error:', error);
+      //   $log.debug('result:', result);
       // });
       //
       // user.login({ login: 'chester.rivas@gmail.com', password: 'Cyclops82' }, function(error, result) {
-      //   console.log('error:', error);
-      //   console.log('result:', result);
+      //   $log.debug('error:', error);
+      //   $log.debug('result:', result);
       // });
       //
       // user.login({ login: 'chester.rivas@gmail.com', password: 'DunnyFrench82' }, function(error, result) {
-      //   console.log('error:', error);
-      //   console.log('result:', result);
+      //   $log.debug('error:', error);
+      //   $log.debug('result:', result);
       // });
       //
       // user.login({ login: 'crivas', password: 'Souldier82' }, function(error, result) {
-      //   console.log('error:', error);
-      //   console.log('result:', result);
+      //   $log.debug('error:', error);
+      //   $log.debug('result:', result);
       // });
       //
       // user.login({ login: 'crivas', password: 'Cyclops82' }, function(error, result) {
-      //   console.log('error:', error);
-      //   console.log('result:', result);
+      //   $log.debug('error:', error);
+      //   $log.debug('result:', result);
       // });
       //
       // user.login({ login: 'crivas', password: 'DunnyFrench82' }, function(error, result) {
-      //   console.log('error:', error);
-      //   console.log('result:', result);
+      //   $log.debug('error:', error);
+      //   $log.debug('result:', result);
       // });
 
     });

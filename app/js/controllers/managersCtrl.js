@@ -8,17 +8,9 @@
 
   angular.module('sicklifes')
 
-    .filter('capitalize', function () {
-      return function (input) {
-        return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
-      };
-    })
+    .controller('managersCtrl', function ($scope, $rootScope, $log, $state, $stateParams, $window, $timeout, $moment, arrayFilter, momentService, transferDates, managerData, managerPlayers, gameLogs, updateDataUtils, arrayMappers, objectUtils, apiFactory, dataRecovery) {
 
-    .controller('managersCtrl', function ($scope, $rootScope, $state, $stateParams, $window, $timeout, $moment, arrayFilter, momentService, transferDates, managerData, managerPlayers, gameLogs, updateDataUtils, apiFactory, dataRecovery) {
-
-      ////////////////////////////////////////
-      /////////////// public /////////////////
-      ////////////////////////////////////////
+      // public
 
       /**
        * @name goalsOnlyFilterOn
@@ -33,7 +25,7 @@
        */
       $scope.changeManager = function (selectedManagerName) {
         $rootScope.loading = true;
-        $state.go($state.current, {managerId: selectedManagerName.toLowerCase()});
+        $state.go($state.current, { managerId: selectedManagerName.toLowerCase() });
       };
 
       $scope.managersList = ['chester', 'frank', 'joe', 'justin', 'mike', 'dan'];
@@ -53,9 +45,7 @@
         }
       ];
 
-      ////////////////////////////////////////
-      ////////////// private /////////////////
-      ////////////////////////////////////////
+      // private
 
       /**
        * @name loadData
@@ -64,7 +54,7 @@
        */
       var loadData = function () {
 
-        if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
+        if (!_.isDefined($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
 
         $rootScope.loading = false;
 
@@ -84,11 +74,11 @@
         $rootScope.source = 'firebase';
 
         if (angular.isDefined($scope.selectedManager._lastSyncedOn) && momentService.isHoursAgo($scope.selectedManager._lastSyncedOn)) {
-          console.log('-- data for', $scope.selectedManager.managerName, 'is old --');
+          $log.debug('-- data for', $scope.selectedManager.managerName, 'is old --');
         } else if (momentService.isHoursAgo($scope.managerData._lastSyncedOn)) {
-          console.log('-- data is too old --');
+          $log.debug('-- data is too old --');
         } else {
-          console.log('-- data is up to date --');
+          $log.debug('-- data is up to date --');
         }
 
         $scope.selectedManager.wildCardCount = 0;
@@ -112,7 +102,7 @@
 
           _.each(m.players, function(p) {
 
-            if (angular.isUndefinedOrNull(managerCore[key])) {
+            if (!_.isDefined(managerCore[key])) {
               managerCore[key] = {
                 players: {}
               };
@@ -137,23 +127,23 @@
               manager: {
                 name: key.capitalize()
               },
-              //stats: {},
-              // active: !angular.isUndefinedOrNull(p.active) ? p.active === false : false,
+              // stats: {},
+              // active: !!_.isDefined(p.active) ? p.active === false : false,
               active: true,
               dateOfTransaction: p.dateOfTransaction
             };
 
-            // if (angular.isUndefinedOrNull(managerCore[key].players[p.id].league)) {
-            //   console.log(p.playerName, managerCore[key].players[p.id].league);
+            // if (!_.isDefined(managerCore[key].players[p.id].league)) {
+            //   $log.debug(p.playerName, managerCore[key].players[p.id].league);
             // }
 
-            console.log(p.playerName, managerCore[key].players[p.id].league.name);
+            $log.debug(p.playerName, managerCore[key].players[p.id].league.name);
 
             var currentPlayers = dataRecovery.draftOrder[key];
 
             _.each(currentPlayers, function(element, index) {
 
-              if (!angular.isUndefinedOrNull(p.playerName)) {
+              if (_.isDefined(p.playerName)) {
                 if (p.playerName.toLowerCase() === element.toLowerCase()) {
                   managerCore[key].players[p.id].player.pickNumber = index + 1;
                 }
@@ -165,7 +155,7 @@
 
         });
 
-        console.log('managerCore', managerCore);
+        $log.debug('managerCore', managerCore);
 
         $scope.saveCoreData(managerCore);
 
@@ -181,9 +171,9 @@
           })
           .then(function (result) {
 
-            console.log('////////////////////////////');
-            console.log('MANAGER DATA RECOVERED');
-            console.log('////////////////////////////');
+            $log.debug('////////////////////////////');
+            $log.debug('MANAGER DATA RECOVERED');
+            $log.debug('////////////////////////////');
 
             var mappedManagers = _.object(_.map(result, function(obj) {
               return [obj.managerName.toLowerCase(), obj];
@@ -194,6 +184,33 @@
             $scope.saveRoster(mappedManagers);
 
           });
+
+      };
+
+      $scope.updatePlayer = function(player) {
+
+        apiFactory.getApiData('leagueTables').then(function () {
+
+          var updatingPlayer = objectUtils.playerResetGoalPoints(player);
+
+          apiFactory.getPlayerProfile('soccer', updatingPlayer.player.id)
+            .then(arrayMappers.playerInfo.bind(this, updatingPlayer))
+            .then(arrayMappers.playerMapPersonalInfo.bind(this, updatingPlayer))
+            .then(arrayMappers.playerGamesLog.bind(this, {
+              player: updatingPlayer,
+              manager: $scope.selectedManager
+            }))
+            .then(function (result) {
+
+              $log.debug('result:', result);
+              $log.debug('player:', player);
+              $log.debug('updatingPlayer:', updatingPlayer);
+              debugger;
+
+
+            });
+
+        });
 
       };
 
@@ -209,15 +226,15 @@
           updateDataUtils.updateAllManagerData(managerPlayers.data)
             .then(function (result) {
 
-              console.log('////////////////////////////');
-              console.log('MANAGER DATA UPDATED');
-              console.log('////////////////////////////');
+              $log.debug('////////////////////////////');
+              $log.debug('MANAGER DATA UPDATED');
+              $log.debug('////////////////////////////');
 
               var mappedManagers = _.object(_.map(result, function(obj) {
                 return [obj.managerName.toLowerCase(), obj];
               }));
 
-              //managerData.data = result;
+              // managerData.data = result;
 
               $scope.selectedManager = mappedManagers[$stateParams.managerId];
               $scope.saveRoster(mappedManagers);
@@ -233,13 +250,12 @@
        */
       $scope.saveCurrentRoster = function () {
 
-        console.log(managerData.data);
-        //$scope.saveRoster(managerData.data);
+        $log.debug(managerData.data);
+        // $scope.saveRoster(managerData.data);
 
       };
 
       $rootScope.$on('MONTH_CHANGED', function (e, month) {
-        console.log('month change detected:', month.monthName);
         $scope.currentMonthLog = _.chain($scope.selectedManager.filteredMonthlyGoalsLog)
           .flatten(true)
           .filter(arrayFilter.filterOnMonth.bind($scope, month))

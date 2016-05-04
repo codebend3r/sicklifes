@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .directive('customTable', function () {
+    .directive('customTable', function ($moment) {
 
       return {
         restrict: 'E',
@@ -29,10 +29,10 @@
 
           $scope.ascending = false;
 
-          var transferShown = false;
+          // var transferShown = false;
 
           $scope.isValidGame = function (player, game) {
-            var gameDate = moment(new Date(game.datePlayed).toISOString());
+            var gameDate = $moment(new Date(game.datePlayed).toISOString());
             if (player.status === 'added' && gameDate.isAfter(new Date(player.dateOfTransaction).toISOString())) {
               return true;
             } else if (player.status === 'dropped' && gameDate.isBefore(new Date(player.dateOfTransaction).toISOString())) {

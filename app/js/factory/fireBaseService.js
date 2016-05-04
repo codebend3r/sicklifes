@@ -39,10 +39,10 @@
           var defer = $q.defer();
 
           ref.on('value', function (snapshot) {
-            //console.log('firebase connect:', snapshot.val());
+            //$log.debug('firebase connect:', snapshot.val());
             defer.resolve(snapshot.val());
           }, function (errorObject) {
-            console.log('The read failed:', errorObject.code);
+            $log.debug('The read failed:', errorObject.code);
           });
 
           return defer.promise;
@@ -51,7 +51,7 @@
 
         saveToLocalStorage: function (saveObject, key) {
 
-          console.log('saveToLocalStorage -- START | key:', key);
+          $log.debug('saveToLocalStorage -- START | key:', key);
 
           var cleanedData = angular.copy(saveObject);
 
@@ -61,14 +61,14 @@
           $rootScope.lastSyncDate = saveObject._lastSyncedOn;
           $rootScope.source = 'local storage';
 
-          console.log('saveToLocalStorage -- COMPLETE');
+          $log.debug('saveToLocalStorage -- COMPLETE');
 
 
         },
 
         saveToFireBase: function (saveObject, key) {
 
-          console.log('saveToFireBase -- START | key:', key);
+          $log.debug('saveToFireBase -- START | key:', key);
 
           var defer = $q.defer(),
             cleanedData = angular.copy(saveObject),
@@ -82,7 +82,7 @@
 
           usersRef.set(cleanedData);
           defer.resolve(true);
-          console.log('saveToFireBase -- COMPLETE', key);
+          $log.debug('saveToFireBase -- COMPLETE', key);
           return defer.promise;
 
         }

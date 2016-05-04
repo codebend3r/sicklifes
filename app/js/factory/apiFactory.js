@@ -8,27 +8,13 @@
 
   angular.module('sicklifes')
 
-    .factory('apiFactory', function ($http, $q, $moment, $rootScope) {
+    .factory('apiFactory', function ($http, $q, $moment, $rootScope, $log) {
 
-      var apiFactory = {};
-
-      /**
-       * @name baseUrl
-       * @description base url for all api requests
-       */
-      apiFactory.baseUrl = 'http://api.thescore.com/';
-
-      /**
-       * @name firebaseUrl
-       * @description url for firebase DB
-       */
-      apiFactory.firebaseUrl = 'https://glaring-fire-9383.firebaseio.com/';
-
-      /**
-       * @name slugs
-       * @description all league slugs
-       */
-      apiFactory.slugs = ['liga', 'epl', 'seri', 'chlg', 'uefa'],
+      var apiFactory = {
+        leagueSlugs: ['liga', 'epl', 'seri', 'chlg', 'uefa'],
+        baseUrl: 'http://api.thescore.com/',
+        firebaseUrl: 'https://glaring-fire-9383.firebaseio.com/'
+      };
 
       /**
        * @name getApiData
@@ -45,7 +31,7 @@
           $http.get(apiFactory.firebaseUrl + namespace + '.json', { cache: true })
             .then(function (result) {
               $rootScope[namespace] = result.data;
-              console.log('rootScope variable saved:', namespace);
+              $log.debug('rootScope variable saved:', namespace);
               defer.resolve(result.data);
 
             });
@@ -86,7 +72,7 @@
        */
       apiFactory.getLeagueTables = function () {
         var listOrPromises = [];
-        _.each(apiFactory.slugs, function (slug) {
+        _.each(apiFactory.leagueSlugs, function (slug) {
           var leagueRequest = apiFactory.getTablesByLeague(slug);
           leagueRequest.then(function (result) {
             result.slug = slug;
@@ -116,12 +102,12 @@
 
       /**
        * @name getAllTeams
-       * @description loops through league slugs and makes a request for all teams in each league
+       * @description loops through league leagueSlugs and makes a request for all teams in each league
        * @returns {promise}
        */
       apiFactory.getAllTeams = function () {
         var listOrPromises = [];
-        _.each(apiFactory.slugs, function (slug) {
+        _.each(apiFactory.leagueSlugs, function (slug) {
           var leagueRequest = apiFactory.getTeamsByLeague(slug);
           leagueRequest.then(function (result) {
             result.slug = slug;
@@ -147,7 +133,7 @@
        */
       apiFactory.getAllGoalLeaders = function () {
         var listOrPromises = [];
-        _.each(apiFactory.slugs, function (slug) {
+        _.each(apiFactory.leagueSlugs, function (slug) {
           var leagueRequest = apiFactory.getGoalLeadersByLeague(slug);
           leagueRequest.then(function (result) {
             result.slug = slug;

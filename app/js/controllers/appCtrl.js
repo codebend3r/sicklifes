@@ -8,13 +8,9 @@
 
   angular.module('sicklifes')
 
-    .controller('appCtrl', function ($scope, $rootScope, $q, $location, $localStorage, apiFactory, $state, fireBaseService, arrayMappers, momentService, objectUtils, arrayFilter, textManipulator, scoringLogic) {
+    .controller('appCtrl', function ($scope, $rootScope, $log, $q, $location, $localStorage, $moment, apiFactory, $state, fireBaseService, arrayMappers, momentService, objectUtils, arrayFilter, textManipulator, scoringLogic) {
 
-      console.log('--> appCtrl');
-
-      ////////////////////////////////////////
-      /////////////// public /////////////////
-      ////////////////////////////////////////
+      // public
 
       $rootScope.version = '6.1';
 
@@ -32,8 +28,6 @@
        * @description filters game log by selected month for all managers
        */
       var updateAllManagersFilter = function () {
-
-        console.log('updateAllManagersFilter');
 
         _.each($rootScope.managerData.data, function (manager) {
 
@@ -96,13 +90,6 @@
 
       };
 
-      /*user.getCurrent().then(function (currentUser) {
-       //console.log('currentUser:', currentUser);
-       $rootScope.user = currentUser;
-       console.log('WELCOME', $rootScope.user.first_name);
-       //$scope.user = user;
-       });*/
-
       /**
        * @name loading
        * @description whether data is still loading
@@ -129,7 +116,7 @@
 
       $scope.$watch(function () {
         return $location.search().admin;
-      }, function (nv, ov) {
+      }, function (nv) {
         $scope.admin = angular.isDefined(nv);
       }, true);
 
@@ -141,7 +128,7 @@
 
       $rootScope.$watch(function () {
         return $location.search().edit;
-      }, function (nv, ov) {
+      }, function (nv) {
         $rootScope.edit = angular.isDefined(nv) && !!nv;
       }, true);
 
@@ -152,11 +139,7 @@
        */
       $scope.draftMode = $location.search().draftMode;
 
-      /////////////////////////////
-      // ROSTER
-      /////////////////////////////
-
-      //$scope.managersList = ['chester', 'frank', 'joe', 'justin', 'dan', 'mike'];
+      // $scope.managersList = ['chester', 'frank', 'joe', 'justin', 'dan', 'mike'];
 
       /**
        * @name chooseManager
@@ -169,27 +152,29 @@
       /**
        * @name saveCoreData
        * @description saves current passed in object to firebase as managerCore
+       * @param {object} coreData - and object (not array) containing information to be saved
+       * @returns {void}
        */
       $scope.saveCoreData = function (coreData) {
 
-        console.log('//////////////////////////////');
-        console.log('SAVING CORE DATA');
-        console.log('//////////////////////////////');
+        $log.debug('//////////////////////////////');
+        $log.debug('SAVING CORE DATA');
+        $log.debug('//////////////////////////////');
 
         if (Array.isArray(coreData)) {
-          console.warn('coreData can not be an array');
+          $log.warn('coreData can not be an array');
           return false;
         }
 
-        console.log('===============================');
-        console.log('coreData', coreData);
-        console.log('===============================');
+        $log.debug('===============================');
+        $log.debug('coreData', coreData);
+        $log.debug('===============================');
 
         if (_.hasDeepProperty(coreData, 'managerName') && _.hasDeepProperty(coreData, 'players')) {
 
           _.each(coreData, function(m) {
             if (_.keys(m.players).length < 26) {
-              console.warn('does NOT have at least 26 players', _.keys(m.players).length);
+              $log.warn('does NOT have at least 26 players', _.keys(m.players).length);
               debugger;
               return false;
             }
@@ -198,9 +183,9 @@
           var hasPlayer = _.allHaveProperty(coreData, 'player');
 
           if (hasPlayer) {
-            console.log('all players have \'player\' property');
+            $log.debug('all players have \'player\' property');
           } else {
-            console.log('all players DO NOT have \'player\' property');
+            $log.debug('all players DO NOT have \'player\' property');
             debugger;
             return false;
           }
@@ -208,9 +193,9 @@
           var hasPlayerId = _.allHaveProperty(coreData, 'player.id');
 
           if (hasPlayerId) {
-            console.log('all players have \'player.id\' property');
+            $log.debug('all players have \'player.id\' property');
           } else {
-            console.log('all players DO NOT have \'player.id\' property');
+            $log.debug('all players DO NOT have \'player.id\' property');
             debugger;
             return false;
           }
@@ -218,9 +203,9 @@
           var hasPlayerName = _.allHaveProperty(coreData, 'player.name');
 
           if (hasPlayerName) {
-            console.log('all players have \'player.name\' property');
+            $log.debug('all players have \'player.name\' property');
           } else {
-            console.log('all players DO NOT have \'player.name\' property');
+            $log.debug('all players DO NOT have \'player.name\' property');
             debugger;
             return false;
           }
@@ -228,9 +213,9 @@
           var hasStatus = _.allHaveProperty(coreData, 'player.status');
 
           if (hasStatus) {
-            console.log('all players have \'player.status\' property');
+            $log.debug('all players have \'player.status\' property');
           } else {
-            console.log('all players DO NOT have \'player.status\' property');
+            $log.debug('all players DO NOT have \'player.status\' property');
             debugger;
             return false;
           }
@@ -238,9 +223,9 @@
           var hasImage = _.allHaveProperty(coreData, 'player.image');
 
           if (hasImage) {
-            console.log('all players have \'player.image\' property');
+            $log.debug('all players have \'player.image\' property');
           } else {
-            console.log('all players DO NOT have \'player.image\' property');
+            $log.debug('all players DO NOT have \'player.image\' property');
             debugger;
             return false;
           }
@@ -248,9 +233,9 @@
           var hasPickNumber = _.allHaveProperty(coreData, 'player.pickNumber');
 
           if (hasPickNumber) {
-            console.log('all players have \'player.pickNumber\' property');
+            $log.debug('all players have \'player.pickNumber\' property');
           } else {
-            console.log('all players DO NOT have \'player.pickNumber\' property');
+            $log.debug('all players DO NOT have \'player.pickNumber\' property');
             debugger;
             return false;
           }
@@ -258,9 +243,9 @@
           var hasTeam = _.allHaveProperty(coreData, 'team');
 
           if (hasTeam) {
-            console.log('all players have \'team\' property');
+            $log.debug('all players have \'team\' property');
           } else {
-            console.log('all players DO NOT have \'team\' property');
+            $log.debug('all players DO NOT have \'team\' property');
             debugger;
             return false;
           }
@@ -268,9 +253,9 @@
           var hasTeamId = _.allHaveProperty(coreData, 'team.id');
 
           if (hasTeamId) {
-            console.log('all players have \'team.id\' property');
+            $log.debug('all players have \'team.id\' property');
           } else {
-            console.log('all players DO NOT have \'team.id\' property');
+            $log.debug('all players DO NOT have \'team.id\' property');
             debugger;
             return false;
           }
@@ -278,9 +263,9 @@
           var hasTeamName = _.allHaveProperty(coreData, 'team.name');
 
           if (hasTeamName) {
-            console.log('all players have \'team.name\' property');
+            $log.debug('all players have \'team.name\' property');
           } else {
-            console.log('all players DO NOT have \'team.name\' property');
+            $log.debug('all players DO NOT have \'team.name\' property');
             debugger;
             return false;
           }
@@ -288,9 +273,9 @@
           var hasTeamLogo = _.allHaveProperty(coreData, 'team.logo');
 
           if (hasTeamLogo) {
-            console.log('all players have \'team.logo\' property');
+            $log.debug('all players have \'team.logo\' property');
           } else {
-            console.log('all players DO NOT have \'team.logo\' property');
+            $log.debug('all players DO NOT have \'team.logo\' property');
             debugger;
             return false;
           }
@@ -298,9 +283,9 @@
           var hasManager = _.allHaveProperty(coreData, 'manager');
 
           if (hasManager) {
-            console.log('all players have \'manager\' property');
+            $log.debug('all players have \'manager\' property');
           } else {
-            console.log('all players DO NOT have \'manager\' property');
+            $log.debug('all players DO NOT have \'manager\' property');
             debugger;
             return false;
           }
@@ -308,9 +293,9 @@
           var hasManagerName = _.allHaveProperty(coreData, 'manager.name');
 
           if (hasManagerName) {
-            console.log('all players have \'manager.name\' property');
+            $log.debug('all players have \'manager.name\' property');
           } else {
-            console.log('all players DO NOT have \'manager.name\' property');
+            $log.debug('all players DO NOT have \'manager.name\' property');
             debugger;
             return false;
           }
@@ -318,9 +303,9 @@
           var hasLeague = _.allHaveProperty(coreData, 'league');
 
           if (hasLeague) {
-            console.log('all players have \'league\' property');
+            $log.debug('all players have \'league\' property');
           } else {
-            console.log('all players DO NOT have \'league\' property');
+            $log.debug('all players DO NOT have \'league\' property');
             debugger;
             return false;
           }
@@ -328,9 +313,9 @@
           var hasLeagueName = _.allHaveProperty(coreData, 'league.name');
 
           if (hasLeagueName) {
-            console.log('all players have \'league.name\' property');
+            $log.debug('all players have \'league.name\' property');
           } else {
-            console.log('all players DO NOT have \'league.name\' property');
+            $log.debug('all players DO NOT have \'league.name\' property');
             debugger;
             return false;
           }
@@ -338,9 +323,9 @@
           var hasLeagueSlugs = _.allHaveProperty(coreData, 'league.slugs');
 
           if (hasLeagueSlugs) {
-            console.log('all players have \'league.slugs\' property');
+            $log.debug('all players have \'league.slugs\' property');
           } else {
-            console.log('all players DO NOT have \'league.slugs\' property');
+            $log.debug('all players DO NOT have \'league.slugs\' property');
             debugger;
             return false;
           }
@@ -348,9 +333,9 @@
           var hasActive = _.allHaveProperty(coreData, 'active');
 
           if (hasActive) {
-            console.log('all players have \'active\' property');
+            $log.debug('all players have \'active\' property');
           } else {
-            console.log('all players DO NOT have \'active\' property');
+            $log.debug('all players DO NOT have \'active\' property');
             debugger;
             return false;
           }
@@ -359,9 +344,9 @@
           var hasDateOfTransaction = _.allHaveProperty(coreData, 'dateOfTransaction');
 
           if (hasDateOfTransaction) {
-            console.log('all players have \'dateOfTransaction\' property');
+            $log.debug('all players have \'dateOfTransaction\' property');
           } else {
-            console.log('all players DO NOT have \'dateOfTransaction\' property');
+            $log.debug('all players DO NOT have \'dateOfTransaction\' property');
             debugger;
             return false;
           }
@@ -369,30 +354,30 @@
           // var hasTransactions = _.allHaveProperty(coreData, 'transactions');
           //
           // if (hasTransactions) {
-          //   console.log('all players have \'transactions\' property');
+          //   $log.debug('all players have \'transactions\' property');
           // } else {
-          //   console.log('all players DO NOT have \'transactions\' property');
+          //   $log.debug('all players DO NOT have \'transactions\' property');
           //   debugger;
           //   return false;
           // }
 
         } else {
-          console.log('coreData test failed');
+          $log.debug('coreData test failed');
           return false;
         }
 
         //////////////////////////////////
 
         if (_.keys(coreData).length === 6) {
-          console.log('has 6 managers');
+          $log.debug('has 6 managers');
         } else {
-          console.log('does NOT have 6 managers:', _.keys(coreData).length);
+          $log.debug('does NOT have 6 managers:', _.keys(coreData).length);
         }
 
         if (_.keys(coreData) === ['chester', 'dan', 'frank', 'joe', 'justin', 'mike']) {
-          console.log('has exact managers', ['chester', 'dan', 'frank', 'joe', 'justin', 'mike']);
+          $log.debug('has exact managers', ['chester', 'dan', 'frank', 'joe', 'justin', 'mike']);
         } else {
-          console.log('does NOT have exact managers:', _.keys(coreData));
+          $log.debug('does NOT have exact managers:', _.keys(coreData));
         }
 
         $scope.saveToFireBase({
@@ -410,12 +395,12 @@
        */
       $scope.saveRoster = function (managerData) {
 
-        console.log('//////////////////////////////');
-        console.log('SAVING MANAGERS DATA', managerData);
-        console.log('//////////////////////////////');
+        $log.debug('//////////////////////////////');
+        $log.debug('SAVING MANAGERS DATA', managerData);
+        $log.debug('//////////////////////////////');
 
         if (Array.isArray(managerData)) {
-          console.warn('managerData can not be an array');
+          $log.warn('managerData can not be an array');
           return false;
         }
 
@@ -456,7 +441,7 @@
           playersGameLogs[key] = {
             managerName: key.capitalize(),
             players: _.object(_.map(manager.players, function(p, key) {
-              console.log('player game logs', p.gameLogs);
+              $log.debug('player game logs', p.gameLogs);
               return [key, {
                 gameLogs: p.gameLogs
               }];
@@ -479,16 +464,16 @@
         //////////////////////////////////
 
         if (_.hasDeepProperty(gameLogs, 'managerName') && _.hasDeepProperty(gameLogs, 'filteredMonthlyGoalsLog') && _.hasDeepProperty(gameLogs, 'monthlyGoalsLog')) {
-          console.log('gameLogs test passsed');
+          $log.debug('gameLogs test passsed');
         } else {
-          console.log('gameLogs test failed');
+          $log.debug('gameLogs test failed');
           return false;
         }
 
         if (_.hasDeepProperty(charts, 'managerName') && _.hasDeepProperty(charts, 'chartData')) {
-          console.log('charts test passsed');
+          $log.debug('charts test passsed');
         } else {
-          console.log('charts test failed');
+          $log.debug('charts test failed');
           return false;
         }
 
@@ -499,9 +484,9 @@
           var hasPlayer = _.allHaveProperty(players, 'player');
 
           if (hasPlayer) {
-            console.log('all players have \'player\' property');
+            $log.debug('all players have \'player\' property');
           } else {
-            console.log('all players DO NOT have \'player\' property');
+            $log.debug('all players DO NOT have \'player\' property');
             debugger;
             return false;
           }
@@ -509,9 +494,9 @@
           var hasPlayerId = _.allHaveProperty(players, 'player.id');
 
           if (hasPlayerId) {
-            console.log('all players have \'player.id\' property');
+            $log.debug('all players have \'player.id\' property');
           } else {
-            console.log('all players DO NOT have \'player.id\' property');
+            $log.debug('all players DO NOT have \'player.id\' property');
             debugger;
             return false;
           }
@@ -519,9 +504,9 @@
           var hasPlayerName = _.allHaveProperty(players, 'player.name');
 
           if (hasPlayerName) {
-            console.log('all players have \'player.name\' property');
+            $log.debug('all players have \'player.name\' property');
           } else {
-            console.log('all players DO NOT have \'player.name\' property');
+            $log.debug('all players DO NOT have \'player.name\' property');
             debugger;
             return false;
           }
@@ -529,9 +514,9 @@
           var hasStatus = _.allHaveProperty(players, 'player.status');
 
           if (hasStatus) {
-            console.log('all players have \'player.status\' property');
+            $log.debug('all players have \'player.status\' property');
           } else {
-            console.log('all players DO NOT have \'player.status\' property');
+            $log.debug('all players DO NOT have \'player.status\' property');
             debugger;
             return false;
           }
@@ -539,9 +524,9 @@
           var hasImage = _.allHaveProperty(players, 'player.image');
 
           if (hasImage) {
-            console.log('all players have \'player.image\' property');
+            $log.debug('all players have \'player.image\' property');
           } else {
-            console.log('all players DO NOT have \'player.image\' property');
+            $log.debug('all players DO NOT have \'player.image\' property');
             debugger;
             return false;
           }
@@ -549,9 +534,9 @@
           var hasPickNumber = _.allHaveProperty(players, 'player.pickNumber');
 
           if (hasPickNumber) {
-            console.log('all players have \'player.pickNumber\' property');
+            $log.debug('all players have \'player.pickNumber\' property');
           } else {
-            console.log('all players DO NOT have \'player.pickNumber\' property');
+            $log.debug('all players DO NOT have \'player.pickNumber\' property');
             debugger;
             return false;
           }
@@ -559,9 +544,9 @@
           var hasBio = _.allHaveProperty(players, 'bio');
 
           if (hasBio) {
-            console.log('all players have \'bio\' property');
+            $log.debug('all players have \'bio\' property');
           } else {
-            console.log('all players DO NOT have \'bio\' property');
+            $log.debug('all players DO NOT have \'bio\' property');
             debugger;
             return false;
           }
@@ -569,9 +554,9 @@
           var hasTeam = _.allHaveProperty(players, 'team');
 
           if (hasTeam) {
-            console.log('all players have \'team\' property');
+            $log.debug('all players have \'team\' property');
           } else {
-            console.log('all players DO NOT have \'team\' property');
+            $log.debug('all players DO NOT have \'team\' property');
             debugger;
             return false;
           }
@@ -579,9 +564,9 @@
           var hasTeamId = _.allHaveProperty(players, 'team.id');
 
           if (hasTeamId) {
-            console.log('all players have \'team.id\' property');
+            $log.debug('all players have \'team.id\' property');
           } else {
-            console.log('all players DO NOT have \'team.id\' property');
+            $log.debug('all players DO NOT have \'team.id\' property');
             debugger;
             return false;
           }
@@ -589,9 +574,9 @@
           var hasTeamName = _.allHaveProperty(players, 'team.name');
 
           if (hasTeamName) {
-            console.log('all players have \'team.name\' property');
+            $log.debug('all players have \'team.name\' property');
           } else {
-            console.log('all players DO NOT have \'team.name\' property');
+            $log.debug('all players DO NOT have \'team.name\' property');
             debugger;
             return false;
           }
@@ -599,9 +584,9 @@
           var hasTeamLogo = _.allHaveProperty(players, 'team.logo');
 
           if (hasTeamLogo) {
-            console.log('all players have \'team.logo\' property');
+            $log.debug('all players have \'team.logo\' property');
           } else {
-            console.log('all players DO NOT have \'team.logo\' property');
+            $log.debug('all players DO NOT have \'team.logo\' property');
             debugger;
             return false;
           }
@@ -609,9 +594,9 @@
           var hasManager = _.allHaveProperty(players, 'manager');
 
           if (hasManager) {
-            console.log('all players have \'manager\' property');
+            $log.debug('all players have \'manager\' property');
           } else {
-            console.log('all players DO NOT have \'manager\' property');
+            $log.debug('all players DO NOT have \'manager\' property');
             debugger;
             return false;
           }
@@ -619,9 +604,9 @@
           var hasManagerName = _.allHaveProperty(players, 'manager.name');
 
           if (hasManagerName) {
-            console.log('all players have \'manager.name\' property');
+            $log.debug('all players have \'manager.name\' property');
           } else {
-            console.log('all players DO NOT have \'manager.name\' property');
+            $log.debug('all players DO NOT have \'manager.name\' property');
             debugger;
             return false;
           }
@@ -629,9 +614,9 @@
           var hasLeague = _.allHaveProperty(players, 'league');
 
           if (hasLeague) {
-            console.log('all players have \'league\' property');
+            $log.debug('all players have \'league\' property');
           } else {
-            console.log('all players DO NOT have \'league\' property');
+            $log.debug('all players DO NOT have \'league\' property');
             debugger;
             return false;
           }
@@ -639,9 +624,9 @@
           var hasLeagueName = _.allHaveProperty(players, 'league.name');
 
           if (hasLeagueName) {
-            console.log('all players have \'league.name\' property');
+            $log.debug('all players have \'league.name\' property');
           } else {
-            console.log('all players DO NOT have \'league.name\' property');
+            $log.debug('all players DO NOT have \'league.name\' property');
             debugger;
             return false;
           }
@@ -649,9 +634,9 @@
           var hasLeagueSlugs = _.allHaveProperty(players, 'league.slugs');
 
           if (hasLeagueSlugs) {
-            console.log('all players have \'league.slugs\' property');
+            $log.debug('all players have \'league.slugs\' property');
           } else {
-            console.log('all players DO NOT have \'league.slugs\' property');
+            $log.debug('all players DO NOT have \'league.slugs\' property');
             debugger;
             return false;
           }
@@ -659,9 +644,9 @@
           var hasActive = _.allHaveProperty(players, 'active');
 
           if (hasActive) {
-            console.log('all players have \'active\' property');
+            $log.debug('all players have \'active\' property');
           } else {
-            console.log('all players DO NOT have \'active\' property');
+            $log.debug('all players DO NOT have \'active\' property');
             debugger;
             return false;
           }
@@ -670,9 +655,9 @@
           var hasDateOfTransaction = _.allHaveProperty(players, 'dateOfTransaction');
 
           if (hasDateOfTransaction) {
-            console.log('all players have \'dateOfTransaction\' property');
+            $log.debug('all players have \'dateOfTransaction\' property');
           } else {
-            console.log('all players DO NOT have \'dateOfTransaction\' property');
+            $log.debug('all players DO NOT have \'dateOfTransaction\' property');
             debugger;
             return false;
           }
@@ -686,21 +671,21 @@
           var hasGameLogs = _.allHaveProperty(playersGameLogs, 'gameLogs');
 
           if (hasGameLogs) {
-            console.log('all players have \'gameLogs\' property');
+            $log.debug('all players have \'gameLogs\' property');
           } else {
-            console.log('all players DO NOT have \'gameLogs\' property');
+            $log.debug('all players DO NOT have \'gameLogs\' property');
             debugger;
             return false;
           }
 
         };
 
-        console.log('===============================');
-        console.log('gameLogs:', gameLogs);
-        console.log('charts:', charts);
-        console.log('players:', players);
-        console.log('playersGameLogs:', playersGameLogs);
-        console.log('===============================');
+        $log.debug('===============================');
+        $log.debug('gameLogs:', gameLogs);
+        $log.debug('charts:', charts);
+        $log.debug('players:', players);
+        $log.debug('playersGameLogs:', playersGameLogs);
+        $log.debug('===============================');
 
         $scope.saveToFireBase({
           data: players,
@@ -843,7 +828,7 @@
 
         allPlayersIndex.data[playerId] = player;
 
-        console.log('allPlayersIndex', allPlayersIndex);
+        $log.debug('allPlayersIndex', allPlayersIndex);
 
         $scope.saveToFireBase({
           _lastSyncedOn: momentService.syncDate(),
@@ -901,7 +886,7 @@
       $scope.lastDays = function (days) {
 
         var listOfDays = [];
-        var today = moment();
+        var today = $moment();
         var thePast = today.subtract(days, 'days');
         for (var i = 0; i < days; i++) {
           var newDay = thePast.add(1, 'days');
@@ -968,7 +953,7 @@
 
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
 
-        console.log('state changed start');
+        $log.debug('state changed start');
 
         $scope.showSpinner();
 
@@ -976,13 +961,13 @@
           if (!_.has(toParams, 'leagueName') || toParams.leagueName === '') {
             toParams.leagueName = 'epl';
           }
-          //console.log('go to league', toParams.leagueName);
+          //$log.debug('go to league', toParams.leagueName);
           $state.go('leagues.tables', {
             leagueName: toParams.leagueName
           });
         } else if (toState.name === 'standings') {
-          //console.log('toState', toState);
-          //console.log('toParams:', toParams);
+          //$log.debug('toState', toState);
+          //$log.debug('toParams:', toParams);
           //if (!_.has(toParams, 'leagueName') || toParams.leagueName === '') {
           //  toParams.leagueName = 'epl';
           //}
@@ -992,7 +977,7 @@
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 
-        console.log('state changed success');
+        $log.debug('state changed success');
 
         $scope.hideSpinner();
 

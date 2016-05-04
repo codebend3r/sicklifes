@@ -8,9 +8,9 @@
 
   angular.module('sicklifes')
 
-    .controller('standingsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, managerData) {
+    .controller('standingsCtrl', function ($scope, $rootScope, $log, $timeout, apiFactory, $state, $stateParams, fireBaseService, updateDataUtils, momentService, managerData) {
 
-      console.log('--> standingsCtrl');
+      $log.debug('--> standingsCtrl');
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -69,7 +69,7 @@
         updateDataUtils.updateAllManagerData(function (data) {
 
           $rootScope.loading = false;
-          console.log('managers updated', data);
+          $log.debug('managers updated', data);
 
         });
 
@@ -100,9 +100,9 @@
         $rootScope.source = 'firebase';
 
         if (momentService.isHoursAgo(managerData._lastSyncedOn)) {
-          console.log('-- data is too old --');
+          $log.debug('-- data is too old --');
         } else {
-          console.log('-- data is up to date --');
+          $log.debug('-- data is up to date --');
         }
 
         $scope.combinedLogs = [];
@@ -126,7 +126,7 @@
       });
 
       $rootScope.$on('MONTH_CHANGED', function (e, month) {
-        console.log('month change detected:', month.monthName);
+        $log.debug('month change detected:', month.monthName);
         currentMonth = month;
         $state.current.name === 'standings.charts' && $timeout(processChart, 500);
       });
@@ -148,7 +148,7 @@
        */
       var onManagersRequestFinished = function (managerData) {
 
-        console.log('onManagersRequestFinished');
+        $log.debug('onManagersRequestFinished');
         $rootScope.loading = false;
         $scope.saveRoster();
 
@@ -160,9 +160,9 @@
        */
       var processChart = function () {
 
-        console.log('---------------------');
-        console.log('processChart', currentMonth.monthName);
-        console.log('---------------------');
+        $log.debug('---------------------');
+        $log.debug('processChart', currentMonth.monthName);
+        $log.debug('---------------------');
 
         $scope.loadingChart = false;
 
@@ -185,7 +185,7 @@
 
         });
 
-        console.log(seriesHashTable, _.keys(seriesHashTable).length);
+        $log.debug(seriesHashTable, _.keys(seriesHashTable).length);
 
         _.each(managerData.data, function (manager) {
 
@@ -193,14 +193,14 @@
           seriesDataObj.name = manager.managerName;
           seriesDataObj.data = [];
 
-          console.log('name:', seriesDataObj.name);
+          $log.debug('name:', seriesDataObj.name);
 
           seriesHashTable = _.map(seriesHashTable, function (data, key) {
-            console.log(data, key);
+            $log.debug(data, key);
             return data;
           });
 
-          console.log('seriesHashTable reset', seriesHashTable);
+          $log.debug('seriesHashTable reset', seriesHashTable);
 
           _.each(manager.chartData, function (data) {
 
@@ -220,7 +220,7 @@
 
           });
 
-          console.log(seriesDataObj.name, seriesDataObj.data);
+          $log.debug(seriesDataObj.name, seriesDataObj.data);
 
           seriesData.push(seriesDataObj);
           gameDates = gameDates.concat(gameDates);
@@ -232,15 +232,15 @@
           return new Date(a).getTime() - new Date(b).getTime();
         });
 
-        console.log('seriesData.length:', seriesData.length);
-        //console.log('gameDates.length:', gameDates.length);
+        $log.debug('seriesData.length:', seriesData.length);
+        //$log.debug('gameDates.length:', gameDates.length);
 
         $scope.showLastAmount = gameDates.length;
 
         // seriesData = _.map(seriesData, function(d) {
-        //   console.log('d.data.length:', d.data.length);
+        //   $log.debug('d.data.length:', d.data.length);
         //   if ($scope.showLastAmount < d.data.length) {
-        //     console.log('cutting off', Math.abs($scope.showLastAmount - d.data.length));
+        //     $log.debug('cutting off', Math.abs($scope.showLastAmount - d.data.length));
         //     return {
         //       name: d.name,
         //       data: d.data.splice(d.data.length - $scope.showLastAmount, d.data.length)

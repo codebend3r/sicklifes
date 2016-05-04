@@ -16,7 +16,7 @@
       worker = new Worker('./js/workers/statsFetcher.js');
 
       worker.addEventListener('message', function (e) {
-        console.log('Worker said: ', e.data);
+        $log.debug('Worker said: ', e.data);
         defer.resolve(e.data);
       }, false);
 

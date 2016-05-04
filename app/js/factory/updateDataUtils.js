@@ -18,7 +18,7 @@
        */
       updateDataUtils.updatePlayerPoolData = function () {
 
-        console.log('updateDataUtils -- updatePlayerPoolData');
+        $log.debug('updateDataUtils -- updatePlayerPoolData');
 
         var defer = $q.defer(),
           allTeamsPromise = [],
@@ -29,13 +29,13 @@
           //loop through each result
           _.each(result, function (leagueData) {
             _.each(leagueData.data, function (teamData) {
-              // console.log('LEAGUE:', leagueData.slug, ', TEAM:', teamData.full_name);
+              // $log.debug('LEAGUE:', leagueData.slug, ', TEAM:', teamData.full_name);
               // returns a promise with the end point for each team
               var rosterRequest = apiFactory.getTeamRosterURL(leagueData.slug, teamData.id);
               allTeamsPromise.push(rosterRequest);
               rosterRequest.then(function (playerData) {
                 _.each(playerData.data, function (eachPlayer) {
-                  console.log(eachPlayer.team.full_name, ':', eachPlayer.full_name);
+                  $log.debug(eachPlayer.team.full_name, ':', eachPlayer.full_name);
                 });
                 // each player on each team
                 var rosterArray = _.map(playerData.data, arrayMappers.transferPlayersMap.bind(this, leagueData, teamData));
@@ -43,7 +43,7 @@
               });
             });
             $q.all(allTeamsPromise).then(function(data) {
-              console.log('resolve promise');
+              $log.debug('resolve promise');
               defer.resolve(data);
             });
           });
@@ -60,7 +60,7 @@
        */
       updateDataUtils.updateAllManagerData = function (managerData) {
 
-        console.log('updateDataUtils.updateAllManagerData()');
+        $log.debug('updateDataUtils.updateAllManagerData()');
 
         var promises = [];
 
@@ -84,7 +84,7 @@
        */
       updateDataUtils.updateManagerData = function (m) {
 
-        console.log('updateDataUtils.updateManagerData()');
+        $log.debug('updateDataUtils.updateManagerData()');
 
         var defer = $q.defer();
         var current = 0;
@@ -104,40 +104,40 @@
 
           apiFactory.getPlayerProfile('soccer', p.player.id)
             .then(arrayMappers.playerInfo.bind(this, p), function () {
-              console.log('failed at player info mapping:', p.player.name);
+              $log.debug('failed at player info mapping:', p.player.name);
             })
             .then(arrayMappers.playerMapPersonalInfo.bind(this, p), function () {
-              console.log('failed at player personal info mapping:', p.player.name);
+              $log.debug('failed at player personal info mapping:', p.player.name);
             })
             .then(arrayMappers.playerGamesLog.bind(this, {
               player: p,
               manager: m
             }), function () {
-              console.log('failed at player game logs', p.player.name);
+              $log.debug('failed at player game logs', p.player.name);
             })
             .then(function (result) {
               current += 1;
 
               if (angular.isUndefinedOrNull(p.league)) {
-                console.warn('no p.league property', p);
+                $log.warn('no p.league property', p);
               }
 
               if (angular.isUndefinedOrNull(p.league.name)) {
-                console.warn('no p.league.name property', p);
+                $log.warn('no p.league.name property', p);
               }
 
               if (angular.isUndefinedOrNull(p.league.slugs)) {
-                console.warn('no p.league.slugs property', p);
+                $log.warn('no p.league.slugs property', p);
               }
 
               m.players[p.player.id] = _.defaults(p, m.players[p.player.id]);
 
               if (current === total) {
-                console.log('RESOLVE PROMISE:', p.manager.name);
+                $log.debug('RESOLVE PROMISE:', p.manager.name);
                 defer.resolve(m);
               }
             }, function () {
-              console.log('failed at final stage:', p.player.name);
+              $log.debug('failed at final stage:', p.player.name);
             });
 
         };
@@ -152,7 +152,7 @@
           _.each(m.players, requestPlayer);
 
         } else {
-          console.warn('try again, object does not contain \'players\' property');
+          $log.warn('try again, object does not contain \'players\' property');
         }
 
         return defer.promise;
@@ -165,7 +165,7 @@
        */
       updateDataUtils.updateLeagueTables = function () {
 
-        console.log('updateDataUtils --> updateLeagueTables');
+        $log.debug('updateDataUtils --> updateLeagueTables');
 
         var defer = $q.defer(),
           leagueTablesData = [];
@@ -206,7 +206,7 @@
        */
       updateDataUtils.updateLeagueLeadersData = function () {
 
-        console.log('updateDataUtils --> updateLeagueLeadersData');
+        $log.debug('updateDataUtils --> updateLeagueLeadersData');
 
         var allLeagues = [],
           defer = $q.defer(),
@@ -255,7 +255,7 @@
               _lastSyncedOn: momentService.syncDate()
             };
 
-            console.log('CORE DATA', $rootScope.managerCore.data);
+            $log.debug('CORE DATA', $rootScope.managerCore.data);
 
             _.each($rootScope.managerCore.data, function (m) {
 
@@ -287,7 +287,7 @@
                 _.each(currentPlayers, function(element, index) {
 
                   if (angular.isUndefinedOrNull(p.player.name)) {
-                    //console.log('> player name not found', p);
+                    //$log.debug('> player name not found', p);
                   } else {
                     if (p.player.name.toLowerCase() === element.toLowerCase()) {
                       p.pickNumber = index + 1;

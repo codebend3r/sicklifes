@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('chartsCtrl', function ($scope, $rootScope, $timeout, apiFactory, $stateParams, fireBaseService, updateDataUtils, momentService, $localStorage) {
+    .controller('chartsCtrl', function ($scope, $rootScope, $log, $timeout, apiFactory, $stateParams, fireBaseService, updateDataUtils, momentService, $localStorage) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -47,7 +47,7 @@
         updateDataUtils.updateAllManagerData(function (data) {
 
           $rootScope.loading = false;
-          console.log('managers updated', data);
+          $log.debug('managers updated', data);
 
         });
 
@@ -144,7 +144,7 @@
        */
       var loadData = function (result) {
 
-        console.log('charts load data');
+        $log.debug('charts load data');
         $rootScope.loading = false;
 
       };
@@ -156,7 +156,7 @@
       });
 
       $rootScope.$on('MONTH_CHANGED', function (e, month) {
-        console.log('charts | month changed', month.monthName);
+        $log.debug('charts | month changed', month.monthName);
         //currentMonth = month;
         //processChart();
       });
@@ -171,7 +171,7 @@
        */
       var processChart = function () {
 
-        console.log('processChart()');
+        $log.debug('processChart()');
 
         $scope.loadingChart = false;
 
@@ -193,19 +193,19 @@
             if ($scope.isCurrentMonth(currentMonth, data.date)) {
               if (angular.isDefined(seriesHashTable[data.date])) {
                 seriesHashTable[data.date] += data[chartKey];
-                //console.log(manager.managerName, 'exists, add', data[chartKey], _.keys(seriesHashTable).length);
+                //$log.debug(manager.managerName, 'exists, add', data[chartKey], _.keys(seriesHashTable).length);
               } else {
                 seriesHashTable[data.date] = data[chartKey];
-                //console.log(manager.managerName, 'new, add', data[chartKey], _.keys(seriesHashTable).length);
+                //$log.debug(manager.managerName, 'new, add', data[chartKey], _.keys(seriesHashTable).length);
               }
-              //console.log(manager.managerName, '| pushing >', data[chartKey]);
+              //$log.debug(manager.managerName, '| pushing >', data[chartKey]);
               if (angular.isDefined(data.date)) gameDates.push(data.date);
             }
 
           });
 
-          //console.log(manager.managerName, 'seriesHashTable', seriesHashTable);
-          //console.log(manager.managerName, 'seriesHashTable', _.keys(seriesHashTable).length);
+          //$log.debug(manager.managerName, 'seriesHashTable', seriesHashTable);
+          //$log.debug(manager.managerName, 'seriesHashTable', _.keys(seriesHashTable).length);
 
           var chartStartValue = 0;
 
@@ -226,13 +226,13 @@
           return new Date(a).getTime() - new Date(b).getTime();
         });
 
-        console.log('date length', gameDates.length);
+        $log.debug('date length', gameDates.length);
 
         $scope.showLastAmount = gameDates.length;
 
         // seriesData = _.map(seriesData, function(d) {
         //   if ($scope.showLastAmount < d.data.length) {
-        //     console.log('cutting off', Math.abs($scope.showLastAmount - d.data.length));
+        //     $log.debug('cutting off', Math.abs($scope.showLastAmount - d.data.length));
         //     return {
         //       name: d.name,
         //       data: d.data.splice(d.data.length - $scope.showLastAmount, d.data.length)
@@ -284,21 +284,21 @@
        */
       var init = function () {
 
-        console.log('init');
+        $log.debug('init');
 
         if (angular.isDefined($rootScope[$scope.dataKeyName])) {
 
-          console.log('read from $rootScope');
+          $log.debug('read from $rootScope');
           loadData($rootScope[$scope.dataKeyName]);
 
         } else if (angular.isDefined($localStorage[$scope.dataKeyName])) {
 
-          console.log('read from local storage');
+          $log.debug('read from local storage');
           loadData($localStorage[$scope.dataKeyName]);
 
         } else {
 
-          console.log('load from firebase');
+          $log.debug('load from firebase');
           apiFactory.getApiData('managerData')
             .then(loadData);
 

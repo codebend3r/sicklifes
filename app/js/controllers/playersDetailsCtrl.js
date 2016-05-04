@@ -8,31 +8,13 @@
 
   angular.module('sicklifes')
 
-    .directive('dot', function() {
-
-      return  {
-        restrict: 'E',
-        replace: true,
-        scope: {
-          className: '@'
-        },
-        template: '<svg class="dot-container" height="10" width="10">' +
-        '<circle class="dot" ng-class="className" cx="5" cy="5" r="5"/>' +
-        'Sorry, your browser does not support inline SVG.' +
-        '</svg>'
-      };
-
-    })
-
-    .controller('playersDetailsCtrl', function ($scope, $rootScope, $http, $timeout, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService, managerData, managerPlayers, charts, gameLogs, allPlayersIndex) {
+    .controller('playersDetailsCtrl', function ($scope, $rootScope, $log, $http, $timeout, $moment, apiFactory, $location, $stateParams, arrayMappers, chartSettings, textManipulator, objectUtils, transferDates, managersService, updateDataUtils, momentService, managerData, managerPlayers, charts, gameLogs, allPlayersIndex) {
 
       var lastDays = $scope.lastDays($scope.selectedRange);
 
       var self = this;
 
       var data = [];
-
-      var dataObj = {};
 
       var chartMapKeys = ['shots', 'shotsOnGoal', 'goals'];
 
@@ -61,7 +43,7 @@
 
         if (!angular.isUndefinedOrNull(findObject.player) && !angular.isUndefinedOrNull(findObject.manager)) {
 
-          console.log('player found in manager data');
+          $log.debug('player found in manager data');
 
           $scope.player = findObject.player;
           $scope.matchingManager = findObject.manager;
@@ -74,46 +56,42 @@
 
           if (!angular.isUndefinedOrNull($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
 
-            console.log('player data up to date');
+            $log.debug('player data up to date');
             $scope.changeRange($scope.selectedRange);
 
           } else {
 
-            console.log('player data NOT up to date');
+            $log.debug('player data NOT up to date');
             $scope.requestUpdateOnPlayer();
 
           }
 
         } else if (!angular.isUndefinedOrNull(allPlayersIndex.data[$stateParams.playerId])) {
 
-          console.log('player found in player index');
+          $log.debug('player found in player index');
 
           $scope.player = allPlayersIndex.data[$stateParams.playerId];
 
           // check the data of the source data
           if (!angular.isUndefinedOrNull($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
 
-            console.log('player data up to date');
+            $log.debug('player data up to date');
             $scope.changeRange($scope.selectedRange);
 
           } else {
 
-            console.log('player data NOT up to date');
+            $log.debug('player data NOT up to date');
             $scope.requestUpdateOnPlayer();
 
           }
 
         } else {
 
-          console.log('player not in player index and not in any manager');
+          $log.debug('player not in player index and not in any manager');
           $scope.player = {};
           $scope.requestUpdateOnPlayer();
 
         }
-
-
-
-
 
       };
 
@@ -174,21 +152,41 @@
       };
 
       /**
+       * @name logLoop
+       * @description loop function for mapping chart data
+       * @param calendarDay
+       * @param targetObject
+       * @param log
+       */
+      var logLoop = function (calendarDay, targetObject, log) {
+        _.each(targetObject, function (obj, mapKey) {
+          if (log.datePlayed === calendarDay) {
+            if (angular.isDefined(targetObject[mapKey][calendarDay])) {
+              targetObject[mapKey][calendarDay] += log[mapKey];
+            } else {
+              targetObject[mapKey][calendarDay] = log[mapKey];
+            }
+          } else if (!_.isDefined(targetObject[mapKey][calendarDay])) {
+            targetObject[mapKey][calendarDay] = 0;
+          }
+        });
+      };
+
+      /**
        * @name changeRange
        * @description
        */
       $scope.changeRange = function (selectedRange) {
 
         data = [];
-        dataObj = {};
 
         $scope.selectedRange = selectedRange;
 
         if ($scope.selectedRange.days === -1) {
-          var a = moment();
-          var b = moment(new Date(transferDates.leagueStart.date));
+          var a = $moment();
+          var b = $moment(new Date(transferDates.leagueStart.date));
           var difference = a.diff(b, 'days');
-          console.log(difference, 'day in fantasy league player');
+          $log.debug(difference, 'day in fantasy league player');
           lastDays = $scope.lastDays(difference);
         } else {
           lastDays = $scope.lastDays($scope.selectedRange.days);
@@ -254,29 +252,6 @@
       };
 
       /**
-       * @name logLoop
-       * @description loop function for mapping chart data
-       * @param calendarDay
-       * @param targetObject
-       * @param log
-       */
-      var logLoop = function (calendarDay, targetObject, log) {
-        _.each(targetObject, function (obj, mapKey) {
-          if (log.datePlayed === calendarDay) {
-            if (angular.isDefined(targetObject[mapKey][calendarDay])) {
-              targetObject[mapKey][calendarDay] += log[mapKey];
-            } else {
-              targetObject[mapKey][calendarDay] = log[mapKey];
-            }
-          } else {
-            if (angular.isUndefinedOrNull(targetObject[mapKey][calendarDay])) {
-              targetObject[mapKey][calendarDay] = 0;
-            }
-          }
-        });
-      };
-
-      /**
        * @name requestUpdateOnPlayer
        * @description makes a new http request from thescore api
        */
@@ -306,11 +281,10 @@
             $rootScope.loading = false;
 
             if (momentService.isHoursAgo($scope.player._lastSyncedOn)) {
-              $scope.saveToPlayerIndex($scope.player.id , $scope.player);
+              $scope.saveToPlayerIndex($scope.player.id, $scope.player);
             } else {
-              console.log('wait 24 hours to update this player');
+              $log.debug('wait 24 hours to update this player');
             }
-
 
           });
 

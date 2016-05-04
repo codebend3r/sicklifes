@@ -8,9 +8,9 @@
 
   angular.module('sicklifes')
 
-    .controller('leaguesCtrl', function ($scope, $rootScope, $stateParams, $state, $localStorage, $location, $http, updateDataUtils, momentService, textManipulator, leagueTables, apiFactory) {
+    .controller('leaguesCtrl', function ($scope, $rootScope, $stateParams, $state, $log, $localStorage, $location, $http, updateDataUtils, momentService, textManipulator, leagueTables, apiFactory) {
 
-      console.log('--> leaguesCtrl');
+      $log.debug('--> leaguesCtrl');
 
       ////////////////////////////////////////
       /////////////// public /////////////////
@@ -20,7 +20,7 @@
       $scope.currentPage = 1;
 
       $scope.pageChanged = function () {
-        console.log('Page changed to: ' + $scope.currentPage);
+        $log.debug('Page changed to: ' + $scope.currentPage);
       };
 
 
