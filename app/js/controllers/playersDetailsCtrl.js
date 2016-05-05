@@ -257,7 +257,7 @@
        */
       $scope.requestUpdateOnPlayer = function () {
 
-        if (angular.isUndefinedOrNull($stateParams.playerId)) {
+        if (!_.isDefined($stateParams.playerId)) {
           throw new Error('$stateParams.playerId was not defined, don\'t do that');
         }
 

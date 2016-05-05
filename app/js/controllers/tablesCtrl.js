@@ -8,7 +8,7 @@
 
   angular.module('sicklifes')
 
-    .controller('tablesCtrl', function ($scope, $rootScope, $stateParams, $localStorage, apiFactory, updateDataUtils, textManipulator, arrayMappers, momentService, leagueTables) {
+    .controller('tablesCtrl', function ($scope, $rootScope, $log, $stateParams, $localStorage, apiFactory, updateDataUtils, textManipulator, arrayMappers, momentService, leagueTables) {
 
       ////////////////////////////////////////
       /////////////// public /////////////////

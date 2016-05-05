@@ -56,7 +56,7 @@
           _.some($rootScope.managerPlayers.data, function (m, key) {
             //var currentManager = _.defaults({}, $rootScope.managerData.data, $rootScope.managerPlayers.data)[key];
             //$log.debug('currentManager', currentManager);
-            return !angular.isUndefinedOrNull(m.players[id]) && (matchingManager = m) && (matchingPlayer = m.players[id]);
+            return _.isDefined(m.players[id]) && (matchingManager = m) && (matchingPlayer = m.players[id]);
           });
 
           return {

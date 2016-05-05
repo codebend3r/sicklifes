@@ -19,7 +19,7 @@
       var mapLeaders = function (data) {
         return {
           id: data.player.id,
-          owner: angular.isUndefinedOrNull(managersService.findPlayerInManagers(data.player.id).manager) ? 'Free Agent' : managersService.findPlayerInManagers(data.player.id).manager.managerName,
+          owner: !_.isDefined(managersService.findPlayerInManagers(data.player.id).manager) ? 'Free Agent' : managersService.findPlayerInManagers(data.player.id).manager.managerName,
           rank: data.ranking_tie ? 'T' + data.ranking : data.ranking,
           goals: data.stat,
           logo: data.team.logos.small,

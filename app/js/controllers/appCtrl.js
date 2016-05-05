@@ -798,7 +798,7 @@
        * @param callback
        */
       $scope.startFireBase = function (callback) {
-        if (angular.isUndefinedOrNull(callback)) throw new Error('$scope.startFireBase: the callback parameter was not defined');
+        if (!_.isDefined(callback)) throw new Error('$scope.startFireBase: the callback parameter was not defined');
         if ($rootScope.fireBaseReady) {
           callback($rootScope.firebaseData);
         } else {
@@ -832,7 +832,6 @@
 
         $scope.saveToFireBase({
           _lastSyncedOn: momentService.syncDate(),
-          //data: {}
           data: allPlayersIndex
         }, 'allPlayersIndex');
 
