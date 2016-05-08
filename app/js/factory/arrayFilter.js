@@ -72,7 +72,7 @@
       };
 
       arrayFilter.filterOutUndefined = function(data) {
-        return !angular.isUndefinedOrNull(data);
+        return _.isDefined(data);
       };
 
       return arrayFilter;

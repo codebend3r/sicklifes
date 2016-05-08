@@ -247,10 +247,10 @@
        */
       var loadData = function () {
 
-        if (angular.isUndefinedOrNull($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
+        if (!_.isDefined($stateParams.managerId) || _.isEmpty($stateParams.managerId)) return;
 
         // _.each(managerData.data, function(manager, key) {
-        //   angular.isUndefinedOrNull(manager.players) && (manager.players = managerPlayers.data[key].players);
+        //   !_.isDefined(manager.players) && (manager.players = managerPlayers.data[key].players);
         // });
 
         $scope.managerData = managerData.data;

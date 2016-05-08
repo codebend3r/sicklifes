@@ -6,7 +6,7 @@
    */
   _.hasDeepProperty = function (obj, key) {
     return !Array.isArray(obj) && _.keys(obj).length > 0 && _.every(obj, function (prop) {
-        return !angular.isUndefinedOrNull(prop[key]);
+        return _.isDefined(prop[key]);
       });
   };
 
@@ -16,8 +16,8 @@
    */
   _.allManagersPlayersHave = function (obj, key) {
     return _.every(obj, function (m) {
-      return !angular.isUndefinedOrNull(m.players) && _.every(m.players, function (eachPlayer) {
-          return !angular.isUndefinedOrNull(eachPlayer[key]);
+      return _.isDefined(m.players) && _.every(m.players, function (eachPlayer) {
+          return _.isDefined(eachPlayer[key]);
         });
     });
   };
@@ -35,7 +35,7 @@
 
     return _.every(obj, function (m) {
 
-      return !angular.isUndefinedOrNull(m.players) && _.every(m.players, function (eachPlayer) {
+      return _.isDefined(m.players) && _.every(m.players, function (eachPlayer) {
 
         if (key.indexOf('.') !== -1) {
 
@@ -45,13 +45,13 @@
 
           var checkObject = function (parentObj, childKey) {
             debug && $log.debug(eachPlayer.player.name, 'checking for', childKey, 'in', parentObj);
-            if (angular.isUndefinedOrNull(parentObj[childKey])) {
+            if (!_.isDefined(parentObj[childKey])) {
               $log.warn(eachPlayer.player.name, 'FAILED: could not find property \'' + childKey + '\' in', parentObj);
               return false;
             } else {
               level += 1;
               if (level < maxLevels) {
-                return !angular.isUndefinedOrNull(parentObj[childKey]) && checkObject(parentObj[childKey], key.split('.')[level]);
+                return _.isDefined(parentObj[childKey]) && checkObject(parentObj[childKey], key.split('.')[level]);
               } else {
                 return true;
               }
@@ -59,8 +59,8 @@
           };
           return checkObject(eachPlayer, currentObjectKey);
         } else {
-          debug && $log.debug(eachPlayer.player.name, 'checking for', key, 'in', eachPlayer, !angular.isUndefinedOrNull(eachPlayer[key]));
-          return !angular.isUndefinedOrNull(eachPlayer[key]);
+          debug && $log.debug(eachPlayer.player.name, 'checking for', key, 'in', eachPlayer, _.isDefined(eachPlayer[key]));
+          return _.isDefined(eachPlayer[key]);
         }
       });
 

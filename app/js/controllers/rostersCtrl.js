@@ -94,7 +94,7 @@
 
               _.each(result.data, function (player) {
 
-                if (!angular.isUndefinedOrNull(allPlayersIndex.data[player.id]) && !angular.isUndefinedOrNull(allPlayersIndex.data[player.id]._lastSyncedOn) && !momentService.isPastYesterday(allPlayersIndex.data[player.id]._lastSyncedOn)) {
+                if (_.isDefined(allPlayersIndex.data[player.id]) && _.isDefined(allPlayersIndex.data[player.id]._lastSyncedOn) && !momentService.isPastYesterday(allPlayersIndex.data[player.id]._lastSyncedOn)) {
 
                   $log.debug('synced data found for', player.full_name);
 
@@ -102,7 +102,7 @@
 
                   var matchingManager = managersService.findPlayerInManagers(player.id).manager;
 
-                  if (!angular.isUndefinedOrNull(matchingManager)) {
+                  if (_.isDefined(matchingManager)) {
                     playerFromIndex.managerName = matchingManager.managerName;
                   }
 
@@ -124,7 +124,7 @@
 
                   player = objectUtils.playerResetGoalPoints(player);
 
-                  if (!angular.isUndefinedOrNull(matchingManager)) {
+                  if (_.isDefined(matchingManager)) {
                     player.managerName = matchingManager.managerName;
                   }
 

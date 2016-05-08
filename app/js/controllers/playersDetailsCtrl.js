@@ -41,7 +41,7 @@
 
         var findObject = managersService.findPlayerInManagers($stateParams.playerId);
 
-        if (!angular.isUndefinedOrNull(findObject.player) && !angular.isUndefinedOrNull(findObject.manager)) {
+        if (_.isDefined(findObject.player) && _.isDefined(findObject.manager)) {
 
           $log.debug('player found in manager data');
 
@@ -54,7 +54,7 @@
           $scope.matchingManager.filteredMonthlyGoalsLog = gameLogs.data[managerName].filteredMonthlyGoalsLog;
           $scope.matchingManager.monthlyGoalsLog = gameLogs.data[managerName].monthlyGoalsLog;
 
-          if (!angular.isUndefinedOrNull($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
+          if (_.isDefined($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
 
             $log.debug('player data up to date');
             $scope.changeRange($scope.selectedRange);
@@ -66,14 +66,14 @@
 
           }
 
-        } else if (!angular.isUndefinedOrNull(allPlayersIndex.data[$stateParams.playerId])) {
+        } else if (_.isDefined(allPlayersIndex.data[$stateParams.playerId])) {
 
           $log.debug('player found in player index');
 
           $scope.player = allPlayersIndex.data[$stateParams.playerId];
 
           // check the data of the source data
-          if (!angular.isUndefinedOrNull($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
+          if (_.isDefined($scope.player._lastSyncedOn) && !momentService.isPastYesterday($scope.player._lastSyncedOn)) {
 
             $log.debug('player data up to date');
             $scope.changeRange($scope.selectedRange);

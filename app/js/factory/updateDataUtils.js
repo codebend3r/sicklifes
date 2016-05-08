@@ -118,15 +118,15 @@
             .then(function (result) {
               current += 1;
 
-              if (angular.isUndefinedOrNull(p.league)) {
+              if (!_.isDefined(p.league)) {
                 $log.warn('no p.league property', p);
               }
 
-              if (angular.isUndefinedOrNull(p.league.name)) {
+              if (!_.isDefined(p.league.name)) {
                 $log.warn('no p.league.name property', p);
               }
 
-              if (angular.isUndefinedOrNull(p.league.slugs)) {
+              if (!_.isDefined(p.league.slugs)) {
                 $log.warn('no p.league.slugs property', p);
               }
 
@@ -263,14 +263,14 @@
 
               _.each(m.players, function (p) {
 
-                if (angular.isUndefinedOrNull(rebuildTeams.data[managerKey])) {
+                if (!_.isDefined(rebuildTeams.data[managerKey])) {
                   rebuildTeams.data[managerKey] = {};
                   rebuildTeams.data[managerKey].managerName = managerKey.capitalize();
                   rebuildTeams.data[managerKey].players = {};
                 }
 
-                // angular.isUndefinedOrNull(player.pickNumber) && (player.pickNumber = 999);
-                angular.isUndefinedOrNull(p.dateOfTransaction) && (p.dateOfTransaction = transferDates.leagueStart.date);
+                // !_.isDefined(player.pickNumber) && (player.pickNumber = 999);
+                !_.isDefined(p.dateOfTransaction) && (p.dateOfTransaction = transferDates.leagueStart.date);
 
                 rebuildTeams.data[managerKey].players[p.player.id] = p;
 
@@ -286,7 +286,7 @@
 
                 _.each(currentPlayers, function(element, index) {
 
-                  if (angular.isUndefinedOrNull(p.player.name)) {
+                  if (!_.isDefined(p.player.name)) {
                     //$log.debug('> player name not found', p);
                   } else {
                     if (p.player.name.toLowerCase() === element.toLowerCase()) {
@@ -331,7 +331,7 @@
 
                 var managerKey = player.managerName.toLowerCase();
 
-                if (angular.isUndefinedOrNull(rebuildTeams.data[managerKey])) {
+                if (!_.isDefined(rebuildTeams.data[managerKey])) {
                   rebuildTeams.data[managerKey] = {};
                   rebuildTeams.data[managerKey].managerName = player.managerName;
                   rebuildTeams.data[managerKey].players = {};

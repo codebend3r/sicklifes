@@ -432,7 +432,7 @@
                 stats: p.stats,
                 bio: p.bio,
                 activeLeagues: p.activeLeagues,
-                active: !angular.isUndefinedOrNull(p.active) ? p.active === false : false,
+                active: _.isDefined(p.active) ? p.active === false : false,
                 dateOfTransaction: p.dateOfTransaction
               }];
             }))

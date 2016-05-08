@@ -202,10 +202,9 @@
             }))
             .then(function (result) {
 
-              $log.debug('result:', result);
-              $log.debug('player:', player);
-              $log.debug('updatingPlayer:', updatingPlayer);
-              debugger;
+              $log.debug('result:', result.stats.goals);
+              $log.debug('player:', player.stats.goals);
+              $log.debug('updatingPlayer:', updatingPlayer.stats.goals);
 
 
             });

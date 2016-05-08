@@ -177,7 +177,7 @@
 
           _.each(manager.chartData, function (data) {
 
-            if ($scope.isCurrentMonth(currentMonth, data.date) && angular.isUndefinedOrNull(seriesHashTable[data.date])) {
+            if ($scope.isCurrentMonth(currentMonth, data.date) && !_.isDefined(seriesHashTable[data.date])) {
               seriesHashTable[data.date] = 0;
             }
 
