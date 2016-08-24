@@ -2,177 +2,177 @@
  * Created by Bouse on 09/01/2015
  */
 
-(function () {
+(function() {
 
   'use strict';
 
   angular.module('sicklifes')
 
-    .controller('rostersCtrl', function ($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, managersService, textManipulator, objectUtils, allPlayersIndex) {
+  .controller('rostersCtrl', function($scope, $http, $stateParams, $rootScope, $localStorage, apiFactory, arrayMappers, momentService, managersService, textManipulator, objectUtils, allPlayersIndex) {
 
-      ////////////////////////////////////////
-      /////////////// public /////////////////
-      ////////////////////////////////////////
+    ////////////////////////////////////////
+    /////////////// public /////////////////
+    ////////////////////////////////////////
 
-      $rootScope.loading = true;
+    $rootScope.loading = true;
 
-      /**
-       * @description
-       * @type {Array}
-       */
-      $scope.players = [];
+    /**
+     * @description
+     * @type {Array}
+     */
+    $scope.players = [];
 
-      /**
-       * @description order by position
-       */
-      $scope.playerPosition = function (player) {
-        return ['F', 'M', 'D', 'G'].indexOf(player.pos);
-      };
+    /**
+     * @description order by position
+     */
+    $scope.playerPosition = function(player) {
+      return ['F', 'M', 'D', 'G'].indexOf(player.pos);
+    };
 
-      /**
-       * @description
-       * @param data
-       */
-      var loadData = function (data) {
+    /**
+     * @description
+     * @param data
+     */
+    var loadData = function(data) {
 
-        if (angular.isDefined(data[$stateParams.teamId])) {
+      if (angular.isDefined(data[$stateParams.teamId])) {
 
-          $scope.players = data[$stateParams.teamId].roster;
-          $scope.teamName = data[$stateParams.teamId].teamName;
-          $scope.largeLogo = data[$stateParams.teamId].logo;
-          $scope.record = data[$stateParams.teamId].record;
-          $scope.formattedRank = data[$stateParams.teamId].formattedRank;
+        $scope.players = data[$stateParams.teamId].roster;
+        $scope.teamName = data[$stateParams.teamId].teamName;
+        $scope.largeLogo = data[$stateParams.teamId].logo;
+        $scope.record = data[$stateParams.teamId].record;
+        $scope.formattedRank = data[$stateParams.teamId].formattedRank;
 
-        } else {
+      } else {
 
-          $scope.players = [];
+        $scope.players = [];
 
-        }
+      }
 
-        httpRequest();
+      httpRequest();
 
-      };
+    };
 
-      /**
-       * @description httpRequest
-       */
-      var httpRequest = function () {
+    /**
+     * @description httpRequest
+     */
+    var httpRequest = function() {
 
-        $log.debug('rostersCtrl.httpRequest()');
+      $log.debug('rostersCtrl.httpRequest()');
 
-        var playersIndex = allPlayersIndex.data;
+      var playersIndex = allPlayersIndex.data;
 
-        $log.debug('$stateParams.teamId:', $stateParams.teamId);
-        $log.debug('$stateParams.leagueName:', $stateParams.leagueName);
-        //$log.debug('playersIndex:', playersIndex);
+      $log.debug('$stateParams.teamId:', $stateParams.teamId);
+      $log.debug('$stateParams.leagueName:', $stateParams.leagueName);
+      //$log.debug('playersIndex:', playersIndex);
 
-        if (angular.isDefined($stateParams.teamId) && angular.isDefined($stateParams.leagueName)) {
+      if (angular.isDefined($stateParams.teamId) && angular.isDefined($stateParams.leagueName)) {
 
-          $log.debug('team id && league name defined');
+        $log.debug('team id && league name defined');
 
-          $http.get('http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId)
-            .then(function (result) {
+        $http.get('http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId)
+          .then(function(result) {
 
-              // first get team logo, name and record
-              debugger;
-              $scope.teamName = result.data.full_name;
-              $scope.largeLogo = result.data.logos.large;
-              $scope.record = result.data.standing.short_record;
-              $scope.formattedRank = result.data.standing.formatted_rank;
+            // first get team logo, name and record
+            debugger;
+            $scope.teamName = result.data.full_name;
+            $scope.largeLogo = result.data.logos.large;
+            $scope.record = result.data.standing.short_record;
+            $scope.formattedRank = result.data.standing.formatted_rank;
 
-              return $http.get('http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId + '/players');
+            return $http.get('http://api.thescore.com/' + $stateParams.leagueName + '/teams/' + $stateParams.teamId + '/players');
 
-            })
-            .then(function (result) {
+          })
+          .then(function(result) {
 
-              // then get team roster and map it accordingly
+            // then get team roster and map it accordingly
 
-              $scope.players = [];
+            $scope.players = [];
 
-              var numberOfPlayers = _.size(result.data),
-                numberOfRequests = 0;
+            var numberOfPlayers = _.size(result.data),
+              numberOfRequests = 0;
 
-              _.each(result.data, function (player) {
+            _.each(result.data, function(player) {
 
-                if (_.isDefined(allPlayersIndex.data[player.id]) && _.isDefined(allPlayersIndex.data[player.id]._lastSyncedOn) && !momentService.isPastYesterday(allPlayersIndex.data[player.id]._lastSyncedOn)) {
+              if (_.isDefined(allPlayersIndex.data[player.id]) && _.isDefined(allPlayersIndex.data[player.id]._lastSyncedOn) && !momentService.isPastYesterday(allPlayersIndex.data[player.id]._lastSyncedOn)) {
 
-                  $log.debug('synced data found for', player.full_name);
+                $log.debug('synced data found for', player.full_name);
 
-                  var playerFromIndex = allPlayersIndex.data[player.id];
+                var playerFromIndex = allPlayersIndex.data[player.id];
 
-                  var matchingManager = managersService.findPlayerInManagers(player.id).manager;
+                var matchingManager = managersService.findPlayerInManagers(player.id).manager;
 
-                  if (_.isDefined(matchingManager)) {
-                    playerFromIndex.managerName = matchingManager.managerName;
-                  }
-
-                  $scope.players.push(playerFromIndex);
-
-                  numberOfRequests += 1;
-
-                  if (numberOfRequests === numberOfPlayers) {
-                    $log.debug('DONE through player index');
-                    //$rootScope.loading = false;
-                    //$scope.saveTeamToPlayerIndex($scope.players);
-                  }
-
-                } else {
-
-                  $log.debug('request for', player.full_name);
-
-                  var matchingManager = managersService.findPlayerInManagers(player.id).manager;
-
-                  player = objectUtils.playerResetGoalPoints(player);
-
-                  if (_.isDefined(matchingManager)) {
-                    player.managerName = matchingManager.managerName;
-                  }
-
-                  apiFactory.getPlayerProfile('soccer', player.id)
-                    .then(function (playerResult) {
-                      player.playerName = playerResult.data.full_name;
-                      return arrayMappers.playerInfo(player, playerResult);
-                    })
-                    //.then(arrayMappers.playerInfo.bind(this, player))
-                    .then(arrayMappers.playerMapPersonalInfo.bind(this, player))
-                    .then(arrayMappers.playerGamesLog.bind(this, {
-                      player: player,
-                      manager: matchingManager
-                    }))
-                    .then(function (result) {
-
-                      player = result;
-                      player._lastSyncedOn = momentService.syncDate();
-
-                      $scope.players.push(player);
-
-                      numberOfRequests += 1;
-
-                      if (numberOfRequests === numberOfPlayers) {
-                        $log.debug('DONE through new requests');
-                        //$rootScope.loading = false;
-                        $scope.saveTeamToPlayerIndex($scope.players);
-                      }
-
-                    });
-
+                if (_.isDefined(matchingManager)) {
+                  playerFromIndex.managerName = matchingManager.managerName;
                 }
 
-              });
+                $scope.players.push(playerFromIndex);
+
+                numberOfRequests += 1;
+
+                if (numberOfRequests === numberOfPlayers) {
+                  $log.debug('DONE through player index');
+                  //$rootScope.loading = false;
+                  //$scope.saveTeamToPlayerIndex($scope.players);
+                }
+
+              } else {
+
+                $log.debug('request for', player.full_name);
+
+                var matchingManager = managersService.findPlayerInManagers(player.id).manager;
+
+                player = objectUtils.playerResetGoalPoints(player);
+
+                if (_.isDefined(matchingManager)) {
+                  player.managerName = matchingManager.managerName;
+                }
+
+                apiFactory.getPlayerProfile('soccer', player.id)
+                  .then(function(playerResult) {
+                    player.playerName = playerResult.data.full_name;
+                    return arrayMappers.playerInfo(player, playerResult);
+                  })
+                  //.then(arrayMappers.playerInfo.bind(this, player))
+                  .then(arrayMappers.playerMapPersonalInfo.bind(this, player))
+                  .then(arrayMappers.playerGamesLog.bind(this, {
+                    player: player,
+                    manager: matchingManager
+                  }))
+                  .then(function(result) {
+
+                    player = result;
+                    player._lastSyncedOn = momentService.syncDate();
+
+                    $scope.players.push(player);
+
+                    numberOfRequests += 1;
+
+                    if (numberOfRequests === numberOfPlayers) {
+                      $log.debug('DONE through new requests');
+                      //$rootScope.loading = false;
+                      $scope.saveTeamToPlayerIndex($scope.players);
+                    }
+
+                  });
+
+              }
 
             });
 
-        } else {
+          });
 
-          $log.warn('no teamId or leagueId specified');
+      } else {
 
-        }
+        $log.warn('no teamId or leagueId specified');
 
-      };
+      }
 
-      apiFactory.getApiData('allPlayersIndex')
-        .then(loadData);
+    };
 
-    });
+    apiFactory.getApiData('allPlayersIndex')
+      .then(loadData);
+
+  });
 
 })();
